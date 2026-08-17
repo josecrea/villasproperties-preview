@@ -139,3 +139,19 @@
 .brand{gap:12px}
 .brand-logo{width:clamp(34px,3.4vw,46px);height:auto;flex:none;border-radius:50%;display:block}
 .header:not(.solid) .brand-logo{filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))}
+
+/* ===== Vimeo background video (hero) — cover any aspect ratio ===== */
+.hero-vimeo{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:100%;min-width:177.78vh;transform:translate(-50%,-50%);border:0;pointer-events:none;z-index:0;opacity:0;transition:opacity 1.6s ease}
+.hero-in .hero-vimeo{opacity:1}
+.hero-static .hero-vimeo{display:none}
+@media (prefers-reduced-motion:reduce){.hero-vimeo{display:none}}
+
+/* ===== Header fixes: real "A" instead of geometric X, bigger nav ===== */
+.wordmark .a{width:auto;height:auto;position:static}
+.wordmark .a:before{content:"A";position:static;left:auto;width:auto;height:auto;background:none;transform:none;font:inherit}
+.wordmark .a:after{content:none;display:none}
+.nav a,.nav button{font-size:11px!important;letter-spacing:.09em}
+@media(max-width:1050px){.nav a,.nav button{font-size:10px!important}}
+/* ===== More breathing room so parallax titles never clip at the top ===== */
+.section{padding-top:clamp(104px,12vw,176px)}
+.section .head{padding-top:clamp(16px,2.5vw,40px)}

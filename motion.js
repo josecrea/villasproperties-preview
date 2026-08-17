@@ -70,7 +70,7 @@
   const bigCircle = document.querySelector('.hero-bigcircle');
   // Auto-motion: give headlines, leads and cards their own parallax layer → the whole page moves
   document.querySelectorAll('.section .head h2, .section .big, .dashtitle, .cta h2').forEach((el, i) => {
-    if (!el.hasAttribute('data-scroll') && !el.hasAttribute('data-drift')) el.setAttribute('data-scroll', (0.1 + (i % 3) * 0.045).toFixed(3));
+    if (!el.hasAttribute('data-scroll') && !el.hasAttribute('data-drift')) el.setAttribute('data-scroll', (0.045 + (i % 3) * 0.02).toFixed(3));
   });
   document.querySelectorAll('.section .head .eye, .section .head p, .step, .eco, .case, .insight, .area, .metric').forEach((el, i) => {
     if (!el.hasAttribute('data-scroll')) el.setAttribute('data-scroll', (0.04 + (i % 4) * 0.025).toFixed(3));
