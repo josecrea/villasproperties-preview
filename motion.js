@@ -1,8 +1,8 @@
-/* motion.js — Villa's Properties V2 motion system.
-   Zero runtime dependencies. IntersectionObserver reveals + stagger,
-   requestAnimationFrame parallax (transform only), hero intro reveal,
-   and a responsive / reduced-motion / save-data aware hero video.
-   Must never interfere with app.js or backoffice-auth.js. */
+/* motion.js v2 — Villa's Scroll Story Engine. Zero runtime dependencies.
+   Progress-based choreography (not just entry triggers):
+   kinetic hero, dynamic header per scene, typography drift, reveal families,
+   scroll-linked parallax. Responsive / reduced-motion / save-data aware.
+   Never interferes with app.js or backoffice-auth.js. */
 (() => {
   'use strict';
   const root = document.documentElement;
@@ -11,17 +11,11 @@
   const conn = navigator.connection || {};
   const saveData = conn.saveData === true;
   const slow = /(^|-)2g/.test(conn.effectiveType || '');
+  const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+  const lerp = (a, b, t) => a + (b - a) * t;
 
   root.classList.add('motion-ready');
   if (reduce) root.classList.add('motion-reduced');
-
-  /* ---------- Protected brand layer ---------- */
-  if (!document.querySelector('script[data-vp-brand-runtime]')) {
-    const brandRuntime = document.createElement('script');
-    brandRuntime.src = 'brand-runtime.js';
-    brandRuntime.dataset.vpBrandRuntime = 'true';
-    document.head.appendChild(brandRuntime);
-  }
 
   /* ---------- Hero video: responsive source + guards ---------- */
   const video = document.getElementById('heroVideo');
@@ -38,9 +32,8 @@
       const p = video.play();
       if (p && p.catch) p.catch(() => {});
     };
-    if (reduce || saveData || slow) {
-      root.classList.add('hero-static');
-    } else {
+    if (reduce || saveData || slow) root.classList.add('hero-static');
+    else {
       load();
       let t;
       addEventListener('resize', () => { clearTimeout(t); t = setTimeout(load, 250); }, { passive: true });
@@ -51,51 +44,90 @@
   /* ---------- Hero intro reveal ---------- */
   requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('hero-in')));
 
-  /* ---------- Scroll reveals ---------- */
+  /* ---------- Entry reveals (families via data-reveal="type") ---------- */
   const revealEls = document.querySelectorAll('[data-reveal]');
   if (revealEls.length && 'IntersectionObserver' in window && !reduce) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
-        const el = e.target;
-        el.querySelectorAll(':scope > [data-stagger], [data-stagger-group] > *').forEach((c, i) => {
-          c.style.setProperty('--st-i', i);
-        });
-        el.classList.add('is-in');
-        io.unobserve(el);
+        e.target.querySelectorAll(':scope > [data-stagger], [data-stagger-group] > *')
+          .forEach((c, i) => c.style.setProperty('--st-i', i));
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);
       });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
     revealEls.forEach((el) => io.observe(el));
   } else {
     revealEls.forEach((el) => el.classList.add('is-in'));
   }
 
-  /* ---------- Light parallax ---------- */
-  const paraEls = Array.from(document.querySelectorAll('[data-parallax]'));
-  if (paraEls.length && !reduce && !saveData) {
-    let ticking = false;
-    const update = () => {
-      const vh = innerHeight;
-      for (const el of paraEls) {
-        const r = el.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) continue;
-        const speed = parseFloat(el.getAttribute('data-parallax')) || 0.1;
-        const off = (((r.top + r.height / 2) - vh / 2) * -speed);
-        el.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0)`;
-      }
-      ticking = false;
-    };
-    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-    addEventListener('scroll', onScroll, { passive: true });
-    addEventListener('resize', onScroll, { passive: true });
-    update();
-  }
+  // Under reduced motion we stop here: content fully visible, no scroll-linked motion.
+  if (reduce) return;
 
-  /* ---------- Scroll cue ---------- */
+  /* ================= SCROLL STORY ENGINE ================= */
+  const hero = document.querySelector('.hero');
+  const heroContent = document.querySelector('.hero .hero-content');
+  const bigCircle = document.querySelector('.hero-bigcircle');
+  const drifters = Array.from(document.querySelectorAll('[data-drift]'));   // typography drift
+  const scrollers = Array.from(document.querySelectorAll('[data-scroll]')); // generic parallax
+  const header = document.querySelector('.header');
   const cue = document.querySelector('.scroll-cue');
-  if (cue) {
-    addEventListener('scroll', () => {
-      cue.classList.toggle('hide', scrollY > 90);
-    }, { passive: true });
-  }
+  const themed = Array.from(document.querySelectorAll('[data-header-theme]'));
+
+  let ticking = false;
+  const onFrame = () => {
+    const vh = innerHeight;
+    const y = scrollY;
+
+    // Kinetic hero: circle grows & exits, text compresses up, as you scroll the first viewport
+    if (hero) {
+      const hp = clamp(y / (hero.offsetHeight || vh), 0, 1);
+      if (bigCircle) {
+        const scale = lerp(1, 1.85, hp);
+        const ty = lerp(0, -vh * 0.55, hp);
+        bigCircle.style.setProperty('--sy', ty.toFixed(1) + 'px');
+        bigCircle.style.setProperty('--ss', scale.toFixed(3));
+        bigCircle.style.opacity = (1 - hp * 0.72).toFixed(3);
+      }
+      if (heroContent) {
+        heroContent.style.transform = `translate3d(0, ${(-hp * 64).toFixed(1)}px, 0)`;
+        heroContent.style.opacity = (1 - hp * 0.85).toFixed(3);
+      }
+    }
+
+    // Typography drift: lines move at slightly different speeds within their section (subtle depth)
+    for (const el of drifters) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -120 || r.top > vh + 120) continue;
+      const prog = clamp((vh - r.top) / (vh + r.height), 0, 1);
+      const amp = parseFloat(el.getAttribute('data-drift')) || 20;
+      el.style.transform = `translate3d(0, ${((prog - 0.5) * amp).toFixed(1)}px, 0)`;
+    }
+
+    // Generic scroll-linked parallax
+    for (const el of scrollers) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -240 || r.top > vh + 240) continue;
+      const speed = parseFloat(el.getAttribute('data-scroll')) || 0.1;
+      const off = (((r.top + r.height / 2) - vh / 2) * -speed);
+      el.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0)`;
+    }
+
+    // Dynamic header theme: the last themed section whose top has passed the header band wins
+    if (header && themed.length) {
+      let best = null, bestTop = -Infinity;
+      for (const s of themed) {
+        const t = s.getBoundingClientRect().top;
+        if (t <= 110 && t > bestTop) { best = s; bestTop = t; }
+      }
+      header.setAttribute('data-theme', best ? best.getAttribute('data-header-theme') : 'hero');
+    }
+
+    if (cue) cue.classList.toggle('hide', y > 90);
+    ticking = false;
+  };
+  const schedule = () => { if (!ticking) { ticking = true; requestAnimationFrame(onFrame); } };
+  addEventListener('scroll', schedule, { passive: true });
+  addEventListener('resize', schedule, { passive: true });
+  schedule();
 })();
