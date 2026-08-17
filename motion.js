@@ -75,8 +75,19 @@
   document.querySelectorAll('.section .head .eye, .section .head p, .step, .eco, .case, .insight, .area, .metric').forEach((el, i) => {
     if (!el.hasAttribute('data-scroll')) el.setAttribute('data-scroll', (0.04 + (i % 4) * 0.025).toFixed(3));
   });
+  // Feil-style: inject big orbit circles with HORIZONTAL parallax into alternating sections
+  document.querySelectorAll('.section').forEach(function (s, i) {
+    if (i % 2 !== 0 || s.querySelector('.mo-orbit')) return;
+    var c = document.createElement('span');
+    c.className = 'mo-orbit ' + (i % 4 === 0 ? 'mo-orbit--l' : 'mo-orbit--r');
+    c.setAttribute('data-scroll-x', i % 4 === 0 ? '0.16' : '-0.16');
+    c.setAttribute('aria-hidden', 'true');
+    if (getComputedStyle(s).position === 'static') s.style.position = 'relative';
+    s.insertBefore(c, s.firstChild);
+  });
   const drifters = Array.from(document.querySelectorAll('[data-drift]'));   // typography drift
-  const scrollers = Array.from(document.querySelectorAll('[data-scroll]')); // generic parallax
+  const scrollers = Array.from(document.querySelectorAll('[data-scroll]')); // generic parallax (vertical)
+  const scrollersX = Array.from(document.querySelectorAll('[data-scroll-x]')); // horizontal parallax (Feil circles)
   const header = document.querySelector('.header');
   const cue = document.querySelector('.scroll-cue');
   const themed = Array.from(document.querySelectorAll('[data-header-theme]'));
@@ -111,13 +122,22 @@
       el.style.transform = `translate3d(0, ${((prog - 0.5) * amp).toFixed(1)}px, 0)`;
     }
 
-    // Generic scroll-linked parallax
+    // Generic scroll-linked parallax (vertical)
     for (const el of scrollers) {
       const r = el.getBoundingClientRect();
       if (r.bottom < -240 || r.top > vh + 240) continue;
       const speed = parseFloat(el.getAttribute('data-scroll')) || 0.1;
       const off = (((r.top + r.height / 2) - vh / 2) * -speed);
       el.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0)`;
+    }
+
+    // Horizontal parallax — Feil-style circles sliding across as you scroll
+    for (const el of scrollersX) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -400 || r.top > vh + 400) continue;
+      const speed = parseFloat(el.getAttribute('data-scroll-x')) || 0.12;
+      const off = (((r.top + r.height / 2) - vh / 2) * speed);
+      el.style.transform = `translate3d(${off.toFixed(1)}px, 0, 0)`;
     }
 
     // Dynamic header theme: the last themed section whose top has passed the header band wins
