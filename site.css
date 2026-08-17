@@ -263,3 +263,8 @@
 .tf-dot{width:34px;height:3px;border-radius:2px;background:color-mix(in oklab,var(--paper) 26%,transparent);transition:background 420ms var(--mo-ease),width 420ms var(--mo-ease)}
 .tf-dot.is-active{width:54px;background:var(--sand)}
 @media (prefers-reduced-motion:reduce){.tf-section{height:auto;overflow:visible}.tf-sticky{position:static;height:auto;display:block}.tf-stage,.tf-vignette,.tf-progress{display:none}.tf-overlay{display:block;padding-block:clamp(2rem,6vw,4rem)}.tf-kicker{position:static;margin-bottom:2rem}.tf-captions{min-height:0}.tf-caption{position:relative;inset:auto;opacity:1;transform:none;pointer-events:auto;padding:clamp(1.5rem,4vw,2.5rem);margin-bottom:clamp(1rem,3vw,2rem);border-radius:14px;background:linear-gradient(160deg,var(--ink) 0%,var(--ink-deep) 100%);border:1px solid color-mix(in oklab,var(--atlantic) 40%,transparent)}.tf-name{font-size:clamp(40px,9vw,88px)}}
+
+/* ===== Header over cinematic scenes: gradient, not a solid bar (no tapa la imagen) ===== */
+.header[data-theme="dark"]{background:linear-gradient(to bottom,rgba(16,20,22,.72),rgba(16,20,22,.28) 58%,transparent)!important;border-bottom:none!important;backdrop-filter:none}
+/* ===== Hero big circle: scroll + independent float (--fx/--fy from JS) ===== */
+.hero-bigcircle{transform:translate3d(calc(-50% + var(--fx,0px)),calc(-50% + var(--sy,0px) + var(--fy,0px)),0) scale(var(--ss,1))!important}

@@ -157,4 +157,15 @@
   addEventListener('scroll', schedule, { passive: true });
   addEventListener('resize', schedule, { passive: true });
   schedule();
+
+  /* Independent continuous float for the hero big circle (moves even without scroll) */
+  if (bigCircle) {
+    const floatLoop = () => {
+      const t = performance.now() / 1000;
+      bigCircle.style.setProperty('--fx', (Math.cos(t * 0.28) * 18).toFixed(1) + 'px');
+      bigCircle.style.setProperty('--fy', (Math.sin(t * 0.4) * 22).toFixed(1) + 'px');
+      requestAnimationFrame(floatLoop);
+    };
+    requestAnimationFrame(floatLoop);
+  }
 })();
