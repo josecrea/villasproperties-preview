@@ -1,13 +1,95 @@
 (() => {
   const $=(s,c=document)=>c.querySelector(s); const $$=(s,c=document)=>[...c.querySelectorAll(s)];
   const fmt=v=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(v||0));
-  $$('.wordmark .a').forEach(a=>{[...a.childNodes].filter(n=>n.nodeType===Node.TEXT_NODE).forEach(n=>n.remove());if(!a.querySelector('.sr-letter')){const s=document.createElement('span');s.className='sr-letter';s.textContent='A';s.style.cssText='position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0';a.appendChild(s)}});
+
+  // Brand integrity: keep the geometric A visually, but preserve the real letter in the DOM/accessibility tree.
+  $$('.wordmark .a').forEach(a=>{
+    [...a.childNodes].filter(n=>n.nodeType===Node.TEXT_NODE).forEach(n=>n.remove());
+    if(!a.querySelector('.sr-letter')){
+      const s=document.createElement('span'); s.className='sr-letter'; s.textContent='A';
+      s.style.cssText='position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0';
+      a.appendChild(s);
+    }
+  });
   $$('.brand').forEach(b=>b.setAttribute('aria-label','Villa’s Properties'));
-  const duplicateHeroLockup=$('.hero .hero-content > .lockup');if(duplicateHeroLockup)duplicateHeroLockup.remove();
-  const localRoutes=[['https://villasproperties.es/valoracion-gratis-tenerife','valuation.html'],['https://villasproperties.es/market-impact','market-impact.html'],['https://villasproperties.es/blog','insights.html'],['https://villasproperties.es/contactus','contact.html']];$$('a[href]').forEach(a=>{const href=a.getAttribute('href')||'';const match=localRoutes.find(([from])=>href.startsWith(from));if(match)a.setAttribute('href',match[1])});
-  const demoProps=[{name:'Ocean Residence',zone:'Costa Adeje',price:245000,status:'For sale',strategy:'Home',market:'-6.8%',yield:'6.9%',psm:'3,141',docs:'Reviewed',specs:['78 m²','2 hab.','2 baños','Parking','Piscina','18 m² terraza']},{name:'Yield Opportunity',zone:'Tenerife Sur',price:198000,status:'Investment',strategy:'Value-add',market:'-7.4%',yield:'7.1%',psm:'1,768',docs:'Reviewed',specs:['112 m²','3 hab.','2 baños','Parking']}];const renderProps=()=>{const grid=$('#propertyGrid');if(!grid)return;grid.innerHTML=demoProps.map(p=>`<article class="property"><div class="media"><span class="tag">${p.status} · ${p.strategy}</span></div><div class="pinfo"><div><h3>${p.name}</h3><div class="meta">${p.zone} · demo de prototipo</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow">${p.specs.map(x=>`<span class="spec">${x}</span>`).join('')}</div><div class="intelrow"><div><small>Market</small><strong>${p.market}</strong></div><div><small>Yield</small><strong>${p.yield}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Docs</small><strong>${p.docs}</strong></div></div></article>`).join('')};renderProps();
-  const reviews=$$('.review');let r=0;const show=n=>{if(!reviews.length)return;r=(n+reviews.length)%reviews.length;reviews.forEach((x,i)=>x.classList.toggle('active',i===r))};$('#prevReview')?.addEventListener('click',()=>show(r-1));$('#nextReview')?.addEventListener('click',()=>show(r+1));if(reviews.length)setInterval(()=>show(r+1),7000);
-  const clock=$('#tenerifeClock');const tick=()=>{if(!clock)return;clock.textContent=new Intl.DateTimeFormat('es-ES',{timeZone:'Atlantic/Canary',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date())};tick();setInterval(tick,1000);const year=$('#year');if(year)year.textContent=new Date().getFullYear();
-  const headerIn=$('.headerin');if(headerIn&&!$('#menuToggle')){const menu=document.createElement('button');menu.id='menuToggle';menu.type='button';menu.className='menu-toggle';menu.textContent='Menu';const config=$('#mobileAdmin');headerIn.insertBefore(menu,config||null);const drawer=document.createElement('div');drawer.id='mobileDrawer';drawer.innerHTML='<nav><a href="properties.html">Properties</a><a href="sell.html">Sell</a><a href="buy.html">Buy</a><a href="finance.html">Finance</a><a href="invest.html">Invest</a><a href="intelligence.html">Intelligence</a><a href="insights.html">Insights</a><a href="contact.html">Talk to an advisor</a></nav>';drawer.style.cssText='position:fixed;z-index:70;inset:76px 0 auto 0;background:#fbfaf7;color:#20242a;border-bottom:1px solid rgba(32,36,42,.16);padding:20px;transform:translateY(-140%);transition:transform .3s ease';const nav=drawer.querySelector('nav');nav.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:0';[...nav.children].forEach(a=>a.style.cssText='padding:15px 8px;border-bottom:1px solid rgba(32,36,42,.12);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase');document.body.appendChild(drawer);let opened=false;menu.addEventListener('click',()=>{opened=!opened;drawer.style.transform=opened?'translateY(0)':'translateY(-140%)';menu.textContent=opened?'Close':'Menu'});nav.addEventListener('click',()=>{opened=false;drawer.style.transform='translateY(-140%)';menu.textContent='Menu'})}
-  const panel=$('#adminPanel'),overlay=$('#overlay');const close=()=>{overlay?.classList.remove('open');panel?.classList.remove('open')};$('#closeAdmin')?.addEventListener('click',close);overlay?.addEventListener('click',close);const features=['Superficie','Habitaciones','Baños','Parking','Trastero','Piscina','Terraza','Jardín','Ascensor','Vistas','A/C','Amueblado'];const fb=$('#features');if(fb){fb.innerHTML=features.map((x,i)=>`<button class="feature ${[0,1,2,3,5,6,8,9,10].includes(i)?'active':''}" type="button"><span class="eye">${String(i+1).padStart(2,'0')}</span><div style="margin-top:9px">${x}</div></button>`).join('');fb.addEventListener('click',e=>{const b=e.target.closest('.feature');if(b)b.classList.toggle('active')})}$('#saveAdmin')?.addEventListener('click',()=>{const n=$('#aName'),p=$('#aPrice'),z=$('#aZone'),st=$('#aStatus'),sg=$('#aStrategy');if(n)demoProps[0].name=n.value;if(p)demoProps[0].price=p.value;if(z)demoProps[0].zone=z.value;if(st)demoProps[0].status=st.value;if(sg)demoProps[0].strategy=sg.value;renderProps();const m=$('#statusMsg');if(m)m.textContent='✓ Cambios aplicados a la sesión del prototipo.'});$('#videoFile')?.addEventListener('change',e=>{const f=e.target.files?.[0],v=$('#heroVideo');if(!f||!v)return;v.src=URL.createObjectURL(f);v.classList.add('active');v.play().catch(()=>{})});
+
+  const duplicateHeroLockup=$('.hero .hero-content > .lockup');
+  if(duplicateHeroLockup) duplicateHeroLockup.remove();
+
+  const localRoutes=[
+    ['https://villasproperties.es/valoracion-gratis-tenerife','valuation.html'],
+    ['https://villasproperties.es/market-impact','market-impact.html'],
+    ['https://villasproperties.es/blog','insights.html'],
+    ['https://villasproperties.es/contactus','contact.html']
+  ];
+  $$('a[href]').forEach(a=>{
+    const href=a.getAttribute('href')||'';
+    const match=localRoutes.find(([from])=>href.startsWith(from));
+    if(match) a.setAttribute('href',match[1]);
+  });
+
+  if(!$('#propertySpecStyles')){
+    const style=document.createElement('style'); style.id='propertySpecStyles';
+    style.textContent=`
+      .specrow{align-items:center;gap:16px!important}
+      .spec{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-size:11px}
+      .spec svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;opacity:.82}
+      .propertygrid.catalogue-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      @media(max-width:820px){.propertygrid.catalogue-grid{grid-template-columns:1fr}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  const icons={
+    area:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5z"/><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4"/></svg>',
+    bed:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18v-7h18v7M3 15h18M6 11V8.5A1.5 1.5 0 0 1 7.5 7h3A1.5 1.5 0 0 1 12 8.5V11M12 11V8.5A1.5 1.5 0 0 1 13.5 7h3A1.5 1.5 0 0 1 18 8.5V11M5 18v2M19 18v2"/></svg>',
+    bath:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h16v2a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5v-2zM7 13V6a2 2 0 0 1 4 0M9 20v1M17 20v1"/></svg>',
+    parking:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 17V7h3.3a3.2 3.2 0 1 1 0 6.4H10M10 13.4h3.3"/></svg>',
+    pool:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16c2 0 2 1.5 4 1.5S9 16 11 16s2 1.5 4 1.5S17 16 19 16s2 1.5 2 1.5M3 20c2 0 2 1 4 1s2-1 4-1 2 1 4 1 2-1 4-1 2 1 2 1M8 15V7a2 2 0 0 1 4 0M8 11h7"/></svg>',
+    terrace:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16M6 11v8M18 11v8M8 15h8M12 5v6M8 7l4-3 4 3"/></svg>'
+  };
+  const spec=(icon,value,label)=>`<span class="spec" title="${label}">${icons[icon]}<span>${value?`<strong>${value}</strong>`:''}${label?` ${label}`:''}</span></span>`;
+
+  const demoProps=[
+    {name:'Ocean Residence',zone:'Costa Adeje',price:245000,status:'For sale',strategy:'Home',market:'-6.8%',yield:'6.9%',psm:'3,141',docs:'Reviewed',area:78,beds:2,baths:2,parking:true,pool:true,terrace:18},
+    {name:'Yield Opportunity',zone:'Tenerife Sur',price:198000,status:'Investment',strategy:'Value-add',market:'-7.4%',yield:'7.1%',psm:'1,768',docs:'Reviewed',area:112,beds:3,baths:2,parking:true,pool:false,terrace:0}
+  ];
+  const propertySpecs=p=>[
+    spec('area',`${p.area} m²`,'superficie'),
+    spec('bed',p.beds,'hab.'),
+    spec('bath',p.baths,p.baths===1?'baño':'baños'),
+    p.parking?spec('parking','1','parking'):'',
+    p.pool?spec('pool','','piscina'):'',
+    p.terrace?spec('terrace',`${p.terrace} m²`,'terraza'):''
+  ].filter(Boolean).join('');
+  const renderProps=()=>{
+    $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
+      grid.innerHTML=demoProps.map(p=>`<article class="property" data-stagger><div class="media"><span class="tag">${p.status} · ${p.strategy}</span></div><div class="pinfo"><div><h3>${p.name}</h3><div class="meta">${p.zone} · demo de prototipo</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Market</small><strong>${p.market}</strong></div><div><small>Yield</small><strong>${p.yield}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Docs</small><strong>${p.docs}</strong></div></div></article>`).join('');
+    });
+  };
+  renderProps();
+
+  const reviews=$$('.review'); let r=0; const show=n=>{if(!reviews.length)return;r=(n+reviews.length)%reviews.length;reviews.forEach((x,i)=>x.classList.toggle('active',i===r))};
+  $('#prevReview')?.addEventListener('click',()=>show(r-1)); $('#nextReview')?.addEventListener('click',()=>show(r+1)); if(reviews.length)setInterval(()=>show(r+1),7000);
+
+  const clock=$('#tenerifeClock'); const tick=()=>{if(!clock)return; clock.textContent=new Intl.DateTimeFormat('es-ES',{timeZone:'Atlantic/Canary',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date())}; tick(); setInterval(tick,1000);
+  const year=$('#year'); if(year)year.textContent=new Date().getFullYear();
+
+  const headerIn=$('.headerin');
+  if(headerIn && !$('#menuToggle')){
+    const menu=document.createElement('button'); menu.id='menuToggle'; menu.type='button'; menu.className='menu-toggle'; menu.textContent='Menu';
+    const config=$('#mobileAdmin'); headerIn.insertBefore(menu,config||null);
+    const drawer=document.createElement('div'); drawer.id='mobileDrawer'; drawer.innerHTML='<nav><a href="properties.html">Properties</a><a href="sell.html">Sell</a><a href="buy.html">Buy</a><a href="finance.html">Finance</a><a href="invest.html">Invest</a><a href="intelligence.html">Intelligence</a><a href="insights.html">Insights</a><a href="contact.html">Talk to an advisor</a></nav>';
+    drawer.style.cssText='position:fixed;z-index:70;inset:76px 0 auto 0;background:#fbfaf7;color:#20242a;border-bottom:1px solid rgba(32,36,42,.16);padding:20px;transform:translateY(-140%);transition:transform .3s ease';
+    const nav=drawer.querySelector('nav'); nav.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:0';
+    [...nav.children].forEach(a=>a.style.cssText='padding:15px 8px;border-bottom:1px solid rgba(32,36,42,.12);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase');
+    document.body.appendChild(drawer);
+    let opened=false; menu.addEventListener('click',()=>{opened=!opened;drawer.style.transform=opened?'translateY(0)':'translateY(-140%)';menu.textContent=opened?'Close':'Menu'});
+    nav.addEventListener('click',()=>{opened=false;drawer.style.transform='translateY(-140%)';menu.textContent='Menu'});
+  }
+
+  const panel=$('#adminPanel'),overlay=$('#overlay'); const close=()=>{overlay?.classList.remove('open');panel?.classList.remove('open')}; $('#closeAdmin')?.addEventListener('click',close); overlay?.addEventListener('click',close);
+  const features=['Superficie','Habitaciones','Baños','Parking','Trastero','Piscina','Terraza','Jardín','Ascensor','Vistas','A/C','Amueblado']; const fb=$('#features'); if(fb){fb.innerHTML=features.map((x,i)=>`<button class="feature ${[0,1,2,3,5,6,8,9,10].includes(i)?'active':''}" type="button"><span class="eye">${String(i+1).padStart(2,'0')}</span><div style="margin-top:9px">${x}</div></button>`).join(''); fb.addEventListener('click',e=>{const b=e.target.closest('.feature');if(b)b.classList.toggle('active')})}
+  $('#saveAdmin')?.addEventListener('click',()=>{const n=$('#aName'),p=$('#aPrice'),z=$('#aZone'),st=$('#aStatus'),sg=$('#aStrategy'); if(n)demoProps[0].name=n.value;if(p)demoProps[0].price=p.value;if(z)demoProps[0].zone=z.value;if(st)demoProps[0].status=st.value;if(sg)demoProps[0].strategy=sg.value; renderProps(); const m=$('#statusMsg');if(m)m.textContent='✓ Cambios aplicados a la sesión del prototipo.'});
+  $('#videoFile')?.addEventListener('change',e=>{const f=e.target.files?.[0],v=$('#heroVideo');if(!f||!v)return;v.src=URL.createObjectURL(f);v.classList.add('active');v.play().catch(()=>{})});
 })();
