@@ -1,0 +1,7 @@
+# Placeholder hero video (third-party reference footage, local test only).
+# Do NOT commit. Replace with own licensed Tenerife footage in this folder.
+*.mp4
+*.webm
+*.webp
+!.gitignore
+!README.md

@@ -15,6 +15,7 @@
   root.classList.add('motion-ready');
   if (reduce) root.classList.add('motion-reduced');
 
+  /* ---------- Hero video: responsive source + guards ---------- */
   const video = document.getElementById('heroVideo');
   if (video && video.hasAttribute('data-src-base')) {
     const base = video.getAttribute('data-src-base');
@@ -30,7 +31,7 @@
       if (p && p.catch) p.catch(() => {});
     };
     if (reduce || saveData || slow) {
-      root.classList.add('hero-static');
+      root.classList.add('hero-static'); // keep poster, never fetch video
     } else {
       load();
       let t;
@@ -39,14 +40,17 @@
     }
   }
 
+  /* ---------- Hero intro reveal ---------- */
   requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('hero-in')));
 
+  /* ---------- Scroll reveals ---------- */
   const revealEls = document.querySelectorAll('[data-reveal]');
   if (revealEls.length && 'IntersectionObserver' in window && !reduce) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
         const el = e.target;
+        // stagger direct children flagged for it
         el.querySelectorAll(':scope > [data-stagger], [data-stagger-group] > *').forEach((c, i) => {
           c.style.setProperty('--st-i', i);
         });
@@ -59,6 +63,7 @@
     revealEls.forEach((el) => el.classList.add('is-in'));
   }
 
+  /* ---------- Light parallax (rAF, transform only, never on reduced) ---------- */
   const paraEls = Array.from(document.querySelectorAll('[data-parallax]'));
   if (paraEls.length && !reduce && !saveData) {
     let ticking = false;
@@ -66,7 +71,7 @@
       const vh = innerHeight;
       for (const el of paraEls) {
         const r = el.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) continue;
+        if (r.bottom < -200 || r.top > vh + 200) continue; // skip offscreen
         const speed = parseFloat(el.getAttribute('data-parallax')) || 0.1;
         const off = (((r.top + r.height / 2) - vh / 2) * -speed);
         el.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0)`;
@@ -79,6 +84,7 @@
     update();
   }
 
+  /* ---------- Scroll cue ---------- */
   const cue = document.querySelector('.scroll-cue');
   if (cue) {
     addEventListener('scroll', () => {
