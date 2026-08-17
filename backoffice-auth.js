@@ -92,7 +92,8 @@
   };
 
   // Capture phase intentionally runs before the prototype's original click handlers.
-  ['openAdmin', 'manageProps'].forEach((id) => {
+  // 'mobileAdmin' included so the mobile/tablet ⚙ Config button is also gated (was bypassing the gate).
+  ['openAdmin', 'manageProps', 'mobileAdmin'].forEach((id) => {
     document.getElementById(id)?.addEventListener('click', requestAdmin, true);
   });
 
