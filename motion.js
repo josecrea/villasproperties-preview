@@ -68,6 +68,13 @@
   const hero = document.querySelector('.hero');
   const heroContent = document.querySelector('.hero .hero-content');
   const bigCircle = document.querySelector('.hero-bigcircle');
+  // Auto-motion: give headlines, leads and cards their own parallax layer → the whole page moves
+  document.querySelectorAll('.section .head h2, .section .big, .dashtitle, .cta h2').forEach((el, i) => {
+    if (!el.hasAttribute('data-scroll') && !el.hasAttribute('data-drift')) el.setAttribute('data-scroll', (0.1 + (i % 3) * 0.045).toFixed(3));
+  });
+  document.querySelectorAll('.section .head .eye, .section .head p, .step, .eco, .case, .insight, .area, .metric').forEach((el, i) => {
+    if (!el.hasAttribute('data-scroll')) el.setAttribute('data-scroll', (0.04 + (i % 4) * 0.025).toFixed(3));
+  });
   const drifters = Array.from(document.querySelectorAll('[data-drift]'));   // typography drift
   const scrollers = Array.from(document.querySelectorAll('[data-scroll]')); // generic parallax
   const header = document.querySelector('.header');

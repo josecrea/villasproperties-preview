@@ -47,6 +47,15 @@
       .property.sold{opacity:.92}
       .property.sold .tag{background:rgba(16,20,22,.92);color:#fff}
       .property.sold .price{color:var(--muted)}
+      .property{position:relative;transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s ease}
+      .property .media{overflow:hidden;position:relative}
+      .property .media-img{position:absolute;inset:0;background-size:cover;background-position:center;background-image:linear-gradient(145deg,#c7b39d,#675a50);transition:transform .85s cubic-bezier(.16,1,.3,1);will-change:transform;z-index:0}
+      .property:nth-child(2) .media-img{background-image:linear-gradient(145deg,#aebbb5,#496159)}
+      .property:nth-child(3) .media-img{background-image:linear-gradient(145deg,#b8b0a4,#5a534b)}
+      .property:hover{transform:translateY(-8px)}
+      .property:hover .media{transform:none;box-shadow:0 34px 66px -34px rgba(16,20,22,.55)}
+      .property:hover .media-img{transform:scale(1.12)}
+      .property.sold:hover .media-img{transform:scale(1.05)}
     `;
     document.head.appendChild(style);
   }
@@ -79,7 +88,7 @@
   ].filter(Boolean).join('');
   const renderProps=()=>{
     $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
-      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger><div class="media${p.images&&p.images[0]?' hasimg':''}"${p.images&&p.images[0]?` style="background-image:url(${p.images[0]})"`:''}><span class="tag">${p.status} · ${p.strategy}</span></div><div class="pinfo"><div><h3>${p.name}</h3><div class="meta">${p.zone} · demo de prototipo</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Market</small><strong>${p.market}</strong></div><div><small>Yield</small><strong>${p.yield}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Docs</small><strong>${p.docs}</strong></div></div><div class="propcta"><a class="btn green" target="_blank" rel="noopener" href="${waMoreInfo(p)}">Más info por WhatsApp ↗</a><a class="btn" target="_blank" rel="noopener" href="${waShare(p)}">Compartir</a></div></article>`).join('');
+      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger><div class="media"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${p.images[0]})"`:''}></div><span class="tag">${p.status} · ${p.strategy}</span></div><div class="pinfo"><div><h3>${p.name}</h3><div class="meta">${p.zone} · demo de prototipo</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Market</small><strong>${p.market}</strong></div><div><small>Yield</small><strong>${p.yield}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Docs</small><strong>${p.docs}</strong></div></div><div class="propcta"><a class="btn green" target="_blank" rel="noopener" href="${waMoreInfo(p)}">Más info por WhatsApp ↗</a><a class="btn" target="_blank" rel="noopener" href="${waShare(p)}">Compartir</a></div></article>`).join('');
     });
   };
   renderProps();
