@@ -43,6 +43,10 @@
       .qtyrow{display:flex;align-items:center;gap:6px;margin-top:8px}
       .qtyrow input{width:66px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px;background:#fff;color:var(--ink)}
       .qtyrow span{font-size:10px;color:var(--muted)}
+      .property.sold .media{filter:grayscale(1) contrast(.96) brightness(.98)}
+      .property.sold{opacity:.92}
+      .property.sold .tag{background:rgba(16,20,22,.92);color:#fff}
+      .property.sold .price{color:var(--muted)}
     `;
     document.head.appendChild(style);
   }
@@ -60,7 +64,8 @@
   const WA_PHONE='34667384965'; // Villa's Properties WhatsApp
   const demoProps=[
     {name:'Ocean Residence',zone:'Costa Adeje',price:245000,status:'For sale',strategy:'Home',market:'-6.8%',yield:'6.9%',psm:'3,141',docs:'Reviewed',area:78,beds:2,baths:2,parking:true,pool:true,terrace:18,images:[]},
-    {name:'Yield Opportunity',zone:'Tenerife Sur',price:198000,status:'Investment',strategy:'Value-add',market:'-7.4%',yield:'7.1%',psm:'1,768',docs:'Reviewed',area:112,beds:3,baths:2,parking:true,pool:false,terrace:0,images:[]}
+    {name:'Yield Opportunity',zone:'Tenerife Sur',price:198000,status:'Investment',strategy:'Value-add',market:'-7.4%',yield:'7.1%',psm:'1,768',docs:'Reviewed',area:112,beds:3,baths:2,parking:true,pool:false,terrace:0,images:[]},
+    {name:'Villa Adeje',zone:'Costa Adeje',price:395000,status:'Sold',strategy:'Home',market:'—',yield:'—',psm:'3,560',docs:'Closed',area:145,beds:3,baths:3,parking:true,pool:true,terrace:32,images:[]}
   ];
   const waMoreInfo=p=>`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(`Hola, me interesa "${p.name}" en ${p.zone} (${fmt(p.price)}). ¿Me podéis dar más información?`)}`;
   const waShare=p=>`https://wa.me/?text=${encodeURIComponent(`${p.name} · ${p.zone} · ${fmt(p.price)} — Villa's Properties\n${location.href}`)}`;
@@ -74,7 +79,7 @@
   ].filter(Boolean).join('');
   const renderProps=()=>{
     $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
-      grid.innerHTML=demoProps.map(p=>`<article class="property" data-stagger><div class="media${p.images&&p.images[0]?' hasimg':''}"${p.images&&p.images[0]?` style="background-image:url(${p.images[0]})"`:''}><span class="tag">${p.status} · ${p.strategy}</span></div><div class="pinfo"><div><h3>${p.name}</h3><div class="meta">${p.zone} · demo de prototipo</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Market</small><strong>${p.market}</strong></div><div><small>Yield</small><strong>${p.yield}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Docs</small><strong>${p.docs}</strong></div></div><div class="propcta"><a class="btn green" target="_blank" rel="noopener" href="${waMoreInfo(p)}">Más info por WhatsApp ↗</a><a class="btn" target="_blank" rel="noopener" href="${waShare(p)}">Compartir</a></div></article>`).join('');
+      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger><div class="media${p.images&&p.images[0]?' hasimg':''}"${p.images&&p.images[0]?` style="background-image:url(${p.images[0]})"`:''}><span class="tag">${p.status} · ${p.strategy}</span></div><div class="pinfo"><div><h3>${p.name}</h3><div class="meta">${p.zone} · demo de prototipo</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Market</small><strong>${p.market}</strong></div><div><small>Yield</small><strong>${p.yield}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Docs</small><strong>${p.docs}</strong></div></div><div class="propcta"><a class="btn green" target="_blank" rel="noopener" href="${waMoreInfo(p)}">Más info por WhatsApp ↗</a><a class="btn" target="_blank" rel="noopener" href="${waShare(p)}">Compartir</a></div></article>`).join('');
     });
   };
   renderProps();
