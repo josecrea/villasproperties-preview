@@ -8,6 +8,8 @@ Public static preview for review purposes only.
 - Back Office access is protected by a client-side preview gate only.
 - Production authentication must be server-side/Odoo.
 
-Expected Pages URL after enabling GitHub Pages with **GitHub Actions** as source:
+GitHub Pages source: **main / (root)**
+
+Preview URL:
 
 `https://josecrea.github.io/villasproperties-preview/`
