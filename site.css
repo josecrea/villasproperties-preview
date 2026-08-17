@@ -268,3 +268,11 @@
 .header[data-theme="dark"]{background:linear-gradient(to bottom,rgba(16,20,22,.72),rgba(16,20,22,.28) 58%,transparent)!important;border-bottom:none!important;backdrop-filter:none}
 /* ===== Hero big circle: scroll + independent float (--fx/--fy from JS) ===== */
 .hero-bigcircle{transform:translate3d(calc(-50% + var(--fx,0px)),calc(-50% + var(--sy,0px) + var(--fy,0px)),0) scale(var(--ss,1))!important}
+
+/* ===== Bug fixes batch ===== */
+.brand-logo{width:clamp(42px,4.3vw,58px)!important}
+.is-title-l2{font-size:clamp(2rem,5.2vw,3.7rem)!important}
+.is-grid{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)}
+.header[data-theme="hero"]{background:linear-gradient(to bottom,rgba(6,9,8,.5),rgba(6,9,8,.12) 60%,transparent)!important}
+.property .media:after{animation:cardOrbit 13s ease-in-out infinite alternate}
+@keyframes cardOrbit{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-10px,12px,0) scale(1.12)}}
