@@ -233,3 +233,33 @@
 
 .footergrid{grid-template-columns:1.4fr 1fr 1fr 1fr}
 @media(max-width:820px){.footergrid{grid-template-columns:1fr 1fr}}
+
+/* ============ TENERIFE CINEMATIC STORYTELLING (tf-) ============ */
+.tf-section{--tf-zones:5;--tf-crossfade:900ms;height:calc(var(--tf-zones) * 90vh);position:relative;background:var(--ink-deep);color:var(--paper);overflow:hidden}
+.tf-sticky{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;display:grid}
+.tf-stage{position:absolute;inset:0;overflow:hidden}
+.tf-layer{position:absolute;inset:0;opacity:0;transform:scale(1.12);background-size:cover;background-position:center;will-change:opacity,transform;transition:opacity var(--tf-crossfade) var(--mo-ease),transform 1600ms var(--mo-ease)}
+.tf-layer.is-active{opacity:1;transform:scale(1)}
+.tf-layer--adeje{background-image:radial-gradient(120% 90% at 78% 18%,#7fa094 0%,transparent 55%),linear-gradient(200deg,var(--atlantic) 0%,var(--ink) 62%,var(--ink-deep) 100%)}
+.tf-layer--cristianos{background-image:radial-gradient(110% 80% at 22% 80%,var(--sand) 0%,transparent 52%),linear-gradient(160deg,var(--ink) 0%,var(--atlantic) 78%,var(--ink-deep) 100%)}
+.tf-layer--palmmar{background-image:radial-gradient(130% 100% at 88% 88%,var(--atlantic) 0%,transparent 58%),linear-gradient(300deg,var(--ink-deep) 0%,var(--ink) 46%,var(--sand) 130%)}
+.tf-layer--medano{background-image:radial-gradient(120% 90% at 50% 12%,#e6d3bf 0%,transparent 50%),linear-gradient(210deg,var(--sand) 0%,var(--atlantic) 66%,var(--ink) 100%)}
+.tf-layer--golf{background-image:radial-gradient(140% 110% at 18% 22%,var(--atlantic-soft) 0%,transparent 46%),linear-gradient(140deg,var(--ink-deep) 0%,var(--atlantic) 72%,var(--ink) 100%)}
+.tf-layer.has-photo{filter:saturate(1.02)}
+.tf-vignette{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(16,20,22,.78) 0%,rgba(16,20,22,.30) 42%,rgba(16,20,22,0) 70%),linear-gradient(0deg,rgba(16,20,22,.72) 0%,rgba(16,20,22,0) 46%)}
+.tf-overlay{position:relative;z-index:2;height:100%;padding:var(--pad,clamp(1.5rem,5vw,5rem));max-width:var(--max,1400px);margin-inline:auto;width:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:clamp(1.25rem,3vw,2.5rem)}
+.tf-kicker{position:absolute;top:var(--pad,clamp(1.5rem,5vw,5rem));left:var(--pad,clamp(1.5rem,5vw,5rem));margin:0;font-size:clamp(.7rem,1.1vw,.82rem);letter-spacing:.28em;text-transform:uppercase;color:color-mix(in oklab,var(--paper) 80%,var(--atlantic))}
+.tf-kicker span{color:var(--sand)}
+.tf-captions{position:relative;min-height:clamp(180px,34vh,340px)}
+.tf-caption{position:absolute;inset:auto auto 0 0;opacity:0;transform:translateY(22px);transition:opacity 560ms var(--mo-ease),transform 720ms var(--mo-ease);pointer-events:none}
+.tf-caption.is-active{opacity:1;transform:translateY(0);pointer-events:auto}
+.tf-index{display:inline-block;font-size:clamp(.8rem,1.4vw,1rem);letter-spacing:.2em;color:var(--sand);margin-bottom:clamp(.5rem,1.4vw,1rem)}
+.tf-index i{color:color-mix(in oklab,var(--paper) 55%,transparent);font-style:normal}
+.tf-name{margin:0;font-size:clamp(48px,8vw,140px);line-height:.92;letter-spacing:-.02em;font-weight:700;text-wrap:balance;color:var(--paper);text-shadow:0 2px 40px rgba(16,20,22,.4)}
+.tf-meta,.tf-demand{margin:clamp(.4rem,1.2vw,.9rem) 0 0;max-width:46ch}
+.tf-meta{font-size:clamp(1rem,2vw,1.6rem);color:color-mix(in oklab,var(--paper) 92%,var(--atlantic));font-weight:500}
+.tf-demand{font-size:clamp(.82rem,1.3vw,1rem);letter-spacing:.06em;text-transform:uppercase;color:var(--sand)}
+.tf-progress{display:flex;gap:.6rem;align-items:center}
+.tf-dot{width:34px;height:3px;border-radius:2px;background:color-mix(in oklab,var(--paper) 26%,transparent);transition:background 420ms var(--mo-ease),width 420ms var(--mo-ease)}
+.tf-dot.is-active{width:54px;background:var(--sand)}
+@media (prefers-reduced-motion:reduce){.tf-section{height:auto;overflow:visible}.tf-sticky{position:static;height:auto;display:block}.tf-stage,.tf-vignette,.tf-progress{display:none}.tf-overlay{display:block;padding-block:clamp(2rem,6vw,4rem)}.tf-kicker{position:static;margin-bottom:2rem}.tf-captions{min-height:0}.tf-caption{position:relative;inset:auto;opacity:1;transform:none;pointer-events:auto;padding:clamp(1.5rem,4vw,2.5rem);margin-bottom:clamp(1rem,3vw,2rem);border-radius:14px;background:linear-gradient(160deg,var(--ink) 0%,var(--ink-deep) 100%);border:1px solid color-mix(in oklab,var(--atlantic) 40%,transparent)}.tf-name{font-size:clamp(40px,9vw,88px)}}
