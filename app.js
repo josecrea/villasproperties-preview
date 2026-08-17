@@ -19,7 +19,6 @@
   const localRoutes=[
     ['https://villasproperties.es/valoracion-gratis-tenerife','valuation.html'],
     ['https://villasproperties.es/market-impact','market-impact.html'],
-    ['https://villasproperties.es/blog','insights.html'],
     ['https://villasproperties.es/contactus','contact.html']
   ];
   $$('a[href]').forEach(a=>{
