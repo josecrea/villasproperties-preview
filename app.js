@@ -36,6 +36,13 @@
       .spec svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;opacity:.82}
       .propertygrid.catalogue-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       @media(max-width:820px){.propertygrid.catalogue-grid{grid-template-columns:1fr}}
+      .propcta{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+      .propcta .btn{flex:1 1 130px;justify-content:center;font-size:9px}
+      .property .media.hasimg{background-size:cover!important;background-position:center!important}
+      .feature.qty{display:flex;flex-direction:column}
+      .qtyrow{display:flex;align-items:center;gap:6px;margin-top:8px}
+      .qtyrow input{width:66px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px;background:#fff;color:var(--ink)}
+      .qtyrow span{font-size:10px;color:var(--muted)}
     `;
     document.head.appendChild(style);
   }
@@ -50,10 +57,13 @@
   };
   const spec=(icon,value,label)=>`<span class="spec" title="${label}">${icons[icon]}<span>${value?`<strong>${value}</strong>`:''}${label?` ${label}`:''}</span></span>`;
 
+  const WA_PHONE='34667384965'; // Villa's Properties WhatsApp
   const demoProps=[
-    {name:'Ocean Residence',zone:'Costa Adeje',price:245000,status:'For sale',strategy:'Home',market:'-6.8%',yield:'6.9%',psm:'3,141',docs:'Reviewed',area:78,beds:2,baths:2,parking:true,pool:true,terrace:18},
-    {name:'Yield Opportunity',zone:'Tenerife Sur',price:198000,status:'Investment',strategy:'Value-add',market:'-7.4%',yield:'7.1%',psm:'1,768',docs:'Reviewed',area:112,beds:3,baths:2,parking:true,pool:false,terrace:0}
+    {name:'Ocean Residence',zone:'Costa Adeje',price:245000,status:'For sale',strategy:'Home',market:'-6.8%',yield:'6.9%',psm:'3,141',docs:'Reviewed',area:78,beds:2,baths:2,parking:true,pool:true,terrace:18,images:[]},
+    {name:'Yield Opportunity',zone:'Tenerife Sur',price:198000,status:'Investment',strategy:'Value-add',market:'-7.4%',yield:'7.1%',psm:'1,768',docs:'Reviewed',area:112,beds:3,baths:2,parking:true,pool:false,terrace:0,images:[]}
   ];
+  const waMoreInfo=p=>`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(`Hola, me interesa "${p.name}" en ${p.zone} (${fmt(p.price)}). ¿Me podéis dar más información?`)}`;
+  const waShare=p=>`https://wa.me/?text=${encodeURIComponent(`${p.name} · ${p.zone} · ${fmt(p.price)} — Villa's Properties\n${location.href}`)}`;
   const propertySpecs=p=>[
     spec('area',`${p.area} m²`,'superficie'),
     spec('bed',p.beds,'hab.'),
@@ -64,7 +74,7 @@
   ].filter(Boolean).join('');
   const renderProps=()=>{
     $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
-      grid.innerHTML=demoProps.map(p=>`<article class="property" data-stagger><div class="media"><span class="tag">${p.status} · ${p.strategy}</span></div><div class="pinfo"><div><h3>${p.name}</h3><div class="meta">${p.zone} · demo de prototipo</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Market</small><strong>${p.market}</strong></div><div><small>Yield</small><strong>${p.yield}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Docs</small><strong>${p.docs}</strong></div></div></article>`).join('');
+      grid.innerHTML=demoProps.map(p=>`<article class="property" data-stagger><div class="media${p.images&&p.images[0]?' hasimg':''}"${p.images&&p.images[0]?` style="background-image:url(${p.images[0]})"`:''}><span class="tag">${p.status} · ${p.strategy}</span></div><div class="pinfo"><div><h3>${p.name}</h3><div class="meta">${p.zone} · demo de prototipo</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Market</small><strong>${p.market}</strong></div><div><small>Yield</small><strong>${p.yield}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Docs</small><strong>${p.docs}</strong></div></div><div class="propcta"><a class="btn green" target="_blank" rel="noopener" href="${waMoreInfo(p)}">Más info por WhatsApp ↗</a><a class="btn" target="_blank" rel="noopener" href="${waShare(p)}">Compartir</a></div></article>`).join('');
     });
   };
   renderProps();
@@ -89,7 +99,33 @@
   }
 
   const panel=$('#adminPanel'),overlay=$('#overlay'); const close=()=>{overlay?.classList.remove('open');panel?.classList.remove('open')}; $('#closeAdmin')?.addEventListener('click',close); overlay?.addEventListener('click',close);
-  const features=['Superficie','Habitaciones','Baños','Parking','Trastero','Piscina','Terraza','Jardín','Ascensor','Vistas','A/C','Amueblado']; const fb=$('#features'); if(fb){fb.innerHTML=features.map((x,i)=>`<button class="feature ${[0,1,2,3,5,6,8,9,10].includes(i)?'active':''}" type="button"><span class="eye">${String(i+1).padStart(2,'0')}</span><div style="margin-top:9px">${x}</div></button>`).join(''); fb.addEventListener('click',e=>{const b=e.target.closest('.feature');if(b)b.classList.toggle('active')})}
-  $('#saveAdmin')?.addEventListener('click',()=>{const n=$('#aName'),p=$('#aPrice'),z=$('#aZone'),st=$('#aStatus'),sg=$('#aStrategy'); if(n)demoProps[0].name=n.value;if(p)demoProps[0].price=p.value;if(z)demoProps[0].zone=z.value;if(st)demoProps[0].status=st.value;if(sg)demoProps[0].strategy=sg.value; renderProps(); const m=$('#statusMsg');if(m)m.textContent='✓ Cambios aplicados a la sesión del prototipo.'});
-  $('#videoFile')?.addEventListener('change',e=>{const f=e.target.files?.[0],v=$('#heroVideo');if(!f||!v)return;v.src=URL.createObjectURL(f);v.classList.add('active');v.play().catch(()=>{})});
+  const featureDefs=[
+    {n:'Superficie',u:'m²',qty:78},{n:'Habitaciones',qty:2},{n:'Baños',qty:2},
+    {n:'Parking',u:'plazas',qty:1},{n:'Trastero',bool:1,on:0},{n:'Piscina',bool:1,on:1},
+    {n:'Terraza',u:'m²',qty:18},{n:'Jardín',bool:1,on:0},{n:'Ascensor',bool:1,on:1},
+    {n:'Vistas',bool:1,on:1},{n:'A/C',bool:1,on:1},{n:'Amueblado',bool:1,on:0}
+  ];
+  const fb=$('#features');
+  if(fb){
+    fb.innerHTML=featureDefs.map((f,i)=>{const num=String(i+1).padStart(2,'0');
+      return f.bool
+        ? `<button class="feature ${f.on?'active':''}" data-i="${i}" type="button"><span class="eye">${num}</span><div style="margin-top:9px">${f.n}</div></button>`
+        : `<div class="feature qty"><span class="eye">${num}</span><div style="margin-top:9px">${f.n}</div><div class="qtyrow"><input type="number" min="0" value="${f.qty}" data-qi="${i}" aria-label="${f.n}"><span>${f.u||''}</span></div></div>`;
+    }).join('');
+    fb.addEventListener('click',e=>{const b=e.target.closest('button.feature[data-i]');if(b){const i=+b.dataset.i;featureDefs[i].on=featureDefs[i].on?0:1;b.classList.toggle('active')}});
+    fb.addEventListener('input',e=>{const inp=e.target.closest('input[data-qi]');if(inp)featureDefs[+inp.dataset.qi].qty=+inp.value||0});
+  }
+  $('#saveAdmin')?.addEventListener('click',()=>{const n=$('#aName'),p=$('#aPrice'),z=$('#aZone'),st=$('#aStatus'),sg=$('#aStrategy'); if(n)demoProps[0].name=n.value;if(p)demoProps[0].price=p.value;if(z)demoProps[0].zone=z.value;if(st)demoProps[0].status=st.value;if(sg)demoProps[0].strategy=sg.value;
+    const q=nm=>featureDefs.find(f=>f.n===nm)?.qty, on=nm=>!!featureDefs.find(f=>f.n===nm)?.on;
+    if(q('Superficie')!=null)demoProps[0].area=q('Superficie'); if(q('Habitaciones')!=null)demoProps[0].beds=q('Habitaciones'); if(q('Baños')!=null)demoProps[0].baths=q('Baños'); if(q('Parking')!=null)demoProps[0].parking=q('Parking')>0; if(q('Terraza')!=null)demoProps[0].terrace=q('Terraza'); demoProps[0].pool=on('Piscina');
+    renderProps(); const m=$('#statusMsg');if(m)m.textContent='✓ Cambios aplicados a la sesión del prototipo.'});
+  $('#videoFile')?.addEventListener('change',e=>{const f=e.target.files?.[0],v=$('#heroVideo');if(!f||!v)return;v.src=URL.createObjectURL(f);v.dataset.variant='local';v.classList.add('active');v.play().catch(()=>{})});
+  // Property images uploader injected next to the hero video field
+  const vfField=$('#videoFile')?.closest('.field');
+  if(vfField && !$('#propImages')){
+    const w=document.createElement('div'); w.className='field full';
+    w.innerHTML='<label>Imágenes de la propiedad (demo local)</label><input id="propImages" type="file" accept="image/*" multiple>';
+    vfField.after(w);
+    $('#propImages').addEventListener('change',e=>{const files=[...(e.target.files||[])]; if(!files.length)return; demoProps[0].images=files.map(f=>URL.createObjectURL(f)); renderProps(); const m=$('#statusMsg'); if(m)m.textContent=`✓ ${files.length} imagen(es) cargadas en la sesión.`;});
+  }
 })();
