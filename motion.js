@@ -15,6 +15,14 @@
   root.classList.add('motion-ready');
   if (reduce) root.classList.add('motion-reduced');
 
+  /* ---------- Protected brand layer ---------- */
+  if (!document.querySelector('script[data-vp-brand-runtime]')) {
+    const brandRuntime = document.createElement('script');
+    brandRuntime.src = 'brand-runtime.js';
+    brandRuntime.dataset.vpBrandRuntime = 'true';
+    document.head.appendChild(brandRuntime);
+  }
+
   /* ---------- Hero video: responsive source + guards ---------- */
   const video = document.getElementById('heroVideo');
   if (video && video.hasAttribute('data-src-base')) {
@@ -31,7 +39,7 @@
       if (p && p.catch) p.catch(() => {});
     };
     if (reduce || saveData || slow) {
-      root.classList.add('hero-static'); // keep poster, never fetch video
+      root.classList.add('hero-static');
     } else {
       load();
       let t;
@@ -50,7 +58,6 @@
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
         const el = e.target;
-        // stagger direct children flagged for it
         el.querySelectorAll(':scope > [data-stagger], [data-stagger-group] > *').forEach((c, i) => {
           c.style.setProperty('--st-i', i);
         });
@@ -63,7 +70,7 @@
     revealEls.forEach((el) => el.classList.add('is-in'));
   }
 
-  /* ---------- Light parallax (rAF, transform only, never on reduced) ---------- */
+  /* ---------- Light parallax ---------- */
   const paraEls = Array.from(document.querySelectorAll('[data-parallax]'));
   if (paraEls.length && !reduce && !saveData) {
     let ticking = false;
@@ -71,7 +78,7 @@
       const vh = innerHeight;
       for (const el of paraEls) {
         const r = el.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) continue; // skip offscreen
+        if (r.bottom < -200 || r.top > vh + 200) continue;
         const speed = parseFloat(el.getAttribute('data-parallax')) || 0.1;
         const off = (((r.top + r.height / 2) - vh / 2) * -speed);
         el.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0)`;
