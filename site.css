@@ -1087,6 +1087,156 @@ body.is-loaded::after {
 body.no-preloader::before,
 body.no-preloader::after { content: none; }
 
+/* ── Consentimiento dentro del preloader ─────────────────────────────────
+   Mientras hay una decisión pendiente el preloader se PAUSA, no se desactiva.
+   La diferencia importa: `animation-play-state` congela también el retardo de
+   9 s, pero si vp-consent.js no llegara a ejecutarse nunca se pone esta clase
+   y la red de seguridad retira el preloader como siempre. Nadie se queda
+   encerrado por un script que no cargó.
+
+   Cuelga de <html> y no de <body> a propósito: <html> existe desde el primer
+   byte del documento, así que la pausa se puede aplicar antes incluso de que
+   haya <body>. Con una conexión lenta, esperar a <body> llegaba tarde —se
+   midió DOMContentLoaded a 5,3 s— y la web se colaba por debajo del aviso. */
+html.vp-consent-espera body::before,
+html.vp-consent-espera body::after { animation-play-state: paused; }
+
+/* La barra de progreso: la carga deja de ser un aro girando sin sentido y pasa
+   a decir cuánto falta. El aviso sale justo al 75%. */
+body::after { z-index: 10000; }
+
+/* Va pegada al borde superior y no bajo el logo: centrada chocaba con el
+   tagline del preloader —quedaba detrás y no se veía—, y cualquier posición
+   calculada respecto al centro se rompe al cambiar el alto de la ventana.
+   Arriba y a todo el ancho no colisiona con nada, a ningún alto. */
+.vp-progreso {
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 3px;
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+  overflow: hidden;
+}
+.vp-progreso__barra {
+  height: 100%;
+  width: var(--pl-progreso, 0%);
+  background: var(--ink);
+  transition: width .5s cubic-bezier(.16, 1, .3, 1);
+}
+body.is-loaded .vp-progreso {
+  animation: pl-out .5s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+html.vp-consent-espera .vp-progreso { animation-play-state: paused; }
+
+/* El aviso. Va por encima del preloader (9999) porque se lee SOBRE él. */
+.vp-consent {
+  position: fixed;
+  z-index: 10001;
+  left: 50%;
+  bottom: clamp(18px, 4vh, 48px);
+  transform: translateX(-50%);
+  width: min(560px, calc(100vw - 40px));
+  /* Compacto a propósito: en una ventana de 720px de alto el aviso llegaba a
+     comerse el tagline del preloader. */
+  padding: 20px 24px 18px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 60px rgba(16, 20, 22, .13);
+  animation: vp-consent-in .5s cubic-bezier(.16, 1, .3, 1) both;
+}
+@keyframes vp-consent-in {
+  from { opacity: 0; transform: translate(-50%, 14px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.vp-consent__titulo {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.vp-consent__texto {
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.vp-consent__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+/* Botones propios y no `.btn.fill`: sobre papel el relleno blanco desaparece.
+   El principal va en tinta —contraste de sobra para un texto de 9px—. */
+.vp-consent__si,
+.vp-consent__no {
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 11px 17px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s, color .2s, opacity .2s;
+}
+.vp-consent__si { background: var(--ink); color: var(--paper); }
+.vp-consent__si:hover { opacity: .82; }
+.vp-consent__no { background: transparent; color: var(--ink); }
+.vp-consent__no:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.vp-consent__si:focus-visible,
+.vp-consent__no:focus-visible,
+.vp-consent__mas:focus-visible { outline: 2px solid var(--atlantic); outline-offset: 3px; }
+
+/* El relleno vertical no es estético: con solo la altura del texto el objetivo
+   táctil se quedaba en 17px y no hay dedo que acierte. El subrayado sigue
+   ciñendo la palabra; lo que crece es la zona que se puede pulsar. */
+.vp-consent__mas {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 16px 4px;
+  font-size: 11px;
+  line-height: 1.1;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Si no se decide a tiempo, el aviso NO se queda bloqueando: baja al pie y la
+   web queda usable. Es el seguro contra el fallo que ya pasó en producción,
+   donde el modal cubría la ventana con el botón muerto. */
+.vp-consent--pie {
+  bottom: 0;
+  left: 0;
+  transform: none;
+  width: 100%;
+  max-width: none;
+  border: 0;
+  border-top: 1px solid var(--line);
+  animation: none;
+}
+.vp-consent--fuera {
+  opacity: 0;
+  transition: opacity .35s;
+  pointer-events: none;
+}
+
+@media (max-width: 560px) {
+  .vp-consent { padding: 20px 20px 18px; }
+  .vp-consent__texto { font-size: 13px; }
+  .vp-consent__si,
+  .vp-consent__no { flex: 1 1 auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vp-consent { animation-duration: .01s; }
+  .vp-progreso__barra { transition: none; }
+}
+
 /* ================= COLOR EN EL MOVIMIENTO =================
    El motion system movía las cosas pero todo entraba en gris. Estos tres
    toques meten los colores de la casa (atlántico y arena) EN la animación,
@@ -1360,11 +1510,14 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   display: block;
   color: inherit;
 }
-/* Delgada: el peso ligero es lo que le da el aire editorial. */
+/* Delgada: el peso ligero es lo que le da el aire editorial.
+   100 y no 200: en la pila del sistema es Ultralight de verdad (San Francisco
+   en Mac/iOS, Roboto Thin en Android). Donde no exista ese corte —Segoe UI en
+   Windows— el navegador cae al más fino disponible, nunca a uno más grueso. */
 .head h2 .t-ligero,
 .pagehero h1 .t-ligero {
-  font-weight: 200;
-  letter-spacing: .07em;    /* la delgada admite —y pide— mucho más aire */
+  font-weight: 100;
+  letter-spacing: .085em;   /* a menos trazo, más aire: si no, se deshilacha */
 }
 /* Y la última palabra, con todo el peso. */
 .head h2 .t-solido,
@@ -1372,6 +1525,24 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   font-weight: 800;
   letter-spacing: .005em;   /* la negra necesita menos, pero ya no va apretada */
   margin-top: .12em;        /* respiro entre la línea delgada y la negra */
+}
+
+/* Un titular largo NO puede ensanchar su propia columna.
+   Los hijos de un grid nacen con min-width:auto, así que una palabra que no
+   quepa —"INTERPRETAMOS" a 46px mide 385px— estira la columna por encima del
+   ancho de la pantalla. Como .section lleva overflow:hidden, el sobrante no
+   genera scroll: se recorta en silencio y la palabra pierde la última letra.
+   Ningún test de desborde lo caza, porque no hay scroll y dentro del h2 el
+   texto "cabe". Solo se ve mirando una captura. */
+.head > *,
+.pagehero > * { min-width: 0; }
+
+/* Y que quepa de verdad en móvil: a 375px el hueco útil es 335px, así que el
+   mínimo del clamp baja hasta que la palabra más larga entre entera. */
+@media (max-width: 560px) {
+  .head h2,
+  .pagehero h1,
+  .big { font-size: clamp(32px, 8.6vw, 46px); }
 }
 
 /* La rayita de debajo, como en el original. */

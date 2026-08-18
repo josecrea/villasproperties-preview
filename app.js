@@ -156,7 +156,19 @@
 
   var RESPIRO_VIDEO_MS = 700;   // margen tras montar el reproductor
 
-  var esperarVideo = function () {
+  /* El vídeo es de Vimeo, así que no se carga hasta que hay consentimiento
+     (vp-consent.js). Aquí se espera esa decisión ANTES de esperar al vídeo: si
+     se eligió "solo lo esencial" no hay iframe que aguardar y el preloader
+     sale en cuanto el resto está listo. Sin este orden, el preloader se
+     quedaría esperando eternamente un vídeo que nadie va a cargar. */
+  var esperarPermiso = function () {
+    var c = window.VPConsent;
+    if (!c || !c.permisoVideo) return Promise.resolve(true);   // sin script, como antes
+    return c.permisoVideo;
+  };
+
+  var esperarVideo = function (permitido) {
+    if (permitido === false) return Promise.resolve();
     return new Promise(function (res) {
       var con = navigator.connection || {};
       if (con.saveData === true || /(^|-)2g/.test(con.effectiveType || '')) return res();
@@ -188,6 +200,7 @@
   var listo = function () {
     var fuentes = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
     fuentes
+      .then(esperarPermiso)
       .then(esperarVideo)
       .then(function () {
         requestAnimationFrame(function () { requestAnimationFrame(quitar); });
