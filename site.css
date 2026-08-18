@@ -749,3 +749,22 @@
 .bo-log{background:var(--ink-deep);color:#cfe3d9;font-size:11px;line-height:1.6;padding:12px 14px;border-radius:8px;max-height:220px;overflow:auto;white-space:pre-wrap;margin:14px 0 0}
 .pmedia-frame{position:relative;aspect-ratio:16/9;border:1px solid var(--line);background:var(--paper-2);overflow:hidden}
 .pmedia-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+/* =====================================================================
+   FIX: la foto de la firma en notaría nunca aparecía.
+   `image-reveal` recortaba el propio elemento observado con
+   clip-path:inset(0 100% 0 0) — área visible cero —, así que el
+   IntersectionObserver devolvía ratio 0, nunca añadía .is-in y nunca se
+   quitaba el recorte: bloqueo circular. El barrido pasa al contenido, que es
+   donde se ve, y el contenedor conserva su área para que el observer dispare.
+   ===================================================================== */
+[data-reveal="image-reveal"]{clip-path:none!important}
+[data-reveal="image-reveal"]>img,[data-reveal="image-reveal"]>picture>img{clip-path:inset(0 100% 0 0);transition:clip-path 1.2s var(--mo-ease),transform 1.2s var(--mo-ease)}
+[data-reveal="image-reveal"].is-in>img,[data-reveal="image-reveal"].is-in>picture>img{clip-path:inset(0 0 0 0)}
+/* Mismo motivo en `mask`: el recorte va al contenido, no al observado. */
+.motion-ready [data-reveal="mask"]{clip-path:none!important}
+.motion-ready [data-reveal="mask"]>*{clip-path:inset(0 0 100% 0);transition:clip-path 1.1s var(--mo-ease)}
+[data-reveal="mask"].is-in>*{clip-path:inset(0 0 0 0)}
+@media (prefers-reduced-motion: reduce){
+  [data-reveal="image-reveal"]>img,[data-reveal="mask"]>*{clip-path:none!important}
+}

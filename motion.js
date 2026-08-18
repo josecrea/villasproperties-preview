@@ -57,6 +57,33 @@
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
     revealEls.forEach((el) => io.observe(el));
+
+    /* Cinturón de seguridad: si por lo que sea el observer no dispara (un
+       clip-path que deja el elemento sin área, un ancestro recortado…), nada
+       puede quedar invisible para siempre. Se revisa por geometría y se deja
+       de escuchar en cuanto no queda nada pendiente. */
+    let pending = [...revealEls];
+    const sweep = () => {
+      pending = pending.filter((el) => {
+        if (el.classList.contains('is-in')) return false;
+        const r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) return true;
+        el.querySelectorAll(':scope > [data-stagger], [data-stagger-group] > *')
+          .forEach((c, i) => c.style.setProperty('--st-i', i));
+        el.classList.add('is-in');
+        io.unobserve(el);
+        return false;
+      });
+      if (!pending.length) removeEventListener('scroll', onScroll);
+    };
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { ticking = false; sweep(); });
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    setTimeout(sweep, 1200);
   } else {
     revealEls.forEach((el) => el.classList.add('is-in'));
   }
