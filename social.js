@@ -57,6 +57,19 @@
     wa.setAttribute('aria-label', 'Escribir por WhatsApp');
     wa.innerHTML = `${ICONS.whatsapp}<span>WhatsApp</span>`;
     document.body.appendChild(wa);
+
+    /* En móvil el botón flotante tapa la esquina del contenido: se retira
+       mientras se baja y vuelve al subir o al detenerse. */
+    let lastY = window.scrollY;
+    let idle;
+    addEventListener('scroll', () => {
+      const y = window.scrollY;
+      const goingDown = y > lastY && y > 240;
+      wa.classList.toggle('is-away', goingDown);
+      lastY = y;
+      clearTimeout(idle);
+      idle = setTimeout(() => wa.classList.remove('is-away'), 700);
+    }, { passive: true });
   }
 
   /* ---------- Compartir (artículos y fichas) ---------- */

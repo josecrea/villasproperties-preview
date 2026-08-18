@@ -909,3 +909,4 @@
   .sell-steps li{grid-template-columns:1fr;gap:10px}
   .sell-ticker-list dd{font-size:17px}
 }
+.wa-float.is-away{transform:translateY(140%);opacity:0;pointer-events:none}
