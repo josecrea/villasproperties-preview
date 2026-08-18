@@ -70,13 +70,15 @@
   const spec=(icon,value,label)=>`<span class="spec" title="${label}">${icons[icon]}<span>${value?`<strong>${value}</strong>`:''}${label?` ${label}`:''}</span></span>`;
 
   const WA_PHONE='34667384965'; // Villa's Properties WhatsApp
-  const demoProps=[
-    {name:'Ático reformado · vistas piscina',zone:'Costa Adeje',price:395000,status:'For sale',strategy:'Home',market:'—',yield:'—',psm:'4.489',docs:'Idealista',area:88,beds:2,baths:2,parking:false,pool:true,terrace:15,images:['assets/img/prop-adeje.webp'],url:'https://www.idealista.com/pro/villas-properties/inmueble/111258127/'},
-    {name:'Apartamento amplio · garaje',zone:'Cabo Blanco · Arona',price:249000,status:'For sale',strategy:'Investment',market:'—',yield:'—',psm:'2.264',docs:'Idealista',area:110,beds:2,baths:2,parking:true,pool:false,terrace:0,images:['assets/img/prop-caboblanco.webp'],url:'https://www.idealista.com/pro/villas-properties/inmueble/111230958/'},
-    {name:'Entreplanta luminosa',zone:'Los Abrigos · Granadilla',price:189000,status:'For sale',strategy:'Home',market:'—',yield:'—',psm:'3.375',docs:'Idealista',area:56,beds:2,baths:1,parking:false,pool:false,terrace:0,images:['assets/img/prop-abrigos.webp'],url:'https://www.idealista.com/pro/villas-properties/inmueble/112230501/'},
-    {name:'Loft El Fraile',zone:'El Fraile · Arona',price:139000,status:'For sale',strategy:'Investment',market:'—',yield:'—',psm:'2.317',docs:'Idealista',area:60,beds:1,baths:1,parking:false,pool:false,terrace:0,images:['assets/img/prop-fraile1.webp'],url:'https://www.idealista.com/pro/villas-properties/inmueble/111734875/'},
-    {name:'Loft El Fraile · 2 hab',zone:'El Fraile · Arona',price:135000,status:'For sale',strategy:'Investment',market:'—',yield:'—',psm:'2.250',docs:'Idealista',area:60,beds:2,baths:1,parking:false,pool:false,terrace:0,images:['assets/img/prop-fraile2.webp'],url:'https://www.idealista.com/pro/villas-properties/inmueble/111928810/'}
-  ];
+  /* Catálogo real: properties-data.js es la fuente única (la comparte la ficha
+     individual). Se mantiene un fallback mínimo por si el script no carga. */
+  const demoProps=(window.VP_PROPERTIES||[]).map(p=>({
+    name:p.title,zone:`${p.zone} · ${p.town}`,price:p.price,status:p.status,strategy:p.strategy,
+    market:'—',yield:'—',psm:String(p.pricePerM2).replace(/\B(?=(\d{3})+(?!\d))/g,'.'),docs:'Ficha',
+    area:p.built,beds:p.beds,baths:p.baths,parking:/garaje/i.test(p.features.join(' ')),
+    pool:/piscina/i.test(p.equipment.join(' ')),terrace:(p.features.join(' ').match(/(?:Terraza|Balcón) de (\d+) m²/)||[])[1]||0,
+    images:p.images,url:`property.html?ref=${p.ref}`,ref:p.ref
+  }));
   const waMoreInfo=p=>`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(`Hola, me interesa "${p.name}" en ${p.zone} (${fmt(p.price)}). ¿Me podéis dar más información?`)}`;
   const waShare=p=>`https://wa.me/?text=${encodeURIComponent(`${p.name} · ${p.zone} · ${fmt(p.price)} — Villa's Properties\n${location.href}`)}`;
   const propertySpecs=p=>[
@@ -89,7 +91,7 @@
   ].filter(Boolean).join('');
   const renderProps=()=>{
     $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
-      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger><div class="media"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${p.images[0]})"`:''}></div><span class="tag">${p.status} · ${p.strategy}</span></div><div class="pinfo"><div><h3>${p.name}</h3><div class="meta">${p.zone} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Market</small><strong>${p.market}</strong></div><div><small>Yield</small><strong>${p.yield}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Docs</small><strong>${p.docs}</strong></div></div><div class="propcta"><a class="btn green" target="_blank" rel="noopener" href="${waMoreInfo(p)}">Más info por WhatsApp ↗</a><a class="btn" target="_blank" rel="noopener" href="${waShare(p)}">Compartir</a></div></article>`).join('');
+      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger><a class="media" href="${p.url}" aria-label="Ver ficha de ${p.name}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${p.images[0]})"`:''}></div><span class="tag">${p.status} · ${p.strategy}</span></a><div class="pinfo"><div><h3><a href="${p.url}">${p.name}</a></h3><div class="meta">${p.zone} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${p.ref||'—'}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${p.url}">Ver ficha ↗</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
     });
   };
   renderProps();
