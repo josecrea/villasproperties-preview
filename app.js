@@ -122,46 +122,77 @@
   /* El editor del catálogo vive en backoffice.js: aquí solo queda el cierre
      del panel, que es puro comportamiento de interfaz. */
 })();
-/* Preloader de marca: dura EXACTAMENTE lo que la web tarda en estar lista.
-   Nada de temporizadores fijos.
+/* Preloader de marca: la web tiene que estar ENTERA antes de descubrirla,
+   vídeo de fondo incluido. Al salir el preloader no debe quedar nada cargando:
+   ni el hero en negro esperando al vídeo, ni tipografías saltando.
 
-   "Lista" = el DOM está montado, las tipografías cargadas y el navegador ya ha
-   pintado un fotograma. Eso es lo que hace falta para que no se vea la página
-   dando saltos. NO se espera al vídeo de fondo: es un iframe de Vimeo que tarda
-   ~9 s, y hacer esperar al usuario por un fondo decorativo es peor experiencia
-   que entrar y que el vídeo aparezca solo un segundo después.
+   Se espera, en este orden:
+     1. DOM montado
+     2. tipografías cargadas
+     3. el vídeo del hero listo — es un iframe de Vimeo, así que se escucha su
+        evento `load` (el reproductor ya está montado) y se le da un respiro
+        para que tenga imagen; con un iframe de otro dominio no hay forma de
+        saber su buffer sin cargar el SDK de Vimeo
+     4. un frame pintado
 
-   Solo hay dos ajustes al "lo que tarde":
-     · un mínimo de 350 ms, porque desde caché la web está lista en 80 ms y el
-       preloader daría un parpadeo desagradable
-     · una red de seguridad a los 10 s por si algo se atasca. Y si este script ni
-       llegara a ejecutarse, el CSS lo retira igual con `forwards`. */
+   Solo entonces sale el preloader, y solo entonces arranca la ola de color del
+   titular (el CSS la cuelga de body.is-loaded).
+
+   Red de seguridad a 12 s por si Vimeo no responde: mejor entrar con el fondo a
+   medias que quedarse fuera. Y si este script ni se ejecutara, el CSS retira el
+   preloader igual. */
 (function () {
   var salida = false;
-  var arranque = Date.now();
-  var MINIMO_MS = 350;
-
   var quitar = function () {
     if (salida) return;
     salida = true;
-    var espera = Math.max(0, MINIMO_MS - (Date.now() - arranque));
-    window.setTimeout(function () {
-      document.body.classList.add('is-loaded');
-    }, espera);
+    document.body.classList.add('is-loaded');
   };
 
-  window.setTimeout(quitar, 10000);   // red de seguridad
+  // 8 s: si Vimeo no ha respondido para entonces, es que no va a responder
+  // (p. ej. el dominio no está autorizado y devuelve 401). Mejor entrar con el
+  // fondo a medias que dejar al visitante mirando el logo.
+  window.setTimeout(quitar, 8000);
+
+  var RESPIRO_VIDEO_MS = 700;   // margen tras montar el reproductor
+
+  var esperarVideo = function () {
+    return new Promise(function (res) {
+      var con = navigator.connection || {};
+      if (con.saveData === true || /(^|-)2g/.test(con.effectiveType || '')) return res();
+
+      var v = document.querySelector('video');
+      if (v) {
+        if (v.readyState >= 3) return res();
+        v.addEventListener('canplay', res, { once: true });
+        v.addEventListener('error', res, { once: true });
+        return;
+      }
+
+      var marco = document.querySelector('.hero-vimeo, .hero iframe');
+      if (!marco) return res();
+
+      // Si ya venía cargado, `load` no volverá a dispararse: se comprueba antes.
+      var yaEsta = false;
+      try { yaEsta = !!(marco.contentWindow && marco.contentDocument
+        && marco.contentDocument.readyState === 'complete'); } catch (e) { /* otro dominio */ }
+      if (yaEsta) return window.setTimeout(res, RESPIRO_VIDEO_MS);
+
+      marco.addEventListener('load', function () {
+        window.setTimeout(res, RESPIRO_VIDEO_MS);
+      }, { once: true });
+      marco.addEventListener('error', res, { once: true });
+    });
+  };
 
   var listo = function () {
-    // Tipografías: si no están, el texto salta al cargar la fuente.
-    var fuentes = (document.fonts && document.fonts.ready)
-      ? document.fonts.ready
-      : Promise.resolve();
-    fuentes.then(function () {
-      // Dos frames: el primero calcula, el segundo pinta. Al salir, lo que hay
-      // detrás ya está dibujado.
-      requestAnimationFrame(function () { requestAnimationFrame(quitar); });
-    }).catch(quitar);
+    var fuentes = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    fuentes
+      .then(esperarVideo)
+      .then(function () {
+        requestAnimationFrame(function () { requestAnimationFrame(quitar); });
+      })
+      .catch(quitar);
   };
 
   if (document.readyState === 'loading') {

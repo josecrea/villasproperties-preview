@@ -1031,7 +1031,7 @@ body::after {
   position: fixed;
   z-index: 9999;
   pointer-events: none;
-  animation: pl-out .5s cubic-bezier(.16,1,.3,1) 10s forwards;  /* solo red de seguridad */
+  animation: pl-out .5s cubic-bezier(.16,1,.3,1) 9s forwards;  /* solo red de seguridad */
 }
 /* Lienzo + logotipo + nombre + tagline */
 body::before {
@@ -1063,7 +1063,7 @@ body::after {
   border-right-color: transparent; /* el hueco es lo que deja ver el giro */
   border-radius: 50%;
   animation: pl-spin .9s linear infinite,
-             pl-out .5s cubic-bezier(.16,1,.3,1) 10s forwards;  /* solo red de seguridad */
+             pl-out .5s cubic-bezier(.16,1,.3,1) 9s forwards;  /* solo red de seguridad */
 }
 /* Cuando la web está lista de verdad (incluido el vídeo), sale antes. */
 body.is-loaded::before,
@@ -1337,13 +1337,21 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 
    motion.js parte el titular y envuelve la última palabra; aquí se les da forma.
    Se copia la GRAMÁTICA, no sus textos. */
-.head h2,
+/* Doble selector a propósito: la hoja original trae `.head h2,.big{line-height:.9}`
+   minificada arriba del todo y, a igual especificidad, gana la que se declare
+   después… salvo que el navegador ya la haya resuelto. Con `.section` delante no
+   hay duda de quién manda. */
+.section .head h2,
 .pagehero h1,
-.big {
-  line-height: .95;
-  letter-spacing: -.015em;
+.section .big,
+.head h2 {
+  /* Interlineado holgado y tracking abierto: en mayúsculas y a este tamaño, el
+     aire es lo que hace que se lea como titular editorial y no como un bloque
+     apelmazado. Es lo que separa el original de una copia apretada. */
+  line-height: 1.14;
+  letter-spacing: .02em;
   text-transform: uppercase;
-  max-width: 20ch;
+  max-width: 22ch;
 }
 .head h2 .t-ligero,
 .pagehero h1 .t-ligero,
@@ -1356,13 +1364,14 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 .head h2 .t-ligero,
 .pagehero h1 .t-ligero {
   font-weight: 200;
-  letter-spacing: .005em;
+  letter-spacing: .07em;    /* la delgada admite —y pide— mucho más aire */
 }
 /* Y la última palabra, con todo el peso. */
 .head h2 .t-solido,
 .pagehero h1 .t-solido {
   font-weight: 800;
-  letter-spacing: -.03em;
+  letter-spacing: .005em;   /* la negra necesita menos, pero ya no va apretada */
+  margin-top: .12em;        /* respiro entre la línea delgada y la negra */
 }
 
 /* La rayita de debajo, como en el original. */
@@ -1370,7 +1379,7 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 .pagehero h1::after {
   content: "";
   display: block;
-  margin-top: .34em;
+  margin-top: .5em;
   height: 1px;
   background: var(--line);
   max-width: 34ch;
