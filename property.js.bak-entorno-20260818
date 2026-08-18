@@ -100,81 +100,6 @@
     return `<video class="pmedia-video" src="${U(url)}" controls playsinline preload="none" poster="${M(property.images[0])}"></video>`;
   };
 
-  /* ---------- El entorno, con datos comprobables ----------
-     "Cerca de todos los servicios" lo escribe cualquier portal y no dice nada.
-     Aquí cada servicio sale de OpenStreetMap con su distancia real y su nombre,
-     para que quien lo lea pueda ir a mirarlo. Lo genera tools/build-nearby.cjs.
-
-     Las coordenadas son de ZONA, no del portal exacto (no se publica la puerta
-     del vendedor), así que las distancias son aproximadas y se dice. */
-  const A_PIE_MIN = (m) => Math.max(1, Math.round(m / 75));   // ~4,5 km/h
-  const dist = (m) => (m < 1000 ? `${m} m` : `${(m / 1000).toFixed(1)} km`.replace('.', ','));
-
-  const entornoBlock = () => {
-    const datos = (window.VP_NEARBY || {})[property.ref];
-    const servicios = (datos && datos.servicios) || [];
-    if (!servicios.length) return '';
-
-    const radio = datos.radio || 1200;
-    const por = (id) => servicios.find((s) => s.id === id);
-
-    /* Las ventajas NO se redactan a mano: se deducen de lo que hay medido. Si el
-       dato no está, la frase no aparece — antes que rellenar con humo. */
-    const ventajas = [];
-    const playa = por('playa');
-    if (playa && playa.distancia <= 900) {
-      ventajas.push(`Playa a ${dist(playa.distancia)}: unos ${A_PIE_MIN(playa.distancia)} min andando${playa.nombre ? ` (${playa.nombre})` : ''}.`);
-    }
-    const sup = por('supermercado');
-    if (sup && sup.distancia <= 700) {
-      ventajas.push(`Compra diaria resuelta a pie: ${sup.total} ${sup.total === 1 ? 'supermercado' : 'supermercados'} en ${dist(radio)}, el más cercano a ${dist(sup.distancia)}.`);
-    }
-    const far = por('farmacia'); const salud = por('salud');
-    if (far && far.distancia <= 800) {
-      ventajas.push(`Farmacia a ${dist(far.distancia)}${salud ? ` y centro médico a ${dist(salud.distancia)}` : ''}.`);
-    }
-    const bus = por('guagua');
-    if (bus && bus.distancia <= 600) {
-      ventajas.push(`Parada de guagua a ${dist(bus.distancia)}: se puede vivir aquí sin coche.`);
-    }
-    const col = por('colegio');
-    if (col && col.distancia <= 1000) ventajas.push(`Colegio a ${dist(col.distancia)}.`);
-    const rest = por('restauracion');
-    if (rest && rest.total >= 5) {
-      ventajas.push(`${rest.total} bares y restaurantes en el radio: zona viva todo el año, no solo en temporada.`);
-    }
-
-    const filas = servicios.map((s) => `
-      <li class="pnear-item">
-        <span class="pnear-cat">${E(s.etiqueta)}</span>
-        <span class="pnear-d">${dist(s.distancia)}</span>
-        <span class="pnear-n">${s.nombre ? E(s.nombre) : `${s.total} en ${dist(radio)}`}</span>
-        <span class="pnear-t">${s.total} en ${dist(radio)}</span>
-      </li>`).join('');
-
-    return `
-      <section class="section tight" id="entorno">
-        <div class="wrap">
-          <div class="head" data-reveal>
-            <div class="eye">El entorno</div>
-            <div>
-              <h2>Qué tienes<br>alrededor.</h2>
-              <p class="muted">Servicios medidos sobre el mapa en un radio de ${dist(radio)}, no adjetivos. Distancias en línea recta desde la zona del inmueble.</p>
-            </div>
-          </div>
-
-          ${ventajas.length ? `
-            <ul class="pventajas" data-reveal data-stagger-group>
-              ${ventajas.map((v) => `<li>${v}</li>`).join('')}
-            </ul>` : ''}
-
-          <ul class="pnear" data-reveal data-stagger-group>${filas}</ul>
-
-          <p class="pnear-fuente">Fuente: OpenStreetMap (© colaboradores, ODbL), consultado el ${(window.VP_NEARBY_FECHA || '2026-08-18')}. Si algo ha cambiado o falta, dínoslo y lo corregimos.</p>
-        </div>
-      </section>`;
-  };
-
   const mediaBlock = () => {
     const items = [];
     if (property.video) items.push(videoEmbed(property.video));
@@ -305,8 +230,6 @@
         <div class="pmap" id="propertyMap" role="application" aria-label="Ubicación aproximada de ${E(property.zone)}"></div>
       </div>
     </section>
-
-    ${entornoBlock()}
 
     ${mediaBlock()}
 
