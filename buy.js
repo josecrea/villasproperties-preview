@@ -66,6 +66,19 @@
     }
 
     const askM2 = price / sqm;
+
+    /* Un €/m² fuera de todo rango plausible del sur significa que el precio o
+       los metros están mal escritos: mejor decirlo que devolver un +29.000%. */
+    if (askM2 < 600 || askM2 > 15000) {
+      out.innerHTML = `<div class="buy-verdict is-warn">
+        <div class="eye">Revisa los datos</div>
+        <h3>Ese precio por metro no cuadra.</h3>
+        <div class="buy-diff">${perM2(askM2)}</div>
+        <p>Sale un precio por metro cuadrado que no existe en el sur de Tenerife (aquí el rango va de unos 2.000 a 6.300 €/m²). Comprueba el precio y la superficie del anuncio: es fácil colar un cero de más o confundir metros construidos con parcela.</p>
+      </div>`;
+      return;
+    }
+
     const ref = zone ? zone.eurM2 : town.eurM2;
     const diff = ((askM2 / ref) - 1) * 100;
     const [cls, title, text] = verdict(diff);
