@@ -120,3 +120,11 @@
   /* El editor del catálogo vive en backoffice.js: aquí solo queda el cierre
      del panel, que es puro comportamiento de interfaz. */
 })();
+/* Preloader de marca: el CSS lo retira solo a los 2,2 s (con `forwards`), así
+   que esto es solo el atajo para cuando la página ya ha cargado antes. Si este
+   script fallara, el preloader se iría igual: nunca puede quedarse pegado. */
+(function () {
+  var quitar = function () { document.body.classList.add('is-loaded'); };
+  if (document.readyState === 'complete') quitar();
+  else window.addEventListener('load', quitar);
+})();
