@@ -154,15 +154,31 @@
     return 0.10;
   };
 
-  const abstainReason = (data) => {
+  /* Los factores (tipología × estado × extras) se multiplican entre sí y, en el
+     extremo, llevan el €/m² muy por encima de cualquier zona del dataset: una
+     villa premium con todos los extras en Playa de las Américas salía a 11.400
+     €/m². El modelo se construye sobre medias de oferta zonal y NO contiene
+     producto de lujo, así que ahí no está estimando: está extrapolando. Se
+     abstiene y lo pasa a valoración con comparables específicos. */
+  /* 1,6 deja pasar el producto alto que SÍ existe en las zonas caras (un piso
+     premium con vistas en Costa Adeje ronda 8.150 €/m², bajo el techo de 8.424)
+     y corta la extrapolación disparatada (villa premium con todos los extras en
+     Playa de las Américas: 11.397 €/m² frente a un techo de 9.973). */
+  const CEILING_FACTOR = 1.6;
+  const PRICE_CEILING = 2000000;
+
+  const ceilingFor = (town) => Math.max(town.eurM2, ...(town.zonas || []).map((z) => z.eurM2)) * CEILING_FACTOR;
+
+  const abstainReason = (data, appliedM2, mid) => {
     if (!data.town) return 'municipio';
     if (data.type === 'otro') return 'tipo';
+    if (appliedM2 !== undefined && (appliedM2 > ceilingFor(data.town) || mid > PRICE_CEILING)) return 'lujo';
     return null;
   };
 
   const compute = (data) => {
-    const reason = abstainReason(data);
-    if (reason) return { ...data, abstain: true, reason };
+    const early = abstainReason(data);
+    if (early) return { ...data, abstain: true, reason: early };
 
     const town = data.town;
     const baseM2 = data.zone ? data.zone.eurM2 : town.eurM2;
@@ -170,6 +186,9 @@
     const appliedM2 = baseM2 * typeFactor(town, data.type) * CONDITION_FACTOR[data.condition] * (1 + featureBoost);
 
     const mid = appliedM2 * data.surface;
+
+    const outOfRange = abstainReason(data, appliedM2, mid);
+    if (outOfRange) return { ...data, abstain: true, reason: outOfRange, appliedM2, mid };
     const spread = spreadFor(data);
     const low = mid * (1 - spread);
     /* La salida realista nunca puede quedar por encima del suelo del rango de
@@ -262,13 +281,20 @@
       const context = est.town && est.town.eurM2
         ? ` Como contexto, el residencial de ${est.town.name} ronda ${perM2(est.town.eurM2)}, pero un terreno o inmueble singular no se valora con un €/m² de vivienda.`
         : '';
-      const body = est.reason === 'municipio'
-        ? 'Trabajamos con datos reales de Adeje, Arona, Granadilla de Abona, San Miguel de Abona, Guía de Isora y Santiago del Teide. Fuera de esa zona preferimos no inventar una cifra: un asesor local te prepara la valoración con criterio.'
-        : `Un terreno o un inmueble singular necesita revisión local para darte una cifra fiable.${context}`;
+      const titles = {
+        municipio: 'Tu municipio está fuera de nuestra zona de datos.',
+        tipo: 'No inventamos un precio para esta tipología.',
+        lujo: 'Esta vivienda se sale de lo que cubren nuestros datos.',
+      };
+      const bodies = {
+        municipio: 'Trabajamos con datos reales de Adeje, Arona, Granadilla de Abona, San Miguel de Abona, Guía de Isora y Santiago del Teide. Fuera de esa zona preferimos no inventar una cifra: un asesor local te prepara la valoración con criterio.',
+        tipo: `Un terreno o un inmueble singular necesita revisión local para darte una cifra fiable.${context}`,
+        lujo: `Nuestro modelo se construye sobre precios medios de oferta por zona, y el perfil que has descrito queda muy por encima de lo que se publica en ${est.town.name} (${perM2(Math.max(est.town.eurM2, ...(est.town.zonas || []).map((z) => z.eurM2)))} en su zona más cara). Con producto así no estimaríamos: extrapolaríamos. Lo valoramos con comparables específicos de ese segmento.`,
+      };
       out.innerHTML = `<div class="vw-abstain">
         <div class="eye">Sin cifra automática</div>
-        <h3>${est.reason === 'municipio' ? 'Tu municipio está fuera de nuestra zona de datos.' : 'No inventamos un precio para esta tipología.'}</h3>
-        <p>${body}</p>
+        <h3>${titles[est.reason]}</h3>
+        <p>${bodies[est.reason]}</p>
       </div>`;
       return;
     }
@@ -363,7 +389,11 @@
       '',
     ];
     if (est.abstain) {
-      lines.push('Sin estimación automática: la tipología o la zona requieren revisión local.');
+      lines.push({
+        municipio: 'Sin estimación automática: el municipio queda fuera de nuestra zona de datos.',
+        tipo: 'Sin estimación automática: la tipología requiere revisión local.',
+        lujo: 'Sin estimación automática: el perfil se sale del rango que cubren los datos de mercado (producto singular o de gama alta).',
+      }[est.reason] || 'Sin estimación automática: requiere revisión local.');
     } else {
       lines.push(
         `Rango de anuncio: ${euro(est.low)} – ${euro(est.high)}`,

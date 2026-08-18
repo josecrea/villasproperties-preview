@@ -1,0 +1,367 @@
+/* estilo-feil.css — Sistema de diseño extraído de feil.com, aplicado a Villa's.
+ *
+ * AISLADO A PROPÓSITO: todo cuelga de .feil para no colisionar con site.css.
+ * El sistema actual de Villa's (crema + verde atlántico + arena, con su motion
+ * system) sigue intacto en el resto del sitio. Esto es una propuesta paralela
+ * para comparar en vivo, no un reemplazo.
+ *
+ * Extracción y racional completo en ~/feil-design/DESIGN.md */
+
+.feil {
+  /* ── Color ───────────────────────────────────────────────────────────
+     Casi monocromo: la fotografía pone TODO el color. Si hace falta un
+     gris, se deriva del negro con alfa; no se añaden colores nuevos. */
+  --f-ink: #000;
+  --f-paper: #fff;
+  --f-primary: #4054b2;   /* índigo: color de SISTEMA (foco, utilidades) */
+  --f-accent: #adcfed;    /* azul cielo: SUPERFICIE, nunca color de texto */
+  --f-ink-70: rgba(0, 0, 0, 0.7);
+  --f-ink-55: rgba(0, 0, 0, 0.55);
+  --f-ink-12: rgba(0, 0, 0, 0.12);
+
+  /* ── Tipografía ──────────────────────────────────────────────────────
+     Una sola familia. Se mantiene el system stack que Villa's ya eligió
+     (commit 88c15be quitó Google Fonts a propósito): el sistema de Feil
+     pide una grotesca neutra, y la del sistema lo es. Cero peticiones. */
+  --f-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* El contraste de escala ES el diseño: ~100px contra 16px. */
+  --f-display: clamp(3rem, 8vw, 6.25rem);
+  --f-h2: clamp(2rem, 4.5vw, 3.5rem);
+  --f-h3: clamp(1.25rem, 2vw, 1.5rem);
+  --f-body: 1rem;
+  --f-small: 0.875rem;
+
+  /* ── Espaciado (base 4px) ────────────────────────────────────────── */
+  --f-2: 0.5rem;
+  --f-4: 1rem;
+  --f-6: 1.5rem;
+  --f-8: 2rem;
+  --f-12: 3rem;
+  --f-16: 4rem;
+  --f-24: 6rem;
+  --f-section: clamp(4rem, 9vw, 8rem);
+
+  /* ── Forma ───────────────────────────────────────────────────────── */
+  --f-radius-pill: 20px;   /* SOLO el botón primario */
+  --f-nav-h: 84px;
+  --f-container: 1280px;
+  --f-gutter: clamp(1.25rem, 4vw, 4rem);
+
+  /* Proporciones: la distinción separa activo de artículo. */
+  --f-ratio-asset: 872 / 642;      /* 4:3 inmuebles */
+  --f-ratio-editorial: 412 / 518;  /* 4:5 editorial */
+
+  --f-fast: 150ms;
+  --f-normal: 300ms;
+  --f-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  background: var(--f-paper);
+  color: var(--f-ink);
+  font-family: var(--f-sans);
+  font-size: var(--f-body);
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feil { --f-fast: 1ms; --f-normal: 1ms; }
+}
+
+.feil *,
+.feil *::before,
+.feil *::after { box-sizing: border-box; }
+
+.feil h1, .feil h2, .feil h3, .feil p, .feil ul { margin: 0; }
+.feil ul { padding: 0; list-style: none; }
+.feil a { color: inherit; text-decoration: none; }
+
+.feil :focus-visible {
+  outline: 3px solid var(--f-primary);
+  outline-offset: 3px;
+}
+
+.feil-container {
+  width: 100%;
+  max-width: var(--f-container);
+  margin-inline: auto;
+  padding-inline: var(--f-gutter);
+}
+
+.feil-sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── Aviso de propuesta ───────────────────────────────────────────────
+   Esta página convive con el sitio real: hay que dejar claro qué es. */
+.feil-banner {
+  background: var(--f-primary);
+  color: var(--f-paper);
+  padding: var(--f-2) var(--f-4);
+  font-size: var(--f-small);
+  text-align: center;
+}
+.feil-banner a { text-decoration: underline; }
+
+/* ── Navegación ───────────────────────────────────────────────────── */
+.feil-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--f-nav-h);
+  display: flex;
+  align-items: center;
+  background: var(--f-ink);
+  color: var(--f-paper);
+}
+.feil-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--f-8);
+}
+/* El logo en disco: el gesto de marca más fuerte del sistema. */
+.feil-nav__logo {
+  display: grid;
+  place-items: center;
+  width: 60px; height: 60px;
+  background: var(--f-paper);
+  color: var(--f-ink);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.04em;
+}
+.feil-nav__list { display: flex; gap: clamp(1.5rem, 3vw, 4rem); }
+.feil-nav__link {
+  font-size: 0.9375rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: opacity var(--f-fast) var(--f-ease);
+}
+.feil-nav__link:hover { opacity: 0.6; }
+.feil-nav__toggle {
+  display: none;
+  background: none; border: 0;
+  color: inherit; font: inherit;
+  padding: var(--f-2);
+  cursor: pointer;
+}
+
+/* ── Hero ─────────────────────────────────────────────────────────── */
+.feil-hero {
+  position: relative;
+  min-height: calc(100svh - var(--f-nav-h));
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+}
+/* Reutiliza el vídeo que Villa's ya tiene en assets/video. */
+.feil-hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.feil-hero__fallback {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 70% 85%, rgba(255, 176, 120, 0.5), transparent 60%),
+    linear-gradient(180deg, #7fa8d4 0%, #b9b1c8 45%, #d99f82 78%, #c47a5e 100%);
+}
+/* Vela solo por la izquierda, donde se apoya el disco: da contraste al logo
+   sin ensuciar el resto de la imagen. */
+.feil-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.32), transparent 45%);
+  pointer-events: none;
+}
+.feil-hero__inner { position: relative; z-index: 2; }
+.feil-hero__mark {
+  display: grid;
+  place-items: center;
+  width: clamp(200px, 26vw, 330px);
+  aspect-ratio: 1;
+  background: var(--f-ink);
+  color: var(--f-paper);
+  border-radius: 50%;
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  text-align: center;
+  line-height: 1;
+}
+.feil-hero__cta {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: 3;
+  padding-block: var(--f-4);
+  background: var(--f-accent);
+  color: var(--f-ink);          /* nunca blanco sobre este azul */
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background var(--f-fast) var(--f-ease);
+}
+.feil-hero__cta:hover { background: #9dc3e6; }
+
+/* ── Secciones ────────────────────────────────────────────────────── */
+.feil-section { padding-block: var(--f-section); }
+.feil-section__title {
+  font-size: var(--f-display);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  max-width: 15ch;
+}
+.feil-section__title--h2 { font-size: var(--f-h2); }
+.feil-section__body {
+  max-width: 62ch;
+  margin-block-start: var(--f-8);
+  display: grid;
+  gap: var(--f-4);
+}
+
+/* Un solo CTA por sección, en frase y como enlace de texto. */
+.feil-link {
+  display: inline-block;
+  margin-block-start: var(--f-6);
+  font-weight: 700;
+  border-block-end: 2px solid var(--f-ink);
+  padding-block-end: 2px;
+  transition: opacity var(--f-fast) var(--f-ease);
+}
+.feil-link:hover { opacity: 0.55; }
+
+/* ── Botones: la jerarquía la marca el RADIO, no el color ─────────── */
+.feil-btn {
+  display: inline-block;
+  padding: var(--f-2) var(--f-6);
+  font: inherit;
+  font-weight: 700;
+  box-shadow: none;
+  cursor: pointer;
+  transition: opacity var(--f-fast) var(--f-ease);
+}
+.feil-btn:hover { opacity: 0.8; }
+.feil-btn--primary {
+  background: var(--f-ink);
+  color: var(--f-paper);
+  border: 1px solid var(--f-paper);   /* el filo lo despega de la foto */
+  border-radius: var(--f-radius-pill);
+}
+.feil-btn--secondary {
+  background: var(--f-paper);
+  color: var(--f-ink);
+  border: 1px solid var(--f-ink);
+  border-radius: 0;                    /* esquina viva */
+}
+
+/* ── Rejilla de inmuebles (4:3) ───────────────────────────────────── */
+.feil-grid {
+  margin-block-start: var(--f-16);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--f-8);
+}
+.feil-card { display: grid; gap: var(--f-4); }
+.feil-card__media {
+  aspect-ratio: var(--f-ratio-asset);
+  background: var(--f-ink-12);
+  display: grid;
+  place-items: center;
+  color: var(--f-ink-55);
+  font-size: var(--f-small);
+  overflow: hidden;
+}
+.feil-card__media img { width: 100%; height: 100%; object-fit: cover; }
+/* Solo transform: no provoca reflow. */
+.feil-card__media > * { transition: transform var(--f-normal) var(--f-ease); }
+.feil-card:hover .feil-card__media > * { transform: scale(1.04); }
+.feil-card__title { font-weight: 700; }
+.feil-card__meta { font-size: var(--f-small); color: var(--f-ink-55); }
+
+/* ── Editorial (4:5) ──────────────────────────────────────────────── */
+.feil-news {
+  margin-block-start: var(--f-16);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--f-12);
+}
+.feil-news__media {
+  aspect-ratio: var(--f-ratio-editorial);
+  background: var(--f-ink-12);
+  display: grid;
+  place-items: center;
+  color: var(--f-ink-55);
+  font-size: var(--f-small);
+}
+.feil-news__title {
+  margin-block-start: var(--f-4);
+  font-size: var(--f-h3);
+  line-height: 1.15;
+  font-weight: 700;
+}
+.feil-news__title a:hover { opacity: 0.6; }
+
+/* ── Footer ───────────────────────────────────────────────────────── */
+.feil-footer {
+  background: var(--f-ink);
+  color: var(--f-paper);
+  padding-block: var(--f-24) var(--f-12);
+}
+.feil-footer__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--f-8);
+}
+.feil-footer__mark {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+.feil-footer__social { display: flex; gap: var(--f-6); }
+.feil-footer__social a { opacity: 0.7; }
+.feil-footer__social a:hover { opacity: 1; }
+.feil-footer__legal {
+  margin-block-start: var(--f-16);
+  padding-block-start: var(--f-6);
+  border-block-start: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--f-4);
+  font-size: var(--f-small);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .feil-grid { grid-template-columns: repeat(2, 1fr); }
+  .feil-news { grid-template-columns: 1fr; gap: var(--f-16); }
+}
+
+@media (max-width: 720px) {
+  .feil-nav__toggle { display: block; }
+  .feil-nav__list {
+    position: fixed;
+    inset: var(--f-nav-h) 0 auto 0;
+    flex-direction: column;
+    gap: var(--f-6);
+    padding: var(--f-8) var(--f-gutter);
+    background: var(--f-ink);
+  }
+  .feil-nav__list[data-open="false"] { display: none; }
+  .feil-grid { grid-template-columns: 1fr; }
+  .feil-section__title { max-width: none; }
+}

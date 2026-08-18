@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Villa's Properties — propuesta de estilo editorial</title>
+<meta name="description" content="Propuesta de dirección visual para Villa's Properties: monocromo, fotografía a sangre y contraste de escala.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23000'/><text x='32' y='34' fill='%23fff' font-family='Helvetica,Arial' font-size='30' font-weight='700' text-anchor='middle' dominant-baseline='central'>V</text></svg>">
+<link rel="stylesheet" href="estilo-feil.css">
+</head>
+<body class="feil">
+
+<!-- Convive con el sitio real: hay que dejar claro qué es esto. -->
+<p class="feil-banner">
+  Propuesta de dirección visual — el sitio actual sigue intacto en
+  <a href="index.html">la home</a>. Comparar y decidir.
+</p>
+
+<header>
+  <nav class="feil-nav" aria-label="Principal">
+    <div class="feil-container feil-nav__inner">
+      <a class="feil-nav__logo" href="index.html" aria-label="Villa's Properties, ir al inicio">V</a>
+      <button class="feil-nav__toggle" type="button" aria-expanded="false" aria-controls="feil-nav-list">Menú</button>
+      <ul class="feil-nav__list" id="feil-nav-list" data-open="false">
+        <li><a class="feil-nav__link" href="sell.html">Vender</a></li>
+        <li><a class="feil-nav__link" href="buy.html">Comprar</a></li>
+        <li><a class="feil-nav__link" href="properties.html">Propiedades</a></li>
+        <li><a class="feil-nav__link" href="invest.html">Invertir</a></li>
+        <li><a class="feil-nav__link" href="insights.html">Actualidad</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <!-- 1. Hero a sangre + disco de marca + franja de contacto -->
+  <section class="feil-hero" aria-labelledby="feil-h1">
+    <div class="feil-hero__fallback" role="presentation"></div>
+    <video class="feil-hero__video" autoplay muted loop playsinline
+           poster="" aria-hidden="true">
+      <source src="assets/video/hero-desktop.webm" type="video/webm">
+      <source src="assets/video/hero-desktop.mp4" type="video/mp4">
+    </video>
+
+    <div class="feil-container feil-hero__inner">
+      <h1 id="feil-h1" class="feil-sr">
+        Villa's Properties — inmobiliaria en el sur de Tenerife
+      </h1>
+      <div class="feil-hero__mark" aria-hidden="true">Villa's</div>
+    </div>
+
+    <a class="feil-hero__cta" href="contact.html">Contacta con nosotros</a>
+  </section>
+
+  <!-- 2. Texto institucional -->
+  <section class="feil-section" aria-labelledby="feil-legado">
+    <div class="feil-container">
+      <h2 class="feil-section__title" id="feil-legado">Una marca</h2>
+      <div class="feil-section__body">
+        <p>
+          Villa's Properties es la división inmobiliaria del grupo VILLVERG.
+          Compramos, reformamos y vendemos en el sur de Tenerife con un criterio
+          que no se negocia: entramos solo donde el número aguanta una escritura,
+          no una expectativa.
+        </p>
+        <p>
+          Trabajamos con el dato real del Notariado, no con el precio de anuncio.
+          Esa diferencia es la que separa una operación que se cierra de una que
+          se queda en la mesa.
+        </p>
+        <a class="feil-link" href="advisory.html">Conócenos mejor</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Rejilla de inmuebles 4:3 -->
+  <section class="feil-section" aria-labelledby="feil-cartera">
+    <div class="feil-container">
+      <h2 class="feil-section__title feil-section__title--h2" id="feil-cartera">
+        Propiedades con una razón para estar aquí
+      </h2>
+      <div class="feil-section__body">
+        <p>
+          De una villa en Costa Adeje a un apartamento en Los Cristianos, la
+          cartera es diversa pero la visión es una sola: inmuebles que generan
+          valor para quien invierte y para el barrio que los rodea.
+        </p>
+        <a class="feil-link" href="properties.html">Ver toda la cartera</a>
+      </div>
+
+      <ul class="feil-grid">
+        <li><a class="feil-card" href="properties.html">
+          <div class="feil-card__media"><span>Fotografía 4:3</span></div>
+          <span class="feil-card__title">Villa en Costa Adeje</span>
+          <span class="feil-card__meta">Obra nueva · vistas al mar</span>
+        </a></li>
+        <li><a class="feil-card" href="properties.html">
+          <div class="feil-card__media"><span>Fotografía 4:3</span></div>
+          <span class="feil-card__title">Apartamento en Los Cristianos</span>
+          <span class="feil-card__meta">Primera línea</span>
+        </a></li>
+        <li><a class="feil-card" href="properties.html">
+          <div class="feil-card__media"><span>Fotografía 4:3</span></div>
+          <span class="feil-card__title">Casa en Palm-Mar</span>
+          <span class="feil-card__meta">Reforma integral</span>
+        </a></li>
+        <li><a class="feil-card" href="properties.html">
+          <div class="feil-card__media"><span>Fotografía 4:3</span></div>
+          <span class="feil-card__title">Ático en San Isidro</span>
+          <span class="feil-card__meta">Inversión</span>
+        </a></li>
+        <li><a class="feil-card" href="properties.html">
+          <div class="feil-card__media"><span>Fotografía 4:3</span></div>
+          <span class="feil-card__title">Local en Arona</span>
+          <span class="feil-card__meta">Rentabilidad</span>
+        </a></li>
+        <li><a class="feil-card" href="properties.html">
+          <div class="feil-card__media"><span>Fotografía 4:3</span></div>
+          <span class="feil-card__title">Chalet en Guargacho</span>
+          <span class="feil-card__meta">Parcela amplia</span>
+        </a></li>
+        <li><a class="feil-card" href="properties.html">
+          <div class="feil-card__media"><span>Fotografía 4:3</span></div>
+          <span class="feil-card__title">Suelo en San Miguel</span>
+          <span class="feil-card__meta">Desarrollo</span>
+        </a></li>
+        <li><a class="feil-card" href="properties.html">
+          <div class="feil-card__media"><span>Fotografía 4:3</span></div>
+          <span class="feil-card__title">Dúplex en Granadilla</span>
+          <span class="feil-card__meta">Listo para entrar</span>
+        </a></li>
+      </ul>
+
+      <a class="feil-link" href="properties.html">Buscar disponibilidad</a>
+    </div>
+  </section>
+
+  <!-- 4. Herramientas / equipo -->
+  <section class="feil-section" aria-labelledby="feil-vision">
+    <div class="feil-container">
+      <h2 class="feil-section__title feil-section__title--h2" id="feil-vision">
+        Más allá del anuncio
+      </h2>
+      <div class="feil-section__body">
+        <p>
+          Valoración instantánea con el dato de escritura, análisis de mercado
+          por zona y estudio de financiación. Tres herramientas que responden
+          antes de que haya que llamar a nadie.
+        </p>
+        <a class="feil-link" href="valuation.html">Valora tu propiedad</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Actualidad 4:5 -->
+  <section class="feil-section" aria-labelledby="feil-news">
+    <div class="feil-container">
+      <h2 class="feil-section__title feil-section__title--h2" id="feil-news">Actualidad</h2>
+      <!-- Titulares reales del blog, no inventados. -->
+      <ul class="feil-news">
+        <li>
+          <div class="feil-news__media"><span>Fotografía 4:5</span></div>
+          <h3 class="feil-news__title"><a href="post-anuncio-vs-escritura.html">Lo que pides y lo que se firma</a></h3>
+        </li>
+        <li>
+          <div class="feil-news__media"><span>Fotografía 4:5</span></div>
+          <h3 class="feil-news__title"><a href="post-donde-se-vende-de-verdad.html">Dónde se vende de verdad en el sur</a></h3>
+        </li>
+        <li>
+          <div class="feil-news__media"><span>Fotografía 4:5</span></div>
+          <h3 class="feil-news__title"><a href="post-mapa-metro-cuadrado.html">El mapa del metro cuadrado en Tenerife Sur</a></h3>
+        </li>
+      </ul>
+      <a class="feil-link" href="insights.html">Todas las publicaciones</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="feil-footer">
+  <div class="feil-container">
+    <div class="feil-footer__top">
+      <span class="feil-footer__mark">Villa's</span>
+      <ul class="feil-footer__social">
+        <li><a href="contact.html">Instagram</a></li>
+        <li><a href="contact.html">LinkedIn</a></li>
+      </ul>
+      <a class="feil-btn feil-btn--primary" href="contact.html">Contacta con nosotros</a>
+    </div>
+    <div class="feil-footer__legal">
+      <span>VILLVERG SOLUCIONES INTEGRALES SL · B19430115</span>
+      <span>Aviso legal</span>
+      <span>Política de privacidad</span>
+      <span>© Villa's Properties 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script src="estilo-feil.js" defer></script>
+</body>
+</html>
