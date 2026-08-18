@@ -1,0 +1,17 @@
+{
+  "name": "Villa's Properties — Property Intelligence · Tenerife",
+  "short_name": "Villa's",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fbfaf7",
+  "theme_color": "#5f8075",
+  "lang": "es-ES",
+  "icons": [
+    {
+      "src": "assets/brand/logo-placeholder.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ]
+}

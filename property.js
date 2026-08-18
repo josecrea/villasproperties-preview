@@ -24,7 +24,9 @@
     return;
   }
 
-  document.title = `${property.title} · ${property.zone} — Villa’s Properties`;
+  /* Google recorta el title a ~60-65 caracteres: usamos el corto (tipología +
+     zona), que además es el que se busca. */
+  document.title = `${property.titleShort || property.title} — Villa’s Properties`;
   const desc = $('meta[name="description"]');
   if (desc) desc.setAttribute('content', `${property.type} en ${property.zone}, ${property.town}. ${property.built} m², ${property.beds} hab, ${property.baths} baños. ${euro(property.price)}.`);
 
@@ -168,6 +170,8 @@
           <dl class="pspecs">
             ${specs.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}
           </dl>
+
+          <div data-share></div>
         </div>
 
         <aside class="pside">
@@ -242,6 +246,9 @@
   document.body.appendChild(lightbox);
 
   const img = lightbox.querySelector('img');
+  /* Con src vacío el navegador reserva 0x0 y algunos hacen una petición inútil. */
+  img.src = property.images[0];
+  img.width = 1600; img.height = 1067;
   const caption = lightbox.querySelector('figcaption');
   let index = 0;
 

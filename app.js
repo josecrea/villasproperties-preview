@@ -77,7 +77,7 @@
     market:'—',yield:'—',psm:String(p.pricePerM2).replace(/\B(?=(\d{3})+(?!\d))/g,'.'),docs:'Ficha',
     area:p.built,beds:p.beds,baths:p.baths,parking:/garaje/i.test(p.features.join(' ')),
     pool:/piscina/i.test(p.equipment.join(' ')),terrace:(p.features.join(' ').match(/(?:Terraza|Balcón) de (\d+) m²/)||[])[1]||0,
-    images:p.images,url:`property.html?ref=${p.ref}`,ref:p.ref
+    images:p.images,url:`property.html?ref=${p.ref}`,ref:p.ref,town:p.town,psmRaw:p.pricePerM2
   }));
   const waMoreInfo=p=>`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(`Hola, me interesa "${p.name}" en ${p.zone} (${fmt(p.price)}). ¿Me podéis dar más información?`)}`;
   const waShare=p=>`https://wa.me/?text=${encodeURIComponent(`${p.name} · ${p.zone} · ${fmt(p.price)} — Villa's Properties\n${location.href}`)}`;
@@ -91,7 +91,7 @@
   ].filter(Boolean).join('');
   const renderProps=()=>{
     $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
-      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger><a class="media" href="${p.url}" aria-label="Ver ficha de ${p.name}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${p.images[0]})"`:''}></div><span class="tag">${p.status} · ${p.strategy}</span></a><div class="pinfo"><div><h3><a href="${p.url}">${p.name}</a></h3><div class="meta">${p.zone} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${p.ref||'—'}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${p.url}">Ver ficha ↗</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
+      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${p.url}" aria-label="Ver ficha de ${p.name}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${p.images[0]})"`:''}></div><span class="tag">${p.status} · ${p.strategy}</span></a><div class="pinfo"><div><h3><a href="${p.url}">${p.name}</a></h3><div class="meta">${p.zone} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${p.ref||'—'}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${p.url}">Ver ficha ↗</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
     });
   };
   renderProps();
@@ -141,7 +141,7 @@
   const vfField=$('#videoFile')?.closest('.field');
   if(vfField && !$('#propImages')){
     const w=document.createElement('div'); w.className='field full';
-    w.innerHTML='<label>Imágenes de la propiedad (demo local)</label><input id="propImages" type="file" accept="image/*" multiple>';
+    w.innerHTML='<label for="propImages">Imágenes de la propiedad (demo local)</label><input id="propImages" type="file" accept="image/*" multiple>';
     vfField.after(w);
     $('#propImages').addEventListener('change',e=>{const files=[...(e.target.files||[])]; if(!files.length)return; demoProps[0].images=files.map(f=>URL.createObjectURL(f)); renderProps(); const m=$('#statusMsg'); if(m)m.textContent=`✓ ${files.length} imagen(es) cargadas en la sesión.`;});
   }

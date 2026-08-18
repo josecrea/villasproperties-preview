@@ -16,6 +16,7 @@ window.VP_PROPERTIES = [
   {
     ref: '111258127',
     slug: 'costa-adeje-torviscas',
+    titleShort: 'Apartamento reformado en Costa Adeje',
     title: 'Apartamento reformado con terraza y vistas a la piscina',
     town: 'Adeje',
     zone: 'Torviscas Centro y Alto',
@@ -54,6 +55,7 @@ window.VP_PROPERTIES = [
   {
     ref: '111230958',
     slug: 'cabo-blanco-arona',
+    titleShort: 'Apartamento con garaje en Cabo Blanco',
     title: 'Apartamento amplio con garaje, trastero y balcón de 12 m²',
     town: 'Arona',
     zone: 'Cabo Blanco',
@@ -92,6 +94,7 @@ window.VP_PROPERTIES = [
   {
     ref: '112230501',
     slug: 'los-abrigos-granadilla',
+    titleShort: 'Entreplanta luminosa en Los Abrigos',
     title: 'Entreplanta luminosa a un paso del paseo marítimo',
     town: 'Granadilla de Abona',
     zone: 'Los Abrigos',
@@ -130,6 +133,7 @@ window.VP_PROPERTIES = [
   {
     ref: '111734875',
     slug: 'el-fraile-loft',
+    titleShort: 'Loft de 1 habitación en El Fraile',
     title: 'Loft de una habitación, listo para entrar o rentabilizar',
     town: 'Arona',
     zone: 'El Fraile',
@@ -168,6 +172,7 @@ window.VP_PROPERTIES = [
   {
     ref: '111928810',
     slug: 'el-fraile-2hab',
+    titleShort: 'Loft de 2 habitaciones en El Fraile',
     title: 'Loft de dos habitaciones en planta baja',
     town: 'Arona',
     zone: 'El Fraile',

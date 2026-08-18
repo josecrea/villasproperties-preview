@@ -81,12 +81,12 @@
         </div>
         <div class="adminbody">
           <div class="fields">
-            <div class="field full"><label>Nombre</label><input id="aName" value="Ocean Residence"></div>
-            <div class="field"><label>Precio</label><input id="aPrice" type="number" value="245000"></div>
-            <div class="field"><label>Zona</label><input id="aZone" value="Costa Adeje"></div>
-            <div class="field"><label>Estado</label><select id="aStatus"><option>For sale</option><option>Reserved</option><option>Sold</option><option>Off-market</option></select></div>
-            <div class="field"><label>Estrategia</label><select id="aStrategy"><option>Home</option><option>Income</option><option>Value-add</option><option>Development</option></select></div>
-            <div class="field full"><label>Hero video local</label><input id="videoFile" type="file" accept="video/*"></div>
+            <div class="field full"><label for="aName">Nombre</label><input id="aName" value="Ocean Residence"></div>
+            <div class="field"><label for="aPrice">Precio</label><input id="aPrice" type="number" value="245000"></div>
+            <div class="field"><label for="aZone">Zona</label><input id="aZone" value="Costa Adeje"></div>
+            <div class="field"><label for="aStatus">Estado</label><select id="aStatus"><option>For sale</option><option>Reserved</option><option>Sold</option><option>Off-market</option></select></div>
+            <div class="field"><label for="aStrategy">Estrategia</label><select id="aStrategy"><option>Home</option><option>Income</option><option>Value-add</option><option>Development</option></select></div>
+            <div class="field full"><label for="videoFile">Hero video local</label><input id="videoFile" type="file" accept="video/*"></div>
           </div>
           <div style="margin-top:28px"><div class="eye">Características</div><div class="features" id="features" style="margin-top:12px"></div></div>
           <div class="adminactions"><button class="btn green" id="saveAdmin" type="button">Guardar cambios</button></div>
