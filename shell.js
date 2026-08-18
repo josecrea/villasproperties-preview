@@ -115,6 +115,7 @@
       loaded = true;
       await load('vp-store.js');
       await load('properties-data.js');
+      await load('vp-publish.js');
       await load('backoffice.js');
     }).observe(panel, { attributes: true, attributeFilter: ['class'] });
   }

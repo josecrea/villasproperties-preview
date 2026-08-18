@@ -87,9 +87,19 @@
   const waLink = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
     `Hola, me interesa la referencia ${property.ref} — ${property.title} (${property.zone}, ${euro(property.price)}). ¿Podemos hablar?`)}`;
 
+  /* El vídeo no vive en el repositorio (pesa demasiado para Pages): se aloja en
+     Vimeo o YouTube y aquí solo se incrusta. Un .mp4 propio también vale. */
+  const videoEmbed = (url) => {
+    const vimeo = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    const yt = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{6,})/);
+    if (vimeo) return `<div class="pmedia-frame"><iframe src="https://player.vimeo.com/video/${vimeo[1]}?dnt=1" title="Vídeo de ${property.title}" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+    if (yt) return `<div class="pmedia-frame"><iframe src="https://www.youtube-nocookie.com/embed/${yt[1]}" title="Vídeo de ${property.title}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
+    return `<video class="pmedia-video" src="${url}" controls playsinline preload="none" poster="${M(property.images[0])}"></video>`;
+  };
+
   const mediaBlock = () => {
     const items = [];
-    if (property.video) items.push(`<video class="pmedia-video" src="${property.video}" controls playsinline preload="none" poster="${property.images[0]}"></video>`);
+    if (property.video) items.push(videoEmbed(property.video));
     if (property.tour) items.push(`<a class="btn green" href="${property.tour}" target="_blank" rel="noopener">Abrir tour 360 ↗</a>`);
     if (property.floorplans.length) {
       items.push(`<div class="pplans">${property.floorplans.map((f, i) => `<a href="${f}" target="_blank" rel="noopener"><img src="${f}" alt="Plano ${i + 1} de ${property.title}" loading="lazy"></a>`).join('')}</div>`);

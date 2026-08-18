@@ -42,10 +42,39 @@ carga bajo demanda: un visitante normal no descarga ni el editor ni el catálogo
   en su carpeta. Se descomprime en `assets/img/`, se sustituye el
   `properties-data.js` y se hace commit.
 
-Lo editado vive en el navegador donde se editó hasta que se exporta y se sube:
-el sitio es estático y no hay servidor donde guardarlo. Publicar directamente
-desde el navegador exigiría un token de escritura del repositorio, y con el gate
-actual (comparación de hash en cliente) eso no es seguro.
+### Publicar sin descargar nada
+
+En la pestaña **Publicar** hay además publicación directa a GitHub: sube el
+catálogo y las fotos en **un solo commit** (Git Data API: blobs → árbol →
+commit → rama). Compara el SHA de Git de cada foto con la que ya está en el
+repositorio, así solo viaja lo que ha cambiado.
+
+Hace falta un **token de acceso personal de grano fino**:
+
+1. GitHub → Settings → Developer settings → Personal access tokens → Fine-grained
+2. Repository access: **Only select repositories** → `villasproperties-preview`
+3. Permissions → Repository permissions → **Contents: Read and write**
+4. Pegarlo en el Back Office. No se guarda en el repositorio ni en localStorage:
+   vive en memoria y, si se marca la casilla, en `sessionStorage` (se borra al
+   cerrar la pestaña).
+
+El campo **Rama** permite publicar a una rama de revisión antes de tocar `main`.
+
+Si se han quitado fotos de un inmueble, el publicador pide confirmación con la
+lista concreta antes de borrar nada, y **solo** dentro de `assets/img/<slug>/`:
+el resto de `assets/img/` (la escena de zonas de la home) no se toca nunca.
+
+### Dónde va cada cosa
+
+| | Dónde | Por qué |
+|---|---|---|
+| Fotos | En el repositorio | 92 KB de media; 30 inmuebles × 15 fotos = 41 MB, un 4% del límite de 1 GB de Pages |
+| Vídeo | Vimeo o YouTube (solo la URL en el catálogo) | Un vídeo de 30 MB agota los 100 GB/mes de Pages en 3.400 reproducciones |
+| Planos y tour | URL o fichero en el repositorio | Pesan como una foto |
+
+Límites oficiales de GitHub Pages: repositorio recomendado 1 GB, sitio publicado
+máximo 1 GB, 100 GB/mes de ancho de banda y 10 builds/hora (los dos últimos,
+límites blandos).
 
 ## Datos de mercado
 

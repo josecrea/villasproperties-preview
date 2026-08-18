@@ -23,6 +23,9 @@
 
   let current = props[0];
   let dirty = false;
+  /* El token vive en memoria mientras el panel está abierto: cambiar de
+     inmueble reconstruye la interfaz y no debe hacer que se pierda. */
+  let ghToken = '';
 
   /* ---------- Conversión de imagen en el navegador ---------- */
   const toWebp = (file) => new Promise((resolve, reject) => {
@@ -53,6 +56,14 @@
   const status = (msg) => {
     const el = document.getElementById('statusMsg');
     if (el) el.textContent = msg;
+  };
+
+  const log = (msg) => {
+    const el = document.getElementById('boLog');
+    if (!el) return;
+    el.hidden = false;
+    el.textContent += `${msg}\n`;
+    el.scrollTop = el.scrollHeight;
   };
 
   /* ---------- Interfaz ---------- */
@@ -89,6 +100,7 @@
         <button class="bo-tab is-on" data-tab="fotos" type="button">Fotos</button>
         <button class="bo-tab" data-tab="datos" type="button">Datos</button>
         <button class="bo-tab" data-tab="texto" type="button">Textos</button>
+        <button class="bo-tab" data-tab="media" type="button">Vídeo</button>
         <button class="bo-tab" data-tab="publicar" type="button">Publicar</button>
       </div>
 
@@ -137,6 +149,30 @@
         <div class="adminactions"><button class="btn green" id="boSaveText" type="button">Guardar textos</button></div>
       </section>
 
+      <section class="bo-panel" data-panel="media" hidden>
+        <div class="fields">
+          <div class="field full">
+            <label for="bo_video">Vídeo (URL de Vimeo o YouTube)</label>
+            <input id="bo_video" type="url" placeholder="https://vimeo.com/123456789" value="${current.video || ''}">
+            <small class="bo-hint">El vídeo NO se sube al repositorio: pesa demasiado para GitHub Pages. Se aloja en Vimeo o YouTube y aquí solo va el enlace.</small>
+          </div>
+          <div class="field full">
+            <label for="bo_tour">Tour 360 (URL)</label>
+            <input id="bo_tour" type="url" placeholder="https://…" value="${current.tour || ''}">
+          </div>
+          <div class="field full">
+            <label for="bo_plans">Planos (una URL o ruta por línea)</label>
+            <textarea id="bo_plans" rows="3">${(current.floorplans || []).join('\n')}</textarea>
+          </div>
+          <div class="field full">
+            <label for="bo_extimg">Fotos por URL externa (una por línea)</label>
+            <textarea id="bo_extimg" rows="3" placeholder="https://…/foto.jpg"></textarea>
+            <small class="bo-hint">Se añaden al final de la galería. Útil si las fotos ya están alojadas fuera.</small>
+          </div>
+        </div>
+        <div class="adminactions"><button class="btn green" id="boSaveMedia" type="button">Guardar media</button></div>
+      </section>
+
       <section class="bo-panel" data-panel="publicar" hidden>
         <p class="bo-hint">Los cambios viven en este navegador. Para que los vea todo el mundo hay que subir al repositorio los dos archivos que se descargan aquí.</p>
         <div class="bo-steps">
@@ -144,6 +180,30 @@
           <div><strong>2.</strong> Descomprime el ZIP dentro de <code>assets/img/</code>, respetando las carpetas.</div>
           <div><strong>3.</strong> Sustituye <code>properties-data.js</code> por el descargado y haz commit.</div>
         </div>
+        <div class="bo-gh">
+          <div class="eye">Publicar en GitHub</div>
+          <p class="bo-hint">Sube el catálogo y las fotos en un solo commit, sin descargar nada. Necesita un token de grano fino con acceso <strong>solo a este repositorio</strong> y permiso <strong>Contents: Read and write</strong>. No se guarda en el repositorio ni de forma permanente.</p>
+          <div class="fields">
+            <div class="field full">
+              <label for="boToken">Token de GitHub</label>
+              <input id="boToken" type="password" autocomplete="off" placeholder="github_pat_…">
+            </div>
+            <div class="field full">
+              <label for="boBranch">Rama</label>
+              <input id="boBranch" type="text" value="main" autocomplete="off">
+            </div>
+            <div class="field full vw-consent">
+              <label><input type="checkbox" id="boRemember"><span>Recordarlo mientras esta pestaña esté abierta</span></label>
+            </div>
+          </div>
+          <div class="adminactions" style="flex-wrap:wrap">
+            <button class="btn" id="boCheck" type="button">Comprobar acceso</button>
+            <button class="btn green" id="boPublish" type="button">Publicar cambios ↗</button>
+          </div>
+          <pre class="bo-log" id="boLog" hidden></pre>
+        </div>
+
+        <div class="eye" style="margin-top:26px">O hacerlo a mano</div>
         <div class="adminactions" style="flex-wrap:wrap">
           <button class="btn green" id="boExportData" type="button">Descargar properties-data.js</button>
           <button class="btn" id="boExportZip" type="button">Descargar fotos (ZIP)</button>
@@ -260,6 +320,41 @@
       });
     });
 
+    /* Vídeo, tour, planos y fotos externas */
+    $('#boSaveMedia').addEventListener('click', () => {
+      const extra = $('#bo_extimg').value.split('\n').map((t) => t.trim()).filter(Boolean);
+      patch({
+        video: $('#bo_video').value.trim() || null,
+        tour: $('#bo_tour').value.trim() || null,
+        floorplans: $('#bo_plans').value.split('\n').map((t) => t.trim()).filter(Boolean),
+        ...(extra.length ? { images: [...(current.images || []), ...extra] } : {}),
+      });
+      $('#bo_extimg').value = '';
+      renderPhotos();
+    });
+
+    /* Publicar en GitHub */
+    const tokenInput = $('#boToken');
+    ghToken = ghToken || (window.VPPublish ? window.VPPublish.getToken() : '');
+    tokenInput.value = ghToken;
+    if (window.VPPublish && window.VPPublish.getToken()) $('#boRemember').checked = true;
+    tokenInput.addEventListener('input', () => { ghToken = tokenInput.value.trim(); });
+
+    $('#boCheck').addEventListener('click', async () => {
+      $('#boLog').textContent = '';
+      try {
+        ghToken = tokenInput.value.trim();
+        const info = await window.VPPublish.check(ghToken, REPO.owner, REPO.repo);
+        window.VPPublish.setToken(ghToken, $('#boRemember').checked);
+        log(`✓ ${info.repo} · rama ${info.branch} · escritura: ${info.canWrite ? 'sí' : 'NO'}`);
+        if (!info.canWrite) log('El token no tiene permiso de escritura (Contents: Read and write).');
+      } catch (error) {
+        log(`✗ ${error.message}`);
+      }
+    });
+
+    $('#boPublish').addEventListener('click', publish);
+
     /* Exportar */
     $('#boExportData').addEventListener('click', exportData);
     $('#boExportZip').addEventListener('click', exportZip);
@@ -270,9 +365,96 @@
     });
   };
 
-  /* ---------- Exportación ---------- */
   const finalPath = (slug, index) => `assets/img/${slug}/${String(index + 1).padStart(2, '0')}.webp`;
 
+  /* ---------- Publicación ---------- */
+  const REPO = { owner: 'josecrea', repo: 'villasproperties-preview' };
+
+  const catalogueFile = () => {
+    const clean = props.map((p) => {
+      const { photos, ...rest } = p;
+      return { ...rest, images: (p.images || []).map((src, i) => (store.isLocal(src) ? finalPath(p.slug, i) : src)) };
+    });
+    return `/* Villa's Properties — catálogo de inmuebles (fuente única).
+   PUBLICADO DESDE EL BACK OFFICE el ${new Date().toISOString().slice(0, 10)}. */
+window.VP_PROPERTIES = ${JSON.stringify(clean, null, 2)};
+
+/* Lo editado en el Back Office (vp-store.js) manda sobre el catálogo base. */
+if (window.VPStore) {
+  window.VP_PROPERTIES = window.VPStore.applyOverrides(window.VP_PROPERTIES);
+  window.VP_PROPERTIES.forEach((p) => {
+    p.photos = (p.images || []).length;
+    p.video = p.video || null;
+    p.floorplans = p.floorplans || [];
+    p.documents = p.documents || [];
+  });
+}
+`;
+  };
+
+  /* Reúne el catálogo y TODAS las fotos con su ruta definitiva: el publicador
+     compara con el repositorio y solo sube lo que ha cambiado. */
+  const collectFiles = async (log) => {
+    const files = [{ path: 'properties-data.js', bytes: new TextEncoder().encode(catalogueFile()) }];
+    for (const p of props) {
+      const images = p.images || [];
+      for (let i = 0; i < images.length; i++) {
+        const src = images[i];
+        if (/^https?:/.test(src)) continue;            // alojada fuera: no se sube
+        let bytes;
+        if (store.isLocal(src)) {
+          const blob = await store.getMedia(src.slice(8));
+          if (!blob) continue;
+          bytes = new Uint8Array(await blob.arrayBuffer());
+        } else {
+          const res = await fetch(src);
+          if (!res.ok) continue;
+          bytes = new Uint8Array(await res.arrayBuffer());
+        }
+        files.push({ path: finalPath(p.slug, i), bytes });
+      }
+    }
+    log(`${files.length} archivos preparados.`);
+    return files;
+  };
+
+  const publish = async () => {
+    const token = ($('#boToken')?.value || ghToken).trim();
+    if (!token) { log('Falta el token.'); return; }
+    const button = $('#boPublish');
+    button.disabled = true;
+    $('#boLog').textContent = '';
+    try {
+      window.VPPublish.setToken(token, $('#boRemember').checked);
+      const files = await collectFiles(log);
+      const branch = ($('#boBranch').value || 'main').trim();
+      const result = await window.VPPublish.commit({
+        token, ...REPO, branch,
+        message: 'chore(catalogo): actualización desde el Back Office',
+        files,
+        /* Solo las carpetas de los inmuebles: fuera de ahí hay imágenes que usa
+           la web (la escena de zonas de la home, la marca) y no se tocan. */
+        prune: props.map((p) => `assets/img/${p.slug}/`),
+      }, log, async (paths) => {
+        log(`Sobran ${paths.length} imágenes en el repositorio:`);
+        paths.slice(0, 12).forEach((path) => log(`  · ${path}`));
+        if (paths.length > 12) log(`  · … y ${paths.length - 12} más`);
+        return window.confirm(`Se van a BORRAR ${paths.length} imágenes del repositorio que ya no están en el catálogo:\n\n${paths.slice(0, 10).join('\n')}${paths.length > 10 ? '\n…' : ''}\n\n¿Borrarlas?`);
+      });
+      if (!result.changed) {
+        log('Nada que publicar: el repositorio ya está igual.');
+      } else {
+        log(`✓ Publicado ${result.sha} · ${result.uploaded} subidos, ${result.skipped} sin cambios, ${result.removed} borrados.`);
+        log('GitHub Pages tarda un minuto en reconstruir el sitio.');
+      }
+    } catch (error) {
+      log(`✗ ${error.message}`);
+    } finally {
+      button.disabled = false;
+    }
+  };
+
+  /* ---------- Exportación ---------- */
   const exportData = () => {
     /* Las rutas locales se traducen a la ruta definitiva del repositorio. */
     const clean = props.map((p) => {
