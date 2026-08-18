@@ -1,0 +1,6 @@
+
+# Respaldos de trabajo: se quedan en local, nunca en una web publica
+*.bak-*
+*.bak
+*.orig
+*.rej
