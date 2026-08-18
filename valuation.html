@@ -1,1 +1,233 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Valoración — Villa’s Properties</title><link rel="icon" type="image/webp" href="assets/brand/logo-placeholder.webp"><link rel="stylesheet" href="site.css"></head><body><header class="header solid"><div class="wrap headerin"><a class="brand" href="index.html" aria-label="Villa’s Properties"><div class="lockup"><div class="wordmark"><span>VILL</span><span class="a">A</span><span>’S&nbsp;PROPERTIES</span></div><div class="brand-sub">PROPERTY INTELLIGENCE · TENERIFE</div></div></a><nav class="nav"><a href="properties.html">Properties</a><a href="sell.html">Sell</a><a href="intelligence.html">Intelligence</a><a class="advisor" href="contact.html">Talk to an advisor</a></nav></div></header><main><section class="pagehero" data-reveal><div class="wrap"><div class="eye">SELL · VALUATION</div><h1>Know the<br>position.</h1><p class="pagelede">Un primer screening del activo antes de hablar de precio. Sin sustituir la valoración profesional ni inventar una cifra automática.</p></div></section><section class="section" data-reveal><div class="wrap"><div class="head" data-reveal><div class="eye">Property screening</div><div><h2>Empieza por los datos que sí cambian la estrategia.</h2><p class="muted">La V2 mantiene la captación de valoración dentro de su propio funnel. El resultado inicial prepara el expediente para análisis de microzona, comparables y documentación.</p></div></div><form id="valuationForm" class="fields" style="max-width:850px"><div class="field full"><label>Zona / dirección</label><input id="vZone" placeholder="Costa Adeje, Los Cristianos…" required></div><div class="field"><label>Tipología</label><select id="vType"><option>Apartamento</option><option>Villa / Casa</option><option>Ático</option><option>Terreno / Desarrollo</option><option>Comercial</option></select></div><div class="field"><label>Superficie m²</label><input id="vSqm" type="number" min="1" required></div><div class="field"><label>Dormitorios</label><input id="vBeds" type="number" min="0"></div><div class="field"><label>Estado</label><select id="vState"><option>Buen estado</option><option>Reformado</option><option>A reformar</option><option>Obra nueva</option></select></div><div class="field full"><button class="btn green" type="submit">Preparar screening ↗</button></div></form><div id="valuationResult" class="tool-card" style="min-height:180px;margin-top:24px"><div class="eye">VILLA’S INTELLIGENCE</div><div><h3>Sin precio mágico.</h3><p>Primero estructuramos el activo. Después medimos mercado, competencia, documentación y objetivo del propietario.</p></div></div></div></section></main><footer class="footer"><div class="wrap"><div class="footer-bottom"><span>© <span id="year">2026</span> Villa's Properties hecho con Amor</span><span><strong>🕒 Tenerife:</strong> <span id="tenerifeClock">--:--:--</span></span></div></div></footer><script src="app.js"></script><script src="motion.js"></script><script src="tools.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Valoración gratis en Tenerife Sur — Villa’s Properties</title>
+<meta name="description" content="Estimación gratuita del valor de tu vivienda en Tenerife Sur con datos reales de mercado: precio de anuncio, salida realista y valor de escritura.">
+<link rel="icon" type="image/webp" href="assets/brand/logo-placeholder.webp">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<header class="header solid"><div class="wrap headerin"><a class="brand" href="index.html" aria-label="Villa’s Properties"><div class="lockup"><div class="wordmark"><span>VILL</span><span class="a">A</span><span>’S&nbsp;PROPERTIES</span></div><div class="brand-sub">PROPERTY INTELLIGENCE · TENERIFE</div></div></a><nav class="nav"><a href="properties.html">Properties</a><a href="sell.html">Sell</a><a href="buy.html">Buy</a><a href="finance.html">Finance</a><a href="invest.html">Invest</a><a href="intelligence.html">Intelligence</a><a href="insights.html">Insights</a><a class="advisor" href="contact.html">Talk to an advisor</a></nav></div></header>
+
+<main>
+<section class="pagehero" data-reveal data-header-theme="paper">
+  <div class="wrap">
+    <div class="eye">SELL · VALORACIÓN GRATIS</div>
+    <h1>Cuánto<br>vale.</h1>
+    <p class="pagelede">Estimación gratuita en dos minutos con los datos reales del mercado de Tenerife Sur. Con la cifra de anuncio, la salida realista y lo que de verdad se firma en notaría.</p>
+    <div class="vw-trust">
+      <div><strong>0 €</strong><span>sin compromiso de venta</span></div>
+      <div><strong>6</strong><span>municipios con dato propio</span></div>
+      <div><strong>2 min</strong><span>estimación inicial</span></div>
+      <div><strong id="vDataDate">—</strong><span>última actualización del dato</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section tight" id="valorador">
+  <div class="wrap">
+    <div class="vw-shell">
+      <ol class="vw-progress" aria-label="Progreso de la valoración">
+        <li class="vw-dot is-on" data-step="1"><span>01</span> Ubicación</li>
+        <li class="vw-dot" data-step="2"><span>02</span> Vivienda</li>
+        <li class="vw-dot" data-step="3"><span>03</span> Resultado</li>
+      </ol>
+
+      <form id="vpValuation" novalidate>
+
+        <!-- Paso 1 -->
+        <section class="vw-step is-active" data-step="1">
+          <div class="vw-grid">
+            <div>
+              <h2 class="vw-title">¿Dónde está la vivienda?</h2>
+              <p class="muted">La microzona explica más del precio que los metros. En Arona hay 3.900 €/m² de diferencia entre Playa de las Américas y Arona pueblo.</p>
+              <div class="fields" style="margin-top:26px">
+                <div class="field full">
+                  <label for="vMunicipality">Municipio</label>
+                  <select id="vMunicipality"></select>
+                  <small class="vw-error" data-error-for="vMunicipality"></small>
+                </div>
+                <div class="field full">
+                  <label for="vZone">Zona</label>
+                  <select id="vZone" disabled></select>
+                </div>
+                <div class="field full">
+                  <label for="vAddress">Calle o urbanización <span class="vw-opt">opcional</span></label>
+                  <input id="vAddress" type="text" placeholder="Av. de Los Pueblos, Residencial…" autocomplete="off">
+                </div>
+              </div>
+              <div class="vw-actions">
+                <button class="btn green" type="button" id="vStep1Next">Continuar ↗</button>
+              </div>
+            </div>
+            <aside class="vw-side" id="vTownPreview"></aside>
+          </div>
+        </section>
+
+        <!-- Paso 2 -->
+        <section class="vw-step" data-step="2">
+          <h2 class="vw-title">¿Qué estamos valorando?</h2>
+          <p class="muted">Cuatro datos cambian el resultado de verdad: tipología, superficie, estado y extras con demanda real.</p>
+
+          <fieldset class="vw-fieldset">
+            <legend class="eye">Tipología</legend>
+            <div class="vw-chips">
+              <label class="vw-chip"><input type="radio" name="vType" value="piso" checked><span>Piso / apartamento</span></label>
+              <label class="vw-chip"><input type="radio" name="vType" value="casa"><span>Casa / chalet</span></label>
+              <label class="vw-chip"><input type="radio" name="vType" value="villa"><span>Villa</span></label>
+              <label class="vw-chip"><input type="radio" name="vType" value="otro"><span>Terreno u otro</span></label>
+            </div>
+          </fieldset>
+
+          <div class="fields" style="max-width:760px">
+            <div class="field">
+              <label for="vSurface">Superficie construida (m²)</label>
+              <input id="vSurface" type="number" min="15" max="2000" inputmode="numeric" placeholder="95">
+              <small class="vw-error" data-error-for="vSurface"></small>
+            </div>
+            <div class="field">
+              <label for="vBedrooms">Dormitorios</label>
+              <select id="vBedrooms">
+                <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5 o más</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="vCondition">Estado</label>
+              <select id="vCondition">
+                <option value="reformar">A reformar</option>
+                <option value="bueno" selected>Buen estado</option>
+                <option value="reformado">Reformado</option>
+                <option value="premium">Calidades premium</option>
+              </select>
+            </div>
+          </div>
+
+          <fieldset class="vw-fieldset">
+            <legend class="eye">Extras con demanda</legend>
+            <div class="vw-chips">
+              <label class="vw-chip"><input type="checkbox" id="terrace"><span>Terraza</span></label>
+              <label class="vw-chip"><input type="checkbox" id="elevator"><span>Ascensor</span></label>
+              <label class="vw-chip"><input type="checkbox" id="seaView"><span>Vistas al mar</span></label>
+              <label class="vw-chip"><input type="checkbox" id="parking"><span>Garaje</span></label>
+            </div>
+          </fieldset>
+
+          <div class="vw-actions">
+            <button class="btn" type="button" id="vStep2Back">← Volver</button>
+            <button class="btn green" type="button" id="vCalculate">Ver mi estimación ↗</button>
+          </div>
+        </section>
+
+        <!-- Paso 3 -->
+        <section class="vw-step" data-step="3">
+          <div id="vResult"></div>
+
+          <div class="vw-lead">
+            <div>
+              <div class="eye">Revisión local · gratis</div>
+              <h3>La cifra abre la conversación. El precio lo decide el mercado de tu calle.</h3>
+              <p class="muted">Te enviamos la estimación por WhatsApp y un asesor local la revisa con comparables reales, documentación y demanda efectiva. Sin llamadas automáticas.</p>
+            </div>
+            <div class="fields">
+              <div class="field">
+                <label for="vName">Nombre</label>
+                <input id="vName" type="text" autocomplete="name">
+                <small class="vw-error" data-error-for="vName"></small>
+              </div>
+              <div class="field">
+                <label for="vPhone">Teléfono / WhatsApp</label>
+                <input id="vPhone" type="tel" autocomplete="tel" placeholder="+34 600 000 000">
+                <small class="vw-error" data-error-for="vPhone"></small>
+              </div>
+              <div class="field full">
+                <label for="vEmail">Email <span class="vw-opt">opcional</span></label>
+                <input id="vEmail" type="email" autocomplete="email">
+              </div>
+              <div class="field full vw-consent">
+                <label><input type="checkbox" id="vPrivacy"><span>Acepto la <a href="privacy.html">política de privacidad</a> y que Villa’s Properties me contacte sobre esta valoración.</span></label>
+                <small class="vw-error" data-error-for="vPrivacy"></small>
+              </div>
+              <div class="field full vw-actions">
+                <button class="btn" type="button" id="vStep3Back">← Cambiar datos</button>
+                <button class="btn green" type="submit">Enviar por WhatsApp ↗</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Éxito -->
+        <section class="vw-step" data-step="done">
+          <div class="vw-done">
+            <div class="eye">Enviado</div>
+            <h2 class="vw-title">Ya está en camino.</h2>
+            <p class="muted">Hemos abierto WhatsApp con tu estimación y los datos de la vivienda: solo falta pulsar enviar. Un asesor local revisa el caso y te responde con comparables de tu microzona.</p>
+            <div class="vw-actions">
+              <button class="btn" type="button" id="vRestart">Valorar otra vivienda</button>
+              <a class="btn green" href="insights.html">Leer el análisis del mercado ↗</a>
+            </div>
+          </div>
+        </section>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section" data-reveal>
+  <div class="wrap">
+    <div class="head" data-reveal>
+      <div class="eye">Método</div>
+      <div>
+        <h2>Tres cifras, no una.</h2>
+        <p class="muted">Un valorador que solo da un número te está vendiendo una ilusión de precisión. Nosotros separamos lo que pides, lo que se mueve y lo que se firma.</p>
+      </div>
+    </div>
+    <div class="vw-method">
+      <article><span class="eye">01</span><h3>Anuncio</h3><p>El rango al que una vivienda como la tuya se publica hoy, calculado sobre el €/m² real de tu zona y ajustado por tipología, estado y extras.</p></article>
+      <article><span class="eye">02</span><h3>Salida realista</h3><p>Entre un 10% y un 15% por debajo del anuncio. Es la banda donde la propiedad se mueve sin quemarse en el portal durante meses.</p></article>
+      <article><span class="eye">03</span><h3>Escritura</h3><p>Lo que de verdad se firma en notaría, según el Portal Estadístico del Notariado. La referencia que manda cuando hay que negociar.</p></article>
+      <article><span class="eye">04</span><h3>Abstención</h3><p>Si tu municipio o tu tipología no tienen dato fiable, no inventamos una cifra. Preferimos decirlo y revisarlo con criterio local.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section tight" data-reveal>
+  <div class="wrap">
+    <div class="head" data-reveal>
+      <div class="eye">FAQ</div>
+      <div><h2>Preguntas honestas.</h2></div>
+    </div>
+    <div class="vw-faq">
+      <details open><summary>¿Es realmente gratis?<span>+</span></summary><p>Sí. La estimación automática y la primera revisión por un asesor local no tienen coste ni obligan a vender con nosotros.</p></details>
+      <details><summary>¿Esto es una tasación?<span>+</span></summary><p>No. Una tasación homologada (ECO/805/2003) la firma una sociedad de tasación con visita e informe registral. Esto es una estimación de mercado orientativa para tomar decisiones antes de esa fase.</p></details>
+      <details><summary>¿De dónde salen los €/m²?<span>+</span></summary><p>De cuatro fuentes contrastadas: idealista (oferta), Fotocasa (índice de compra), RealAdvisor (mediana por tipología) y el Portal Estadístico del Notariado (escritura real). El Catastro aporta el valor de referencia. Se actualizan cada mes.</p></details>
+      <details><summary>¿Por qué pedís el WhatsApp después de enseñar la cifra?<span>+</span></summary><p>Porque la cifra ya la has visto: no la escondemos detrás del formulario. El teléfono sirve para enviarte el resumen y preparar la revisión con comparables de tu calle.</p></details>
+      <details><summary>¿Por qué a veces no dais un número?<span>+</span></summary><p>Porque un terreno, un inmueble singular o un municipio sin serie de datos no se valoran con un €/m² de vivienda. Inventar una cifra ahí sería ruido, no información.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="cta" data-header-theme="green">
+  <div class="wrap" style="position:relative;z-index:1">
+    <div class="eye">START A CONVERSATION</div>
+    <h2>Let’s talk<br>property.</h2>
+    <p style="max-width:580px">¿Prefieres saltarte el formulario? Cuéntanos la vivienda y la valoramos contigo.</p>
+    <div class="actions" style="justify-content:flex-start;margin-top:25px">
+      <a class="btn fill" href="contact.html">Contact ↗</a>
+      <a class="btn" href="https://wa.me/34667384965" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer"><div class="wrap"><div class="footer-bottom"><span>© <span id="year">2026</span> Villa's Properties hecho con Amor</span><span><strong>🕒 Tenerife:</strong> <span id="tenerifeClock">--:--:--</span></span></div></div></footer>
+<script src="app.js"></script>
+<script src="motion.js"></script>
+<script src="market-data.js"></script>
+<script src="valuation.js"></script>
+<script>document.getElementById('vDataDate').textContent=(window.VP_MARKET&&window.VP_MARKET.meta.updated)?new Intl.DateTimeFormat('es-ES',{month:'short',year:'numeric'}).format(new Date(window.VP_MARKET.meta.updated)):'—';</script>
+</body>
+</html>
