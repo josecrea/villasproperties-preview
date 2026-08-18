@@ -569,3 +569,10 @@
   .map-chip-in b{font-size:9px;letter-spacing:.07em}
   .map-chip-in span{font-size:10px}
 }
+
+/* El menú se perdía al bajar en las páginas interiores: solo la home tenía
+   header fijo. Aquí se queda pegado arriba sin desplazar el contenido. */
+.header.solid{position:sticky;top:0}
+/* Leaflet usa z-index 400 en sus panes: sin stacking context propio, el mapa
+   se pintaría por encima del header al hacer scroll. */
+.pricemap{z-index:0}

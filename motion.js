@@ -141,7 +141,9 @@
     }
 
     // Dynamic header theme: the last themed section whose top has passed the header band wins
-    if (header && themed.length) {
+    /* Solo la home tiene header transparente sobre escenas. En las páginas
+       interiores es sticky y opaco: cambiarle el tema lo dejaría ilegible. */
+    if (header && themed.length && !header.classList.contains('solid')) {
       let best = null, bestTop = -Infinity;
       for (const s of themed) {
         const t = s.getBoundingClientRect().top;
