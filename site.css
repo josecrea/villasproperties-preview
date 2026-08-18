@@ -910,3 +910,99 @@
   .sell-ticker-list dd{font-size:17px}
 }
 .wa-float.is-away{transform:translateY(140%);opacity:0;pointer-events:none}
+
+/* =====================================================================
+   Buy — contraste de anuncio y due diligence
+   ===================================================================== */
+.buy-tool{display:grid;grid-template-columns:.95fr 1.25fr;gap:clamp(20px,3vw,44px);align-items:start}
+.buy-form{border:1px solid var(--line);background:#fff;padding:22px}
+.buy-result{display:block;border:1px solid var(--line);background:var(--paper);padding:clamp(20px,2.6vw,32px)}
+.buy-verdict{border-left:3px solid var(--line);padding-left:18px}
+.buy-verdict h3{font-size:clamp(23px,2.6vw,33px);font-weight:400;letter-spacing:-.04em;line-height:1.05;margin:6px 0 4px}
+.buy-verdict p{font-size:14px;color:var(--muted);margin:10px 0 0;max-width:56ch}
+.buy-diff{font-size:clamp(30px,4vw,52px);font-weight:400;letter-spacing:-.055em;line-height:1}
+.buy-verdict.is-good{border-left-color:var(--atlantic)}
+.buy-verdict.is-good .buy-diff{color:var(--atlantic)}
+.buy-verdict.is-fair{border-left-color:var(--sand)}
+.buy-verdict.is-warn{border-left-color:#c98a4b}
+.buy-verdict.is-warn .buy-diff{color:#b4712f}
+.buy-verdict.is-bad{border-left-color:#b4442f}
+.buy-verdict.is-bad .buy-diff{color:#b4442f}
+.buy-numbers{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:26px}
+.buy-numbers>div{background:#fff;padding:13px 15px;display:flex;flex-direction:column;gap:3px}
+.buy-numbers span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.buy-numbers b{font-size:18px;font-weight:400;letter-spacing:-.03em}
+.buy-deed{font-size:14px;line-height:1.6;margin:20px 0 0;max-width:62ch}
+.buy-deed strong{font-weight:600}
+
+.buy-checks{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.buy-checks article{border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:8px;
+  transition:border-color .4s var(--mo-ease)}
+.buy-checks article:hover{border-top-color:var(--atlantic)}
+.buy-checks .eye{color:var(--sand)}
+.buy-checks h3{font-size:clamp(21px,2.2vw,27px);font-weight:400;letter-spacing:-.035em;margin:0}
+.buy-checks p{font-size:13px;line-height:1.6;color:var(--muted);margin:0}
+
+@media(max-width:1000px){
+  .buy-tool{grid-template-columns:1fr}
+  .buy-checks{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .buy-checks{grid-template-columns:1fr}
+  .buy-numbers{grid-template-columns:1fr}
+}
+
+/* =====================================================================
+   Invest — matriz precio × liquidez
+   ===================================================================== */
+.inv-matrix{display:grid;grid-template-columns:1.5fr .9fr;gap:clamp(20px,3vw,44px);align-items:start}
+.inv-plot{margin:0;border:1px solid var(--line);background:#fff;padding:14px 14px 10px}
+.inv-plot figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:10px;padding:0 4px}
+.inv-svg{width:100%;height:auto;display:block;font-family:inherit}
+.inv-q{fill:var(--paper-2);opacity:.55}
+.inv-q2{fill:var(--atlantic-soft);opacity:.4}
+.inv-qlabel{font-size:9px;letter-spacing:.14em;text-transform:uppercase;fill:var(--muted)}
+.inv-axis{stroke:var(--line);stroke-width:1}
+.inv-axis-label{font-size:9px;letter-spacing:.13em;text-transform:uppercase;fill:var(--muted)}
+.inv-dot{cursor:pointer;outline:none}
+/* Un círculo transparente amplio hace pulsable el punto con el dedo: el SVG se
+   escala en móvil y la marca visible se queda en 7px reales. */
+.inv-hit{fill:transparent}
+.inv-dot .inv-mark{fill:var(--atlantic);opacity:.55;transition:opacity .3s ease,stroke-width .3s ease;
+  stroke:var(--atlantic);stroke-width:0}
+.inv-dot .inv-mark.is-down{fill:var(--sand);stroke:var(--sand)}
+.inv-dot text{font-size:11px;fill:var(--ink);letter-spacing:-.01em}
+.inv-dot:hover .inv-mark,.inv-dot:focus-visible .inv-mark{opacity:.85}
+.inv-dot.is-on .inv-mark{opacity:1;stroke-width:8;stroke-opacity:.22}
+.inv-dot:focus-visible text{text-decoration:underline}
+
+.inv-read{border:1px solid var(--line);background:var(--paper);padding:22px;display:flex;flex-direction:column;gap:14px}
+.inv-read-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.inv-read-grid>div{background:#fff;padding:11px 13px;display:flex;flex-direction:column;gap:2px}
+.inv-read-grid small{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.inv-read-grid b{font-size:18px;font-weight:400;letter-spacing:-.03em}
+.inv-read-grid b.is-up{color:var(--atlantic)}
+.inv-read-grid b.is-down{color:#b4442f}
+.inv-read p{font-size:14px;line-height:1.62;color:var(--muted);margin:0}
+
+.inv-questions{margin:20px 0 0;padding-left:20px;display:grid;gap:14px}
+.inv-questions li{font-size:16px;line-height:1.6;color:var(--muted);max-width:62ch}
+.inv-questions b{color:var(--ink);font-weight:600}
+
+@media(max-width:1000px){
+  .inv-matrix{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .inv-read-grid{grid-template-columns:1fr}
+  .inv-qlabel{font-size:8px}
+}
+
+/* Finance — reparto del precio entre préstamo y entrada */
+.fin-bar{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--paper-2);margin-top:26px}
+.fin-bar i{display:block;width:var(--w);transition:width .6s cubic-bezier(.16,1,.3,1)}
+.fin-bar-loan{background:var(--atlantic)}
+.fin-bar-entry{background:var(--sand)}
+.fin-legend{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin:9px 0 0;letter-spacing:.04em}
+.fin-legend span{width:11px;height:11px;border-radius:3px;display:inline-block}
+.fin-legend .is-loan{background:var(--atlantic)}
+.fin-legend .is-entry{background:var(--sand)}
