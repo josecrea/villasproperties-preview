@@ -19,6 +19,7 @@
   const QUALITY = 0.82;
 
   const $ = (sel, ctx = body) => ctx.querySelector(sel);
+  const E = (v) => (window.VPSafe ? VPSafe.esc(v) : String(v ?? ''));
   const euro = (v) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v || 0);
 
   let current = props[0];
@@ -92,7 +93,7 @@
       <div class="bo-pick">
         <label for="boProperty">Inmueble</label>
         <select id="boProperty">
-          ${props.map((p) => `<option value="${p.slug}"${p.slug === current.slug ? ' selected' : ''}>${p.titleShort || p.title} · ${euro(p.price)}</option>`).join('')}
+          ${props.map((p) => `<option value="${E(p.slug)}"${p.slug === current.slug ? ' selected' : ''}>${E(p.titleShort || p.title)} · ${euro(p.price)}</option>`).join('')}
         </select>
       </div>
 
@@ -121,8 +122,8 @@
             <div class="field${['title', 'titleShort', 'address'].includes(f.key) ? ' full' : ''}">
               <label for="bo_${f.key}">${f.label}</label>
               ${f.type === 'select'
-                ? `<select id="bo_${f.key}" data-field="${f.key}">${f.options.map((o) => `<option${current[f.key] === o ? ' selected' : ''}>${o}</option>`).join('')}</select>`
-                : `<input id="bo_${f.key}" data-field="${f.key}" type="${f.type}" value="${current[f.key] ?? ''}">`}
+                ? `<select id="bo_${f.key}" data-field="${f.key}">${f.options.map((o) => `<option${current[f.key] === o ? ' selected' : ''}>${E(o)}</option>`).join('')}</select>`
+                : `<input id="bo_${f.key}" data-field="${f.key}" type="${f.type}" value="${E(current[f.key] ?? '')}">`}
             </div>`).join('')}
         </div>
       </section>
@@ -131,19 +132,19 @@
         <div class="fields">
           <div class="field full">
             <label for="bo_highlight">Titular de la ficha</label>
-            <input id="bo_highlight" data-field="highlight" type="text" value="${(current.highlight || '').replace(/"/g, '&quot;')}">
+            <input id="bo_highlight" data-field="highlight" type="text" value="${E(current.highlight || '')}">
           </div>
           <div class="field full">
             <label for="bo_description">Descripción (un párrafo por línea en blanco)</label>
-            <textarea id="bo_description" rows="12">${(current.description || []).join('\n\n')}</textarea>
+            <textarea id="bo_description" rows="12">${E((current.description || []).join('\n\n'))}</textarea>
           </div>
           <div class="field full">
             <label for="bo_features">Características (una por línea)</label>
-            <textarea id="bo_features" rows="5">${(current.features || []).join('\n')}</textarea>
+            <textarea id="bo_features" rows="5">${E((current.features || []).join('\n'))}</textarea>
           </div>
           <div class="field full">
             <label for="bo_equipment">Equipamiento (una por línea)</label>
-            <textarea id="bo_equipment" rows="4">${(current.equipment || []).join('\n')}</textarea>
+            <textarea id="bo_equipment" rows="4">${E((current.equipment || []).join('\n'))}</textarea>
           </div>
         </div>
         <div class="adminactions"><button class="btn green" id="boSaveText" type="button">Guardar textos</button></div>
@@ -153,16 +154,16 @@
         <div class="fields">
           <div class="field full">
             <label for="bo_video">Vídeo (URL de Vimeo o YouTube)</label>
-            <input id="bo_video" type="url" placeholder="https://vimeo.com/123456789" value="${current.video || ''}">
+            <input id="bo_video" type="url" placeholder="https://vimeo.com/123456789" value="${E(current.video || '')}">
             <small class="bo-hint">El vídeo NO se sube al repositorio: pesa demasiado para GitHub Pages. Se aloja en Vimeo o YouTube y aquí solo va el enlace.</small>
           </div>
           <div class="field full">
             <label for="bo_tour">Tour 360 (URL)</label>
-            <input id="bo_tour" type="url" placeholder="https://…" value="${current.tour || ''}">
+            <input id="bo_tour" type="url" placeholder="https://…" value="${E(current.tour || '')}">
           </div>
           <div class="field full">
             <label for="bo_plans">Planos (una URL o ruta por línea)</label>
-            <textarea id="bo_plans" rows="3">${(current.floorplans || []).join('\n')}</textarea>
+            <textarea id="bo_plans" rows="3">${E((current.floorplans || []).join('\n'))}</textarea>
           </div>
           <div class="field full">
             <label for="bo_extimg">Fotos por URL externa (una por línea)</label>
@@ -222,7 +223,7 @@
     const images = current.images || [];
     grid.innerHTML = images.map((src, i) => `
       <figure class="bo-photo${i === 0 ? ' is-cover' : ''}">
-        <img src="${store.mediaSrc(src)}"${store.mediaAttr(src)} alt="Foto ${i + 1}" loading="lazy">
+        <img src="${window.VPSafe ? VPSafe.url(store.mediaSrc(src)) : store.mediaSrc(src)}"${store.mediaAttr(src)} alt="Foto ${i + 1}" loading="lazy">
         ${i === 0 ? '<figcaption>Portada</figcaption>' : ''}
         <div class="bo-photo-actions">
           <button type="button" data-move="${i}" data-dir="-1" title="Mover antes" aria-label="Mover antes">←</button>

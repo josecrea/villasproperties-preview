@@ -1,5 +1,7 @@
 (() => {
   const $=(s,c=document)=>c.querySelector(s); const $$=(s,c=document)=>[...c.querySelectorAll(s)];
+  const E=v=>(window.VPSafe?VPSafe.esc(v):String(v??''));
+  const U=v=>(window.VPSafe?VPSafe.url(v):String(v??''));
   const fmt=v=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(v||0));
 
   // Brand integrity: keep the geometric A visually, but preserve the real letter in the DOM/accessibility tree.
@@ -91,7 +93,7 @@
   ].filter(Boolean).join('');
   const renderProps=()=>{
     $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
-      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${p.url}" aria-label="Ver ficha de ${p.name}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${window.VPStore?VPStore.mediaSrc(p.images[0]):p.images[0]})"${window.VPStore?VPStore.mediaAttr(p.images[0]):''}`:''}></div><span class="tag">${p.status} · ${p.strategy}</span></a><div class="pinfo"><div><h3><a href="${p.url}">${p.name}</a></h3><div class="meta">${p.zone} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${p.ref||'—'}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${p.url}">Ver ficha ↗</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
+      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${U(p.url)}" aria-label="Ver ficha de ${E(p.name)}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${U(window.VPStore?VPStore.mediaSrc(p.images[0]):p.images[0])})"${window.VPStore?VPStore.mediaAttr(p.images[0]):''}`:''}></div><span class="tag">${E(p.status)} · ${E(p.strategy)}</span></a><div class="pinfo"><div><h3><a href="${U(p.url)}">${E(p.name)}</a></h3><div class="meta">${E(p.zone)} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${E(p.name)}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${E(p.ref||'—')}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${U(p.url)}">Ver ficha ↗</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
     });
   };
   renderProps();

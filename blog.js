@@ -8,6 +8,9 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
+  const E = (v) => (window.VPSafe ? VPSafe.esc(v) : String(v ?? ''));
+  const U = (v) => (window.VPSafe ? VPSafe.url(v) : String(v ?? ''));
+
   const dateLabel = (iso) => {
     const d = new Date(`${iso}T12:00:00`);
     return new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
@@ -20,17 +23,17 @@
   const figure = (post) => `<div class="pcard-fig" data-fig="${post.figure || 'plain'}" data-accent="${post.accent || 'sand'}" aria-hidden="true"><i></i><b></b></div>`;
 
   const linkAttrs = (post) => (post.external
-    ? `href="${post.slug}" target="_blank" rel="noopener"`
-    : `href="${post.slug}"`);
+    ? `href="${U(post.slug)}" target="_blank" rel="noopener"`
+    : `href="${U(post.slug)}"`);
 
   const card = (post) => `
-    <article class="pcard${post.external ? ' is-external' : ''}" data-category="${post.category}" data-stagger>
+    <article class="pcard${post.external ? ' is-external' : ''}" data-category="${E(post.category)}" data-stagger>
       <a class="pcard-link" ${linkAttrs(post)}>
         ${figure(post)}
         <div class="pcard-body">
-          <div class="pcard-meta"><span class="eye">${post.category}</span><span>${dateLabel(post.date)} · ${post.read}</span></div>
-          <h3>${post.title}</h3>
-          <p>${post.dek}</p>
+          <div class="pcard-meta"><span class="eye">${E(post.category)}</span><span>${dateLabel(post.date)} · ${post.read}</span></div>
+          <h3>${E(post.title)}</h3>
+          <p>${E(post.dek)}</p>
           <span class="pcard-cta eye">${post.external ? 'Leer en el blog ↗' : 'Leer el análisis ↗'}</span>
         </div>
       </a>
@@ -50,8 +53,8 @@
           ${figure(lead)}
           <div class="pfeat-body">
             <div class="pcard-meta"><span class="eye">Destacado · ${lead.category}</span><span>${dateLabel(lead.date)} · ${lead.read}</span></div>
-            <h2>${lead.title}</h2>
-            <p>${lead.dek}</p>
+            <h2>${E(lead.title)}</h2>
+            <p>${E(lead.dek)}</p>
             <span class="pcard-cta eye">${lead.external ? 'Leer en el blog ↗' : 'Leer el análisis ↗'}</span>
           </div>
         </a>`;
@@ -70,7 +73,7 @@
     if (filters) {
       const categories = ['Todo', ...[...new Set(posts.map((p) => p.category))]];
       filters.innerHTML = categories
-        .map((c, i) => `<button type="button" class="pfilter${i === 0 ? ' is-on' : ''}" data-cat="${c}">${c}</button>`)
+        .map((c, i) => `<button type="button" class="pfilter${i === 0 ? ' is-on' : ''}" data-cat="${E(c)}">${E(c)}</button>`)
         .join('');
       filters.addEventListener('click', (event) => {
         const button = event.target.closest('.pfilter');

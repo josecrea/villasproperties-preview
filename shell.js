@@ -113,6 +113,7 @@
     new MutationObserver(async () => {
       if (loaded || !panel.classList.contains('open')) return;
       loaded = true;
+      await load('vp-safe.js');
       await load('vp-store.js');
       await load('properties-data.js');
       await load('vp-publish.js');

@@ -20,6 +20,9 @@
      VPStore.hydrate() cuando IndexedDB responde. */
   const M = (src) => (window.VPStore ? VPStore.mediaSrc(src) : src);
   const A = (src) => (window.VPStore ? VPStore.mediaAttr(src) : '');
+  /* El catálogo es contenido editable: todo lo que entre en el HTML se escapa. */
+  const E = (v) => (window.VPSafe ? VPSafe.esc(v) : String(v ?? ''));
+  const U = (v) => (window.VPSafe ? VPSafe.url(v) : String(v ?? ''));
 
   const params = new URLSearchParams(location.search);
   const property = props.find((p) => p.ref === params.get('ref') || p.slug === params.get('ref')) || props[0];
@@ -57,13 +60,13 @@
   const gallery = () => `
     <div class="pgal">
       <button class="pgal-main" type="button" data-index="0" aria-label="Ampliar foto 1">
-        <img src="${M(property.images[0])}"${A(property.images[0])} alt="${property.title}, ${property.zone}" width="1200" height="800" fetchpriority="high">
+        <img src="${U(M(property.images[0]))}"${A(property.images[0])} alt="${E(property.title)}, ${E(property.zone)}" width="1200" height="800" fetchpriority="high">
         <span class="pgal-count">1 / ${property.images.length}</span>
       </button>
       <div class="pgal-side">
         ${property.images.slice(1, 5).map((src, i) => `
           <button class="pgal-thumb" type="button" data-index="${i + 1}" aria-label="Ampliar foto ${i + 2}">
-            <img src="${M(src)}"${A(src)} alt="${property.title}: foto ${i + 2}" loading="lazy" width="600" height="400">
+            <img src="${U(M(src))}"${A(src)} alt="${E(property.title)}: foto ${i + 2}" loading="lazy" width="600" height="400">
             ${i === 3 && property.images.length > 5 ? `<span class="pgal-more">+${property.images.length - 5} fotos</span>` : ''}
           </button>`).join('')}
       </div>
@@ -94,18 +97,18 @@
     const yt = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{6,})/);
     if (vimeo) return `<div class="pmedia-frame"><iframe src="https://player.vimeo.com/video/${vimeo[1]}?dnt=1" title="Vídeo de ${property.title}" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
     if (yt) return `<div class="pmedia-frame"><iframe src="https://www.youtube-nocookie.com/embed/${yt[1]}" title="Vídeo de ${property.title}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
-    return `<video class="pmedia-video" src="${url}" controls playsinline preload="none" poster="${M(property.images[0])}"></video>`;
+    return `<video class="pmedia-video" src="${U(url)}" controls playsinline preload="none" poster="${M(property.images[0])}"></video>`;
   };
 
   const mediaBlock = () => {
     const items = [];
     if (property.video) items.push(videoEmbed(property.video));
-    if (property.tour) items.push(`<a class="btn green" href="${property.tour}" target="_blank" rel="noopener">Abrir tour 360 ↗</a>`);
+    if (property.tour) items.push(`<a class="btn green" href="${U(property.tour)}" target="_blank" rel="noopener">Abrir tour 360 ↗</a>`);
     if (property.floorplans.length) {
-      items.push(`<div class="pplans">${property.floorplans.map((f, i) => `<a href="${f}" target="_blank" rel="noopener"><img src="${f}" alt="Plano ${i + 1} de ${property.title}" loading="lazy"></a>`).join('')}</div>`);
+      items.push(`<div class="pplans">${property.floorplans.map((f, i) => `<a href="${U(f)}" target="_blank" rel="noopener"><img src="${U(f)}" alt="Plano ${i + 1} de ${E(property.title)}" loading="lazy"></a>`).join('')}</div>`);
     }
     if (property.documents.length) {
-      items.push(`<ul class="pdocs">${property.documents.map((d) => `<li><a href="${d.url}" target="_blank" rel="noopener">${d.label} ↗</a></li>`).join('')}</ul>`);
+      items.push(`<ul class="pdocs">${property.documents.map((d) => `<li><a href="${U(d.url)}" target="_blank" rel="noopener">${E(d.label)} ↗</a></li>`).join('')}</ul>`);
     }
     /* Sin inventar material que no existe: se dice qué falta y se ofrece pedirlo. */
     const pending = [
@@ -139,13 +142,13 @@
         <nav class="pbread" aria-label="Migas de pan">
           <a href="index.html">Inicio</a> <span>·</span>
           <a href="properties.html">Properties</a> <span>·</span>
-          <span>${property.zone}</span>
+          <span>${E(property.zone)}</span>
         </nav>
         <div class="phead">
           <div>
-            <div class="eye">${property.status} · ${property.type} · Ref. ${property.ref}</div>
-            <h1>${property.title}</h1>
-            <p class="pplace">${property.address} · ${property.zone}, ${property.town}</p>
+            <div class="eye">${E(property.status)} · ${E(property.type)} · Ref. ${E(property.ref)}</div>
+            <h1>${E(property.title)}</h1>
+            <p class="pplace">${E(property.address)} · ${E(property.zone)}, ${E(property.town)}</p>
           </div>
           <div class="pprice">
             <strong>${euro(property.price)}</strong>
@@ -173,17 +176,17 @@
       <div class="wrap pmain">
         <div class="pcol">
           <div class="eye">La propiedad</div>
-          <h2 class="ph2">${property.highlight}</h2>
-          ${property.description.map((p) => `<p>${p}</p>`).join('')}
+          <h2 class="ph2">${E(property.highlight)}</h2>
+          ${property.description.map((t) => `<p>${E(t)}</p>`).join('')}
 
           <h3 class="ph3">Características</h3>
           <ul class="ptags">
-            ${[...property.features, ...property.equipment].map((f) => `<li>${f}</li>`).join('')}
+            ${[...property.features, ...property.equipment].map((f) => `<li>${E(f)}</li>`).join('')}
           </ul>
 
           <h3 class="ph3">Ficha técnica</h3>
           <dl class="pspecs">
-            ${specs.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}
+            ${specs.map(([k, v]) => `<div><dt>${E(k)}</dt><dd>${E(v)}</dd></div>`).join('')}
           </dl>
 
           <div data-share></div>
@@ -212,7 +215,7 @@
             <p class="muted">Te contamos lo que no está en el anuncio: estado real, comunidad, documentación y margen de negociación.</p>
             <a class="btn green" href="${waLink}" target="_blank" rel="noopener">WhatsApp ↗</a>
             <a class="btn" href="contact.html">Solicitar visita</a>
-            <a class="btn" href="${property.url}" target="_blank" rel="noopener">Ver en idealista ↗</a>
+            <a class="btn" href="${U(property.url)}" target="_blank" rel="noopener">Ver en idealista ↗</a>
           </div>
         </aside>
       </div>
@@ -224,7 +227,7 @@
           <div class="eye">Ubicación</div>
           <div><h2>${property.zone}, ${property.town}.</h2><p class="muted">Zona aproximada: la dirección exacta se facilita en la visita.</p></div>
         </div>
-        <div class="pmap" id="propertyMap" role="application" aria-label="Ubicación aproximada de ${property.zone}"></div>
+        <div class="pmap" id="propertyMap" role="application" aria-label="Ubicación aproximada de ${E(property.zone)}"></div>
       </div>
     </section>
 
@@ -238,11 +241,11 @@
         </div>
         <div class="pothers">
           ${props.filter((p) => p.ref !== property.ref).slice(0, 4).map((p) => `
-            <a class="pother" href="property.html?ref=${p.ref}">
-              <div class="pother-img" style="background-image:url(${M(p.images[0])})"${A(p.images[0])}></div>
+            <a class="pother" href="property.html?ref=${encodeURIComponent(p.ref)}">
+              <div class="pother-img" style="background-image:url(${U(M(p.images[0]))})"${A(p.images[0])}></div>
               <div class="pother-body">
-                <div class="eye">${p.zone}</div>
-                <h3>${p.title}</h3>
+                <div class="eye">${E(p.zone)}</div>
+                <h3>${E(p.title)}</h3>
                 <div class="pother-price">${euro(p.price)} · ${p.built} m²</div>
               </div>
             </a>`).join('')}
