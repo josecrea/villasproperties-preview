@@ -768,3 +768,35 @@
 @media (prefers-reduced-motion: reduce){
   [data-reveal="image-reveal"]>img,[data-reveal="mask"]>*{clip-path:none!important}
 }
+
+/* FIX: la tarjeta de propiedad pasó a enlazar la foto (<a class="media">) y un
+   <a> es inline, así que aspect-ratio no aplicaba: la imagen desaparecía y la
+   etiqueta de estado, posicionada sobre ella, caía encima del título. */
+.property .media{display:block}
+
+/* =====================================================================
+   Robustez y táctil
+   ===================================================================== */
+/* Sin JavaScript, .hero-content>*{opacity:0} dejaba la portada en negro: el
+   titular solo aparecía cuando motion.js añadía .hero-in. Ahora la ocultación
+   depende de que el motor de animación esté vivo. */
+.hero-content>*{opacity:1;transform:none}
+.motion-ready .hero-content>*{opacity:0;transform:translateY(26px)}
+
+/* Zonas de toque: en pantalla táctil, los enlaces de acción y los controles
+   necesitan alto suficiente para el dedo (WCAG 2.2 pide 24px; Apple, 44). */
+@media (hover:none) and (pointer:coarse){
+  a.eye,.pcard-cta,.plink,.insight a,.post-body a:not(.btn){min-height:44px;display:inline-flex;align-items:center}
+  .pbread a{padding:6px 0}
+  .menu-toggle,.nav .admin,.round{min-height:44px}
+  .share-row a,.share-row button,.social-list svg{width:44px;height:44px}
+  .bo-photo-actions button{width:34px;height:34px}
+  .leaflet-control-zoom a{width:38px!important;height:38px!important;line-height:38px!important}
+  .vw-chip span{padding-block:13px}
+  .field input,.field select,.field textarea{min-height:46px;font-size:16px}
+  /* 16px evita que iOS haga zoom automático al enfocar un campo */
+}
+
+/* El header sticky tapaba el arranque de la sección al saltar a un ancla o al
+   cambiar de paso en el valorador. */
+[id]{scroll-margin-top:clamp(84px,13vw,104px)}

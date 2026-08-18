@@ -287,6 +287,16 @@
   lightbox.querySelector('.plight-prev').addEventListener('click', () => show(index - 1));
   lightbox.querySelector('.plight-next').addEventListener('click', () => show(index + 1));
   lightbox.addEventListener('click', (event) => { if (event.target === lightbox) close(); });
+  /* En móvil se pasan fotos deslizando, no buscando la flecha. */
+  let touchX = null;
+  lightbox.addEventListener('touchstart', (e) => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  lightbox.addEventListener('touchend', (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    touchX = null;
+    if (Math.abs(dx) > 45) show(dx < 0 ? index + 1 : index - 1);
+  }, { passive: true });
+
   document.addEventListener('keydown', (event) => {
     if (!lightbox.classList.contains('is-open')) return;
     if (event.key === 'Escape') close();
