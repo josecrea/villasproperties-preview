@@ -91,10 +91,11 @@
   ].filter(Boolean).join('');
   const renderProps=()=>{
     $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
-      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${p.url}" aria-label="Ver ficha de ${p.name}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${p.images[0]})"`:''}></div><span class="tag">${p.status} · ${p.strategy}</span></a><div class="pinfo"><div><h3><a href="${p.url}">${p.name}</a></h3><div class="meta">${p.zone} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${p.ref||'—'}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${p.url}">Ver ficha ↗</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
+      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${p.url}" aria-label="Ver ficha de ${p.name}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${window.VPStore?VPStore.mediaSrc(p.images[0]):p.images[0]})"${window.VPStore?VPStore.mediaAttr(p.images[0]):''}`:''}></div><span class="tag">${p.status} · ${p.strategy}</span></a><div class="pinfo"><div><h3><a href="${p.url}">${p.name}</a></h3><div class="meta">${p.zone} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${p.ref||'—'}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${p.url}">Ver ficha ↗</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
     });
   };
   renderProps();
+  window.VPStore?.hydrate();
 
   const reviews=$$('.review'); let r=0; const show=n=>{if(!reviews.length)return;r=(n+reviews.length)%reviews.length;reviews.forEach((x,i)=>x.classList.toggle('active',i===r))};
   $('#prevReview')?.addEventListener('click',()=>show(r-1)); $('#nextReview')?.addEventListener('click',()=>show(r+1)); if(reviews.length)setInterval(()=>show(r+1),7000);
@@ -116,33 +117,6 @@
   }
 
   const panel=$('#adminPanel'),overlay=$('#overlay'); const close=()=>{overlay?.classList.remove('open');panel?.classList.remove('open')}; $('#closeAdmin')?.addEventListener('click',close); overlay?.addEventListener('click',close);
-  const featureDefs=[
-    {n:'Superficie',u:'m²',qty:78},{n:'Habitaciones',qty:2},{n:'Baños',qty:2},
-    {n:'Parking',u:'plazas',qty:1},{n:'Trastero',bool:1,on:0},{n:'Piscina',bool:1,on:1},
-    {n:'Terraza',u:'m²',qty:18},{n:'Jardín',bool:1,on:0},{n:'Ascensor',bool:1,on:1},
-    {n:'Vistas',bool:1,on:1},{n:'A/C',bool:1,on:1},{n:'Amueblado',bool:1,on:0}
-  ];
-  const fb=$('#features');
-  if(fb){
-    fb.innerHTML=featureDefs.map((f,i)=>{const num=String(i+1).padStart(2,'0');
-      return f.bool
-        ? `<button class="feature ${f.on?'active':''}" data-i="${i}" type="button"><span class="eye">${num}</span><div style="margin-top:9px">${f.n}</div></button>`
-        : `<div class="feature qty"><span class="eye">${num}</span><div style="margin-top:9px">${f.n}</div><div class="qtyrow"><input type="number" min="0" value="${f.qty}" data-qi="${i}" aria-label="${f.n}"><span>${f.u||''}</span></div></div>`;
-    }).join('');
-    fb.addEventListener('click',e=>{const b=e.target.closest('button.feature[data-i]');if(b){const i=+b.dataset.i;featureDefs[i].on=featureDefs[i].on?0:1;b.classList.toggle('active')}});
-    fb.addEventListener('input',e=>{const inp=e.target.closest('input[data-qi]');if(inp)featureDefs[+inp.dataset.qi].qty=+inp.value||0});
-  }
-  $('#saveAdmin')?.addEventListener('click',()=>{const n=$('#aName'),p=$('#aPrice'),z=$('#aZone'),st=$('#aStatus'),sg=$('#aStrategy'); if(n)demoProps[0].name=n.value;if(p)demoProps[0].price=p.value;if(z)demoProps[0].zone=z.value;if(st)demoProps[0].status=st.value;if(sg)demoProps[0].strategy=sg.value;
-    const q=nm=>featureDefs.find(f=>f.n===nm)?.qty, on=nm=>!!featureDefs.find(f=>f.n===nm)?.on;
-    if(q('Superficie')!=null)demoProps[0].area=q('Superficie'); if(q('Habitaciones')!=null)demoProps[0].beds=q('Habitaciones'); if(q('Baños')!=null)demoProps[0].baths=q('Baños'); if(q('Parking')!=null)demoProps[0].parking=q('Parking')>0; if(q('Terraza')!=null)demoProps[0].terrace=q('Terraza'); demoProps[0].pool=on('Piscina');
-    renderProps(); const m=$('#statusMsg');if(m)m.textContent='✓ Cambios aplicados a la sesión del prototipo.'});
-  $('#videoFile')?.addEventListener('change',e=>{const f=e.target.files?.[0],v=$('#heroVideo');if(!f||!v)return;v.src=URL.createObjectURL(f);v.dataset.variant='local';v.classList.add('active');v.play().catch(()=>{})});
-  // Property images uploader injected next to the hero video field
-  const vfField=$('#videoFile')?.closest('.field');
-  if(vfField && !$('#propImages')){
-    const w=document.createElement('div'); w.className='field full';
-    w.innerHTML='<label for="propImages">Imágenes de la propiedad (demo local)</label><input id="propImages" type="file" accept="image/*" multiple>';
-    vfField.after(w);
-    $('#propImages').addEventListener('change',e=>{const files=[...(e.target.files||[])]; if(!files.length)return; demoProps[0].images=files.map(f=>URL.createObjectURL(f)); renderProps(); const m=$('#statusMsg'); if(m)m.textContent=`✓ ${files.length} imagen(es) cargadas en la sesión.`;});
-  }
+  /* El editor del catálogo vive en backoffice.js: aquí solo queda el cierre
+     del panel, que es puro comportamiento de interfaz. */
 })();

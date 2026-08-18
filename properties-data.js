@@ -212,10 +212,22 @@ window.VP_PROPERTIES = [
 
 /* Galerías: assets/img/<slug>/NN.webp, descargadas del anuncio propio. */
 window.VP_PROPERTIES.forEach((p) => {
-  p.images = Array.from({ length: p.photos }, (_, i) => `assets/img/${p.slug}/${String(i + 1).padStart(2, '0')}.webp`);
+  p.images = p.images || Array.from({ length: p.photos }, (_, i) => `assets/img/${p.slug}/${String(i + 1).padStart(2, '0')}.webp`);
   /* Pendiente de producción propia: se rellenan cuando existan. */
   p.video = p.video || null;
   p.floorplans = p.floorplans || [];
   p.tour = p.tour || null;
   p.documents = p.documents || [];
 });
+
+/* Lo editado en el Back Office (vp-store.js) manda sobre el catálogo base.
+   Se aplica aquí, antes de cualquier render, para que no haya parpadeo. */
+if (window.VPStore) {
+  window.VP_PROPERTIES = window.VPStore.applyOverrides(window.VP_PROPERTIES);
+  window.VP_PROPERTIES.forEach((p) => {
+    p.photos = (p.images || []).length;
+    p.video = p.video || null;
+    p.floorplans = p.floorplans || [];
+    p.documents = p.documents || [];
+  });
+}

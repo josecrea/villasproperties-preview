@@ -26,6 +26,27 @@ Antes de abrirla hay que decidir a qué dominio apunta el canonical (`BASE` en
 `tools/build-seo.js`) y sustituir las fotos de los inmuebles por los originales
 sin la marca de agua de idealista.
 
+## Back Office: el catálogo lo mantiene el equipo
+
+El editor vive en `⚙ Back Office` (tras el gate) y está en todas las páginas. Se
+carga bajo demanda: un visitante normal no descarga ni el editor ni el catálogo.
+
+- **Fotos** — arrastrar o elegir archivos. Se reescalan a 1600 px y se convierten
+  a webp en el propio navegador. Se reordenan con las flechas; la primera es la
+  portada. Se guardan en IndexedDB (`vp-store.js`).
+- **Datos** — precio, superficies, dormitorios, baños, zona, estado comercial,
+  año, planta, comunidad… El €/m² se recalcula solo al cambiar precio o metros.
+- **Textos** — titular, descripción por párrafos, características y equipamiento.
+- **Publicar** — descarga `properties-data.js` (con las rutas ya apuntando a
+  `assets/img/<slug>/NN.webp`) y un ZIP con **todas** las fotos, nuevas y viejas,
+  en su carpeta. Se descomprime en `assets/img/`, se sustituye el
+  `properties-data.js` y se hace commit.
+
+Lo editado vive en el navegador donde se editó hasta que se exporta y se sube:
+el sitio es estático y no hay servidor donde guardarlo. Publicar directamente
+desde el navegador exigiría un token de escritura del repositorio, y con el gate
+actual (comparación de hash en cliente) eso no es seguro.
+
 ## Datos de mercado
 
 `market-data.js` está **generado**, no se edita a mano. Se regenera desde la fuente

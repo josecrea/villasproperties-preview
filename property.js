@@ -16,6 +16,11 @@
   const euro = (v) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v);
   const perM2 = (v) => `${String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} €/m²`;
 
+  /* Fotos subidas desde el Back Office: se pintan como hueco y las rellena
+     VPStore.hydrate() cuando IndexedDB responde. */
+  const M = (src) => (window.VPStore ? VPStore.mediaSrc(src) : src);
+  const A = (src) => (window.VPStore ? VPStore.mediaAttr(src) : '');
+
   const params = new URLSearchParams(location.search);
   const property = props.find((p) => p.ref === params.get('ref') || p.slug === params.get('ref')) || props[0];
 
@@ -52,13 +57,13 @@
   const gallery = () => `
     <div class="pgal">
       <button class="pgal-main" type="button" data-index="0" aria-label="Ampliar foto 1">
-        <img src="${property.images[0]}" alt="${property.title}, ${property.zone}" width="1200" height="800" fetchpriority="high">
+        <img src="${M(property.images[0])}"${A(property.images[0])} alt="${property.title}, ${property.zone}" width="1200" height="800" fetchpriority="high">
         <span class="pgal-count">1 / ${property.images.length}</span>
       </button>
       <div class="pgal-side">
         ${property.images.slice(1, 5).map((src, i) => `
           <button class="pgal-thumb" type="button" data-index="${i + 1}" aria-label="Ampliar foto ${i + 2}">
-            <img src="${src}" alt="${property.title}: foto ${i + 2}" loading="lazy" width="600" height="400">
+            <img src="${M(src)}"${A(src)} alt="${property.title}: foto ${i + 2}" loading="lazy" width="600" height="400">
             ${i === 3 && property.images.length > 5 ? `<span class="pgal-more">+${property.images.length - 5} fotos</span>` : ''}
           </button>`).join('')}
       </div>
@@ -224,7 +229,7 @@
         <div class="pothers">
           ${props.filter((p) => p.ref !== property.ref).slice(0, 4).map((p) => `
             <a class="pother" href="property.html?ref=${p.ref}">
-              <div class="pother-img" style="background-image:url(${p.images[0]})"></div>
+              <div class="pother-img" style="background-image:url(${M(p.images[0])})"${A(p.images[0])}></div>
               <div class="pother-body">
                 <div class="eye">${p.zone}</div>
                 <h3>${p.title}</h3>
@@ -234,6 +239,8 @@
         </div>
       </div>
     </section>`;
+
+  window.VPStore?.hydrate();
 
   /* ---------- Lightbox ---------- */
   const lightbox = document.createElement('div');
@@ -247,14 +254,15 @@
 
   const img = lightbox.querySelector('img');
   /* Con src vacío el navegador reserva 0x0 y algunos hacen una petición inútil. */
-  img.src = property.images[0];
+  img.src = M(property.images[0]);
   img.width = 1600; img.height = 1067;
   const caption = lightbox.querySelector('figcaption');
   let index = 0;
 
-  const show = (i) => {
+  const show = async (i) => {
     index = (i + property.images.length) % property.images.length;
-    img.src = property.images[index];
+    const src = property.images[index];
+    img.src = window.VPStore && VPStore.isLocal(src) ? (await VPStore.urlFor(src.slice(8))) || M(src) : src;
     img.alt = `${property.title}: foto ${index + 1} de ${property.images.length}`;
     caption.textContent = `${index + 1} / ${property.images.length} · ${property.zone}`;
   };

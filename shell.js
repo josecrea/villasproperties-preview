@@ -75,7 +75,7 @@
         <div class="adminhead">
           <div class="brand">
             <svg class="monogram" viewBox="0 0 100 70" aria-hidden="true"><path d="M8 8 L35 60 L60 8"/><path d="M62 60 V8 H82 C94 8 98 16 98 27 C98 39 91 46 80 46 H62"/></svg>
-            <div><div class="eye">PRIVATE BACK OFFICE</div><strong>Property editor · prototype</strong></div>
+            <div><div class="eye">PRIVATE BACK OFFICE</div><strong>Catálogo · fotos y datos</strong></div>
           </div>
           <button class="round" id="closeAdmin" type="button">×</button>
         </div>
@@ -93,6 +93,30 @@
           <div class="statusmsg" id="statusMsg">Prototipo local: producción debe usar Odoo/API + autenticación server-side.</div>
         </div>
       </aside>`);
+  }
+
+  /* El editor del catálogo (backoffice.js + el catálogo) pesa ~28 KB y solo lo
+     usa el equipo: se carga cuando el panel se abre de verdad, no en cada
+     visita. Escuchamos la clase del panel porque el gate corta el clic en fase
+     de captura y no llegaría a un listener nuestro. */
+  const panel = document.getElementById('adminPanel');
+  if (panel) {
+    let loaded = false;
+    const load = (src) => new Promise((resolve) => {
+      if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
+      const el = document.createElement('script');
+      el.src = src;
+      el.onload = resolve;
+      el.onerror = resolve;
+      document.body.appendChild(el);
+    });
+    new MutationObserver(async () => {
+      if (loaded || !panel.classList.contains('open')) return;
+      loaded = true;
+      await load('vp-store.js');
+      await load('properties-data.js');
+      await load('backoffice.js');
+    }).observe(panel, { attributes: true, attributeFilter: ['class'] });
   }
 
   /* El CSS del gate solo estaba enlazado en la home. */
