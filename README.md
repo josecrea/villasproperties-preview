@@ -6,7 +6,7 @@ Public static preview for review purposes only.
 - This repository contains only the static preview build.
 - `noindex,nofollow` is enabled.
 - Back Office access is protected by a client-side preview gate only.
-- Production authentication must be server-side/Odoo.
+- Sitio estático sin dependencias de servidor: el catálogo se edita en el Back Office y se publica al repositorio.
 
 ## Indexación: BLOQUEADA a propósito
 
@@ -41,6 +41,25 @@ carga bajo demanda: un visitante normal no descarga ni el editor ni el catálogo
   `assets/img/<slug>/NN.webp`) y un ZIP con **todas** las fotos, nuevas y viejas,
   en su carpeta. Se descomprime en `assets/img/`, se sustituye el
   `properties-data.js` y se hace commit.
+
+### Seguridad del Back Office en un sitio sin servidor
+
+No hay backend, así que **no existe autenticación real posible dentro del propio sitio**.
+El gate (`backoffice-auth.js`) compara un hash en el navegador: es una barrera para que un
+visitante no abra el panel por curiosidad, **no** un control de acceso.
+
+Opciones reales, de menos a más trabajo:
+
+1. **No publicar el editor** — usar el Back Office en local (`python3 -m http.server`) y subir
+   al repositorio solo el resultado. Es lo que encaja con un sitio de cero dependencias: el
+   panel no llega a estar en internet.
+2. **Protección en el hosting** — un frente que soporte contraseña o lista de acceso delante
+   de la ruta del panel.
+3. **Backend mínimo** — solo si algún día hace falta edición multiusuario; rompe el "cero
+   dependencias".
+
+Todo lo que se pinta del catálogo va escapado (`vp-safe.js`), así que un texto con HTML no
+puede ejecutar código en el navegador de un visitante.
 
 ### Publicar sin descargar nada
 
