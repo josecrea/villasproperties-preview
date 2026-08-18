@@ -1326,6 +1326,276 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   .pnear-t { grid-column: 2; text-align: right; }
 }
 
+/* ================= TÍTULOS DE SECCIÓN, ESTILO EDITORIAL =================
+   El gesto de feil.com ("OUR FUTURE / LEGACY"): la primera parte del titular en
+   tipografía DELGADA y la última palabra en NEGRA, ambas en color sólido. El
+   contraste es de PESO, no de relleno.
+
+   Primero se probó con -webkit-text-stroke y relleno transparente: quedaba una
+   letra hueca de contorno que no es lo que hace Feil y encima se leía peor sobre
+   fondos con textura. Se descarta.
+
+   motion.js parte el titular y envuelve la última palabra; aquí se les da forma.
+   Se copia la GRAMÁTICA, no sus textos. */
+.head h2,
+.pagehero h1,
+.big {
+  line-height: .95;
+  letter-spacing: -.015em;
+  text-transform: uppercase;
+  max-width: 20ch;
+}
+.head h2 .t-ligero,
+.pagehero h1 .t-ligero,
+.head h2 .t-solido,
+.pagehero h1 .t-solido {
+  display: block;
+  color: inherit;
+}
+/* Delgada: el peso ligero es lo que le da el aire editorial. */
+.head h2 .t-ligero,
+.pagehero h1 .t-ligero {
+  font-weight: 200;
+  letter-spacing: .005em;
+}
+/* Y la última palabra, con todo el peso. */
+.head h2 .t-solido,
+.pagehero h1 .t-solido {
+  font-weight: 800;
+  letter-spacing: -.03em;
+}
+
+/* La rayita de debajo, como en el original. */
+.head h2::after,
+.pagehero h1::after {
+  content: "";
+  display: block;
+  margin-top: .34em;
+  height: 1px;
+  background: var(--line);
+  max-width: 34ch;
+}
+
+.head p { max-width: 60ch; }
+
+/* Aparición por máscara: el titular se descubre de abajo arriba en vez de
+   limitarse a subir. Es el gesto de Feil, aplicado a nuestros títulos. */
+.motion-ready [data-reveal] .head h2,
+.motion-ready [data-reveal] > div > h2,
+.motion-ready [data-reveal].head h2 {
+  clip-path: inset(0 0 105% 0);
+  transition: clip-path 1s var(--mo-ease);
+}
+[data-reveal].is-in .head h2,
+[data-reveal].is-in > div > h2,
+[data-reveal].is-in.head h2 {
+  clip-path: inset(0 0 -12% 0);   /* margen abajo: las colas de la g y la j */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-ready [data-reveal] .head h2,
+  .motion-ready [data-reveal] > div > h2,
+  .motion-ready [data-reveal].head h2 { clip-path: none; transition: none; }
+}
+
+@media (max-width: 720px) {
+  .head h2, .big, .pagehero h1 { max-width: none; }
+}
+
+/* ================= EL ENTORNO DE CADA INMUEBLE =================
+   Datos reales de OpenStreetMap, no adjetivos. Dos bloques: las ventajas
+   deducidas de lo medido, y la tabla completa de servicios con su distancia. */
+
+/* Ventajas: frases cortas, cada una con su línea de color al entrar. */
+.pventajas {
+  display: grid;
+  gap: 0;
+  margin: 0 0 clamp(28px, 4vw, 48px);
+  border-top: 1px solid var(--line);
+}
+.pventajas li {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: clamp(16px, 1.7vw, 20px);
+  line-height: 1.45;
+  max-width: 68ch;
+}
+
+/* Tabla de servicios: categoría · distancia · nombre · cuántos hay. */
+.pnear {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.pnear-item {
+  display: grid;
+  grid-template-columns: 1.1fr auto 1.6fr auto;
+  gap: 16px;
+  align-items: baseline;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+.pnear-cat { font-weight: 600; font-size: 13px; }
+.pnear-d {
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;   /* las cifras alineadas se comparan mejor */
+}
+.pnear-n { color: var(--muted); font-size: 13px; }
+.pnear-t {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+  white-space: nowrap;
+}
+.pnear-fuente {
+  margin-top: 18px;
+  font-size: 11px;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+@media (max-width: 720px) {
+  .pnear-item { grid-template-columns: 1fr auto; row-gap: 4px; }
+  .pnear-n { grid-column: 1 / -1; }
+  .pnear-t { grid-column: 2; text-align: right; }
+}
+
+/* ================= TÍTULOS DE SECCIÓN, ESTILO EDITORIAL =================
+   El gesto de feil.com: "OUR FUTURE" en HUECO (solo contorno) y "LEGACY" en
+   SÓLIDO, en mayúsculas, muy grandes y con una línea fina debajo. El golpe lo da
+   ese contraste entre lo vacío y lo lleno, no el tamaño.
+
+   motion.js parte el titular y envuelve la última palabra; aquí se les da forma.
+   Se copia la GRAMÁTICA, no sus textos: los títulos siguen siendo los nuestros. */
+.head h2,
+.pagehero h1,
+.big {
+  font-weight: 700;
+  line-height: .92;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  max-width: 18ch;
+}
+.head h2 .t-hueco,
+.pagehero h1 .t-hueco,
+.head h2 .t-solido,
+.pagehero h1 .t-solido {
+  display: block;
+}
+/* Hueco: relleno transparente y solo el trazo. -webkit-text-stroke lo entienden
+   todos los navegadores actuales; si alguno no, se ve sólido y no se rompe nada. */
+.head h2 .t-hueco,
+.pagehero h1 .t-hueco {
+  color: transparent;
+  -webkit-text-stroke: 1.4px var(--ink);
+  font-weight: 400;          /* el trazo fino es lo que lo hace elegante */
+  letter-spacing: .01em;
+}
+.dark .head h2 .t-hueco,
+.dark .pagehero h1 .t-hueco,
+.cta .head h2 .t-hueco { -webkit-text-stroke-color: currentColor; }
+
+.head h2 .t-solido,
+.pagehero h1 .t-solido { color: inherit; }
+
+/* La rayita de debajo, como en el original. */
+.head h2::after,
+.pagehero h1::after {
+  content: "";
+  display: block;
+  margin-top: .38em;
+  height: 1px;
+  background: var(--line);
+  max-width: 30ch;
+}
+
+.head p { max-width: 60ch; }
+
+/* Aparición por máscara: el titular se descubre de abajo arriba en vez de
+   limitarse a subir. Es el gesto de Feil, aplicado a nuestros títulos. */
+.motion-ready [data-reveal] .head h2,
+.motion-ready [data-reveal] > div > h2,
+.motion-ready [data-reveal].head h2 {
+  clip-path: inset(0 0 105% 0);
+  transition: clip-path 1s var(--mo-ease);
+}
+[data-reveal].is-in .head h2,
+[data-reveal].is-in > div > h2,
+[data-reveal].is-in.head h2 {
+  clip-path: inset(0 0 -12% 0);   /* margen abajo: las colas de la g y la j */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-ready [data-reveal] .head h2,
+  .motion-ready [data-reveal] > div > h2,
+  .motion-ready [data-reveal].head h2 { clip-path: none; transition: none; }
+}
+
+@media (max-width: 720px) {
+  .head h2, .big, .pagehero h1 { max-width: none; }
+  .head h2 .t-hueco, .pagehero h1 .t-hueco { -webkit-text-stroke-width: 1px; }
+}
+
+/* ================= EL ENTORNO DE CADA INMUEBLE =================
+   Datos reales de OpenStreetMap, no adjetivos. Dos bloques: las ventajas
+   deducidas de lo medido, y la tabla completa de servicios con su distancia. */
+
+/* Ventajas: frases cortas, cada una con su línea de color al entrar. */
+.pventajas {
+  display: grid;
+  gap: 0;
+  margin: 0 0 clamp(28px, 4vw, 48px);
+  border-top: 1px solid var(--line);
+}
+.pventajas li {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: clamp(16px, 1.7vw, 20px);
+  line-height: 1.45;
+  max-width: 68ch;
+}
+
+/* Tabla de servicios: categoría · distancia · nombre · cuántos hay. */
+.pnear {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.pnear-item {
+  display: grid;
+  grid-template-columns: 1.1fr auto 1.6fr auto;
+  gap: 16px;
+  align-items: baseline;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+.pnear-cat { font-weight: 600; font-size: 13px; }
+.pnear-d {
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;   /* las cifras alineadas se comparan mejor */
+}
+.pnear-n { color: var(--muted); font-size: 13px; }
+.pnear-t {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+  white-space: nowrap;
+}
+.pnear-fuente {
+  margin-top: 18px;
+  font-size: 11px;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+@media (max-width: 720px) {
+  .pnear-item { grid-template-columns: 1fr auto; row-gap: 4px; }
+  .pnear-n { grid-column: 1 / -1; }
+  .pnear-t { grid-column: 2; text-align: right; }
+}
+
 /* ================= TÍTULOS DE SECCIÓN, ESCALA EDITORIAL =================
    Adaptado de feil.com ("Our Future Legacy", "Longevity and commitment"): el
    titular pesa, va en dos líneas y el contraste con el cuerpo de texto es

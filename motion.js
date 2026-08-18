@@ -89,6 +89,37 @@
     void titular.offsetWidth;
   }
 
+  /* ---------- Titulares de sección: contorno + sólido ----------
+     El gesto tipográfico de feil.com: la primera parte del titular va HUECA
+     (solo contorno) y la última palabra en sólido. "OUR FUTURE / LEGACY".
+     Ese contraste es el que da el golpe, no el tamaño.
+
+     Se aplica a nuestros títulos sin tocar el HTML: se parte el h2 y se envuelve
+     la última palabra. Si el título ya trae <br>, se respeta como corte natural
+     y va en sólido lo que haya después. */
+  document.querySelectorAll('.head h2, .pagehero h1').forEach((t) => {
+    if (t.dataset.outline) return;
+    t.dataset.outline = '1';
+
+    const html = t.innerHTML.trim();
+    let hueco, solido;
+
+    if (/<br\s*\/?>/i.test(html)) {
+      const partes = html.split(/<br\s*\/?>/i);
+      solido = partes.pop().trim();
+      hueco = partes.join(' ').trim();
+    } else {
+      // Sin <br>: la última palabra en sólido. Con títulos de una sola palabra
+      // no se parte nada (quedaría hueco vacío y perdería fuerza).
+      const palabras = html.split(/\s+/);
+      if (palabras.length < 2) return;
+      solido = palabras.pop();
+      hueco = palabras.join(' ');
+    }
+
+    t.innerHTML = `<span class="t-ligero">${hueco}</span><span class="t-solido">${solido}</span>`;
+  });
+
   /* ---------- Hero intro reveal ---------- */
   requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('hero-in')));
 
