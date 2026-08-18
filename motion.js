@@ -41,6 +41,54 @@
     }
   }
 
+  /* ---------- Titular del hero: color letra a letra ----------
+     El titular arranca en blanco y cada letra va tomando su color, en orden,
+     como una ola que recorre las tres líneas. Los tonos se generan girando el
+     círculo cromático en HSL con saturación baja y luminosidad alta: sale el
+     arcoíris pastel sin tener que mantener una lista de 28 colores a mano.
+
+     El texto NO se toca en el HTML: se trocea aquí. Se conserva el <br> como
+     separador de línea y se pone aria-label en el h1 con el texto íntegro, para
+     que un lector de pantalla lea "Tenerife. Property. Different." y no letra
+     por letra. */
+  const titular = document.querySelector('.hero h1');
+  if (titular && !titular.dataset.split) {
+    // Los <br> no aportan espacio, así que se reponen para que no se lea
+    // "Tenerife.Property.Different." de corrido.
+    const texto = titular.innerHTML.replace(/<br\s*\/?>/gi, ' ')
+      .replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    titular.setAttribute('aria-label', texto);
+    titular.dataset.split = '1';
+
+    const HUE_INICIAL = 168;   // turquesa, como la primera letra coloreada
+    const HUE_PASO = 13;       // ~28 letras -> una vuelta completa al círculo
+    let i = 0;
+
+    // Se recorren los nodos para respetar los <br> que separan las tres líneas.
+    const salida = document.createDocumentFragment();
+    titular.childNodes.forEach((nodo) => {
+      if (nodo.nodeName === 'BR') { salida.appendChild(document.createElement('br')); return; }
+      (nodo.textContent || '').split('').forEach((ch) => {
+        if (ch === ' ') { salida.appendChild(document.createTextNode(' ')); return; }
+        const s = document.createElement('span');
+        s.className = 'ltr';
+        s.textContent = ch;
+        s.style.setProperty('--i', i);
+        s.style.setProperty('--c', 'hsl(' + ((HUE_INICIAL + i * HUE_PASO) % 360) + ' 62% 79%)');
+        s.setAttribute('aria-hidden', 'true');
+        salida.appendChild(s);
+        i++;
+      });
+    });
+    titular.textContent = '';
+    titular.appendChild(salida);
+
+    // Reflow forzado: si no, el navegador ve el span nacer y cambiar de color en
+    // el mismo frame, no registra el blanco de partida y salta al color final
+    // sin transición — la ola se veía de golpe.
+    void titular.offsetWidth;
+  }
+
   /* ---------- Hero intro reveal ---------- */
   requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('hero-in')));
 

@@ -1008,62 +1008,82 @@
 .fin-legend .is-entry{background:var(--sand)}
 
 /* ================= PRELOADER DE MARCA =================
-   El primer fotograma es la marca: el monograma de Villa's quieto dentro de un
-   anillo que gira. Idea tomada de feil.com, con los colores de la casa.
+   El primer fotograma es la marca: logotipo, nombre y línea de posicionamiento
+   sobre papel, con un aro que gira. Idea tomada de feil.com.
 
-   CSS puro y sin tocar el HTML de las 25 páginas: va en ::before/::after del
-   body. Clave de seguridad -> la animación de salida lleva `forwards` y se
-   dispara sola a los 2,2 s, así que si el JS falla o tarda, el preloader se
-   retira igual y NUNCA se queda tapando el sitio. app.js solo lo acelera
-   añadiendo .is-loaded en cuanto termina la carga real. */
+   Sin tocar el HTML de las 25 páginas: todo va en ::before/::after del body. El
+   ::before lleva el logo de fondo y el texto en `content` (dos líneas con \A);
+   el ::after es el aro.
+
+   Se usa logo-disc.png: el .webp original trae un fondo negro CUADRADO que
+   sobre papel se recortaba como un recuadro. Se probó también a hacer el negro
+   transparente (logo-mark.png), pero el logotipo está diseñado para fondo
+   oscuro —degrada de blanco a dorado— y sobre papel la mitad superior
+   desaparecía. logo-disc.png conserva su disco oscuro y recorta solo las
+   esquinas: sobre papel queda un disco limpio y el logo con todo su contraste.
+
+   CLAVE DE SEGURIDAD: la salida lleva `forwards` con retardo, así que el
+   preloader se retira SOLO aunque el JS falle. app.js solo lo adelanta cuando
+   la página —y el vídeo del hero— están de verdad listos. */
 body::before,
 body::after {
   content: "";
   position: fixed;
   z-index: 9999;
   pointer-events: none;
-  animation: pl-out .45s cubic-bezier(.16,1,.3,1) 2.2s forwards;
+  animation: pl-out .5s cubic-bezier(.16,1,.3,1) 10s forwards;  /* solo red de seguridad */
 }
-/* Lienzo + logotipo centrado.
-   Fondo NEGRO a propósito: el logo .webp no tiene canal alfa y trae su propio
-   fondo negro, así que sobre crema se vería un cuadrado. En negro el recuadro
-   desaparece y solo queda el círculo dorado. */
+/* Lienzo + logotipo + nombre + tagline */
 body::before {
   inset: 0;
-  /* NEGRO PURO, no --ink-deep (#101416): el .webp trae su propio fondo #000 y
-     con cualquier otro tono se recorta un cuadrado visible alrededor del logo.
-     108px hacía que el logo rozara el aro; a 86px respira. */
-  background: #000 url("assets/brand/logo-placeholder.webp")
-              center / 86px auto no-repeat;
+  content: "VILLA’S PROPERTIES\A PROPERTY INTELLIGENCE · TENERIFE";
+  white-space: pre;
+  text-align: center;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding-top: 190px;              /* deja hueco al logo, que va de fondo */
+  background: var(--paper) url("assets/brand/logo-disc.png")
+              center calc(50% - 74px) / 104px auto no-repeat;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .29em;
+  line-height: 2.6;
+  text-indent: .29em;              /* compensa el tracking del último carácter */
 }
-/* Anillo girando alrededor */
+/* Aro girando alrededor del logotipo */
 body::after {
-  top: 50%;
+  top: calc(50% - 74px);
   left: 50%;
-  width: 132px;
-  height: 132px;
-  margin: -66px 0 0 -66px;
-  border: 3px solid var(--sand);     /* arena: es el tono del propio logo */
-  border-right-color: transparent;   /* el hueco es lo que deja ver el giro */
+  width: 152px;
+  height: 152px;
+  margin: -76px 0 0 -76px;
+  border: 3px solid var(--sand);   /* arena: el tono del propio logo */
+  border-right-color: transparent; /* el hueco es lo que deja ver el giro */
   border-radius: 50%;
-  animation: pl-spin .9s linear infinite, pl-out .45s cubic-bezier(.16,1,.3,1) 2.2s forwards;
+  animation: pl-spin .9s linear infinite,
+             pl-out .5s cubic-bezier(.16,1,.3,1) 10s forwards;  /* solo red de seguridad */
 }
-/* Cuando la página ya ha cargado de verdad, sale antes. */
+/* Cuando la web está lista de verdad (incluido el vídeo), sale antes. */
 body.is-loaded::before,
 body.is-loaded::after {
-  animation: pl-out .45s cubic-bezier(.16,1,.3,1) forwards;
+  animation: pl-out .5s cubic-bezier(.16,1,.3,1) forwards;
 }
 @keyframes pl-spin { to { transform: rotate(360deg); } }
 @keyframes pl-out { to { opacity: 0; visibility: hidden; } }
 
-/* Quien pide menos movimiento no quiere un aro girando: se queda el monograma
-   quieto y se retira igual. */
+@media (max-width: 560px) {
+  body::before { font-size: 11px; letter-spacing: .2em; background-size: 84px auto; }
+}
+
+/* Quien pide menos movimiento no quiere el aro girando. */
 @media (prefers-reduced-motion: reduce) {
   body::after { animation: pl-out .01s linear .4s forwards; }
   body::before { animation: pl-out .01s linear .4s forwards; }
 }
 
-/* En las páginas del back office el preloader estorba: son herramientas. */
+/* En el back office el preloader estorba: son herramientas. */
 body.no-preloader::before,
 body.no-preloader::after { content: none; }
 
@@ -1223,4 +1243,23 @@ body.no-preloader::after { content: none; }
 @media (prefers-reduced-motion: reduce) {
   .cap-card:hover .circle, .step:hover .num,
   .tool-card:hover:after, .eco:hover { transform: none; }
+}
+
+/* ================= TITULAR DEL HERO, LETRA A LETRA =================
+   Cada letra entra en BLANCO y se tiñe de su color con su propio retardo, así
+   que el color recorre el titular como una ola. Los tonos los genera motion.js
+   girando el círculo cromático (pastel), y los deja en --c y --i por letra.
+
+   Solo se anima `color`: no toca layout ni provoca reflow. */
+.hero h1 .ltr {
+  color: #fff;
+  transition: color .55s var(--mo-ease);
+  transition-delay: calc(var(--i, 0) * 55ms + 350ms);  /* tras el reveal del hero */
+  will-change: color;
+}
+.hero-in .hero h1 .ltr { color: var(--c, #fff); }
+
+/* Sin movimiento: el color aparece ya puesto, sin ola ni retardos. */
+@media (prefers-reduced-motion: reduce) {
+  .hero h1 .ltr { transition: none; transition-delay: 0s; color: var(--c, #fff); }
 }

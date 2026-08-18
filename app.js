@@ -1,5 +1,7 @@
 (() => {
   const $=(s,c=document)=>c.querySelector(s); const $$=(s,c=document)=>[...c.querySelectorAll(s)];
+  const E=v=>(window.VPSafe?VPSafe.esc(v):String(v??''));
+  const U=v=>(window.VPSafe?VPSafe.url(v):String(v??''));
   const fmt=v=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(v||0));
 
   // Brand integrity: keep the geometric A visually, but preserve the real letter in the DOM/accessibility tree.
@@ -91,7 +93,7 @@
   ].filter(Boolean).join('');
   const renderProps=()=>{
     $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
-      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${p.url}" aria-label="Ver ficha de ${p.name}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${window.VPStore?VPStore.mediaSrc(p.images[0]):p.images[0]})"${window.VPStore?VPStore.mediaAttr(p.images[0]):''}`:''}></div><span class="tag">${p.status} · ${p.strategy}</span></a><div class="pinfo"><div><h3><a href="${p.url}">${p.name}</a></h3><div class="meta">${p.zone} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${p.name}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${p.ref||'—'}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${p.url}">Ver ficha ↗</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
+      grid.innerHTML=demoProps.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${U(p.url)}" aria-label="Ver ficha de ${E(p.name)}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${U(window.VPStore?VPStore.mediaSrc(p.images[0]):p.images[0])})"${window.VPStore?VPStore.mediaAttr(p.images[0]):''}`:''}></div><span class="tag">${E(p.status)} · ${E(p.strategy)}</span></a><div class="pinfo"><div><h3><a href="${U(p.url)}">${E(p.name)}</a></h3><div class="meta">${E(p.zone)} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${E(p.name)}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${E(p.ref||'—')}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${U(p.url)}">Ver ficha ↗</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
     });
   };
   renderProps();
@@ -120,11 +122,51 @@
   /* El editor del catálogo vive en backoffice.js: aquí solo queda el cierre
      del panel, que es puro comportamiento de interfaz. */
 })();
-/* Preloader de marca: el CSS lo retira solo a los 2,2 s (con `forwards`), así
-   que esto es solo el atajo para cuando la página ya ha cargado antes. Si este
-   script fallara, el preloader se iría igual: nunca puede quedarse pegado. */
+/* Preloader de marca: dura EXACTAMENTE lo que la web tarda en estar lista.
+   Nada de temporizadores fijos.
+
+   "Lista" = el DOM está montado, las tipografías cargadas y el navegador ya ha
+   pintado un fotograma. Eso es lo que hace falta para que no se vea la página
+   dando saltos. NO se espera al vídeo de fondo: es un iframe de Vimeo que tarda
+   ~9 s, y hacer esperar al usuario por un fondo decorativo es peor experiencia
+   que entrar y que el vídeo aparezca solo un segundo después.
+
+   Solo hay dos ajustes al "lo que tarde":
+     · un mínimo de 350 ms, porque desde caché la web está lista en 80 ms y el
+       preloader daría un parpadeo desagradable
+     · una red de seguridad a los 10 s por si algo se atasca. Y si este script ni
+       llegara a ejecutarse, el CSS lo retira igual con `forwards`. */
 (function () {
-  var quitar = function () { document.body.classList.add('is-loaded'); };
-  if (document.readyState === 'complete') quitar();
-  else window.addEventListener('load', quitar);
+  var salida = false;
+  var arranque = Date.now();
+  var MINIMO_MS = 350;
+
+  var quitar = function () {
+    if (salida) return;
+    salida = true;
+    var espera = Math.max(0, MINIMO_MS - (Date.now() - arranque));
+    window.setTimeout(function () {
+      document.body.classList.add('is-loaded');
+    }, espera);
+  };
+
+  window.setTimeout(quitar, 10000);   // red de seguridad
+
+  var listo = function () {
+    // Tipografías: si no están, el texto salta al cargar la fuente.
+    var fuentes = (document.fonts && document.fonts.ready)
+      ? document.fonts.ready
+      : Promise.resolve();
+    fuentes.then(function () {
+      // Dos frames: el primero calcula, el segundo pinta. Al salir, lo que hay
+      // detrás ya está dibujado.
+      requestAnimationFrame(function () { requestAnimationFrame(quitar); });
+    }).catch(quitar);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', listo, { once: true });
+  } else {
+    listo();
+  }
 })();
