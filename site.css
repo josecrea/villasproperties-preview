@@ -1024,10 +1024,17 @@ body::after {
   pointer-events: none;
   animation: pl-out .45s cubic-bezier(.16,1,.3,1) 2.2s forwards;
 }
-/* Lienzo + monograma centrado */
+/* Lienzo + logotipo centrado.
+   Fondo NEGRO a propósito: el logo .webp no tiene canal alfa y trae su propio
+   fondo negro, así que sobre crema se vería un cuadrado. En negro el recuadro
+   desaparece y solo queda el círculo dorado. */
 body::before {
   inset: 0;
-  background: var(--paper) url("%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 70'%3E%3Cg fill='none' stroke='%23202429' stroke-width='5.5' stroke-linecap='square' stroke-linejoin='miter'%3E%3Cpath d='M8 8 L35 60 L60 8'/%3E%3Cpath d='M62 60 V8 H82 C94 8 98 16 98 27 C98 39 91 46 80 46 H62'/%3E%3C/g%3E%3C/svg%3E") center / 62px auto no-repeat;
+  /* NEGRO PURO, no --ink-deep (#101416): el .webp trae su propio fondo #000 y
+     con cualquier otro tono se recorta un cuadrado visible alrededor del logo.
+     108px hacía que el logo rozara el aro; a 86px respira. */
+  background: #000 url("assets/brand/logo-placeholder.webp")
+              center / 86px auto no-repeat;
 }
 /* Anillo girando alrededor */
 body::after {
@@ -1036,7 +1043,7 @@ body::after {
   width: 132px;
   height: 132px;
   margin: -66px 0 0 -66px;
-  border: 3px solid var(--atlantic);
+  border: 3px solid var(--sand);     /* arena: es el tono del propio logo */
   border-right-color: transparent;   /* el hueco es lo que deja ver el giro */
   border-radius: 50%;
   animation: pl-spin .9s linear infinite, pl-out .45s cubic-bezier(.16,1,.3,1) 2.2s forwards;
@@ -1133,4 +1140,87 @@ body.no-preloader::after { content: none; }
   [data-reveal].is-in .cap-card .circle,
   [data-reveal].is-in .step .num,
   [data-reveal].is-in .round { animation: none; }
+}
+
+/* ================= LAS OPCIONES, EN CUATRO COLORES =================
+   Los bloques de opciones (capacidades, pasos del proceso, herramientas) tenían
+   todos sus círculos en verde atlántico: se leían como una masa. Ahora cada uno
+   toma un color del ciclo — los primarios de la casa más el negro — y al pasar
+   por encima el círculo se rellena con ese mismo color.
+
+   El ciclo es de 4 con `nth-child(4n+…)`, así que sirve igual para grupos de 3,
+   de 4 o de 6: cuando se acaban los colores, vuelve a empezar.
+
+   El dorado NO está inventado: es el #f0c060 muestreado del propio logotipo. */
+:root {
+  --opt-1: var(--atlantic);   /* verde atlántico */
+  --opt-2: var(--sand);       /* arena          */
+  --opt-3: #f0c060;           /* dorado del logo */
+  --opt-4: var(--ink);        /* negro          */
+}
+
+.cap-card:nth-child(4n+1), .step:nth-child(4n+1), .tool-card:nth-child(4n+1), .eco:nth-child(4n+1) { --opt: var(--opt-1); }
+.cap-card:nth-child(4n+2), .step:nth-child(4n+2), .tool-card:nth-child(4n+2), .eco:nth-child(4n+2) { --opt: var(--opt-2); }
+.cap-card:nth-child(4n+3), .step:nth-child(4n+3), .tool-card:nth-child(4n+3), .eco:nth-child(4n+3) { --opt: var(--opt-3); }
+.cap-card:nth-child(4n+4), .step:nth-child(4n+4), .tool-card:nth-child(4n+4), .eco:nth-child(4n+4) { --opt: var(--opt-4); }
+
+/* Círculo de las capacidades: borde en su color, relleno al pasar. */
+.cap-card .circle {
+  border-color: var(--opt, var(--atlantic));
+  color: var(--opt, var(--atlantic));
+  transition: background-color .3s var(--mo-ease), color .3s var(--mo-ease),
+              border-color .3s var(--mo-ease), transform .3s var(--mo-ease);
+}
+.cap-card:hover .circle,
+.cap-card:focus-within .circle {
+  background: var(--opt, var(--atlantic));
+  color: #fff;
+  transform: scale(1.06);
+}
+/* La línea superior de la tarjeta se tiñe también: ata el color al bloque
+   entero, no solo al círculo. */
+.cap-card {
+  transition: border-color .3s var(--mo-ease);
+}
+.cap-card:hover { border-top-color: var(--opt, var(--line)); }
+
+/* Número del proceso: mismo criterio. */
+.step .num {
+  background: color-mix(in srgb, var(--opt, var(--atlantic)) 18%, transparent);
+  color: var(--opt, var(--atlantic));
+  transition: background-color .3s var(--mo-ease), color .3s var(--mo-ease),
+              transform .3s var(--mo-ease);
+}
+.step:hover .num,
+.step:focus-within .num {
+  background: var(--opt, var(--atlantic));
+  color: #fff;
+  transform: scale(1.06);
+}
+
+/* El círculo grande de las herramientas: ya tenía un color por tarjeta a mano;
+   ahora sale del mismo ciclo y reacciona al pasar. */
+.tool-card:after {
+  background: color-mix(in srgb, var(--opt, var(--atlantic)) 22%, transparent);
+  transition: background-color .35s var(--mo-ease), transform .45s var(--mo-ease);
+}
+.tool-card:nth-child(2):after,
+.tool-card:nth-child(3):after { background: color-mix(in srgb, var(--opt) 22%, transparent); }
+.tool-card:hover:after {
+  background: color-mix(in srgb, var(--opt, var(--atlantic)) 42%, transparent);
+  transform: scale(1.12);
+}
+
+/* Bloques del ecosistema: no llevan círculo, así que el color entra por el borde. */
+.eco {
+  transition: border-color .3s var(--mo-ease), transform .3s var(--mo-ease);
+}
+.eco:hover {
+  border-color: var(--opt, var(--line));
+  transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cap-card:hover .circle, .step:hover .num,
+  .tool-card:hover:after, .eco:hover { transform: none; }
 }
