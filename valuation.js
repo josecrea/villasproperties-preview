@@ -163,6 +163,12 @@
 
     const mid = appliedM2 * data.surface;
     const spread = spreadFor(data);
+    const low = mid * (1 - spread);
+    /* La salida realista nunca puede quedar por encima del suelo del rango de
+       anuncio: con horquillas anchas (villa, sin zona) el -10/-15% sobre el
+       centro se solapaba con el propio anuncio y contradecía la lectura. */
+    const realisticHigh = Math.min(mid * REALISTIC_HIGH, low);
+    const realisticLow = realisticHigh * (REALISTIC_LOW / REALISTIC_HIGH);
     /* Confianza honesta: nunca "alta". No hay backtest ni calibración; el badge
        solo refleja cuánto se ha podido afinar el dato de partida. */
     const confidence = data.type === 'villa'
@@ -178,10 +184,10 @@
       baseM2,
       appliedM2,
       mid,
-      low: mid * (1 - spread),
+      low,
       high: mid * (1 + spread),
-      realisticLow: mid * REALISTIC_LOW,
-      realisticHigh: mid * REALISTIC_HIGH,
+      realisticLow,
+      realisticHigh,
       deedRatio,
       deedValue: deedRatio ? mid * deedRatio : null,
       confidence,
@@ -215,6 +221,31 @@
       <div class="vw-scale-bar"><i style="left:${pos.toFixed(1)}%"></i></div>
       <div class="vw-scale-legend"><span>${zones[0].label} · ${perM2(min)}</span><span>${zones[zones.length - 1].label} · ${perM2(max)}</span></div>
     </div>`;
+  };
+
+  /* Contraste de escritura: bloque completo. Con diferencias extremas (San Miguel
+     y Santiago del Teide superan el 50%) la cifra dejaría de significar lo que
+     se paga por una vivienda como la tuya: lo que refleja es una mezcla de
+     producto distinta y pocas operaciones. Ahí damos la señal, no el número. */
+  const DEED_GAP_MAX = 0.35;
+
+  const deedCard = (est) => {
+    if (!est.deedRatio) {
+      return '<strong>—</strong><p>Sin dato de escritura publicado para este municipio.</p>';
+    }
+    const gap = Math.round((1 - est.deedRatio) * 100);
+    if (1 - est.deedRatio > DEED_GAP_MAX) {
+      return `<strong>−${gap}%</strong><p>En ${est.town.name} la escritura media queda un ${gap}% por debajo de la oferta. Una diferencia así refleja mezcla de producto y pocas operaciones, no lo que se paga por una vivienda como la tuya: lo revisamos caso a caso.</p>`;
+    }
+    return `<strong>${euro(est.deedValue)}</strong><p>En ${est.town.name} lo que se firma en notaría está un <b>${gap}%</b> por debajo del precio medio de oferta. ${deedReading(est)}</p>`;
+  };
+
+  /* Lectura del contraste: dónde cae la escritura respecto a la banda de salida.
+     Si queda por encima, el municipio aguanta precio y hay menos que ceder. */
+  const deedReading = (est) => {
+    if (est.deedValue > est.realisticHigh) return 'Aquí el mercado aguanta: la escritura queda por encima de tu banda de salida.';
+    if (est.deedValue < est.realisticLow) return 'Aquí pesa la negociación: la escritura queda por debajo de tu banda de salida.';
+    return 'Encaja dentro de tu banda de salida: es el terreno donde se cierra.';
   };
 
   const renderResult = (est) => {
@@ -259,10 +290,7 @@
           </article>
           <article class="vw-card">
             <div class="eye">Contraste de escritura</div>
-            <strong>${est.deedValue ? euro(est.deedValue) : '—'}</strong>
-            <p>${est.deedRatio
-              ? `En ${est.town.name} lo que se firma en notaría está un <b>${Math.round((1 - est.deedRatio) * 100)}%</b> por debajo del precio medio de oferta. Es el dato que manda al negociar.`
-              : 'Sin dato de escritura publicado para este municipio.'}</p>
+            ${deedCard(est)}
           </article>
           <article class="vw-card">
             <div class="eye">Qué falta para cerrar</div>
