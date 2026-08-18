@@ -807,3 +807,105 @@
 /* El header sticky tapaba el arranque de la sección al saltar a un ancla o al
    cambiar de paso en el valorador. */
 [id]{scroll-margin-top:clamp(84px,13vw,104px)}
+
+/* =====================================================================
+   Sell — dossier del propietario
+   La página se escribe con los números del municipio de quien la lee: el
+   argumento no es un eslogan, es su propio mercado.
+   ===================================================================== */
+.sell-hero{position:relative;padding:clamp(76px,10vw,150px) 0 clamp(40px,5vw,72px);overflow:hidden}
+.sell-hero:before{content:"";position:absolute;width:min(64vw,780px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,rgba(201,173,149,.34),transparent 62%);
+  right:-16vw;top:-24%;pointer-events:none}
+.sell-hero-grid{display:grid;grid-template-columns:1.42fr .86fr;gap:clamp(28px,4.5vw,76px);align-items:end;position:relative;z-index:1}
+.sell-hero h1{font-size:clamp(46px,8.4vw,124px);font-weight:400;line-height:.86;letter-spacing:-.062em;margin:18px 0 26px}
+.sell-hero h1 em{font-style:normal;position:relative;white-space:nowrap}
+/* Subrayado que se dibuja al entrar: marca la palabra que sostiene la página */
+.sell-hero h1 em:after{content:"";position:absolute;left:0;right:0;bottom:.1em;height:3px;background:var(--atlantic);
+  transform:scaleX(0);transform-origin:0 50%;animation:sellRule 1.1s cubic-bezier(.16,1,.3,1) .55s forwards}
+@keyframes sellRule{to{transform:scaleX(1)}}
+.sell-lede{font-size:clamp(16px,1.75vw,21px);line-height:1.62;max-width:60ch;color:var(--muted)}
+.sell-lede strong{color:var(--ink);font-weight:600}
+.sell-town-pick{position:relative;display:inline-flex;align-items:baseline;border-bottom:2px solid var(--sand);
+  padding-right:18px;transition:border-color .3s ease}
+.sell-town-pick:hover{border-bottom-color:var(--atlantic)}
+.sell-town-label{font-weight:600;color:var(--ink);white-space:nowrap}
+.sell-town-pick:after{content:"▾";position:absolute;right:0;bottom:.12em;pointer-events:none;color:var(--sand);font-size:.72em}
+.sell-town-pick select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;
+  font:inherit;appearance:none;border:none;background:transparent}
+.sell-town-pick:focus-within{border-bottom-color:var(--atlantic);outline:2px solid var(--atlantic);outline-offset:4px}
+.sell-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px}
+
+.sell-ticker{border:1px solid var(--line);background:#fff;padding:22px}
+.sell-ticker-list{margin:14px 0 0;display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+.sell-ticker-list>div{background:#fff;padding:12px 14px;display:flex;justify-content:space-between;gap:14px;align-items:baseline}
+.sell-ticker-list dt{font-size:11px;color:var(--muted);margin:0}
+.sell-ticker-list dd{margin:0;font-size:19px;font-weight:400;letter-spacing:-.03em;text-align:right}
+.sell-ticker-list small{display:block;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--sand)}
+.sell-hero-rule{height:1px;background:var(--line);margin-top:clamp(30px,4vw,58px)}
+
+.sell-split{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,58px);align-items:start;max-width:960px}
+.sell-split-num{font-size:clamp(56px,9vw,132px);line-height:.8;letter-spacing:-.07em;color:var(--sand);opacity:.5}
+.sell-h2{font-size:clamp(30px,4.6vw,62px);font-weight:400;line-height:.98;letter-spacing:-.05em;margin:0 0 22px}
+.sell-cost p{font-size:17px;line-height:1.68;max-width:62ch;margin:0 0 16px}
+
+.sell-figures{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.sell-figure{border-top:2px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:10px;
+  transition:border-color .45s var(--mo-ease),transform .45s var(--mo-ease)}
+.sell-figure:hover{transform:translateY(-5px);border-top-color:var(--sand)}
+.sell-figure.is-key{border-top-color:var(--atlantic)}
+.sell-figure-tag{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.sell-figure.is-key .sell-figure-tag{color:var(--atlantic)}
+.sell-figure strong{font-size:clamp(20px,2.4vw,31px);font-weight:400;letter-spacing:-.04em;line-height:1.05}
+.sell-figure p{font-size:13px;color:var(--muted);margin:0}
+.sell-note{font-size:12px;color:var(--muted);margin-top:26px;max-width:76ch;line-height:1.6}
+
+.sell-zonelist{display:grid;gap:11px}
+.sell-zone{display:grid;grid-template-columns:minmax(150px,.9fr) 1fr auto;gap:18px;align-items:center;font-size:14px}
+.sell-zone-name{color:var(--muted)}
+.sell-zone-bar{height:8px;background:var(--paper-2);border-radius:4px;overflow:hidden}
+.sell-zone-bar i{display:block;height:100%;width:var(--w);border-radius:4px;
+  background:linear-gradient(90deg,var(--atlantic),var(--sand));
+  transform-origin:0 50%;animation:sellBar 1s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i,0)*70ms)}
+@keyframes sellBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.sell-zone b{font-weight:400;font-size:15px;letter-spacing:-.02em;min-width:96px;text-align:right}
+
+.sell-steps{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.sell-steps li{display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3.4vw,54px);align-items:start;
+  padding:clamp(22px,3vw,38px) 0;border-bottom:1px solid var(--line);transition:background .4s ease}
+.sell-steps li:hover{background:var(--paper-2)}
+.sell-step-n{font-size:clamp(30px,4vw,54px);line-height:.85;letter-spacing:-.06em;color:var(--sand)}
+.sell-steps h3{font-size:clamp(22px,2.6vw,34px);font-weight:400;letter-spacing:-.04em;margin:0 0 8px}
+.sell-steps p{font-size:15px;line-height:1.6;color:var(--muted);margin:0;max-width:64ch}
+
+.sell-stance-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,70px)}
+.sell-list{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:12px}
+.sell-list li{font-size:15px;line-height:1.55;padding-left:26px;position:relative}
+.sell-list li:before{position:absolute;left:0;top:0;font-size:15px}
+.sell-list.is-do li:before{content:"→";color:var(--atlantic)}
+.sell-list.is-dont li{color:var(--muted)}
+.sell-list.is-dont li:before{content:"×";color:var(--sand)}
+
+.sell-cta{background:var(--atlantic);color:#fff;padding:clamp(64px,9vw,124px) 0;position:relative;overflow:hidden}
+.sell-cta:after{content:"";position:absolute;width:min(60vw,700px);aspect-ratio:1;border:1px solid rgba(255,255,255,.42);
+  border-radius:50%;right:-10vw;top:-38%}
+.sell-cta .wrap{position:relative;z-index:1}
+.sell-cta h2{font-size:clamp(40px,7vw,104px);font-weight:400;line-height:.88;letter-spacing:-.06em;margin:16px 0 20px}
+.sell-cta p{max-width:52ch;margin:0}
+.sell-cta .btn{border-color:rgba(255,255,255,.45);color:#fff}
+.sell-cta .btn:hover{background:rgba(255,255,255,.12)}
+.sell-cta .btn.fill{background:#fff;color:var(--atlantic);border-color:#fff}
+
+@media(max-width:1000px){
+  .sell-hero-grid,.sell-stance-grid{grid-template-columns:1fr}
+  .sell-figures{grid-template-columns:1fr}
+  .sell-split{grid-template-columns:1fr}
+  .sell-split-num{font-size:clamp(44px,12vw,72px)}
+}
+@media(max-width:640px){
+  .sell-zone{grid-template-columns:1fr auto;gap:8px 12px}
+  .sell-zone-bar{grid-column:1/-1;order:3}
+  .sell-zone b{min-width:0}
+  .sell-steps li{grid-template-columns:1fr;gap:10px}
+  .sell-ticker-list dd{font-size:17px}
+}
