@@ -286,15 +286,18 @@
         tipo: 'No inventamos un precio para esta tipología.',
         lujo: 'Esta vivienda se sale de lo que cubren nuestros datos.',
       };
+      /* Cada mensaje se construye SOLO cuando toca: el del caso "lujo" accede a
+         est.town, que es null cuando el municipio está fuera de zona, y
+         evaluarlo siempre rompía la abstención por municipio. */
       const bodies = {
-        municipio: 'Trabajamos con datos reales de Adeje, Arona, Granadilla de Abona, San Miguel de Abona, Guía de Isora y Santiago del Teide. Fuera de esa zona preferimos no inventar una cifra: un asesor local te prepara la valoración con criterio.',
-        tipo: `Un terreno o un inmueble singular necesita revisión local para darte una cifra fiable.${context}`,
-        lujo: `Nuestro modelo se construye sobre precios medios de oferta por zona, y el perfil que has descrito queda muy por encima de lo que se publica en ${est.town.name} (${perM2(Math.max(est.town.eurM2, ...(est.town.zonas || []).map((z) => z.eurM2)))} en su zona más cara). Con producto así no estimaríamos: extrapolaríamos. Lo valoramos con comparables específicos de ese segmento.`,
+        municipio: () => 'Trabajamos con datos reales de Adeje, Arona, Granadilla de Abona, San Miguel de Abona, Guía de Isora y Santiago del Teide. Fuera de esa zona preferimos no inventar una cifra: un asesor local te prepara la valoración con criterio.',
+        tipo: () => `Un terreno o un inmueble singular necesita revisión local para darte una cifra fiable.${context}`,
+        lujo: () => `Nuestro modelo se construye sobre precios medios de oferta por zona, y el perfil que has descrito queda muy por encima de lo que se publica en ${est.town.name} (${perM2(Math.max(est.town.eurM2, ...(est.town.zonas || []).map((z) => z.eurM2)))} en su zona más cara). Con producto así no estimaríamos: extrapolaríamos. Lo valoramos con comparables específicos de ese segmento.`,
       };
       out.innerHTML = `<div class="vw-abstain">
         <div class="eye">Sin cifra automática</div>
         <h3>${titles[est.reason]}</h3>
-        <p>${bodies[est.reason]}</p>
+        <p>${(bodies[est.reason] || bodies.tipo)()}</p>
       </div>`;
       return;
     }
