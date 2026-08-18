@@ -503,3 +503,69 @@
   .post-table{font-size:12px}
   .post-table th,.post-table td{padding:9px 6px}
 }
+
+/* =====================================================================
+   Mapa de precios (Leaflet + OpenStreetMap)
+   ===================================================================== */
+.pricemap-wrap{display:grid;grid-template-columns:1.35fr .95fr;gap:20px;align-items:stretch}
+.pricemap{position:relative;border:1px solid var(--line);background:var(--paper-2);overflow:hidden;min-height:520px}
+#priceMap{position:absolute;inset:0;background:var(--paper-2)}
+.pricemap-expand{position:absolute;z-index:500;right:14px;top:14px;background:#fff}
+.map-fallback{position:absolute;inset:0;display:grid;place-items:center;padding:30px;text-align:center;font-size:13px;color:var(--muted)}
+
+/* Etiqueta de precio sobre cada municipio */
+.map-chip{pointer-events:auto;width:0!important;height:0!important;overflow:visible}
+.map-chip-in{position:absolute;left:0;top:0;width:max-content;transform:translate(-50%,-50%);white-space:nowrap;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:6px 12px;display:flex;gap:8px;align-items:baseline;box-shadow:0 8px 22px -14px rgba(16,20,22,.55);cursor:pointer;transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .3s ease}
+.map-chip-in:hover{transform:translate(-50%,-50%) scale(1.06);border-color:var(--ink)}
+.map-chip-in b{font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase}
+.map-chip-in span{font-size:11px;color:var(--muted)}
+
+.mappanel{border:1px solid var(--line);background:#fff;padding:22px;display:flex;flex-direction:column;gap:18px;max-height:520px;overflow:auto}
+.mp-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.mp-head h3{font-size:clamp(26px,3vw,38px);font-weight:400;letter-spacing:-.045em;line-height:1;margin:8px 0 6px}
+.mp-price{font-size:19px;margin:0;color:var(--muted)}
+.mp-cta{font-size:9px}
+.mp-sources{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.mp-sources>div{background:#fff;padding:11px 12px;display:flex;flex-direction:column;gap:2px}
+.mp-sources span{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mp-sources b{font-size:15px;font-weight:400;letter-spacing:-.02em}
+.mp-sources small{font-size:9px;color:var(--sand);letter-spacing:.08em;text-transform:uppercase}
+.mp-zones{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.mp-zones li{display:grid;grid-template-columns:1fr 74px auto;gap:10px;align-items:center;font-size:12px}
+.mp-zones li span{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mp-zones i{display:block;height:5px;background:var(--paper-2);border-radius:3px;overflow:hidden}
+.mp-zones i b{display:block;height:100%;background:var(--sand);border-radius:3px}
+.mp-zones em{font-style:normal;font-size:12px;min-width:74px;text-align:right}
+.mp-foot{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+
+.pricemap-wrap.is-expanded{position:fixed;inset:0;z-index:120;background:var(--paper);grid-template-columns:1.5fr .8fr;gap:0;padding:0}
+.pricemap-wrap.is-expanded .pricemap{border:none;min-height:100vh}
+.pricemap-wrap.is-expanded .mappanel{max-height:100vh;border:none;border-left:1px solid var(--line)}
+
+@media(max-width:1000px){
+  .pricemap-wrap{grid-template-columns:1fr}
+  .pricemap{min-height:400px}
+  .mappanel{max-height:none}
+  .pricemap-wrap.is-expanded{grid-template-rows:60vh 40vh;grid-template-columns:1fr;overflow:auto}
+  .pricemap-wrap.is-expanded .pricemap{min-height:60vh}
+  .pricemap-wrap.is-expanded .mappanel{border-left:none;border-top:1px solid var(--line);max-height:40vh}
+}
+
+/* Página actual en el menú (el shell la marca con .is-current) */
+.nav a.is-current{opacity:1}
+.nav a.is-current::after{transform:scaleX(1)!important;opacity:1!important}
+.map-chip-in.is-on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.map-chip-in.is-on span{color:rgba(251,250,247,.72)}
+
+/* Móvil: el header suma logo + Menu + Config y se salía 20px. El botón del
+   Back Office se reduce a su icono. */
+@media(max-width:560px){
+  .headerin{gap:8px}
+  #mobileAdmin{font-size:0;padding-inline:12px}
+  #mobileAdmin::before{content:"⚙";font-size:13px;letter-spacing:0}
+}
+@media(max-width:700px){
+  .map-chip-in{padding:4px 9px;gap:5px;transform:translate(-50%,-50%) scale(.82)}
+  .map-chip-in b{font-size:9px;letter-spacing:.07em}
+  .map-chip-in span{font-size:10px}
+}

@@ -176,6 +176,25 @@
   </div>
 </section>
 
+<section class="section tight" id="mapa" data-reveal>
+  <div class="wrap">
+    <div class="head" data-reveal>
+      <div class="eye">Mapa de precios</div>
+      <div>
+        <h2>El sur, zona a zona.</h2>
+        <p class="muted">Pulsa un municipio para ver su precio de oferta, lo que se firma en escritura, el volumen real de operaciones y el desglose por zona.</p>
+      </div>
+    </div>
+    <div class="pricemap-wrap">
+      <div class="pricemap">
+        <div id="priceMap" role="application" aria-label="Mapa de precios por municipio de Tenerife Sur"></div>
+        <button class="btn pricemap-expand" id="mapExpand" type="button">&#10530; Ampliar</button>
+      </div>
+      <aside id="mapPanel" class="mappanel"></aside>
+    </div>
+  </div>
+</section>
+
 <section class="section" data-reveal>
   <div class="wrap">
     <div class="head" data-reveal>
@@ -224,10 +243,12 @@
 </main>
 
 <footer class="footer"><div class="wrap"><div class="footer-bottom"><span>© <span id="year">2026</span> Villa's Properties hecho con Amor</span><span><strong>🕒 Tenerife:</strong> <span id="tenerifeClock">--:--:--</span></span></div></div></footer>
-<script src="app.js"></script>
+<script src="shell.js"></script><script src="app.js"></script>
 <script src="motion.js"></script>
 <script src="market-data.js"></script>
 <script src="valuation.js"></script>
+<script src="map.js"></script>
 <script>document.getElementById('vDataDate').textContent=(window.VP_MARKET&&window.VP_MARKET.meta.updated)?new Intl.DateTimeFormat('es-ES',{month:'short',year:'numeric'}).format(new Date(window.VP_MARKET.meta.updated)):'—';</script>
+<script src="backoffice-auth.js"></script>
 </body>
 </html>

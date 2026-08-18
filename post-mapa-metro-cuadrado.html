@@ -64,6 +64,25 @@
 
     <p>Santiago del Teide es la excepción interesante: con solo 1,19× de diferencia entre Los Gigantes y Puerto de Santiago, es el municipio más homogéneo del sur. Ahí la media sí significa algo.</p>
 
+    <h2>El mapa, para explorarlo tú</h2>
+    <p>Pulsa cualquier municipio para ver su precio de oferta, lo que se firma en escritura, el volumen real de operaciones y el desglose completo por zona.</p>
+  </div>
+</article>
+
+<section class="section tight" id="mapa" data-reveal>
+  <div class="wrap">
+    <div class="pricemap-wrap">
+      <div class="pricemap">
+        <div id="priceMap" role="application" aria-label="Mapa de precios por municipio de Tenerife Sur"></div>
+        <button class="btn pricemap-expand" id="mapExpand" type="button">&#10530; Ampliar</button>
+      </div>
+      <aside id="mapPanel" class="mappanel"></aside>
+    </div>
+  </div>
+</section>
+
+<article class="wrap">
+  <div class="post-body" style="padding-top:0">
     <h2>Las diez zonas más caras del sur</h2>
     <div class="bchart">
       <div class="bchart-cap">€/m² de oferta por zona · idealista, junio 2026</div>
@@ -111,9 +130,12 @@
 </main>
 
 <footer class="footer"><div class="wrap"><div class="footer-bottom"><span>© <span id="year">2026</span> Villa's Properties hecho con Amor</span><span><strong>🕒 Tenerife:</strong> <span id="tenerifeClock">--:--:--</span></span></div></div></footer>
-<script src="app.js"></script>
+<script src="shell.js"></script><script src="app.js"></script>
+<script src="market-data.js"></script>
+<script src="map.js"></script>
 <script src="blog-data.js"></script>
 <script src="blog.js"></script>
 <script src="motion.js"></script>
+<script src="backoffice-auth.js"></script>
 </body>
 </html>

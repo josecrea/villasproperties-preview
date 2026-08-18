@@ -90,6 +90,14 @@
     renderTownPreview(townSelect.value);
   });
 
+  /* El mapa y las landings enlazan con ?municipio=<clave>: llegan con el
+     municipio ya decidido, no se lo volvemos a preguntar. */
+  const preset = new URLSearchParams(location.search).get('municipio');
+  if (preset && TOWNS[preset]) {
+    townSelect.value = preset;
+    populateZones(preset);
+  }
+
   /* Vista previa del municipio en el propio paso 1: el dato antes de pedir nada. */
   const preview = $('#vTownPreview');
   const renderTownPreview = (key) => {
@@ -109,7 +117,7 @@
       rows.map(([label, value]) => `<div><small>${label}</small><strong>${value}</strong></div>`).join('')
     }</div>`;
   };
-  renderTownPreview('');
+  renderTownPreview(townSelect.value);
 
   /* ---------- Lectura del formulario ---------- */
   const readInput = () => {
