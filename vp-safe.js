@@ -1,6 +1,6 @@
 /* Villa's Properties — saneado de datos al pintar HTML.
 
-   El catálogo es contenido editable (Back Office hoy, Odoo mañana) y se pinta
+   El catálogo es contenido editable desde el Back Office y se pinta
    con plantillas de cadena e innerHTML. Sin escapar, un título o una URL de
    imagen con comillas se sale de su atributo y ejecuta código en el navegador
    de cualquier visitante. Comprobado: era explotable en título, descripción,

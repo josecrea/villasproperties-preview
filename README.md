@@ -6,7 +6,7 @@ Public static preview for review purposes only.
 - This repository contains only the static preview build.
 - `noindex,nofollow` is enabled.
 - Back Office access is protected by a client-side preview gate only.
-- Production authentication must be server-side/Odoo.
+- Sitio estático sin dependencias de servidor: el catálogo se edita en el Back Office y se publica al repositorio.
 
 ## Indexación: BLOQUEADA a propósito
 

@@ -90,7 +90,7 @@
           </div>
           <div style="margin-top:28px"><div class="eye">Características</div><div class="features" id="features" style="margin-top:12px"></div></div>
           <div class="adminactions"><button class="btn green" id="saveAdmin" type="button">Guardar cambios</button></div>
-          <div class="statusmsg" id="statusMsg">Prototipo local: producción debe usar Odoo/API + autenticación server-side.</div>
+          <div class="statusmsg" id="statusMsg">Catálogo real. Lo que edites se guarda en este navegador hasta que lo publiques.</div>
         </div>
       </aside>`);
   }
