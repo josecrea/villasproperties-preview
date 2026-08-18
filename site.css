@@ -786,11 +786,16 @@
 /* Zonas de toque: en pantalla táctil, los enlaces de acción y los controles
    necesitan alto suficiente para el dedo (WCAG 2.2 pide 24px; Apple, 44). */
 @media (hover:none) and (pointer:coarse){
-  a.eye,.pcard-cta,.plink,.insight a,.post-body a:not(.btn){min-height:44px;display:inline-flex;align-items:center}
-  .pbread a{padding:6px 0}
+  /* Solo objetivos de navegación y acción. Los enlaces dentro de un párrafo
+     están exentos (WCAG 2.2, 2.5.8) y agrandarlos rompería el interlineado. */
+  a.eye,.pcard-cta,.plink,.insight a{min-height:44px;display:inline-flex;align-items:center}
+  .footer p a{display:flex;align-items:center;min-height:40px}
+  .footer .footer-bottom a{display:inline-block;padding-block:10px}
+  .pbread a{display:inline-flex;align-items:center;min-height:36px}
   .menu-toggle,.nav .admin,.round{min-height:44px}
   .share-row a,.share-row button,.social-list svg{width:44px;height:44px}
   .bo-photo-actions button{width:34px;height:34px}
+  .vp-auth-logout,#closeAdmin{min-height:40px;padding-inline:14px}
   .leaflet-control-zoom a{width:38px!important;height:38px!important;line-height:38px!important}
   .vw-chip span{padding-block:13px}
   .field input,.field select,.field textarea{min-height:46px;font-size:16px}
