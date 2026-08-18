@@ -781,7 +781,9 @@
    titular solo aparecía cuando motion.js añadía .hero-in. Ahora la ocultación
    depende de que el motor de animación esté vivo. */
 .hero-content>*{opacity:1;transform:none}
-.motion-ready .hero-content>*{opacity:0;transform:translateY(26px)}
+/* :not(.hero-in) evita el empate de especificidad con `.hero-in .hero-content>*`,
+   que dejaba la portada oculta también CON JavaScript. */
+.motion-ready:not(.hero-in) .hero-content>*{opacity:0;transform:translateY(26px)}
 
 /* Zonas de toque: en pantalla táctil, los enlaces de acción y los controles
    necesitan alto suficiente para el dedo (WCAG 2.2 pide 24px; Apple, 44). */
