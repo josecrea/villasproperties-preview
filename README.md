@@ -8,6 +8,24 @@ Public static preview for review purposes only.
 - Back Office access is protected by a client-side preview gate only.
 - Production authentication must be server-side/Odoo.
 
+## Indexación: BLOQUEADA a propósito
+
+Todas las páginas van con `noindex,nofollow` y `robots.txt` con `Disallow: /`,
+incluidos los crawlers de IA. **Se queda así hasta que la web esté acabada**:
+indexar el preview lo pondría a competir con villasproperties.es por el mismo
+contenido.
+
+La capa SEO/GEO ya está construida y lista (canonical, Open Graph, Twitter Card,
+JSON-LD, sitemap.xml, llms.txt, manifest). Para abrirla, cuando se decida:
+
+```bash
+node tools/build-seo.js --index --si-publicar   # requiere las dos banderas
+```
+
+Antes de abrirla hay que decidir a qué dominio apunta el canonical (`BASE` en
+`tools/build-seo.js`) y sustituir las fotos de los inmuebles por los originales
+sin la marca de agua de idealista.
+
 ## Datos de mercado
 
 `market-data.js` está **generado**, no se edita a mano. Se regenera desde la fuente

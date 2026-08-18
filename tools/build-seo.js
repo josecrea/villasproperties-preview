@@ -6,8 +6,11 @@
    theme-color y JSON-LD según el tipo. Y a nivel de sitio: robots.txt,
    sitemap.xml, llms.txt y site.webmanifest.
 
-   Uso:  node tools/build-seo.js            (mantiene noindex, es un preview)
-         node tools/build-seo.js --index    (publica: quita noindex)
+   Uso:  node tools/build-seo.js                          (noindex: es un preview)
+         node tools/build-seo.js --index --si-publicar   (abre la indexación)
+
+   El preview se mantiene en noindex por decisión de Jose hasta que la web esté
+   acabada: indexarlo ahora lo pondría a competir con villasproperties.es.
 */
 'use strict';
 
@@ -16,7 +19,18 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const BASE = 'https://josecrea.github.io/villasproperties-preview/';
-const PUBLISH = process.argv.includes('--index');
+/* Publicar es una decisión de negocio, no un flag que se teclea por inercia:
+   indexar el preview duplicaría contenido con villasproperties.es. Por eso
+   --index exige confirmación explícita. */
+const WANTS_INDEX = process.argv.includes('--index');
+const CONFIRMED = process.argv.includes('--si-publicar');
+const PUBLISH = WANTS_INDEX && CONFIRMED;
+if (WANTS_INDEX && !CONFIRMED) {
+  console.error('\n[seo] --index NO aplicado.');
+  console.error('[seo] Indexar este preview lo pone a competir con villasproperties.es');
+  console.error('[seo] (contenido duplicado). Si de verdad quieres publicarlo:');
+  console.error('[seo]   node tools/build-seo.js --index --si-publicar\n');
+}
 const TODAY = '2026-08-18';
 
 const ORG = {
@@ -248,7 +262,7 @@ User-agent: Applebot-Extended
 User-agent: CCBot
 ${PUBLISH ? 'Allow: /' : 'Disallow: /'}
 
-Sitemap: ${BASE}sitemap.xml
+${PUBLISH ? `Sitemap: ${BASE}sitemap.xml` : '# Sitemap: se publicará al abrir la indexación.'}
 `, 'utf8');
 
 /* ---------- sitemap.xml ---------- */
@@ -314,4 +328,6 @@ fs.writeFileSync(path.join(ROOT, 'site.webmanifest'), JSON.stringify({
 }, null, 2), 'utf8');
 
 console.log(`[seo] ${touched} páginas · robots.txt, sitemap.xml (${urls.split('<url>').length - 1} URL), llms.txt y site.webmanifest`);
-console.log(`[seo] indexación: ${PUBLISH ? 'ACTIVADA (index,follow)' : 'bloqueada (noindex) — es un preview; usa --index para publicar'}`);
+console.log(`[seo] indexación: ${PUBLISH
+  ? 'ABIERTA (index,follow) — revisa el canonical antes de dejarlo así'
+  : 'BLOQUEADA (noindex + robots Disallow) — se abre con --index --si-publicar'}`);

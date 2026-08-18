@@ -15,4 +15,4 @@ User-agent: Applebot-Extended
 User-agent: CCBot
 Disallow: /
 
-Sitemap: https://josecrea.github.io/villasproperties-preview/sitemap.xml
+# Sitemap: se publicará al abrir la indexación.
