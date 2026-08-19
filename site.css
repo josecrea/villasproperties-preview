@@ -2096,3 +2096,33 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 @media (max-width: 820px) {
   .ceofoto { position: static; }
 }
+
+/* ── La casilla de consentimiento ────────────────────────────────────────
+   `.field input{width:100%}` está pensada para campos de texto, pero también
+   alcanzaba al checkbox: ocupaba los 296px del bloque y empujaba el texto
+   fuera de la caja, que se cortaba por la derecha —31px fuera de la ventana
+   en móvil—. Aquí recupera su tamaño natural. */
+.vw-consent input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  flex: 0 0 18px;
+  padding: 0;
+  border-radius: 4px;
+  accent-color: var(--atlantic);
+}
+/* Y el texto, que pueda encoger: en flex los hijos nacen con min-width:auto y
+   no bajan de su contenido, así que una línea larga desborda en vez de partir. */
+.vw-consent label > span { flex: 1 1 auto; min-width: 0; }
+
+/* ── EL bug del carrusel de zonas ────────────────────────────────────────
+   `.tf-section` llevaba `overflow:hidden`, y eso ROMPE el `position:sticky`
+   de `.tf-sticky`: un ancestro con overflow distinto de visible crea un
+   contenedor de scroll y el hijo deja de pegarse. Resultado: la escena se iba
+   hacia arriba con el scroll y lo que quedaba en pantalla era el fondo negro
+   de la sección. Se veía Costa Adeje al entrar y negro el resto del recorrido.
+
+   `overflow: clip` recorta igual pero NO crea contenedor de scroll, así que el
+   sticky vuelve a funcionar. Donde no se soporte, el navegador lo ignora y
+   queda `visible`: no recorta, pero el carrusel funciona igual. */
+.tf-section { overflow: clip; }

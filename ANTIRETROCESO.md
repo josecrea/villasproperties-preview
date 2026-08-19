@@ -206,6 +206,13 @@ que es señal fuerte de SEO: el buscador no lee rótulos incrustados.
 
 ---
 
+## 3bis-b. La casilla de consentimiento del valorador
+
+`.field input{width:100%}` está pensada para campos de texto, pero también
+alcanzaba al `<input type="checkbox">`: ocupaba los 296px del bloque y empujaba
+el texto fuera de la caja —31px fuera de la ventana en móvil—. La casilla
+necesita su ancho fijo y el texto un `min-width: 0` para poder partir.
+
 ## 3ter. El menú NO está en el HTML
 
 `shell.js` construye la cabecera de las 25 páginas desde su array `NAV`, y
@@ -225,6 +232,16 @@ una en el cuerpo y el pie, así que no pierden tráfico interno ni enlaces de SE
   cuatro pantallas y media para ver cinco fotos.
 - Esa altura va dentro de `@media (prefers-reduced-motion: no-preference)`. Si
   se saca de ahí, se le impone el recorrido a quien pidió justo lo contrario.
+- 🔴 **`.tf-section` va con `overflow: clip`, NUNCA con `overflow: hidden`.**
+  Un ancestro con `overflow` distinto de `visible` crea un contenedor de scroll
+  y **rompe el `position: sticky`** del hijo. Con `hidden`, la escena se iba
+  hacia arriba con el scroll y lo único que quedaba en pantalla era el fondo
+  negro de la sección: se veía Costa Adeje al entrar y negro el resto del
+  recorrido, aunque el JS informara de que la capa activa tenía opacidad 1.
+  `clip` recorta igual pero no crea contenedor de scroll.
+- **Las fotos de las zonas son paisajes** (`zona-*.webp`, 1600×900). Antes eran
+  `prop-*.webp`: interiores de pisos a 480×360, que ni son la zona ni dan
+  resolución para pantalla completa.
 - **Con `reduced-motion` la sección era un pasillo negro**: el CSS oculta
   `.tf-stage` —las cinco fotos van superpuestas— y quedaba solo texto sobre
   fondo oscuro. Ahora `tenerife-cinematic.js` le devuelve a cada zona SU foto y
