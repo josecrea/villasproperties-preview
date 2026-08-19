@@ -13,13 +13,21 @@
      comprar o invertir, no un destino; Insights porque el contenido se alcanza
      desde Intelligence y desde el pie. Ambas siguen enlazadas en el footer y
      en el cuerpo, así que no pierden ni tráfico interno ni enlaces para SEO. */
+  /* Cinco entradas, una por intención de quien llega:
+       Properties  ver qué hay
+       Sell        vender  · Buy  comprar
+       Finance     el embudo de financiación (es el que paga comisión)
+       News        el centro editorial
+     Invest e Intelligence salen del menú y se alcanzan desde la portada y desde
+     Buy: son argumento, no puerta de entrada, y en el menú competían con las
+     cinco que sí lo son. Valuation tampoco va aquí — tiene su propio CTA en la
+     cabecera y se enlaza desde media web. */
   const NAV = [
     ['properties.html', 'Properties'],
     ['sell.html', 'Sell'],
     ['buy.html', 'Buy'],
-    ['invest.html', 'Invest'],
-    ['intelligence.html', 'Intelligence'],
-    ['valuation.html', 'Valuation'],
+    ['finance.html', 'Finance'],
+    ['insights.html', 'News'],
   ];
 
   const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
@@ -37,14 +45,19 @@
 
   const header = document.querySelector('.header');
   if (header) {
-    const advisor = page === 'index.html' ? '#contact' : 'contact.html';
+    /* El botón destacado ofrece algo gratis en lugar de pedir un compromiso:
+       "hablar con un asesor" obliga a dar el paso social, "valoración gratis"
+       no. Y la valoración es el mayor gancho de captación de vendedores, que
+       al salir Valuation del menú se había quedado sin sitio visible.
+       Contacto no pierde nada: ya se enlaza desde 15 páginas y desde el pie. */
+    const advisor = 'valuation.html';
     header.innerHTML = `
       <div class="wrap headerin">
         ${brand}
         <nav class="nav">
           ${NAV.map(([href, label]) => `<a href="${href}"${href === active ? ' class="is-current" aria-current="page"' : ''}>${label}</a>`).join('')}
           <button class="admin" id="openAdmin" type="button">⚙ Back Office</button>
-          <a class="advisor" href="${advisor}">Talk to an advisor</a>
+          <a class="advisor" href="${advisor}">Valoración gratis</a>
         </nav>
         <button class="menu-toggle" id="mobileAdmin" type="button">⚙ Config</button>
       </div>`;
