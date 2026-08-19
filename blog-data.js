@@ -4,16 +4,6 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
-    slug: 'post-prueba-de-publicacion-automatica.html',
-    category: 'Mercado',
-    title: "Prueba de publicación automática",
-    dek: "Un artículo de prueba para verificar que el sistema de publicación funciona de punta a punta.",
-    date: '2026-08-19',
-    read: '3 min',
-    accent: 'atlantic',
-    figure: 'chart',
-  },
-  {
     slug: 'post-mapa-metro-cuadrado.html',
     category: 'Mercado',
     title: 'El mapa del metro cuadrado en Tenerife Sur',

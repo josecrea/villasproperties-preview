@@ -16,11 +16,15 @@
 - Número de compraventas de vivienda al año por municipio, fuente Catastro.
 - Contraste entre precio de anuncio y precio de escritura, ponderado por operaciones.
 
-## Cifras destacadas (datos de julio de 2026)
-- Rango del sur: 6.233 €/m² en Playa de las Américas frente a 2.099 €/m² en el casco de Granadilla (2,97 veces).
-- Diferencia media entre anuncio y escritura ponderada por operaciones: 21,4%.
+## Cifras destacadas (anuncio: idealista julio 2026 · escritura: Portal Estadístico del Notariado julio 2026)
+- Rango del sur: 7.469 €/m² en La Caleta (Adeje) frente a 2.123 €/m² en el casco de San Miguel de Abona (3,52 veces).
+- Diferencia media entre anuncio y escritura ponderada por operaciones: 25,3%.
 - Compraventas anuales en los seis municipios del sur: 8.552; Arona concentra el 40,2%.
-- Municipio que más sube a 12 meses: San Miguel de Abona (+10,2%). El único que cae: Guía de Isora (-4,8%).
+- Municipio que más sube a 12 meses: Guía de Isora (+5,3%). Ninguno cae: toda la comarca se ha desacelerado y el rango va de +1,9% a +5,3%.
+
+## Nota metodológica
+- Desde julio de 2026 idealista cambió su forma de calcular el precio de anuncio: las cifras de julio en adelante no son comparables sin más con las anteriores.
+- El dato ancla de Villa's es el €/m² REAL de escritura del Notariado, no la media de anuncio de los portales.
 
 ## Páginas
 - [Valoración gratis](https://josecrea.github.io/villasproperties-preview/valuation.html): estimación con datos reales por microzona.

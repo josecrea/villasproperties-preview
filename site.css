@@ -2372,3 +2372,21 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 /* Los orbes son decoración: si se salen, que los recorte su sección en lugar
    de empujar la página. */
 .hero, .section { overflow-x: clip; }
+
+/* Saltar al contenido: quien navega con teclado o lector no tiene por qué
+   pasar por el menú entero en cada página. Invisible hasta que recibe foco. */
+.skip-link {
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  left: 12px;
+  padding: 12px 18px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 0 0 10px 10px;
+  transform: translateY(-110%);
+  transition: transform .18s;
+}
+.skip-link:focus { transform: none; outline: 2px solid var(--atlantic); outline-offset: 2px; }
