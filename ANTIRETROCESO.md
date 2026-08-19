@@ -168,6 +168,25 @@ que es señal fuerte de SEO: el buscador no lee rótulos incrustados.
 
 ---
 
+## 3bis. Contacto y espacio del fundador
+
+- **El formulario NO tiene backend.** La web es estática: no hay servidor que
+  reciba un POST. `contact-form.js` compone el mensaje y lo abre en el WhatsApp
+  del visitante, que ve exactamente qué envía y a quién. Aquí no se guarda ni
+  un dato de nadie. Si algún día se pone un backend de verdad, hay que revisar
+  el aviso de privacidad: ahora mismo dice que no se almacena nada.
+- **Solo el nombre es obligatorio.** Pedir más campos en un formulario de
+  contacto solo consigue que la gente se vaya.
+- **El hueco de la foto del fundador está marcado a propósito.** En el sitio
+  donde va la cara del responsable, o está la suya o no hay ninguna: una foto
+  de banco de imágenes ahí destruye justo la confianza que la sección busca.
+  Sustituir `.ceofoto__hueco` por un retrato propio en 3:4.
+- **Los datos de contacto son reales y verificados**: +34 667 384 965,
+  info@villasproperties.es, VILLVERG SL · B19430115. No inventar credenciales,
+  años de experiencia ni número de operaciones en el texto del fundador.
+
+---
+
 ## 4. Lo que mantiene la web invisible (y es intencionado)
 
 Hay **cuatro frenos** puestos a propósito. No se tocan a mano:

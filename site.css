@@ -1920,3 +1920,82 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   max-width: var(--max);
   margin-inline: auto;
 }
+
+/* ── Espacio del fundador y contacto ─────────────────────────────────────
+   Una inmobiliaria vende confianza antes que inmuebles: saber quién responde
+   al otro lado vale más que otra sección de servicios. */
+.ceogrid {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: clamp(26px, 5vw, 64px);
+  align-items: start;
+}
+.ceofoto { margin: 0; }
+/* Hueco marcado, no una foto de banco de imágenes: en el sitio donde va la
+   cara del responsable, o está la suya o no hay ninguna. */
+.ceofoto__hueco {
+  aspect-ratio: 3 / 4;
+  display: grid;
+  place-items: center;
+  background: var(--paper-2);
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.ceofoto figcaption { margin-top: 10px; font-size: 11px; }
+.ceotxt h3 {
+  font-size: clamp(30px, 3.6vw, 46px);
+  font-weight: 400;
+  letter-spacing: -.04em;
+  margin: 0 0 4px;
+}
+.ceorol {
+  margin: 0 0 18px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--atlantic);
+}
+.ceotxt p { max-width: 58ch; }
+
+/* Los datos de contacto, en fila y separados por filos: se leen de un vistazo
+   y sin jerarquía falsa entre ellos. */
+.nap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: clamp(34px, 5vw, 60px);
+  border-top: 1px solid var(--line);
+}
+.nap > div {
+  padding: 18px 16px 0 0;
+  border-right: 1px solid var(--line);
+}
+.nap > div:last-child { border-right: 0; }
+.nap small {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.nap a, .nap span { font-size: 13px; line-height: 1.45; }
+.nap a { text-decoration: underline; text-underline-offset: 3px; }
+
+@media (max-width: 820px) {
+  .ceogrid { grid-template-columns: 1fr; }
+  .ceofoto { max-width: 240px; }
+  .nap { grid-template-columns: 1fr 1fr; }
+  .nap > div { padding-right: 14px; padding-bottom: 16px; }
+  .nap > div:nth-child(2n) { border-right: 0; }
+}
+@media (max-width: 480px) {
+  .nap { grid-template-columns: 1fr; }
+  .nap > div { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+  .nap > div:last-child { border-bottom: 0; }
+}
