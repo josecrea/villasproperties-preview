@@ -1897,3 +1897,26 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
    bajar a ciegas hasta encontrarla. */
 .filmreel--top { padding-top: clamp(18px, 2.5vw, 34px); }
 .filmreel--top .head { margin-top: clamp(22px, 3vw, 40px); margin-bottom: 0; }
+
+/* ── Vídeo a sangre ──────────────────────────────────────────────────────
+   Sin marco y de borde a borde: lo que se busca es que la imagen mande, y un
+   filo de 1px alrededor la convierte en "una foto puesta en la página".
+   El ancho completo se consigue sacando el <figure> del .wrap en el HTML y no
+   con width:100vw, que en Windows incluye la barra de scroll y provoca
+   desborde horizontal. */
+.filmbox--sangre { width: 100%; }
+.filmbox--sangre .filmvid {
+  border: 0;                    /* fuera el marco */
+  width: 100%;
+  /* Tope de alto para pantallas muy anchas: a 1920px un 16:9 pediría 1080px de
+     alto y no cabría de una vez. `contain` en lugar de `cover` porque el vídeo
+     lleva rótulos y datos pegados a los bordes: recortar se comería cifras. */
+  max-height: 90vh;
+  object-fit: contain;
+}
+.filmbox--sangre figcaption {
+  /* El pie sí vuelve al margen del resto del texto. */
+  padding-inline: var(--pad);
+  max-width: var(--max);
+  margin-inline: auto;
+}
