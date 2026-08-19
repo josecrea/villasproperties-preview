@@ -2528,37 +2528,51 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   .fin-alt { text-align: center; }
 }
 
-/* ── El vídeo del hero, entero ───────────────────────────────────────────
-   En móvil se servía un recorte 9:16 del vídeo horizontal y se perdía el 68%
-   del ancho: la playa y las sombrillas, que son lo que hace la escena. Por eso
-   parecía cortado.
+/* ── El vídeo del hero en móvil ──────────────────────────────────────────
+   Aquí se sirve un montaje VERTICAL propio (720x1280), reencuadrado plano a
+   plano. Recortar el horizontal por el centro se comía la cala en unos planos
+   y la montaña en otros; y dejarlo entero llenaba solo un tercio de la
+   pantalla. Con material 9:16 real, cover lo deja a pantalla completa sin
+   recorte apreciable.
 
-   Ahora se sirve el mismo 16:9 en todos y en móvil se ve ENTERO, apoyado
-   arriba. El hueco de abajo no queda vacío: lo ocupa el degradado del hero,
-   que es justo donde va el titular — así el texto gana fondo sólido y se lee
-   mejor que sobre la imagen. */
+   Se anulan explícitamente el aspect-ratio y la máscara que hicieron falta
+   mientras aquí se servía un 16:9, para que no queden reglas huérfanas. */
 @media (max-width: 820px) {
-  /* El vídeo es 16:9 y el hero en el móvil es casi vertical: con object-fit
-     cover se comía el 68% del ancho —la playa entera— y por eso parecía
-     recortado.
-
-     No basta con poner contain: el <video> sigue ocupando todo el hero y el
-     fotograma queda flotando dentro, así que cualquier degradado de fusión
-     caería en el sitio equivocado. Se le da al elemento el tamaño EXACTO del
-     fotograma (aspect-ratio 16/9 pegado arriba); entonces cover ya no recorta
-     nada y la máscara cae justo en el borde de la imagen.
-
-     Debajo queda el fondo del hero, que es donde va el titular: el texto pasa
-     a leerse sobre color plano en vez de sobre la foto. */
   .hero-video.active {
-    inset: 0 0 auto 0;
-    height: auto;
-    aspect-ratio: 16 / 9;
+    inset: 0;
+    height: 100%;
+    aspect-ratio: auto;
     object-fit: cover;
-    -webkit-mask-image: linear-gradient(180deg,
-      #000 0%, #000 62%, rgba(0,0,0,.5) 86%, transparent 100%);
-    mask-image: linear-gradient(180deg,
-      #000 0%, #000 62%, rgba(0,0,0,.5) 86%, transparent 100%);
+    object-position: center;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 }
 
+
+/* ── Legibilidad del titular sobre el vídeo vertical ─────────────────────
+   Mientras el vídeo llenaba solo el tercio superior, el titular caía sobre el
+   fondo oscuro del hero y se leía solo. Ahora ocupa toda la pantalla y queda
+   sobre arena y agua clara: medido a lo largo del bucle, la franja de detrás
+   llega a 180/255 de luminancia en tres de los cinco planos, y las letras son
+   de colores pastel.
+
+   Subir el velo hasta que el texto se leyera dejaba la mitad inferior casi
+   negra, o sea el mismo problema de antes por otro camino. Así que el velo
+   sube solo lo justo y el resto lo hace una sombra bajo el texto, que es
+   local: protege las letras sin apagar la imagen. */
+@media (max-width: 820px) {
+  .hero .film:has(.hero-video.active)::after,
+  .hero-static .hero .film::after {
+    background:
+      linear-gradient(to top,
+        rgba(6, 9, 8, .86) 0%,
+        rgba(6, 9, 8, .54) 34%,
+        rgba(6, 9, 8, .30) 64%,
+        rgba(6, 9, 8, .14) 100%);
+  }
+  .hero-video.active { filter: brightness(.78) saturate(1.05); }
+  .hero h1,
+  .hero .herocopy,
+  .hero .eye { text-shadow: 0 2px 22px rgba(6, 9, 8, .62), 0 1px 3px rgba(6, 9, 8, .5); }
+}
