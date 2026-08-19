@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Financiación de vivienda en Tenerife — Villa’s Properties</title>
 <link rel="icon" type="image/webp" href="assets/brand/logo-placeholder.webp">
-<link rel="stylesheet" href="site.css?v=202608191850">
+<link rel="stylesheet" href="site.css?v=202608191856">
 <!-- seo:start -->
 <meta name="description" content="Financiación inmobiliaria en Tenerife: capacidad de compra real, entrada, cuota y preparación del expediente hipotecario.">
 <link rel="canonical" href="https://josecrea.github.io/villasproperties-preview/finance.html">
@@ -31,146 +31,67 @@
 <header class="header solid"></header>
 
 <main id="contenido">
-<!-- 01 · Apertura -->
-<section class="sell-hero" data-header-theme="paper">
-  <div class="wrap">
-    <div class="sell-hero-grid">
-      <div class="sell-hero-copy">
-        <div class="eye">Financiar · compradores</div>
-        <h1>El banco no<br>financia el precio.<br>Financia <em>tu capacidad</em>.</h1>
-        <p class="sell-lede">
-          Antes de enamorarte de una vivienda conviene saber hasta dónde llegas
-          de verdad: cuánto puedes pagar al mes, cuánto ahorro necesitas encima
-          de la mesa y qué precio máximo sale de ahí.
-        </p>
-        <div class="sell-actions">
-          <a class="btn green" href="#capacidad">Calcular mi capacidad ↓</a>
-          <a class="btn" href="valuation.html">Valorar mi vivienda actual</a>
-        </div>
-      </div>
 
-      <aside class="sell-ticker">
-        <div class="eye">Tu resumen</div>
-        <dl class="sell-ticker-list" id="finTicker"></dl>
-      </aside>
-    </div>
+<!-- 01 · La oferta, arriba y sin rodeos: es lo único que hay que hacer aquí -->
+<section class="fin-hero" data-header-theme="paper"><div class="wrap">
+  <div class="eye">Financiar · compradores</div>
+  <h1>Tu hipoteca,<br>comparada entre<br>más de veinte bancos.</h1>
+  <p class="fin-lede">Gratis, sin compromiso y sin moverte de casa. Estudiamos tu caso y
+  te decimos qué banco te da las mejores condiciones — no el que más nos convenga.</p>
+
+  <div class="fin-acciones">
+    <a class="fin-cta" href="r/financiacion/" target="_blank" rel="noopener">
+      <span class="fin-cta__txt">Estudiad mi caso, gratis</span>
+      <span class="fin-cta__sub">2 minutos · sin compromiso</span>
+    </a>
+    <a class="fin-alt" href="https://wa.me/34667384965?text=Hola%2C%20tengo%20una%20duda%20sobre%20la%20hipoteca."
+       target="_blank" rel="noopener">Prefiero preguntar antes ↗</a>
   </div>
-  <div class="sell-hero-rule" aria-hidden="true"></div>
-</section>
 
-<!-- 02 · Calculadora -->
-<section class="section tight" id="capacidad" data-reveal>
-  <div class="wrap">
-    <div class="head" data-reveal>
-      <div class="eye">01 · Capacidad</div>
-      <div>
-        <h2>Hasta dónde<br>llegas.</h2>
-        <p class="muted">Se calcula en tu navegador y no se envía a ningún sitio. Todos los criterios son editables: cámbialos por los de tu banco cuando los tengas.</p>
-      </div>
-    </div>
+  <div class="fin-cifras">
+    <div><strong>+20</strong><small>bancos comparados</small></div>
+    <div><strong>100 %</strong><small>online, sin oficinas</small></div>
+    <div><strong>0 €</strong><small>el estudio no cuesta nada</small></div>
+  </div>
+</div></section>
 
-    <div class="buy-tool">
-      <form class="buy-form" id="finForm" novalidate>
-        <div class="fields">
-          <div class="field">
-            <label for="finIncome">Ingresos netos del hogar (€/mes)</label>
-            <input id="finIncome" type="number" inputmode="numeric" min="0" step="50" value="2800">
-          </div>
-          <div class="field">
-            <label for="finDebt">Otras cuotas que ya pagas (€/mes)</label>
-            <input id="finDebt" type="number" inputmode="numeric" min="0" step="25" value="0">
-          </div>
-          <div class="field">
-            <label for="finSavings">Ahorro disponible (€)</label>
-            <input id="finSavings" type="number" inputmode="numeric" min="0" step="1000" value="60000">
-          </div>
-          <div class="field">
-            <label for="finYears">Plazo (años)</label>
-            <input id="finYears" type="number" inputmode="numeric" min="5" max="40" value="30">
-          </div>
-          <div class="field">
-            <label for="finRate">Tipo de interés (%)</label>
-            <input id="finRate" type="number" inputmode="decimal" min="0" max="15" step="0.05" value="3">
-          </div>
-          <div class="field">
-            <label for="finEffort">Esfuerzo máximo (%)</label>
-            <input id="finEffort" type="number" inputmode="numeric" min="20" max="45" value="35">
-          </div>
-          <div class="field">
-            <label for="finLtv">Financiación del banco (%)</label>
-            <input id="finLtv" type="number" inputmode="numeric" min="50" max="100" value="80">
-          </div>
-          <div class="field">
-            <label for="finCosts">Impuestos y gastos (%)</label>
-            <input id="finCosts" type="number" inputmode="decimal" min="0" max="20" step="0.5" value="10">
-          </div>
-        </div>
-        <p class="bo-hint">Los valores de partida son los criterios que la banca suele aplicar: hasta un 35% de esfuerzo sobre el ingreso neto y hasta un 80% del valor de tasación. <strong>El porcentaje de impuestos y gastos varía según el tipo de vivienda y tu situación: confírmalo con tu gestoría antes de dar por buena la cifra.</strong></p>
-      </form>
-
-      <output class="buy-result" id="finResult" for="finForm"></output>
-    </div>
+<!-- 02 · La prueba: quiénes compiten por tu hipoteca -->
+<section class="section tight bancos" data-reveal>
+  <div class="wrap"><p class="fin-prueba">Entre otras, compiten por darte la mejor oferta:</p></div>
+  <div class="bank-slider" role="img" aria-label="Entidades: Santander, CaixaBank, Banco Sabadell, Abanca, Deutsche Bank y hipotecas.com, entre otras.">
+    <div class="bank-track" aria-hidden="true"><div class="bank-item"><img src="assets/bancos/santander.svg" alt="Santander" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/caixaBank.svg" alt="CaixaBank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/sabadell.svg" alt="Banco Sabadell" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/abanca.svg" alt="Abanca" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/deutschebank.svg" alt="Deutsche Bank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/hipotecas.svg" alt="hipotecas.com" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/santander.svg" alt="Santander" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/caixaBank.svg" alt="CaixaBank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/sabadell.svg" alt="Banco Sabadell" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/abanca.svg" alt="Abanca" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/deutschebank.svg" alt="Deutsche Bank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/hipotecas.svg" alt="hipotecas.com" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/santander.svg" alt="Santander" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/caixaBank.svg" alt="CaixaBank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/sabadell.svg" alt="Banco Sabadell" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/abanca.svg" alt="Abanca" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/deutschebank.svg" alt="Deutsche Bank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/hipotecas.svg" alt="hipotecas.com" width="120" height="35" decoding="async"></div></div>
   </div>
 </section>
 
-<!-- 03 · Qué mira el banco -->
-<section class="section" data-reveal>
-  <div class="wrap">
-    <div class="head" data-reveal>
-      <div class="eye">02 · Expediente</div>
-      <div>
-        <h2>Qué mira el banco<br>además del sueldo.</h2>
-        <p class="muted">Dos personas con el mismo ingreso reciben respuestas distintas. La diferencia está en el expediente.</p>
-      </div>
-    </div>
-    <div class="buy-checks" data-stagger-group>
-      <article data-stagger><span class="eye">Estabilidad</span><h3>Tipo de contrato</h3><p>Antigüedad, tipo de relación laboral y regularidad del ingreso. Un autónomo con tres ejercicios ordenados pesa más que un indefinido reciente.</p></article>
-      <article data-stagger><span class="eye">Historial</span><h3>Comportamiento de pago</h3><p>Descubiertos, devoluciones de recibos y financiaciones al consumo. Se revisan los últimos meses de cuenta: conviene llegar con ellos limpios.</p></article>
-      <article data-stagger><span class="eye">Endeudamiento</span><h3>Lo que ya pagas</h3><p>Cada cuota viva resta capacidad. Cancelar un préstamo pequeño antes de pedir la hipoteca suele valer más que negociar una décima de tipo.</p></article>
-      <article data-stagger><span class="eye">Aportación</span><h3>Origen del ahorro</h3><p>De dónde viene la entrada y desde cuándo está disponible. Una donación o una venta previa se documenta, no se explica de palabra.</p></article>
-      <article data-stagger><span class="eye">Garantía</span><h3>Tasación del inmueble</h3><p>El banco financia sobre el valor de tasación, no sobre el precio pactado. Si la tasación queda por debajo, la diferencia la pones tú.</p></article>
-      <article data-stagger><span class="eye">Producto</span><h3>Vinculaciones</h3><p>Seguros, nóminas y planes que bajan el tipo. Se comparan con su coste anual: a veces la bonificación cuesta más de lo que ahorra.</p></article>
-    </div>
+<!-- 03 · Tres razones, una línea cada una. Nada más. -->
+<section class="section tight" data-reveal><div class="wrap">
+  <div class="fin-razones">
+    <div><b>Un banco te da su oferta.</b><p class="muted">Nosotros te damos la de veinte y te
+    enseñamos cuál sale a cuenta, con los números delante.</p></div>
+    <div><b>No pagas nada.</b><p class="muted">El estudio es gratis. Si al final no te
+    interesa ninguna, no ha pasado nada.</p></div>
+    <div><b>Hasta el 100 % según perfil.</b><p class="muted">Y te decimos desde el principio
+    hasta dónde llegas de verdad, no lo que te gustaría oír.</p></div>
   </div>
-</section>
+</div></section>
 
-<!-- 04 · Orden de trabajo -->
-<section class="section tight" data-reveal>
-  <div class="wrap">
-    <div class="sell-split">
-      <div class="sell-split-num" aria-hidden="true">03</div>
-      <div>
-        <h2 class="sell-h2">El orden correcto<br>ahorra meses.</h2>
-        <ol class="inv-questions">
-          <li><b>Primero la capacidad, después la casa.</b> Buscar sin saber el techo real termina en visitas inútiles y en ofertas que el banco tumba.</li>
-          <li><b>Antes de las arras, el sondeo bancario.</b> Firmar arras confiando en una hipoteca que nadie ha estudiado es la forma más cara de perder la señal.</li>
-          <li><b>La cláusula de financiación, por escrito.</b> Si el préstamo no llega, las arras deben tener salida pactada, con plazo y condiciones.</li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- 04 · El mismo CTA, para quien llegó hasta aquí -->
+<section class="fin-cierre" data-header-theme="green"><div class="wrap">
+  <h2>¿Empezamos?</h2>
+  <p>Cuéntanos tu caso en dos minutos. El estudio es gratis y sin compromiso.</p>
+  <a class="fin-cta fin-cta--claro" href="r/financiacion/" target="_blank" rel="noopener">
+    <span class="fin-cta__txt">Estudiad mi caso, gratis</span>
+    <span class="fin-cta__sub">2 minutos · sin compromiso</span>
+  </a>
+</div></section>
 
-<!-- 05 · Cierre -->
-<section class="section tight bancos" data-reveal><div class="wrap"><div class="head" data-reveal><div class="eye">03 · Comparativa</div><div><h2>No una oferta:<br>la mejor de todas.</h2><p class="muted">Un banco te da su oferta y no tiene por qué ser la mejor. Comparamos las condiciones de más de veinte entidades para el mismo expediente y te enseñamos cuál sale a cuenta, con los números delante.</p></div></div><div class="bankcifras"><div><strong>+20</strong><small>entidades comparadas</small></div><div><strong>Hasta 100 %</strong><small>de financiación según perfil</small></div><div><strong>0 €</strong><small>el estudio no cuesta nada</small></div></div><div class="bank-slider" role="img" aria-label="Entidades con las que trabajamos: Santander, CaixaBank, Banco Sabadell, Abanca y Deutsche Bank, entre otras."><div class="bank-track" aria-hidden="true"><div class="bank-item"><img src="assets/bancos/santander.svg" alt="Santander" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/caixaBank.svg" alt="CaixaBank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/sabadell.svg" alt="Banco Sabadell" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/abanca.svg" alt="Abanca" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/deutschebank.svg" alt="Deutsche Bank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/hipotecas.svg" alt="hipotecas.com" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/santander.svg" alt="Santander" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/caixaBank.svg" alt="CaixaBank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/sabadell.svg" alt="Banco Sabadell" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/abanca.svg" alt="Abanca" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/deutschebank.svg" alt="Deutsche Bank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/hipotecas.svg" alt="hipotecas.com" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/santander.svg" alt="Santander" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/caixaBank.svg" alt="CaixaBank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/sabadell.svg" alt="Banco Sabadell" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/abanca.svg" alt="Abanca" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/deutschebank.svg" alt="Deutsche Bank" width="120" height="35" decoding="async"></div><div class="bank-item"><img src="assets/bancos/hipotecas.svg" alt="hipotecas.com" width="120" height="35" decoding="async"></div></div></div><p class="muted bankpie">Muestra de entidades. La comparativa se hace sobre tu caso concreto: mismo expediente, mismas cuentas, y la decisión con el cuadro delante.</p><div class="actions" style="justify-content:flex-start;margin-top:22px"><a class="btn green" href="r/financiacion/" target="_blank" rel="noopener">Estudiad mi caso, gratis ↗</a><a class="btn" href="finance-lab.html">Calcular mi capacidad</a></div></div></section>
-<section class="sell-cta" data-header-theme="green">
-  <div class="wrap">
-    <div class="eye">Acompañamiento</div>
-    <h2>¿Preparamos<br>tu expediente?</h2>
-    <p>Revisamos capacidad, documentación y encaje bancario antes de que pongas una señal. Con las cuentas hechas y por escrito.</p>
-    <div class="sell-actions">
-      <a class="btn fill" href="contact.html">Hablar con un asesor ↗</a>
-      <a class="btn" href="https://wa.me/34667384965?text=Hola%2C%20quiero%20revisar%20la%20financiaci%C3%B3n%20de%20una%20compra" target="_blank" rel="noopener">Hablar por WhatsApp</a>
-    </div>
-  </div>
-</section>
 </main>
 
 <footer class="footer"></footer>
-<script src="vp-safe.js?v=202608191850" defer></script><script src="vp-lead.js?v=202608191850" defer></script><script src="vp-consent.js?v=202608191850"></script><script src="shell.js?v=202608191850" defer></script><script src="app.js?v=202608191850" defer></script><script src="social.js?v=202608191850" defer></script>
-<script src="market-data.js?v=202608191850" defer></script>
-<script src="finance.js?v=202608191850" defer></script>
-<script src="motion.js?v=202608191850" defer></script>
-<script src="backoffice-auth.js?v=202608191850" defer></script>
+<script src="vp-safe.js?v=202608191856" defer></script><script src="vp-lead.js?v=202608191856" defer></script><script src="vp-consent.js?v=202608191856"></script><script src="shell.js?v=202608191856" defer></script><script src="app.js?v=202608191856" defer></script><script src="social.js?v=202608191856" defer></script>
+<script src="market-data.js?v=202608191856" defer></script>
+<script src="finance.js?v=202608191856" defer></script>
+<script src="motion.js?v=202608191856" defer></script>
+<script src="backoffice-auth.js?v=202608191856" defer></script>
 </body>
 </html>

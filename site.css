@@ -2390,3 +2390,126 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   transition: transform .18s;
 }
 .skip-link:focus { transform: none; outline: 2px solid var(--atlantic); outline-offset: 2px; }
+
+/* ── Financiación: página de conversión ──────────────────────────────────
+   Aquí solo se viene a una cosa: que el visitante pida el estudio. Todo lo
+   demás —calculadoras, explicaciones largas— se quitó porque competía con el
+   botón. La regla es que el CTA se vea SIN hacer scroll. */
+.fin-hero {
+  padding: clamp(52px, 8vw, 104px) 0 clamp(40px, 6vw, 72px);
+  background: var(--paper);
+  position: relative;
+  overflow: clip;
+}
+.fin-hero::after {
+  content: "";
+  position: absolute;
+  width: min(46vw, 620px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--atlantic-soft);
+  right: -10vw;
+  top: -18%;
+  z-index: 0;
+  pointer-events: none;
+}
+.fin-hero .wrap { position: relative; z-index: 1; }
+.fin-hero h1 {
+  font-size: clamp(40px, 6.4vw, 88px);
+  font-weight: 400;
+  line-height: .96;
+  letter-spacing: -.05em;
+  margin: 14px 0 22px;
+}
+.fin-lede {
+  font-size: clamp(16px, 1.7vw, 21px);
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 56ch;
+  margin: 0 0 clamp(26px, 4vw, 40px);
+}
+
+/* El botón: grande, con dos líneas —qué haces y qué te cuesta— y objetivo
+   táctil holgado. Un `.btn` normal aquí se perdía entre los demás. */
+.fin-acciones { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.fin-cta {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 18px 34px;
+  background: var(--atlantic);
+  color: #fff !important;
+  border-radius: var(--radius);
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(95, 128, 117, .28);
+  transition: transform .18s var(--ease, cubic-bezier(.16,1,.3,1)), box-shadow .18s, background .18s;
+}
+.fin-cta:hover { background: #4f6d63; transform: translateY(-2px); box-shadow: 0 16px 40px rgba(95,128,117,.36); }
+.fin-cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.fin-cta__txt { font-size: 15px; font-weight: 600; letter-spacing: .01em; }
+.fin-cta__sub { font-size: 11px; opacity: .82; letter-spacing: .06em; text-transform: uppercase; }
+.fin-cta--claro { background: #fff; color: var(--ink) !important; box-shadow: 0 12px 34px rgba(6,9,8,.22); }
+.fin-cta--claro:hover { background: #f3f1ec; }
+
+.fin-alt {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  padding: 12px 4px;   /* objetivo táctil, no solo la altura del texto */
+}
+.fin-alt:hover { color: var(--ink); }
+
+.fin-cifras {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: clamp(34px, 5vw, 56px);
+  border-top: 1px solid var(--line);
+}
+.fin-cifras > div { padding: 18px 16px 0 0; border-right: 1px solid var(--line); }
+.fin-cifras > div:last-child { border-right: 0; }
+.fin-cifras strong { display: block; font-size: clamp(30px, 3.6vw, 48px); font-weight: 400; letter-spacing: -.035em; }
+.fin-cifras small { display: block; margin-top: 4px; font-size: 11px; color: var(--muted); }
+
+.fin-prueba {
+  margin: 0 0 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.fin-razones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 3vw, 44px);
+}
+.fin-razones b { display: block; font-size: clamp(17px, 1.8vw, 21px); font-weight: 500; margin-bottom: 8px; }
+.fin-razones p { margin: 0; font-size: 14px; line-height: 1.55; }
+
+.fin-cierre {
+  background: var(--atlantic);
+  color: #fff;
+  padding: clamp(56px, 8vw, 100px) 0;
+  text-align: center;
+}
+.fin-cierre h2 {
+  font-size: clamp(38px, 6vw, 76px);
+  font-weight: 400;
+  line-height: .98;
+  letter-spacing: -.05em;
+  margin: 0 0 14px;
+}
+.fin-cierre p { margin: 0 auto clamp(26px, 4vw, 38px); max-width: 46ch; opacity: .92; }
+.fin-cierre .fin-cta { margin-inline: auto; }
+
+@media (max-width: 700px) {
+  .fin-cifras { grid-template-columns: 1fr; }
+  .fin-cifras > div { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+  .fin-cifras > div:last-child { border-bottom: 0; }
+  .fin-razones { grid-template-columns: 1fr; }
+  .fin-acciones { flex-direction: column; align-items: stretch; }
+  .fin-cta { align-items: center; }
+  .fin-alt { text-align: center; }
+}
