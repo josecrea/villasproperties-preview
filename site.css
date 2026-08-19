@@ -1817,3 +1817,42 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 @media (max-width: 720px) {
   .head h2, .big, .pagehero h1 { max-width: none; }
 }
+
+/* ── Pieza de presentación (18 s, antes del CTA) ─────────────────────────
+   Va aquí y no en el hero por una razón concreta: el vídeo lleva su propio
+   texto quemado —"TENERIFE.", "PROPERTY.", "DIFFERENT."— que es justo el que
+   la portada ya dice en HTML. De fondo, ambos se pisarían. Colocado antes del
+   CTA, en cambio, remata: el vídeo cierra en "HABLEMOS" y el botón real está
+   justo debajo. */
+.filmbox {
+  margin: 0;
+  position: relative;
+}
+.filmvid {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: var(--ink-deep);
+  /* El filo, no una sombra: el resto del sitio tampoco usa sombras. */
+  border: 1px solid var(--line);
+}
+.filmbox figcaption {
+  margin-top: 12px;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+/* El disco de la marca asomando por detrás, como en el resto de secciones. */
+.filmreel { position: relative; }
+.filmreel::before {
+  content: "";
+  position: absolute;
+  width: clamp(180px, 22vw, 340px);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--atlantic) 38%, transparent);
+  border-radius: 50%;
+  right: -6vw;
+  top: 12%;
+  pointer-events: none;
+}

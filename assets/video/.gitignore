@@ -10,3 +10,8 @@
 !hero-poster.webp
 !.gitignore
 !README.md
+
+# Excepcion: la pieza de presentacion SI se versiona. Es la que sirve
+# GitHub Pages y sin ella la seccion de la portada queda con el poster
+# y un play que no reproduce nada.
+!villas-tenerife.mp4
