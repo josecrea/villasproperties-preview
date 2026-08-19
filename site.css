@@ -1856,3 +1856,38 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   top: 12%;
   pointer-events: none;
 }
+
+/* ── Vídeo vertical a dos columnas (sell.html) ───────────────────────────
+   Un 9:16 a todo ancho dejaría un hueco enorme a los lados y empujaría el
+   resto de la página fuera de pantalla. Repartido con el texto, el formato
+   deja de ser un problema y pasa a ser el encuadre natural de la columna. */
+.videosplit {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+.vidvert { margin: 0; }
+.vidvert__v {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  background: var(--ink-deep);
+  border: 1px solid var(--line);
+}
+.videosplit__txt h2 {
+  font-size: clamp(34px, 4.6vw, 62px);
+  font-weight: 400;
+  line-height: .98;
+  letter-spacing: -.045em;
+  margin: 10px 0 18px;
+}
+.videosplit__txt p { max-width: 52ch; }
+
+@media (max-width: 820px) {
+  /* Apilado, y el vídeo con tope de alto: en un móvil un 9:16 a ancho completo
+     ocupa más que la pantalla entera y obliga a hacer scroll dentro del vídeo. */
+  .videosplit { grid-template-columns: 1fr; }
+  .vidvert { max-width: 300px; margin-inline: auto; }
+}
