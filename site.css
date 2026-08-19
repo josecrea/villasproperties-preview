@@ -2312,3 +2312,43 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   line-height: 1.6;
   color: var(--muted);
 }
+
+/* ── Capabilities con retrato ────────────────────────────────────────────
+   El montaje de Feil: una fotografía vertical sostiene la columna izquierda y
+   las decisiones se leen al lado. La foto va en monocromo CÁLIDO y no en gris
+   neutro: la paleta de la casa es papel y arena, y un B/N frío se queda encima
+   de la página en lugar de pertenecer a ella. */
+.capsplit {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  gap: clamp(28px, 4.5vw, 66px);
+  align-items: start;
+}
+.capfoto { margin: 0; }
+.capfoto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+.capfoto figcaption {
+  margin-top: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+/* Dentro del split las tarjetas van a dos columnas, no a cuatro: con la foto
+   al lado, cuatro columnas dejarían cada una en un carril demasiado estrecho. */
+.capsplit .capabilities { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 900px) {
+  .capsplit { grid-template-columns: 1fr; }
+  .capfoto { max-width: 320px; }
+}
+@media (max-width: 560px) {
+  .capsplit .capabilities { grid-template-columns: 1fr; }
+}
