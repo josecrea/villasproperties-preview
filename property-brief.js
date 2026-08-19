@@ -76,7 +76,23 @@
     /* Se abre en el WhatsApp del visitante y no se envía por detrás: así ve
        exactamente qué manda y a quién, y esta web —que es estática— no tiene
        que guardar datos de nadie ni pedir un servidor que no existe. */
-    const url = `https://api.whatsapp.com/send/?phone=${WA}&text=${encodeURIComponent(componerMensaje(d))}`;
+    const mensaje = componerMensaje(d);
+
+    /* El lead entra en Odoo aunque el visitante no llegue a pulsar enviar en
+       WhatsApp: es justo el caso en el que hoy se perdía. */
+    if (window.VPLead) {
+      const c = VPLead.repartirContacto(d.briefContact);
+      VPLead.enviar({
+        asunto: `Brief de búsqueda · ${OBJETIVOS[d.briefType] || d.briefType} · ${d.briefZone}`,
+        nombre: d.briefName,
+        email: c.email,
+        telefono: c.telefono,
+        descripcion: mensaje,
+        honeypot: document.querySelector('#vp_hp')?.value,
+      });
+    }
+
+    const url = `https://api.whatsapp.com/send/?phone=${WA}&text=${encodeURIComponent(mensaje)}`;
     window.open(url, '_blank', 'noopener');
 
     const resumen = [

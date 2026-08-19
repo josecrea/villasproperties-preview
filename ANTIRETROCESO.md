@@ -249,6 +249,34 @@ una en el cuerpo y el pie, así que no pierden tráfico interno ni enlaces de SE
 
 ---
 
+## 3quinquies. Los leads van a Odoo (`vp-lead.js`)
+
+Odoo expone `/website/form/crm.lead` (módulo `website_crm`, instalado en
+`VILLVERG18`) y **acepta un POST sin autenticación y sin token CSRF**.
+Verificado contra producción: creó los leads 772, 773 y 774, todos borrados
+después. Eso es lo que permite crear leads desde una web estática **sin
+credenciales en el navegador y sin tocar el servidor**.
+
+- **`mode: 'no-cors'` es obligatorio.** Odoo no devuelve cabeceras CORS, así que
+  un `fetch` normal se bloquea. Con `no-cors` y
+  `Content-Type: application/x-www-form-urlencoded` la petición es "simple", no
+  hay preflight y el navegador la envía. El precio: la respuesta llega opaca y
+  **no se puede leer el id del lead**, así que nunca se le dice al visitante
+  "recibido" basándose en ella.
+- **`team_id: 11` = "Villa's · Compraventas".** Es lo que separa estos leads de
+  los de okservice. La `company_id` la pone Odoo sola (`#okservice.es`) y no se
+  pelea: aquí solo hay una sociedad real, VILLVERG SL, y la marca se distingue
+  por equipo.
+- **`description` va en TEXTO PLANO.** Odoo escapa el HTML: los `<br>` salían
+  literales como `&lt;br&gt;`.
+- **El endpoint es público y sin CSRF: admite spam.** Por eso los formularios
+  llevan honeypot (`#vp_hp`), colocado fuera de pantalla y NO con
+  `display:none`, que muchos bots ya detectan.
+- WhatsApp se mantiene **además** de Odoo: si Odoo está caído o hay un
+  bloqueador, el lead no se pierde.
+
+---
+
 ## 4. Lo que mantiene la web invisible (y es intencionado)
 
 Hay **cuatro frenos** puestos a propósito. No se tocan a mano:

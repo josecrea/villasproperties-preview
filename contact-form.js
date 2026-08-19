@@ -44,8 +44,24 @@
       if (mensaje) lineas.push(mensaje);
       if (tel) lineas.push('Mi teléfono: ' + tel);
 
+      var texto = lineas.join('\n');
+
+      /* Igual que en el brief: el lead entra en Odoo aunque no se llegue a
+         pulsar enviar en WhatsApp. */
+      if (window.VPLead) {
+        var c = VPLead.repartirContacto(tel);
+        VPLead.enviar({
+          asunto: 'Contacto web · ' + (intencion || 'consulta'),
+          nombre: nombre,
+          email: c.email,
+          telefono: c.telefono || tel,
+          descripcion: texto,
+          honeypot: (document.getElementById('vp_hp') || {}).value,
+        });
+      }
+
       var url = 'https://api.whatsapp.com/send/?phone=' + TEL
-        + '&text=' + encodeURIComponent(lineas.join('\n'));
+        + '&text=' + encodeURIComponent(texto);
       window.open(url, '_blank', 'noopener');
     };
 

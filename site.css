@@ -2289,3 +2289,14 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   .bankcifras > div { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
   .bankcifras > div:last-child { border-bottom: 0; }
 }
+
+/* Honeypot: fuera de la vista pero NO con display:none, que muchos bots ya
+   detectan. Sin tamaño y fuera de pantalla: una persona no lo ve ni lo tabula
+   —lleva tabindex -1— y un bot que rellene todo cae. */
+.vp-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

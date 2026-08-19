@@ -288,7 +288,7 @@
             <div class="eye">Hablar con un asesor</div>
             <h3>¿La vemos?</h3>
             <p class="muted">Te contamos lo que no está en el anuncio: estado real, comunidad, documentación y margen de negociación.</p>
-            <a class="btn green" href="${waLink}" target="_blank" rel="noopener">WhatsApp ↗</a>
+            <a class="btn green" href="${waLink}" target="_blank" rel="noopener">WhatsApp ↗</a><a class="btn" href="finance-lab.html?precio=${property.price}">Calcular financiación</a>
             <a class="btn" href="contact.html">Solicitar visita</a>
             <a class="btn" href="${U(property.url)}" target="_blank" rel="noopener">Ver en idealista ↗</a>
           </div>
