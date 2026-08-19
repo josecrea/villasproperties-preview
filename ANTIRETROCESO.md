@@ -115,10 +115,13 @@ portada. Ni analítica, ni publicidad, ni cookies propias.
 > **y subir `VERSION` en `vp-consent.js`**. Si no se sube, nadie vuelve a ser
 > preguntado y el consentimiento guardado deja de ser válido.
 
-El consentimiento tiene efecto real y verificable: "solo lo esencial" no carga
-el iframe → **cero cookies**. Por eso el iframe va con `data-src` y no con
-`src`. Solo se pregunta donde hay terceros (la portada), detectado con
-`.hero-vimeo[data-src], [data-tercero]`.
+> ✅ **19-08-2026: ya no hay terceros.** El hero pasó de un iframe de Vimeo a
+> vídeo propio autoalojado, así que la web quedó a **CERO cookies y CERO
+> dominios externos** y el aviso **dejó de aparecer solo**: `vp-consent.js`
+> comprueba si hay terceros con `.hero-vimeo[data-src], [data-tercero]` y ya no
+> encuentra ninguno. El mecanismo se conserva entero: el día que se añada un
+> tercero (analítica, un mapa embebido, otro reproductor), basta con marcarlo
+> con `data-tercero` y el aviso vuelve solo.
 
 ---
 
@@ -129,6 +132,20 @@ el iframe → **cero cookies**. Por eso el iframe va con `data-src` y no con
 | `inversores-web.mp4` | `invest.html`, 1ª sección tras el hero | **a sangre + arranque automático** |
 | `vender-hoy.mp4` | `sell.html` | dos columnas, play a demanda |
 | `villas-tenerife.mp4` | portada, antes del CTA | play a demanda |
+| `hero-desktop.mp4` / `hero-mobile.mp4` | fondo del hero de la portada | bucle mudo, sin terceros |
+
+**El hero ya no usa Vimeo.** El vídeo propio es el único metraje recibido **sin
+texto quemado**, que era justo lo que impedía usar los otros de fondo. Se
+recortan los primeros 20 s de los 38 limpios (el logo entra a los 40 s).
+
+⚠️ El `<video>` del hero necesita **la clase `.active`**, no solo
+`data-variant`: el CSS antiguo lo tiene en `display:none` y solo `.hero-video.active`
+lo muestra. Con `data-variant` a secas se queda en 0×0 y ni siquiera arranca,
+porque un elemento de tamaño cero no dispara el IntersectionObserver.
+
+⚠️ **El velo oscuro del hero es obligatorio con este metraje.** Es cielo y arena
+a plena luz, y el titular va en tonos pastel: sin reforzar el degradado las dos
+primeras líneas son ilegibles.
 
 ### 3.1 Trampas al añadir un vídeo nuevo
 

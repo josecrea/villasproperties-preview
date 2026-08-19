@@ -172,6 +172,12 @@
     return new Promise(function (res) {
       var con = navigator.connection || {};
       if (con.saveData === true || /(^|-)2g/.test(con.effectiveType || '')) return res();
+      /* Quien pide menos movimiento no recibe el vídeo del hero (lo decide
+         vp-video.js), así que aquí no hay nada que esperar: sin esta salida el
+         preloader se quedaría colgado hasta el tope de 8 s por un fichero que
+         nadie va a cargar. */
+      if (window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return res();
 
       var v = document.querySelector('video');
       if (v) {

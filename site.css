@@ -1999,3 +1999,17 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   .nap > div { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
   .nap > div:last-child { border-bottom: 0; }
 }
+
+/* El vídeo propio del hero es MUCHO más claro que el que había antes (cielo y
+   arena a plena luz), y el titular va en tonos pastel: con el velo original
+   —un degradado que solo carga en la parte baja— las primeras líneas quedaban
+   ilegibles. Se añade una capa uniforme por encima del vídeo, no del hero
+   entero, para no ensuciar el fallback de degradado cuando no hay vídeo. */
+.hero .film:has(.hero-video.active)::after {
+  background:
+    linear-gradient(to top, rgba(6, 9, 8, .88), rgba(6, 9, 8, .30) 58%, rgba(6, 9, 8, .42)),
+    linear-gradient(90deg, rgba(6, 9, 8, .42), rgba(6, 9, 8, .06) 62%);
+}
+/* Sin :has() —Safari antiguo, Firefox ESR— el velo uniforme se aplica igual a
+   través del propio vídeo, que va bajo el texto. */
+.hero-video.active { filter: brightness(.82) saturate(1.05); }

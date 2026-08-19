@@ -36,10 +36,15 @@
   };
 
   var cargar = function (video) {
-    var fuente = video.querySelector('source[data-src]');
-    if (!fuente) return false;
-    fuente.src = fuente.getAttribute('data-src');
-    fuente.removeAttribute('data-src');
+    /* Varios <source>: el hero lleva uno para móvil y otro para escritorio, y
+       es el navegador quien elige según el `media`. Hay que soltarlos todos, no
+       solo el primero, o en escritorio se serviría el recorte vertical. */
+    var fuentes = video.querySelectorAll('source[data-src]');
+    if (!fuentes.length) return false;
+    Array.prototype.forEach.call(fuentes, function (f) {
+      f.src = f.getAttribute('data-src');
+      f.removeAttribute('data-src');
+    });
     video.load();
     return true;
   };
