@@ -1891,3 +1891,9 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   .videosplit { grid-template-columns: 1fr; }
   .vidvert { max-width: 300px; margin-inline: auto; }
 }
+
+/* El bloque de vídeo que va pegado al hero: sin el respiro de arriba, para que
+   la imagen en movimiento asome en cuanto se pasa la portada y no haya que
+   bajar a ciegas hasta encontrarla. */
+.filmreel--top { padding-top: clamp(18px, 2.5vw, 34px); }
+.filmreel--top .head { margin-top: clamp(22px, 3vw, 40px); margin-bottom: 0; }
