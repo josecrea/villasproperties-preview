@@ -2300,3 +2300,15 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   height: 1px;
   overflow: hidden;
 }
+
+/* Nota metodológica de los artículos: va marcada porque no es el argumento,
+   es la letra pequeña que hace que el argumento se sostenga. */
+.post-note {
+  margin: 22px 0;
+  padding: 16px 18px;
+  border-left: 3px solid var(--sand);
+  background: var(--paper-2);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}

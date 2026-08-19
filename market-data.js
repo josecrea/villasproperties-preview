@@ -10,9 +10,9 @@
 */
 window.VP_MARKET = {
   "meta": {
-    "updated": "2026-07-24",
+    "updated": "2026-08-19",
     "dates": {
-      "idealista": "jun 2026",
+      "idealista": "jul 2026",
       "fotocasa": "jul 2026",
       "realadvisor": "jul 2026",
       "catastro": "2025"
@@ -22,8 +22,8 @@ window.VP_MARKET = {
   "municipios": {
     "adeje": {
       "name": "Adeje",
-      "eurM2": 4607,
-      "var1a": 3.9,
+      "eurM2": 4756,
+      "var1a": 3.4,
       "piso": 4484,
       "casa": 5334,
       "fc": 4869,
@@ -33,41 +33,112 @@ window.VP_MARKET = {
       "catastroCV": 1917,
       "zonas": [
         {
+          "id": "la-caleta",
+          "label": "La Caleta",
+          "eurM2": 7469,
+          "fiabilidad": "solida",
+          "mes": "jul 2026",
+          "var1a": 3.9
+        },
+        {
+          "id": "playa-de-las-americas-adeje",
+          "label": "Playa de las Américas (Adeje)",
+          "eurM2": 6000,
+          "fiabilidad": "solida",
+          "mes": "jul 2026",
+          "var1a": 3.6
+        },
+        {
+          "id": "san-eugenio-bajo",
+          "label": "San Eugenio Bajo",
+          "eurM2": 5944,
+          "fiabilidad": "solida",
+          "mes": "jul 2026",
+          "var1a": 10.5
+        },
+        {
+          "id": "playa-de-fanabe",
+          "label": "Playa de Fañabé",
+          "eurM2": 5917,
+          "fiabilidad": "solida",
+          "mes": "jul 2026",
+          "var1a": -2.4
+        },
+        {
+          "id": "torviscas-bajo",
+          "label": "Torviscas Bajo",
+          "eurM2": 5412,
+          "fiabilidad": "solida",
+          "mes": "jul 2026",
+          "var1a": 0
+        },
+        {
           "id": "costa-adeje",
           "label": "Costa Adeje",
-          "eurM2": 5265
+          "eurM2": 5309,
+          "fiabilidad": "solida",
+          "var1a": 3.4,
+          "mes": "jul 2026"
+        },
+        {
+          "id": "fanabe-alto",
+          "label": "Playa de Fañabé Alto",
+          "eurM2": 4773,
+          "fiabilidad": "solida",
+          "var1a": 9.6,
+          "mes": "jul 2026"
+        },
+        {
+          "id": "san-eugenio-alto",
+          "label": "San Eugenio Alto",
+          "eurM2": 4684,
+          "fiabilidad": "solida",
+          "mes": "jul 2026",
+          "var1a": 2.7
         },
         {
           "id": "callao-salvaje",
-          "label": "Callao Salvaje - Playa Paraíso",
-          "eurM2": 4298
+          "label": "Playa Paraíso",
+          "eurM2": 4496,
+          "fiabilidad": "solida",
+          "var1a": 5.3,
+          "mes": "jul 2026"
+        },
+        {
+          "id": "torviscas-centro-y-alto",
+          "label": "Torviscas Centro y Alto",
+          "eurM2": 4154,
+          "fiabilidad": "solida",
+          "mes": "jul 2026",
+          "var1a": -4.2
         },
         {
           "id": "casco-adeje",
           "label": "Casco urbano de Adeje",
-          "eurM2": 3425
-        },
-        {
-          "id": "fanabe-alto",
-          "label": "Fañabé alto - Ifonche y Benítez",
-          "eurM2": 3256
+          "eurM2": 3425,
+          "mes": "jun 2026",
+          "fiabilidad": "historica"
         },
         {
           "id": "tijoco",
           "label": "Tijoco - La Quinta - Caucho",
-          "eurM2": 2722
+          "eurM2": 2722,
+          "mes": "jun 2026",
+          "fiabilidad": "historica"
         },
         {
           "id": "armenime",
           "label": "Armeñime",
-          "eurM2": 2529
+          "eurM2": 2529,
+          "mes": "jun 2026",
+          "fiabilidad": "historica"
         }
       ]
     },
     "arona": {
       "name": "Arona",
-      "eurM2": 3804,
-      "var1a": 4.4,
+      "eurM2": 4038,
+      "var1a": 2,
       "piso": 3823,
       "casa": 3402,
       "fc": 4266,
@@ -79,49 +150,96 @@ window.VP_MARKET = {
         {
           "id": "las-americas",
           "label": "Playa de las Américas",
-          "eurM2": 6233
+          "eurM2": 6085,
+          "fiabilidad": "solida",
+          "var1a": 0.6,
+          "mes": "jul 2026"
         },
         {
           "id": "los-cristianos",
-          "label": "Los Cristianos - Palm Mar",
-          "eurM2": 4519
+          "label": "Los Cristianos",
+          "eurM2": 4784,
+          "fiabilidad": "solida",
+          "var1a": 4,
+          "mes": "jul 2026"
+        },
+        {
+          "id": "palm-mar",
+          "label": "Palm Mar",
+          "eurM2": 4057,
+          "fiabilidad": "orientativa",
+          "mes": "jul 2026",
+          "var1a": 5.8
         },
         {
           "id": "costa-silencio",
-          "label": "Costa del Silencio - Las Galletas",
-          "eurM2": 3448
+          "label": "Costa del Silencio-Las Galletas",
+          "eurM2": 3404,
+          "fiabilidad": "solida",
+          "var1a": 4.9,
+          "mes": "jul 2026"
         },
         {
           "id": "chayofa",
           "label": "Chayofa",
-          "eurM2": 3062
+          "eurM2": 3109,
+          "fiabilidad": "orientativa",
+          "var1a": -8.4,
+          "mes": "jul 2026"
         },
         {
           "id": "cho-guaza",
-          "label": "Cho - Guaza",
-          "eurM2": 2801
+          "label": "Cho-Guaza",
+          "eurM2": 2900,
+          "fiabilidad": "orientativa",
+          "var1a": 3.6,
+          "mes": "jul 2026"
         },
         {
-          "id": "valle-san-lorenzo",
-          "label": "Valle San Lorenzo",
-          "eurM2": 2618
+          "id": "las-rosas",
+          "label": "Las Rosas",
+          "eurM2": 2821,
+          "fiabilidad": "insuficiente",
+          "mes": "jul 2026",
+          "var1a": 14.9
+        },
+        {
+          "id": "cabo-blanco",
+          "label": "Cabo Blanco",
+          "eurM2": 2744,
+          "fiabilidad": "orientativa",
+          "mes": "jul 2026",
+          "var1a": 21.6
+        },
+        {
+          "id": "arona-pueblo",
+          "label": "Arona Pueblo",
+          "eurM2": 2600,
+          "fiabilidad": "insuficiente",
+          "mes": "jul 2026"
         },
         {
           "id": "el-fraile",
           "label": "El Fraile",
-          "eurM2": 2553
+          "eurM2": 2535,
+          "fiabilidad": "orientativa",
+          "var1a": 11.2,
+          "mes": "jul 2026"
         },
         {
-          "id": "arona-pueblo",
-          "label": "Arona pueblo",
-          "eurM2": 2370
+          "id": "valle-san-lorenzo",
+          "label": "Valle San Lorenzo",
+          "eurM2": 2441,
+          "fiabilidad": "orientativa",
+          "var1a": 7.1,
+          "mes": "jul 2026"
         }
       ]
     },
     "granadilla": {
       "name": "Granadilla de Abona",
-      "eurM2": 2806,
-      "var1a": -0.5,
+      "eurM2": 3037,
+      "var1a": 2.1,
       "piso": 2711,
       "casa": 2665,
       "fc": 3270,
@@ -133,29 +251,40 @@ window.VP_MARKET = {
         {
           "id": "el-medano",
           "label": "El Médano",
-          "eurM2": 3675
+          "eurM2": 3858,
+          "fiabilidad": "solida",
+          "var1a": 0.4,
+          "mes": "jul 2026"
         },
         {
           "id": "los-abrigos",
           "label": "Los Abrigos",
-          "eurM2": 3440
+          "eurM2": 3523,
+          "fiabilidad": "solida",
+          "var1a": 1.5,
+          "mes": "jul 2026"
         },
         {
           "id": "san-isidro",
           "label": "San Isidro",
-          "eurM2": 2345
+          "eurM2": 2457,
+          "fiabilidad": "orientativa",
+          "var1a": 11.1,
+          "mes": "jul 2026"
         },
         {
           "id": "granadilla-casco",
           "label": "Granadilla casco",
-          "eurM2": 2099
+          "eurM2": 2099,
+          "mes": "jun 2026",
+          "fiabilidad": "historica"
         }
       ]
     },
     "san-miguel": {
       "name": "San Miguel de Abona",
-      "eurM2": 3182,
-      "var1a": 10.2,
+      "eurM2": 3241,
+      "var1a": 1.9,
       "piso": 2994,
       "casa": 2954,
       "fc": 3363,
@@ -166,25 +295,41 @@ window.VP_MARKET = {
       "zonas": [
         {
           "id": "golf-del-sur",
-          "label": "Golf del Sur - Amarilla Golf",
-          "eurM2": 3550
+          "label": "Golf del Sur-Amarilla Golf",
+          "eurM2": 3622,
+          "fiabilidad": "solida",
+          "var1a": 4,
+          "mes": "jul 2026"
         },
         {
           "id": "las-chafiras",
           "label": "Las Chafiras",
-          "eurM2": 2878
+          "eurM2": 3018,
+          "fiabilidad": "orientativa",
+          "var1a": 0.1,
+          "mes": "jul 2026"
+        },
+        {
+          "id": "guargacho",
+          "label": "Guargacho",
+          "eurM2": 2637,
+          "fiabilidad": "insuficiente",
+          "mes": "jul 2026"
         },
         {
           "id": "san-miguel-casco",
-          "label": "San Miguel casco",
-          "eurM2": 2172
+          "label": "San Miguel de Abona pueblo",
+          "eurM2": 2123,
+          "fiabilidad": "orientativa",
+          "var1a": 12.2,
+          "mes": "jul 2026"
         }
       ]
     },
     "guia-isora": {
       "name": "Guía de Isora",
-      "eurM2": 4318,
-      "var1a": -4.8,
+      "eurM2": 4542,
+      "var1a": 5.3,
       "piso": 3967,
       "casa": 3562,
       "fc": 5142,
@@ -194,26 +339,43 @@ window.VP_MARKET = {
       "catastroCV": 469,
       "zonas": [
         {
+          "id": "abama",
+          "label": "Abama",
+          "eurM2": 7101,
+          "fiabilidad": "solida",
+          "mes": "jul 2026",
+          "var1a": -5.1
+        },
+        {
           "id": "playa-san-juan",
           "label": "Playa San Juan",
-          "eurM2": 5407
+          "eurM2": 3850,
+          "fiabilidad": "solida",
+          "var1a": 2.8,
+          "mes": "jul 2026"
         },
         {
           "id": "alcala",
           "label": "Alcalá",
-          "eurM2": 3650
+          "eurM2": 3846,
+          "fiabilidad": "orientativa",
+          "var1a": 25.6,
+          "mes": "jul 2026"
         },
         {
           "id": "guia-casco",
-          "label": "Guía de Isora casco",
-          "eurM2": 3119
+          "label": "Guía de Isora pueblo",
+          "eurM2": 3158,
+          "fiabilidad": "orientativa",
+          "var1a": 18.8,
+          "mes": "jul 2026"
         }
       ]
     },
     "santiago-teide": {
       "name": "Santiago del Teide",
-      "eurM2": 3713,
-      "var1a": 4.2,
+      "eurM2": 3774,
+      "var1a": 3.6,
       "piso": 3926,
       "casa": 3579,
       "fc": 4021,
@@ -225,12 +387,25 @@ window.VP_MARKET = {
         {
           "id": "los-gigantes",
           "label": "Acantilados de Los Gigantes",
-          "eurM2": 4480
+          "eurM2": 4619,
+          "fiabilidad": "solida",
+          "var1a": 6.3,
+          "mes": "jul 2026"
         },
         {
           "id": "puerto-santiago",
           "label": "Puerto de Santiago",
-          "eurM2": 3753
+          "eurM2": 3729,
+          "fiabilidad": "solida",
+          "var1a": 5,
+          "mes": "jul 2026"
+        },
+        {
+          "id": "tamaimo-arguayo",
+          "label": "Tamaimo-Arguayo",
+          "eurM2": 2736,
+          "fiabilidad": "insuficiente",
+          "mes": "jul 2026"
         }
       ]
     }
