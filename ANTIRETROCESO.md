@@ -291,6 +291,32 @@ por WhatsApp y quien atienda lo tiene ya con el inmueble delante.
 
 ---
 
+## 3sexies. 🔴 El enlace de socio da DINERO: no tocarlo a la ligera
+
+Villa's **cobra comisión por cada cierre** que entra por la financiación. La
+atribución viaja en la cadena entera:
+
+```
+/r/financiacion  →  zpr.io/hQMMAJ3X2UFp  →  form.typeform.com/to/oMUZVhWd
+                    #organizationid=19284&user_id=Villas Properties&ownername=27599282
+```
+
+`ownername=27599282` es lo que identifica a Villa's ante el socio.
+
+- **No enlazar "directamente" al formulario.** Sin esos parámetros el cierre
+  puede quedar sin atribuir: es dinero perdido y **no salta ningún error**, así
+  que nadie se entera hasta que no llega la liquidación.
+- **No saltarse el acortador** aunque parezca un rodeo: es la cadena que el
+  socio reconoce. El destino final está escrito en `r/financiacion/index.html`
+  solo como respaldo por si `zpr.io` dejara de responder.
+- El CTA "Estudiad mi caso, gratis" de `finance.html` apunta ahí. Si alguien lo
+  cambia por un WhatsApp porque "convierte mejor", se pierde la comisión.
+- `/financiacion/` se conserva porque **esa URL está indexada** en la web
+  actual: al migrar no puede quedarse en 404. Hoy redirige a `finance.html` con
+  meta refresh; en el dominio definitivo debe ser una **301 de servidor**.
+
+---
+
 ## 4. Lo que mantiene la web invisible (y es intencionado)
 
 Hay **cuatro frenos** puestos a propósito. No se tocan a mano:
