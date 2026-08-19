@@ -31,6 +31,19 @@ const DOMINIO = 'https://josecrea.github.io/villasproperties-preview';
 /* Coordenadas REALES de cada municipio. Las landings de la web actual llevan
    las seis las mismas —las de la empresa—, que para SEO local es como no
    ponerlas: el buscador no distingue un municipio de otro. */
+/* EL SLUG NO ES LIBRE. Estas URLs ya están indexadas en villasproperties.es:
+   si la web nueva las publica con otro nombre, al migrar dan 404 y se pierde
+   el posicionamiento acumulado, que es justo lo que se venía a conservar.
+   Se usan las de la web viva, tal cual, aunque sean más largas. */
+const SLUG = {
+  adeje: 'vender-casa-adeje',
+  arona: 'vender-casa-arona',
+  granadilla: 'vender-casa-granadilla-de-abona',
+  'san-miguel': 'vender-casa-san-miguel-de-abona',
+  'guia-isora': 'vender-casa-guia-de-isora',
+  'santiago-teide': 'vender-casa-santiago-del-teide',
+};
+
 const MUNI = {
   adeje: { geo: [28.1227, -16.7261], cp: '38670', comarca: 'Costa suroeste',
     gancho: 'Entre Costa Adeje y las medianías hay más diferencia que entre dos municipios distintos.' },
@@ -86,7 +99,7 @@ for (const [k, m] of Object.entries(MERCADO.municipios)) {
   const cfg = MUNI[k];
   if (!cfg) { console.log(`  ⚠ sin configuración: ${k}`); continue; }
   const n = m.name;
-  const fichero = `vender-casa-${k}.html`;
+  const fichero = `${SLUG[k]}.html`;
   const brecha = m.notaria ? ((m.eurM2 - m.notaria) / m.eurM2 * 100).toFixed(1).replace('.', ',') : null;
   const zonas = (m.zonas || []).slice().sort((a, b) => b.eurM2 - a.eurM2);
   const cara = zonas[0]; const barata = zonas[zonas.length - 1];
@@ -101,7 +114,7 @@ for (const [k, m] of Object.entries(MERCADO.municipios)) {
     + `<td>${z.var1a != null ? (z.var1a > 0 ? '+' : '') + String(z.var1a).replace('.', ',') + ' %' : '—'}</td></tr>`).join('');
 
   const otras = claves.filter((x) => x !== k).map((x) =>
-    `<a class="btn" href="vender-casa-${x}.html">${E(MERCADO.municipios[x].name)}</a>`).join('');
+    `<a class="btn" href="${SLUG[x]}.html">${E(MERCADO.municipios[x].name)}</a>`).join('');
 
   const schema = {
     '@context': 'https://schema.org',
@@ -227,7 +240,7 @@ const rutaSm = path.join(RAIZ, 'sitemap.xml');
 if (fs.existsSync(rutaSm)) {
   let sm = fs.readFileSync(rutaSm, 'utf8');
   for (const k of claves) {
-    const f = `vender-casa-${k}.html`;
+    const f = `${SLUG[k]}.html`;
     if (sm.includes(f)) continue;
     sm = sm.replace('</urlset>',
       `  <url><loc>${DOMINIO}/${f}</loc><lastmod>${hoy}</lastmod><priority>0.9</priority></url>\n</urlset>`);

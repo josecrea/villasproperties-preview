@@ -79,8 +79,8 @@ Y no es solo el SEO: ahí vive **contenido que la preview no tiene**.
 
 ### Pendiente
 
-- 🔴 **Faltan las 6 landings municipales** que sí tiene la web actual. Es el
-  hueco más caro: "vender casa en Adeje" es la consulta que trae vendedores.
+- ✅ **Las 6 landings municipales ya están** (`tools/build-landings.js`), con
+  los mismos slugs que las indexadas, para que la migración no genere 404.
 - 🟡 **`hreflang` 0/25 y todo en español.** El comprador del sur es
   mayoritariamente extranjero. Es lo más rentable que queda, y ya existe
   `anuncio_aleman_1.mp4` grabado sin usar.

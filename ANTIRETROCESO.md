@@ -317,6 +317,34 @@ atribución viaja en la cadena entera:
 
 ---
 
+## 3septies. Las landings municipales: EL SLUG NO ES LIBRE
+
+Las seis `vender-casa-*.html` las genera `tools/build-landings.js` desde
+`market-data.js`. Citan €/m² de anuncio, de escritura y por zona: escritas a
+mano, al mes siguiente mienten.
+
+> 🔴 **Los nombres de fichero están fijados por el SEO, no por gusto.** Estas
+> URLs ya están indexadas en villasproperties.es:
+>
+> ```
+> vender-casa-adeje                vender-casa-granadilla-de-abona
+> vender-casa-arona                vender-casa-san-miguel-de-abona
+> vender-casa-guia-de-isora        vender-casa-santiago-del-teide
+> ```
+>
+> Publicarlas con un nombre "más limpio" (`vender-casa-granadilla`) las
+> convierte en 404 el día de la migración y tira el posicionamiento acumulado,
+> que es justo lo que se venía a conservar. El mapa `SLUG` del generador existe
+> para eso: **no simplificarlo.**
+
+- **No entran en el menú.** Se alcanzan desde `sell.html` y se enlazan entre sí.
+  Seis entradas en el nav es el tope.
+- Cada una lleva **sus propias coordenadas y su código postal**. Las de la web
+  actual llevan las seis las mismas —las de la empresa—, que para SEO local es
+  como no ponerlas.
+
+---
+
 ## 4. Lo que mantiene la web invisible (y es intencionado)
 
 Hay **cuatro frenos** puestos a propósito. No se tocan a mano:
