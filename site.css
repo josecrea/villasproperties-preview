@@ -2126,3 +2126,166 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
    sticky vuelve a funcionar. Donde no se soporte, el navegador lo ignora y
    queda `visible`: no recorta, pero el carrusel funciona igual. */
 .tf-section { overflow: clip; }
+
+/* ── Selección múltiple del brief ────────────────────────────────────────
+   Casillas convertidas en fichas pulsables: con nueve opciones, una lista de
+   checkboxes se lee como un formulario de Hacienda. Y el objetivo táctil pasa
+   de los 13px de una casilla suelta a toda la ficha. */
+.chiplabel {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.chipset { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background .18s, border-color .18s, color .18s;
+}
+.chip:hover { border-color: var(--atlantic); }
+/* La casilla sigue ahí para el lector de pantalla y el teclado: se hace
+   pequeña, no se oculta, porque `display:none` la sacaría del recorrido. */
+.chip input {
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  margin: 0;
+  padding: 0;
+  flex: none;
+  accent-color: var(--atlantic);
+}
+.chip:has(input:checked) {
+  background: var(--atlantic);
+  border-color: var(--atlantic);
+  color: #fff;
+}
+.chip:has(input:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
+.chipnota {
+  display: block;
+  margin-top: 9px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Botones sociales con su color de marca ──────────────────────────────
+   Cada red tiene su color y su gente lo reconoce antes de leer la palabra.
+   El color va en el borde y en el hover, no en el relleno permanente: cuatro
+   rectángulos saturados en el pie del sitio le robarían el sitio al contenido.
+   Al pasar por encima, cada uno se llena del suyo. */
+.footer p:has(.social) { display: flex; flex-wrap: wrap; gap: 8px; }
+.social {
+  --c: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+  border-radius: var(--radius);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--c) !important;
+  background: transparent;
+  transition: background .2s, color .2s, border-color .2s;
+}
+/* El punto de color: lee la marca de un vistazo aunque no se pase el ratón. */
+.social::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--fondo, var(--c));
+  flex: none;
+}
+.social:hover {
+  background: var(--fondo, var(--c));
+  border-color: transparent;
+  color: var(--sobre, #fff) !important;
+}
+.social:hover::before { background: var(--sobre, #fff); }
+.social:focus-visible { outline: 2px solid var(--c); outline-offset: 3px; }
+
+/* Colores oficiales de cada red. */
+.social--ig { --c: #E4405F; --fondo: linear-gradient(45deg, #F58529, #DD2A7B 45%, #8134AF 75%, #515BD4); }
+.social--fb { --c: #1877F2; --fondo: #1877F2; }
+.social--tt { --c: #111; --fondo: #111; }
+.social--yt { --c: #FF0000; --fondo: #FF0000; }
+.social--li { --c: #0A66C2; --fondo: #0A66C2; }
+/* TikTok es negro: en el pie claro se distingue por sus dos acentos. */
+.social--tt::before { background: linear-gradient(135deg, #25F4EE 45%, #FE2C55 55%); }
+.social--tt:hover::before { background: linear-gradient(135deg, #25F4EE 45%, #FE2C55 55%); }
+
+/* ── Carrusel de entidades ───────────────────────────────────────────────
+   Cinta infinita: el track lleva la tira de logos TRES veces y se desplaza un
+   tercio exacto, así el bucle no tiene costura. La máscara de los extremos
+   evita que los logos aparezcan y desaparezcan de golpe contra el borde. */
+.bank-slider {
+  overflow: hidden;
+  margin-top: clamp(26px, 4vw, 44px);
+  padding-block: 10px;
+  border-block: 1px solid var(--line);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.bank-track {
+  display: flex;
+  width: max-content;
+  animation: bankScroll 32s linear infinite;
+}
+.bank-item {
+  width: clamp(150px, 16vw, 210px);
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding-inline: 10px;
+}
+.bank-item img {
+  height: 32px;
+  width: auto;
+  max-width: 100%;
+  /* Los logos vienen en sus colores de marca; en gris compiten menos entre sí
+     y con el resto de la página. Recuperan su color al pasar por encima. */
+  filter: grayscale(1) opacity(.62);
+  transition: filter .25s;
+}
+.bank-slider:hover .bank-item img { filter: none; }
+@keyframes bankScroll { to { transform: translateX(-33.333%); } }
+
+/* Quien pide menos movimiento no ve una cinta girando sin parar: los logos se
+   quedan quietos y se reparten en rejilla, que se leen igual de bien. */
+@media (prefers-reduced-motion: reduce) {
+  .bank-track { animation: none; flex-wrap: wrap; width: 100%; justify-content: center; }
+  .bank-item:nth-child(n+6) { display: none; }   /* la tira se repite 3 veces */
+  .bank-item img { filter: grayscale(1) opacity(.75); }
+}
+
+.bankcifras {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: clamp(22px, 3vw, 34px);
+  border-top: 1px solid var(--line);
+}
+.bankcifras > div { padding: 16px 14px 0 0; border-right: 1px solid var(--line); }
+.bankcifras > div:last-child { border-right: 0; }
+.bankcifras strong { display: block; font-size: clamp(26px, 3.2vw, 42px); font-weight: 400; letter-spacing: -.03em; }
+.bankcifras small { display: block; margin-top: 4px; font-size: 11px; color: var(--muted); }
+.bankpie { margin-top: 16px; font-size: 12px; max-width: 62ch; }
+
+@media (max-width: 560px) {
+  .bankcifras { grid-template-columns: 1fr; }
+  .bankcifras > div { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+  .bankcifras > div:last-child { border-bottom: 0; }
+}
