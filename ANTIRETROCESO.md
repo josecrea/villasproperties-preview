@@ -194,10 +194,12 @@ que es señal fuerte de SEO: el buscador no lee rótulos incrustados.
   el aviso de privacidad: ahora mismo dice que no se almacena nada.
 - **Solo el nombre es obligatorio.** Pedir más campos en un formulario de
   contacto solo consigue que la gente se vaya.
-- **El hueco de la foto del fundador está marcado a propósito.** En el sitio
-  donde va la cara del responsable, o está la suya o no hay ninguna: una foto
-  de banco de imágenes ahí destruye justo la confianza que la sección busca.
-  Sustituir `.ceofoto__hueco` por un retrato propio en 3:4.
+- **La foto ya está puesta**: `assets/team/valeria-villa.webp` (47 KB, 3:4, con
+  JPG de respaldo). Lleva `width`/`height` en el HTML para reservar el sitio
+  antes de cargar y que no salte la maquetación.
+- **El nombre y el cargo son dato, no suposición**: Valeria Villa, CEO de
+  Villa's Properties. En la primera versión puse el de Jose por deducción propia
+  y estaba mal. Si cambia, se cambia también el `alt` de la imagen.
 - **Los datos de contacto son reales y verificados**: +34 667 384 965,
   info@villasproperties.es, VILLVERG SL · B19430115. No inventar credenciales,
   años de experiencia ni número de operaciones en el texto del fundador.

@@ -2013,3 +2013,14 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 /* Sin :has() —Safari antiguo, Firefox ESR— el velo uniforme se aplica igual a
    través del propio vídeo, que va bajo el texto. */
 .hero-video.active { filter: brightness(.82) saturate(1.05); }
+
+/* La foto ya está: el hueco marcado desaparece. width/height van en el HTML
+   para reservar el sitio antes de que cargue y que no salte la maquetación. */
+.ceofoto__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
