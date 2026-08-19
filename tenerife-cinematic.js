@@ -37,7 +37,24 @@
   }
   function onScroll() { if (ticking) return; ticking = true; window.requestAnimationFrame(function () { computeIndex(); ticking = false; }); }
   function enable() { setActive(0); computeIndex(); window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll, { passive: true }); }
-  function disable() { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); layers.forEach(function (l) { l.classList.add('is-active'); }); captions.forEach(function (c) { c.classList.add('is-active'); }); }
+  /* Con "reducir movimiento" no hay recorrido que seguir, así que la sección
+     pasa de escena a rejilla. El CSS oculta .tf-stage —las cinco fotos van
+     superpuestas y ahí no tienen sentido—, pero dejar solo texto sobre negro
+     convertía el bloque en un pasillo oscuro larguísimo. Aquí cada zona
+     recupera SU foto, pegada a su propio texto. */
+  function disable() {
+    window.removeEventListener('scroll', onScroll);
+    window.removeEventListener('resize', onScroll);
+    layers.forEach(function (l) { l.classList.add('is-active'); });
+    captions.forEach(function (c, i) {
+      c.classList.add('is-active');
+      var src = layers[i] && layers[i].getAttribute('data-img');
+      if (src) {
+        c.style.backgroundImage = "url('" + src + "')";
+        c.classList.add('tf-caption--foto');
+      }
+    });
+  }
   function apply() { if (reduce.matches) disable(); else enable(); }
   apply();
   if (reduce.addEventListener) reduce.addEventListener('change', function () { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); current = -1; apply(); });

@@ -109,7 +109,7 @@
     }
     const rows = [
       ['Oferta idealista', perM2(town.eurM2)],
-      town.notaria ? ['Escritura · Notariado', perM2(town.notaria)] : null,
+      town.notaria ? ['Escritura · escriturado', perM2(town.notaria)] : null,
       town.var1a !== null && town.var1a !== undefined ? ['12 meses', delta(town.var1a)] : null,
       town.catastroCV ? ['Compraventas / año', groupThousands(town.catastroCV)] : null,
     ].filter(Boolean);

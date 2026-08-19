@@ -206,6 +206,32 @@ que es señal fuerte de SEO: el buscador no lee rótulos incrustados.
 
 ---
 
+## 3ter. El menú NO está en el HTML
+
+`shell.js` construye la cabecera de las 25 páginas desde su array `NAV`, y
+`app.js` monta aparte el desplegable móvil. **Editar el `<nav>` de un HTML no
+sirve de nada**: al cargar, el JS lo sobrescribe. Si se toca el menú hay que
+tocar los dos sitios, o móvil y escritorio dejan de coincidir.
+
+Son **seis** entradas a propósito: un menú de ocho no se lee, se escanea y se
+abandona. Finance e Insights salieron del menú pero conservan tres enlaces cada
+una en el cuerpo y el pie, así que no pierden tráfico interno ni enlaces de SEO.
+
+## 3quater. Las zonas de Tenerife (`#tf-zonas`)
+
+- **La portada muestra 4 propiedades como máximo** (`TOPE_PORTADA` en `app.js`).
+  El catálogo completo sigue mostrándolas todas: son dos cosas distintas.
+- El scrollytelling mide `--tf-zones × 58vh`. Estaba a 90vh, o sea **4.050 px**:
+  cuatro pantallas y media para ver cinco fotos.
+- Esa altura va dentro de `@media (prefers-reduced-motion: no-preference)`. Si
+  se saca de ahí, se le impone el recorrido a quien pidió justo lo contrario.
+- **Con `reduced-motion` la sección era un pasillo negro**: el CSS oculta
+  `.tf-stage` —las cinco fotos van superpuestas— y quedaba solo texto sobre
+  fondo oscuro. Ahora `tenerife-cinematic.js` le devuelve a cada zona SU foto y
+  el CSS las coloca en rejilla: de 1.810 px de negro a 1.069 px con imágenes.
+
+---
+
 ## 4. Lo que mantiene la web invisible (y es intencionado)
 
 Hay **cuatro frenos** puestos a propósito. No se tocan a mano:

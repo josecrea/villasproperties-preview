@@ -270,7 +270,8 @@
 .hero-bigcircle{transform:translate3d(calc(-50% + var(--fx,0px)),calc(-50% + var(--sy,0px) + var(--fy,0px)),0) scale(var(--ss,1))!important}
 
 /* ===== Bug fixes batch ===== */
-.brand-logo{width:clamp(42px,4.3vw,58px)!important}
+/* +12%: pedido expreso, el logotipo se quedaba pequeño junto al lockup. */
+.brand-logo{width:clamp(47px,4.8vw,65px)!important}
 .is-title-l2{font-size:clamp(2rem,5.2vw,3.7rem)!important}
 .is-grid{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)}
 .header[data-theme="hero"]{background:linear-gradient(to bottom,rgba(6,9,8,.5),rgba(6,9,8,.12) 60%,transparent)!important}
@@ -2023,4 +2024,75 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   aspect-ratio: 3 / 4;
   object-fit: cover;
   border: 1px solid var(--line);
+}
+
+/* ── Zonas de Tenerife: recorrido más corto ──────────────────────────────
+   Cinco zonas a 90vh cada una daban 4.050px de scroll: cuatro pantallas y
+   media para ver cinco fotos. A 58vh el cambio se sigue leyendo y el bloque
+   deja de ser un pasillo. */
+@media (prefers-reduced-motion: no-preference) {
+  .tf-section { height: calc(var(--tf-zones) * 58vh); }
+}
+
+/* Y con "reducir movimiento", rejilla en vez de columna: las cinco zonas
+   caben de una vez, cada una con su foto detrás en lugar de texto suelto
+   sobre negro. */
+@media (prefers-reduced-motion: reduce) {
+  .tf-captions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: clamp(12px, 2vw, 20px);
+  }
+  .tf-caption { margin-bottom: 0; }
+  .tf-caption--foto {
+    position: relative;
+    min-height: 260px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+  /* Velo para que el texto se lea sobre cualquier foto. */
+  .tf-caption--foto::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(6, 9, 8, .88), rgba(6, 9, 8, .25));
+    z-index: 0;
+  }
+  .tf-caption--foto > * { position: relative; z-index: 1; }
+}
+
+/* ── La biografía ────────────────────────────────────────────────────────
+   Cinco párrafos son bastante más de lo que había: el texto pasa a mandar y
+   la foto se queda arriba en lugar de centrarse, que si no queda flotando en
+   mitad de una columna larga. */
+.ceogrid:has(.ceobio) { align-items: start; }
+.ceofoto { position: sticky; top: 110px; }
+.ceobio {
+  margin: 0 0 14px;
+  max-width: 62ch;
+  color: var(--muted);
+  line-height: 1.6;
+}
+/* La entradilla en mayor cuerpo: es la que engancha y da el origen. */
+.ceobio--entrada {
+  font-size: clamp(17px, 1.6vw, 21px);
+  line-height: 1.5;
+  color: var(--ink);
+  margin-bottom: 18px;
+}
+/* Y el cierre, que es la frase que resume todo, no se deja como una línea más. */
+.ceobio--cierre {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: clamp(16px, 1.5vw, 19px);
+  color: var(--ink);
+  font-style: italic;
+}
+@media (max-width: 820px) {
+  .ceofoto { position: static; }
 }

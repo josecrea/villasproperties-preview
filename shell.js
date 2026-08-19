@@ -8,14 +8,17 @@
 (() => {
   'use strict';
 
+  /* Seis y no ocho: un menú de ocho no se lee, se escanea y se abandona.
+     Quedan las puertas de negocio. Finance sale porque es un paso DENTRO de
+     comprar o invertir, no un destino; Insights porque el contenido se alcanza
+     desde Intelligence y desde el pie. Ambas siguen enlazadas en el footer y
+     en el cuerpo, así que no pierden ni tráfico interno ni enlaces para SEO. */
   const NAV = [
     ['properties.html', 'Properties'],
     ['sell.html', 'Sell'],
     ['buy.html', 'Buy'],
-    ['finance.html', 'Finance'],
     ['invest.html', 'Invest'],
     ['intelligence.html', 'Intelligence'],
-    ['insights.html', 'Insights'],
     ['valuation.html', 'Valuation'],
   ];
 
