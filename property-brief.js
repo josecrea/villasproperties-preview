@@ -103,7 +103,14 @@
     ];
     if (d.briefTipo.length) resumen.push(d.briefTipo.join(' / '));
     if (d.briefVistas.length) resumen.push(`vistas ${d.briefVistas.join(' / ').toLowerCase()}`);
-    status.innerHTML = `✓ Brief enviado: <strong>${resumen.join('</strong> · <strong>')}</strong>.`
+    /* El resumen incluye texto que ha escrito el visitante —la zona, su nombre—,
+       así que va escapado antes de tocar innerHTML. Sin esto, escribir una
+       etiqueta en el campo "zona" la ejecutaba: XSS comprobado con
+       <img src=x onerror=...>. Y el brief se guarda en localStorage y se
+       restaura al volver, así que el payload persistía entre visitas. */
+    const E = (t) => (window.VPSafe ? VPSafe.esc(t) : String(t ?? '')
+      .replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])));
+    status.innerHTML = `✓ Brief enviado: <strong>${resumen.map(E).join('</strong> · <strong>')}</strong>.`
       + ' Se ha abierto WhatsApp con el mensaje: revísalo antes de darle a enviar.';
   });
 

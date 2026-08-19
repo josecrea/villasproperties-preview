@@ -2295,10 +2295,16 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
    —lleva tabindex -1— y un bot que rellene todo cae. */
 .vp-hp {
   position: absolute;
-  left: -9999px;
   width: 1px;
   height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
   overflow: hidden;
+  /* clip-path en lugar de left:-9999px: aquello ensanchaba el documento y
+     provocaba scroll horizontal en pantallas de 320px. */
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* Nota metodológica de los artículos: va marcada porque no es el argumento,
@@ -2352,3 +2358,17 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 @media (max-width: 560px) {
   .capsplit .capabilities { grid-template-columns: 1fr; }
 }
+
+/* ── Pantallas de 320px (iPhone SE, Galaxy S9+) ──────────────────────────
+   A ese ancho el botón de menú se salía 21px y provocaba scroll horizontal en
+   cuatro páginas. `vp-touch` no lo cazaba porque empezaba a medir en 360. */
+@media (max-width: 340px) {
+  .headerin { gap: 10px; }
+  .menu-toggle { padding: 7px 8px; font-size: 8px; letter-spacing: .04em; }
+  .wordmark { font-size: 10px; letter-spacing: .16em; }
+  .brand { gap: 9px; }
+  .brand-logo { width: 38px !important; }
+}
+/* Los orbes son decoración: si se salen, que los recorte su sección en lugar
+   de empujar la página. */
+.hero, .section { overflow-x: clip; }

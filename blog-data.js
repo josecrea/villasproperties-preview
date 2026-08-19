@@ -4,10 +4,20 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-prueba-de-publicacion-automatica.html',
+    category: 'Mercado',
+    title: "Prueba de publicación automática",
+    dek: "Un artículo de prueba para verificar que el sistema de publicación funciona de punta a punta.",
+    date: '2026-08-19',
+    read: '3 min',
+    accent: 'atlantic',
+    figure: 'chart',
+  },
+  {
     slug: 'post-mapa-metro-cuadrado.html',
     category: 'Mercado',
     title: 'El mapa del metro cuadrado en Tenerife Sur',
-    dek: 'De 6.233 €/m² en Playa de las Américas a 2.099 € en el casco de Granadilla: tres veces de diferencia dentro de la misma comarca, y a veces del mismo municipio.',
+    dek: 'De 7.469 €/m² en La Caleta a 2.123 € en el casco de San Miguel: tres veces y media de diferencia dentro de la misma comarca, y a veces del mismo municipio.',
     date: '2026-08-18',
     read: '6 min',
     featured: true,
@@ -18,7 +28,7 @@ window.VP_POSTS = [
     slug: 'post-anuncio-vs-escritura.html',
     category: 'Venta',
     title: 'Lo que pides y lo que se firma',
-    dek: 'El precio de anuncio y el de escritura no son el mismo mercado. En Arona la diferencia media es del 18%; en otros municipios el dato dice algo más incómodo.',
+    dek: 'El precio de anuncio y el de escritura no son el mismo mercado. En Arona la diferencia media es del 22%; en otros municipios el dato dice algo más incómodo.',
     date: '2026-08-18',
     read: '7 min',
     accent: 'atlantic',
