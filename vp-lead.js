@@ -73,5 +73,56 @@ window.VPLead = (function () {
     return { telefono: t };
   };
 
+  /* ---------- clics a WhatsApp ----------
+   * Quien pulsa WhatsApp sobre un inmueble concreto es el lead más caliente que
+   * hay: ya sabe cuál quiere. El mensaje llega por WhatsApp, pero el aviso
+   * entra en el CRM en el mismo instante y con la ficha delante, así que quien
+   * atienda no empieza de cero.
+   *
+   * Se registra SOLO cuando hay contexto —un inmueble, una zona, un precio—.
+   * Un clic suelto en el botón flotante no crea nada: llenar el CRM de leads
+   * vacíos es la forma más rápida de que nadie vuelva a mirarlo. */
+  var yaAvisado = {};
+
+  var vigilarWhatsApp = function () {
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest && e.target.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
+      if (!a) return;
+
+      var ficha = a.closest('.property, .pmain, .phero, [data-ref]');
+      if (!ficha) return;                       // sin contexto no se registra
+
+      var ref = (ficha.getAttribute('data-ref')
+        || (ficha.querySelector('[data-ref]') || {}).dataset?.ref || '').trim();
+      var titulo = (ficha.querySelector('h1, h3') || {}).textContent || '';
+      var precio = (ficha.querySelector('.price, .pprice') || {}).textContent || '';
+      titulo = titulo.trim().replace(/\s+/g, ' ').slice(0, 90);
+      if (!titulo) return;
+
+      var clave = ref + titulo;
+      if (yaAvisado[clave]) return;             // un clic, un aviso
+      yaAvisado[clave] = true;
+
+      enviar({
+        asunto: 'Interés por WhatsApp · ' + titulo,
+        descripcion: [
+          'Alguien ha pulsado WhatsApp desde la ficha de este inmueble.',
+          '',
+          'Inmueble: ' + titulo,
+          ref ? 'Referencia: ' + ref : '',
+          precio ? 'Precio: ' + precio.trim() : '',
+          'Página: ' + location.href,
+          '',
+          'El contacto llega por WhatsApp: este aviso solo sirve para que lo',
+          'tengas con la ficha delante antes de que escriba.',
+        ].filter(Boolean).join('\n'),
+      });
+    }, true);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', vigilarWhatsApp);
+  } else { vigilarWhatsApp(); }
+
   return { enviar: enviar, repartirContacto: repartirContacto, EQUIPO: EQUIPO_VILLAS };
 })();

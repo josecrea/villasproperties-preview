@@ -275,6 +275,20 @@ credenciales en el navegador y sin tocar el servidor**.
 - WhatsApp se mantiene **además** de Odoo: si Odoo está caído o hay un
   bloqueador, el lead no se pierde.
 
+**Qué manda lead y qué no**, que es una decisión, no un olvido:
+
+| Origen | ¿Lead? |
+|---|---|
+| Valorador, brief y contacto | sí — captan nombre y teléfono |
+| Clic en WhatsApp **desde una ficha** | sí — con el inmueble, la referencia y el precio |
+| Clic en el botón flotante de WhatsApp | **no** — no hay contexto |
+| Calculadoras (finance-lab, compare, decision-lab, market-impact, buy) | **no** — no captan contacto |
+
+Las calculadoras no crean lead a propósito: sin nombre ni teléfono quedaría una
+ficha vacía, y llenar el CRM de leads sin contacto es la forma más rápida de
+que nadie vuelva a mirarlo. El clic en ficha sí, porque el mensaje va a llegar
+por WhatsApp y quien atienda lo tiene ya con el inmueble delante.
+
 ---
 
 ## 4. Lo que mantiene la web invisible (y es intencionado)

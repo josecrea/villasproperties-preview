@@ -434,6 +434,20 @@
       lead.email ? `Email: ${lead.email}` : null,
     ].filter((line) => line !== null).join('\n');
 
+    /* El lead entra en Odoo con la valoración ya calculada: quien lo atienda
+       ve el número de partida antes de descolgar. Va antes del window.open
+       porque esa llamada puede acabar en otra pestaña con foco. */
+    if (window.VPLead) {
+      VPLead.enviar({
+        asunto: `Valoración · ${$('#vMunicipality').options[$('#vMunicipality').selectedIndex].text} · ${$('#vSurface').value} m²`,
+        nombre: lead.name,
+        email: lead.email,
+        telefono: lead.phone,
+        descripcion: message,
+        honeypot: (document.getElementById('vp_hp') || {}).value,
+      });
+    }
+
     /* window.open dentro del gesto del usuario: si no, el navegador lo bloquea. */
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
     goToStep('done');
