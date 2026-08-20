@@ -26,7 +26,7 @@ window.VP_MARKET = {
       "var1a": 3.4,
       "piso": 4484,
       "casa": 5334,
-      "fc": 9999,
+      "fc": 4869,
       "ra": 4834,
       "notaria": 4304,
       "catastro": 2545,
