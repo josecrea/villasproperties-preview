@@ -3,7 +3,7 @@
 
   // Static preview only: keep plaintext passwords out of the repository.
   // Replace this SHA-256 hash to rotate the preview password.
-  const BACKOFFICE_HASH = '07b4386deeed32b69f2db935dc16aa7890e4270e30a7adfee6fd34ccb17bdd64';
+  const BACKOFFICE_HASH = '474786d578b50e31275890448f77d1a45ebeef4534da30014a4a916c69c34bed';
   const SESSION_KEY = 'vpBackofficeUnlocked';
   const MAX_ATTEMPTS = 5;
   const LOCK_MS = 30000;
