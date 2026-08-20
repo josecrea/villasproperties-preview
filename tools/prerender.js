@@ -51,8 +51,12 @@ const OBJETIVOS = [
   { pagina: 'index.html', ids: ['propertyGrid'] },
 ];
 
-const MARCA_INI = '<!--prerender-->';
-const MARCA_FIN = '<!--/prerender-->';
+/* Las marcas llevan el id dentro. Sin él, al volcar el segundo contenedor de
+   una misma página la expresión casaba con las marcas del PRIMERO y lo
+   sustituía: insights.html acabó con los seis artículos dentro del destacado y
+   la rejilla vacía. */
+const marcaIni = (id) => `<!--prerender:${id}-->`;
+const marcaFin = (id) => `<!--/prerender:${id}-->`;
 
 (async () => {
   const navegador = await chromium.launch({ channel: 'chrome' });
@@ -86,12 +90,25 @@ const MARCA_FIN = '<!--/prerender-->';
       if (dentro === null) { console.log(`  ✘ ${fichero}: no hay #${id}`); continue; }
       if (!dentro.trim()) { console.log(`  · ${fichero}: #${id} sigue vacío tras renderizar`); continue; }
 
-      /* Se sustituye el contenido del contenedor, venga vacío o ya prerenderizado. */
-      const re = new RegExp(`(<(\\w+)[^>]*id="${id}"[^>]*>)([\\s\\S]*?)(</\\2>)`);
-      const m = html.match(re);
-      if (!m) { console.log(`  ✘ ${fichero}: no encuentro el marcado de #${id}`); continue; }
-
-      html = html.replace(re, `$1${MARCA_INI}${dentro}${MARCA_FIN}$4`);
+      /* Si ya hay un volcado anterior se sustituye ENTRE LAS MARCAS, nunca
+         buscando el cierre del contenedor: el contenido inyectado trae sus
+         propios </div>, así que una expresión no ávida cortaría en el primero
+         y dejaría la mitad del volcado viejo pegada al nuevo. Pasó: se
+         publicaron 9 tarjetas donde había 5. */
+      const INI = marcaIni(id); const FIN = marcaFin(id);
+      const reMarcado = new RegExp(`${INI}[\\s\\S]*?${FIN}`);
+      if (reMarcado.test(html)) {
+        html = html.replace(reMarcado, `${INI}${dentro}${FIN}`);
+      } else {
+        /* Primera vez: el contenedor está vacío, así que su cierre es el
+           siguiente y aquí sí se puede buscar por etiqueta. */
+        const reVacio = new RegExp(`(<(\\w+)[^>]*id="${id}"[^>]*>)(\\s*)(</\\2>)`);
+        if (!reVacio.test(html)) {
+          console.log(`  ✘ ${fichero}: #${id} no está vacío y no tiene marcas — revisar a mano`);
+          continue;
+        }
+        html = html.replace(reVacio, `$1${INI}${dentro}${FIN}$4`);
+      }
       const palabras = dentro.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
       console.log(`  ✔ ${fichero.padEnd(18)} #${id.padEnd(15)} ${palabras} palabras al HTML`);
       escritos += 1;
