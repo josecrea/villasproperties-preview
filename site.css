@@ -2582,3 +2582,37 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 .post-firma a { border-bottom: 1px solid currentColor; }
 .post-firma a:hover { opacity: .65; }
 
+
+/* ── El titular del artículo ─────────────────────────────────────────────
+   Este h1 se diseñó para dos o tres palabras y funciona muy bien así. Con un
+   titular importado de 91 caracteres ocupaba pantalla y media, en mayúsculas
+   de 92 px, y era ilegible.
+
+   Y había un fallo peor y menos evidente: con `line-height` por debajo de 1 y
+   texto en mayúsculas, **las tildes de Á, Í, Ú y la virgulilla de la Ñ se
+   solapan con la línea de arriba**. En "ESPAÑA" y "ÚLTIMOS" se veía recortado.
+   La caja de la mayúscula acentuada es más alta que la de la mayúscula normal,
+   y el interlineado apretado no le deja sitio.
+
+   Se escala por longitud —la clase la pone nuevo-post.js al generar, así que
+   no hace falta JavaScript en el navegador— y se da aire cuando hay acentos. */
+.post-hero h1 {
+  /* Sitio para las tildes de las mayúsculas, sin separar visiblemente las
+     líneas: el ajuste va en el padding, no en el interlineado. */
+  padding-top: .08em;
+}
+.post-hero h1.titular-largo {
+  font-size: clamp(32px, 4.6vw, 62px);
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  max-width: 24ch;
+}
+.post-hero h1.titular-muy-largo {
+  font-size: clamp(28px, 3.6vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -.02em;
+  max-width: 30ch;
+  /* A este tamaño las mayúsculas ya no aportan carácter, solo estorban la
+     lectura de una frase larga. */
+  text-transform: none;
+}

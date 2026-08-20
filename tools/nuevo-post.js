@@ -80,12 +80,33 @@ for (const req of ['titulo', 'categoria', 'entradilla']) {
   if (!meta[req]) { console.error(`Falta "${req}" en la cabecera.`); process.exit(1); }
 }
 
+/* El h1 del artículo está pensado para dos o tres palabras. Un titular
+   importado de 91 caracteres lo revienta, así que se le pone una clase según lo
+   que mida y el CSS lo escala. Se decide aquí, al generar, para no depender de
+   JavaScript en el navegador. */
+const claseTitular = (t) => {
+  const n = String(t).length;
+  if (n > 62) return ' class="titular-muy-largo"';
+  if (n > 42) return ' class="titular-largo"';
+  return '';
+};
+
 const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '')
   .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
 
 const slug = meta.slug || slugify(meta.titulo);
 const fichero = `post-${slug}.html`;
 const hoy = new Date().toISOString().slice(0, 10);
+
+/* Los artículos propios muestran "18 de agosto de 2026", no "2026-08-18". Se
+   escribe aquí para que los importados se vean igual que los de casa. */
+const MESES_ES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+  'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const fechaLarga = (iso) => {
+  const [a, m, d] = String(iso).split('-');
+  if (!a || !m || !d) return iso;
+  return `${Number(d)} de ${MESES_ES[Number(m) - 1]} de ${a}`;
+};
 
 /* Escapes: el borrador lo escribe una persona y puede llevar < o &. */
 const E = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -159,17 +180,23 @@ ${cssTag}
 <body>
 ${readbar}
 ${cabecera}
-<main>
-  <section class="pagehero"><div class="wrap">
-    <div class="eye">${E(meta.categoria)} · ${meta.lectura || '5 min'}</div>
-    <div class="post-kicker"><span class="post-firma">Por <a href="contact.html" rel="author">Valeria Villa</a>, CEO</span></div>
-    <h1>${E(meta.titulo)}</h1>
-    <p class="pagelede">${E(meta.entradilla)}</p>
+<main id="contenido">
+  <section class="post-hero"><div class="wrap">
+    <div class="post-kicker">
+      <b>${E(meta.categoria)}</b>
+      <span>${fechaLarga(meta.fecha || hoy)}</span>
+      <span>${meta.lectura || '5 min'} de lectura</span>
+      <span class="post-firma">Por <a href="contact.html" rel="author">Valeria Villa</a>, CEO</span>
+    </div>
+    <h1${claseTitular(meta.titulo)}>${E(meta.titulo)}</h1>
+    <p class="post-dek">${E(meta.entradilla)}</p>
   </div></section>
 
-  <section class="section"><div class="wrap post-body">
+  <article class="wrap">
+    <div class="post-body">
     ${aHtml(cuerpo)}
-  </div></section>
+    </div>
+  </article>
 
   <section class="section tight"><div class="wrap">
     <div class="eye">Seguir leyendo</div>

@@ -1,4 +1,4 @@
-titulo: Canarias tiene suelo para 125.000 viviendas. Once mil son casas
+titulo: Suelo para 125.000 viviendas. Once mil son casas
 tituloseo: Suelo urbano en Canarias: 125.000 viviendas
 slug: suelo-urbano-canarias-125000-viviendas
 categoria: Mercado

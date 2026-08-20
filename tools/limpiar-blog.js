@@ -55,6 +55,65 @@ const INICIO_DEL_PIE = [
 /* El placeholder del editor a veces queda PEGADO al final de una línea de
    texto real —"…vender tu casa en Tenerife! piece a escribir aquí…"— así que
    cortar por él se llevaría el cierre del artículo. Se borra en línea. */
+/* Odoo exporta algunos encabezados envueltos en negrita —"**### Compartir"— y
+   el conversor a HTML no los reconoce como encabezado: los publica tal cual,
+   con las almohadillas y los asteriscos a la vista. Se normalizan antes. */
+const NORMALIZAR = [
+  [/^\s*\*\*\s*(#{2,3})\s*/gm, '$1 '],      // **## Título  →  ## Título
+  [/^(#{2,3}[^\n]*?)\s*\*\*\s*$/gm, '$1'],   // ## Título**  →  ## Título
+  /* Marcas duplicadas: "## ## 3. Análisis". Salen cuando el original ya traía
+     almohadillas y la regla de arriba añade las suyas. El conversor solo quita
+     las tres primeras letras, así que el segundo par acaba DENTRO del <h2>. */
+  [/^(#{2,3})\s+#{2,3}\s+/gm, '$1 '],
+];
+
+/* Las negritas quedaron descompensadas al exportar: hay líneas con un número
+   IMPAR de "**", porque el <strong> de origen abría en una línea y cerraba en
+   otra. El conversor solo transforma los pares, así que el asterisco huérfano
+   se publica tal cual: "El precio inadecuado** es la causa número uno".
+
+   Se corrige por línea, que es donde vive el desajuste: si sobra uno, se quita
+   el último. No se intenta adivinar dónde iba la apertura — perder una negrita
+   es mucho menos malo que publicar un asterisco suelto. */
+const equilibrarNegritas = (linea) => {
+  const marcas = (linea.match(/\*\*/g) || []).length;
+  if (marcas % 2 === 0) return linea;
+  const ultimo = linea.lastIndexOf('**');
+  return linea.slice(0, ultimo) + linea.slice(ultimo + 2);
+};
+
+/* Almohadillas que no están al principio de la línea no son un encabezado:
+   son residuo del exportador y se ven como "###" en medio del texto. */
+const quitarAlmohadillasSueltas = (linea) => (
+  /^\s*#{2,3}\s/.test(linea) ? linea : linea.replace(/#{2,}/g, '').replace(/\s{2,}/g, ' ')
+);
+
+/* Un encabezado necesita una línea en blanco DELANTE o el conversor lo trata
+   como parte del párrafo anterior y lo publica como texto: "…el tiempo de
+   venta. ## Situación del mercado inmobiliario actual". Se garantiza aquí, que
+   es más fiable que confiar en cómo venía el original. */
+const airearEncabezados = (texto) => texto
+  /* Encabezado pegado EN MEDIO de una línea: "…/ 3295). ## 3. Análisis de…".
+     Hay que partir la línea primero; buscar solo tras un salto no lo pilla. */
+  .replace(/([.:!?)\]"»])\s+(#{2,3}\s)/g, '$1\n\n$2')
+  .replace(/([^\n])\n(#{2,3}\s)/g, '$1\n\n$2');
+
+/* Asteriscos que no envuelven nada: "¿Cuánto vale? ** La clave está…". Quedan
+   cuando el <strong> de origen abarcaba un salto de línea. */
+/* Frases pegadas: "…mediterráneos.En el otro extremo…". Salen cuando el
+   exportador funde el final de un <li> con el <p> siguiente. Solo se separa
+   cuando delante hay una palabra de dos letras o más, para no romper siglas
+   ni decimales. */
+const separarFrasesPegadas = (texto) => texto
+  .replace(/([a-záéíóúñü]{2,})([.:!?])([A-ZÁÉÍÓÚÑ¿¡])/g, '$1$2 $3');
+
+const quitarAsteriscosHuerfanos = (texto) => texto
+  /* Tres o más seguidos no son negrita de nada: son un cierre duplicado. Van
+     primero, porque un "****" el contador de pares lo da por equilibrado. */
+  .replace(/\*{3,}/g, '')
+  .replace(/(^|\s)\*\*(\s|$)/gm, '$1$2')
+  .replace(/\*\*\s*$/gm, '');
+
 const EN_LINEA = [
   /* El exportador se comió las dos primeras letras en algún caso —quedó
      "piece a escribir aquí"— así que no se ancla al principio de la palabra. */
@@ -64,7 +123,12 @@ const EN_LINEA = [
 
 const RESTOS = [
   /^\s*​+\s*$/,                             // líneas con solo espacios de ancho cero
-  /^\s*\**\s*\**\s*$/,                     // líneas con solo asteriscos sueltos
+  /* Ojo: este patrón exige AL MENOS un asterisco. Sin el `+`, la expresión
+     casaba también con las líneas vacías y se las llevaba por delante — y sin
+     línea en blanco entre bloques, el conversor a HTML mete el artículo entero
+     dentro del primer encabezado. Los nueve importados se publicaron así: 928
+     palabras dentro de un <h2>. */
+  /^\s*\*+\s*$/,
 ];
 
 /* Después de cortar quedan colas: "en ​**", "# 2025 tenerife", "**COMPARTE**".
@@ -146,8 +210,13 @@ for (const f of ficheros) {
   dobles.slice(0, 2).forEach((d) => console.log(`       repetido: «${d}…»`));
 
   if (APLICAR && (cortadas || vacios)) {
-    const limpio = texto
-      .split('\n').filter((l) => !RESTOS.some((re) => re.test(l))).join('\n')
+    const base = separarFrasesPegadas(quitarAsteriscosHuerfanos(
+      airearEncabezados(NORMALIZAR.reduce((t, [re, a]) => t.replace(re, a), texto)),
+    ));
+    const limpio = base
+      .split('\n')
+      .map(quitarAlmohadillasSueltas)
+      .map(equilibrarNegritas).filter((l) => !RESTOS.some((re) => re.test(l))).join('\n')
       .replace(/^#{2,3}\s*$/gm, '')
       .replace(/\n{3,}/g, '\n\n').trim();
     /* El salto antes del --- es obligatorio: nuevo-post.js busca "\n---" para
