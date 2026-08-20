@@ -4,6 +4,16 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-suelo-urbano-canarias-125000-viviendas.html',
+    category: 'Mercado',
+    title: "Canarias tiene suelo para 125.000 viviendas. Once mil son casas",
+    dek: "El Observatorio Canario de la Vivienda cuenta 125.024 viviendas posibles sin recalificar un metro. Pero solo 11.000 son unifamiliares, y eso explica el precio de la villa en el sur.",
+    date: '2026-08-20',
+    read: '6 min',
+    accent: 'atlantic',
+    figure: 'chart',
+  },
+  {
     slug: 'post-por-que-tu-casa-no-se-vende-en-tenerife-8.html',
     category: 'Venta',
     title: "Por qué tu casa no se vende en Tenerife",
