@@ -299,10 +299,12 @@ sitios y el día que cambie una, la otra se queda vieja sin que nadie se entere.
 
 | | antes | ahora |
 |---|---|---|
-| properties.html | 198 palabras | **656** (+231%) |
-| insights.html | 206 | **824** (+300%) |
-| index.html | 1.132 | **1.506** (+33%) |
-| **total** | 2.599 | **4.049 (+56%)** |
+| properties.html | 198 palabras | **427** (+116%) |
+| insights.html | 206 | **515** (+150%) |
+| index.html | 1.132 | **1.319** (+17%) |
+| **total** | 1.536 | **2.261 (+47%)** |
+
+Medido con `curl` contra la URL en vivo, sin ejecutar nada.
 
 Verificado con JavaScript desactivado: **5 inmuebles y 6 artículos visibles**.
 Y verificado que al cargar con JS no se duplican: siguen siendo 5 y 6, la barra
@@ -314,6 +316,28 @@ hace visibles vivía dentro de `@media (prefers-reduced-motion)`. Sin JS, el
 catálogo prerenderizado habría quedado **en blanco** para un rastreador que
 pinta CSS. Resuelto con un `<noscript>` en las 32 páginas, que es el único
 mecanismo que se aplica exactamente en ese caso.
+
+
+### Dos fallos del prerenderizador que llegaron a publicarse
+
+Conviene dejarlo escrito porque el segundo no se ve mirando la web:
+
+**Se acumulaba.** Para sustituir un volcado anterior, el script buscaba el
+cierre del contenedor con una expresión no ávida, y cortaba en el primer
+`</div>` — que ya venía *dentro* del contenido inyectado. Ejecutarlo dos veces
+dejaba restos del volcado viejo colgando fuera de las marcas: se publicaron **9
+tarjetas de inmueble donde hay 5**. En el navegador no se notaba, porque el JS
+reemplaza el `innerHTML`; solo lo veía un rastreador sin JS, que es justo para
+quien se hizo esto.
+
+**El segundo contenedor pisaba al primero.** Las marcas no llevaban el id, así
+que al volcar `blogGrid` la expresión casaba con las marcas de `blogFeatured` y
+lo sustituía. `insights.html` acabó con los seis artículos dentro del destacado
+y la rejilla vacía.
+
+Ambos corregidos y verificados ejecutando el script **cuatro veces seguidas**:
+5 inmuebles, 6 artículos y 4 fichas en portada, iguales sin JavaScript y con él,
+con una sola marca por contenedor.
 
 ### El inventario ya tiene datos estructurados
 
