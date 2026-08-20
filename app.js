@@ -207,8 +207,15 @@
   };
 
   var listo = function () {
-    var fuentes = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
-    fuentes
+    /* Ya no se espera a `document.fonts.ready`. Tenía sentido cuando la idea era
+       que nada saltara al entrar, pero esta web no carga ni una @font-face: usa
+       la tipografía del sistema, que ya está. Esperar a esa promesa no evitaba
+       ningún salto y sí retrasaba la salida del preloader, y con ella el pintado
+       del elemento LCP.
+
+       Lighthouse lo dejó claro: del LCP de la portada, 130 ms eran descargar el
+       póster y 2.020 ms el elemento esperando a poder pintarse. */
+    Promise.resolve()
       .then(esperarPermiso)
       .then(esperarImagenDelHero)
       .then(function () {
