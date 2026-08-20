@@ -1,4 +1,27 @@
 #!/usr/bin/env node
+/* ⛔ ESTE SCRIPT ESTÁ ROTO Y NO DEBE EJECUTARSE ⛔
+ *
+ * Extrae las reglas usadas por sus posiciones de inicio y fin dentro de la
+ * hoja, y esas posiciones apuntan a la REGLA, no al @media que la envuelve. Al
+ * concatenarlas se pierde el envoltorio y `.nav a{display:none}` —que solo debe
+ * aplicar por debajo de 820px— pasa a aplicar SIEMPRE.
+ *
+ * Resultado: la web se queda SIN NAVEGACIÓN en escritorio. Ha pasado dos veces
+ * en producción. La segunda fue por ejecutarlo sin pensar dentro de una cadena
+ * de comandos, y por eso ahora se niega a funcionar en lugar de fiarlo a que
+ * alguien lea el comentario.
+ *
+ * Para arreglarlo: reconstruir el @media alrededor de cada regla antes de
+ * concatenar, y comprobar que el crítico resultante tiene @media (el roto tenía
+ * cero). Luego quitar este bloque.
+ */
+if (!process.argv.includes('--se-que-esta-roto')) {
+  console.error('  ⛔ css-critico.js está roto: pierde los @media y deja la web sin menú.');
+  console.error('     Lee la cabecera del fichero. Si de verdad quieres ejecutarlo:');
+  console.error('     node tools/css-critico.js --se-que-esta-roto');
+  process.exit(1);
+}
+
 /* css-critico.js — Que el primer pintado no dependa de 151 KB de CSS.
  *
  * POR QUÉ
