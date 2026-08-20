@@ -69,6 +69,25 @@
   };
 
   var init = function () {
+    /* Pósters diferidos. Va aparte de la lógica de reproducción a propósito:
+       esto aplica también a los vídeos con controles, que no se reproducen
+       solos y por tanto no entran en la lista de abajo. Su póster se
+       descargaba al entrar en la página y competía con el del hero, que es el
+       elemento que decide el LCP de la portada. */
+    Array.prototype.forEach.call(document.querySelectorAll('video[data-poster]'), function (v) {
+      var poner = function () {
+        var p = v.getAttribute('data-poster');
+        if (!p) return;
+        v.setAttribute('poster', p);
+        v.removeAttribute('data-poster');
+      };
+      if (!('IntersectionObserver' in window)) { poner(); return; }
+      var ob = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { poner(); ob.disconnect(); } });
+      }, { rootMargin: '400px' });   // margen amplio: mejor llegar con imagen
+      ob.observe(v);
+    });
+
     var videos = document.querySelectorAll('video[data-autoplay]');
     if (!videos.length) return;
 

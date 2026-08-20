@@ -1016,11 +1016,11 @@
    ::before lleva el logo de fondo y el texto en `content` (dos líneas con \A);
    el ::after es el aro.
 
-   Se usa logo-disc.png: el .webp original trae un fondo negro CUADRADO que
+   Se usa logo-disc.webp: el .webp original trae un fondo negro CUADRADO que
    sobre papel se recortaba como un recuadro. Se probó también a hacer el negro
    transparente (logo-mark.png), pero el logotipo está diseñado para fondo
    oscuro —degrada de blanco a dorado— y sobre papel la mitad superior
-   desaparecía. logo-disc.png conserva su disco oscuro y recorta solo las
+   desaparecía. logo-disc.webp conserva su disco oscuro y recorta solo las
    esquinas: sobre papel queda un disco limpio y el logo con todo su contraste.
 
    CLAVE DE SEGURIDAD: la salida lleva `forwards` con retardo, así que el
@@ -1044,7 +1044,7 @@ body::before {
   align-content: center;
   justify-items: center;
   padding-top: 190px;              /* deja hueco al logo, que va de fondo */
-  background: var(--paper) url("assets/brand/logo-disc.png")
+  background: var(--paper) url("assets/brand/logo-disc.webp")
               center calc(50% - 74px) / 104px auto no-repeat;
   color: var(--ink);
   font-size: 15px;
