@@ -43,7 +43,18 @@ const fs = require('fs');
 const path = require('path');
 
 const RAIZ = path.join(__dirname, '..');
-const DOMINIO = 'https://josecrea.github.io/villasproperties-preview';
+/* El dominio se lee del sitemap, que ya vive en el definitivo, en vez de estar
+   escrito aquí: dejarlo fijo hizo que ocho artículos republicados salieran con
+   el canonical apuntando al preview, que es la señal que le dice a Google cuál
+   es la URL buena. */
+const DOMINIO = (() => {
+  try {
+    const sm = fs.readFileSync(path.join(__dirname, '..', 'sitemap.xml'), 'utf8');
+    const m = sm.match(/<loc>(https?:\/\/[^\/<]+)/);
+    if (m) return m[1];
+  } catch { /* sin sitemap, se usa el de respaldo */ }
+  return 'https://villasproperties.es';
+})();
 
 const entrada = process.argv[2];
 if (!entrada) {
@@ -120,7 +131,7 @@ const html = `<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${E(meta.titulo)} — Villa’s Properties</title>
+<title>${E(meta.tituloseo || meta.titulo)} — Villa’s Properties</title>
 <meta name="description" content="${E(meta.entradilla)}">
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="${DOMINIO}/${fichero}">
