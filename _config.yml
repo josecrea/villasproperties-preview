@@ -1,0 +1,18 @@
+# Configuración de GitHub Pages.
+#
+# Pages publica TODO lo que hay en el repositorio, y eso incluía los diecisiete
+# scripts de tools/. No contienen contraseñas, pero sí la ruta exacta donde vive
+# la clave de Google Maps y el mapa completo de cómo se construye el sitio: es
+# regalarle el plano a quien quiera buscarle las costuras.
+#
+# Estas carpetas quedan fuera de lo publicado. Siguen en el repositorio, que es
+# donde tienen que estar.
+exclude:
+  - tools/
+  - borradores/
+  - "*.md"
+  - vp-qa/
+
+# Los ficheros que empiezan por guion bajo los excluye Jekyll por su cuenta.
+# include:
+#   - .well-known
