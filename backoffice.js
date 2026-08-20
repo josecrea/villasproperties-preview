@@ -102,7 +102,8 @@
         <button class="bo-tab" data-tab="datos" type="button">Datos</button>
         <button class="bo-tab" data-tab="texto" type="button">Textos</button>
         <button class="bo-tab" data-tab="media" type="button">Vídeo</button>
-        <button class="bo-tab" data-tab="publicar" type="button">Publicar</button>
+        <button class="bo-tab" data-tab="blog" type="button">Blog</button>
+          <button class="bo-tab" data-tab="publicar" type="button">Publicar</button>
       </div>
 
       <section class="bo-panel" data-panel="fotos">
@@ -174,6 +175,31 @@
         <div class="adminactions"><button class="btn green" id="boSaveMedia" type="button">Guardar media</button></div>
       </section>
 
+      <section class="bo-panel" data-panel="blog" hidden>
+          <div class="eye">Escribir un artículo</div>
+          <p class="bo-hint">Se publica firmado por Valeria y con el mismo formato que el resto. En el texto: una línea que empiece por <code>## </code> es un apartado, <code>### </code> un sub-apartado, <code>- </code> una lista y <code>**negrita**</code> resalta. Deja una línea en blanco entre párrafos.</p>
+          <div class="fields">
+            <div class="field full"><label for="blTitulo">Título</label>
+              <input id="blTitulo" type="text" autocomplete="off" placeholder="Lo que verá el lector"></div>
+            <div class="field"><label for="blCategoria">Categoría</label>
+              <select id="blCategoria">
+                <option>Mercado</option><option>Venta</option><option>Compra</option>
+                <option>Valoración</option><option>Inversión</option>
+              </select></div>
+            <div class="field"><label for="blLectura">Tiempo de lectura</label>
+              <input id="blLectura" type="text" autocomplete="off" placeholder="se calcula solo"></div>
+            <div class="field full"><label for="blEntradilla">Entradilla <span id="blEntCount" class="bo-hint"></span></label>
+              <textarea id="blEntradilla" rows="2" placeholder="Una o dos frases que resuman y den ganas de entrar (máx. 165)"></textarea></div>
+            <div class="field full"><label for="blCuerpo">Cuerpo</label>
+              <textarea id="blCuerpo" rows="16" placeholder="## Primer apartado&#10;&#10;El texto del artículo…"></textarea></div>
+          </div>
+          <div class="adminactions" style="flex-wrap:wrap">
+            <button class="btn" id="blVista" type="button">Vista previa</button>
+            <button class="btn green" id="blPublicar" type="button">Publicar en GitHub</button>
+          </div>
+          <p class="statusmsg" id="blMsg"></p>
+      </section>
+
       <section class="bo-panel" data-panel="publicar" hidden>
         <p class="bo-hint">Los cambios viven en este navegador. Para que los vea todo el mundo hay que subir al repositorio los dos archivos que se descargan aquí.</p>
         <div class="bo-steps">
@@ -216,6 +242,62 @@
 
     renderPhotos();
     wire();
+    wireBlog();
+  };
+
+  /* ---------- Pestaña Blog ---------- */
+  const wireBlog = () => {
+    if (!window.VPBlog || !$('#blPublicar') || $('#blPublicar').dataset.wired) return;
+    $('#blPublicar').dataset.wired = '1';
+    const val = (id) => ($('#' + id) ? $('#' + id).value.trim() : '');
+    const meta = () => ({
+      titulo: val('blTitulo'),
+      categoria: val('blCategoria'),
+      entradilla: val('blEntradilla'),
+      lectura: val('blLectura'),
+    });
+    const msg = (t, malo) => { const m = $('#blMsg'); m.textContent = t; m.style.color = malo ? '#b23b3b' : ''; };
+
+    const cuenta = $('#blEntradilla');
+    if (cuenta) cuenta.addEventListener('input', () => {
+      const n = cuenta.value.trim().length;
+      $('#blEntCount').textContent = n + '/165' + (n > 165 ? ' — muy larga' : '');
+    });
+
+    $('#blVista').addEventListener('click', async () => {
+      const faltan = window.VPBlog.validar(meta(), val('blCuerpo'));
+      if (faltan.length) { msg('Falta ' + faltan.join('; falta '), true); return; }
+      msg('Preparando vista previa…');
+      const { post } = await window.VPBlog.preparar(meta(), val('blCuerpo'));
+      const w = window.open('', '_blank');
+      w.document.write(post.html);
+      w.document.close();
+      msg('Vista previa abierta en otra pestaña. Si te convence, pulsa Publicar.');
+    });
+
+    $('#blPublicar').addEventListener('click', async () => {
+      const faltan = window.VPBlog.validar(meta(), val('blCuerpo'));
+      if (faltan.length) { msg('Falta ' + faltan.join('; falta '), true); return; }
+      const token = ($('#boToken') && $('#boToken').value.trim())
+        || (window.VPPublish && window.VPPublish.getToken()) || '';
+      if (!token) { msg('Ve a la pestaña Publicar y pega tu token de GitHub primero.', true); return; }
+      const btn = $('#blPublicar'); btn.disabled = true;
+      try {
+        msg('Preparando el artículo…');
+        const { post, files } = await window.VPBlog.preparar(meta(), val('blCuerpo'));
+        msg('Publicando en GitHub…');
+        await window.VPPublish.commit({
+          token, owner: REPO.owner, repo: REPO.repo,
+          branch: ($('#boBranch') && $('#boBranch').value.trim()) || 'main',
+          message: 'blog: ' + post.meta.titulo,
+          files,
+        }, (l) => msg(l));
+        msg('✓ Publicado. En un par de minutos estará en villasproperties.es/' + post.fichero);
+        ['blTitulo', 'blEntradilla', 'blCuerpo', 'blLectura'].forEach((id) => { if ($('#' + id)) $('#' + id).value = ''; });
+      } catch (e) {
+        msg('Error al publicar: ' + (e && e.message ? e.message : e), true);
+      } finally { btn.disabled = false; }
+    });
   };
 
   const renderPhotos = () => {
