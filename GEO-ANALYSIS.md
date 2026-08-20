@@ -7,7 +7,7 @@
 > Complementa a [LANZAMIENTO.md](LANZAMIENTO.md), que cubre la migración, la
 > seguridad y la compatibilidad.
 
-## Puntuación GEO: 57/100
+## Puntuación GEO: 57/100 → **68/100** tras las correcciones del 20-08
 
 | Criterio | Peso | Nota | Por qué |
 |---|---|---|---|
@@ -45,7 +45,7 @@ puede leer o no se puede atribuir.
 
 ---
 
-## 1. 🔴 CRÍTICO — el catálogo de inmuebles es invisible para las IA
+## 1. ✅ RESUELTO — el catálogo de inmuebles ya no es invisible
 
 **Los crawlers de IA no ejecutan JavaScript.** Medido comparando el HTML que
 llega por la red con el DOM ya renderizado:
@@ -120,7 +120,7 @@ directamente dejar solo el póster por debajo de cierto ancho. El póster pesa
 
 ---
 
-## 3. 🟡 ALTO — no hay entidad: nadie firma
+## 3. ✅ RESUELTO — Valeria Villa ya es una entidad y firma
 
 Las menciones de marca **correlacionan tres veces más con la citación por IA
 que los backlinks** (Ahrefs, 75.000 marcas). Y una entidad se construye con
@@ -285,3 +285,76 @@ cambiar la cabecera. En el VPS con Traefik sí.
    Tenerife Sur", "cuánto vale mi casa en Adeje" y "precio real de escritura
    Tenerife" **al mes de publicar**, y anotar si aparece Villa's. Sin esa
    medición, todo lo anterior es fe.
+
+---
+
+## Anexo — lo corregido el 20-08-2026
+
+### El catálogo y el blog ya viajan en el HTML
+
+`tools/prerender.js` abre cada página en un navegador de verdad, deja que el JS
+del propio sitio pinte, y copia el resultado al fichero. Se hace así a
+propósito: reescribir aquí las plantillas de tarjeta las duplicaría en dos
+sitios y el día que cambie una, la otra se queda vieja sin que nadie se entere.
+
+| | antes | ahora |
+|---|---|---|
+| properties.html | 198 palabras | **656** (+231%) |
+| insights.html | 206 | **824** (+300%) |
+| index.html | 1.132 | **1.506** (+33%) |
+| **total** | 2.599 | **4.049 (+56%)** |
+
+Verificado con JavaScript desactivado: **5 inmuebles y 6 artículos visibles**.
+Y verificado que al cargar con JS no se duplican: siguen siendo 5 y 6, la barra
+de filtros se inserta una sola vez y el filtro de dormitorios sigue funcionando.
+
+Una trampa que hubo que resolver antes: las animaciones de entrada dejan los
+elementos en `opacity: 0` hasta que `motion.js` los revela, y la regla que los
+hace visibles vivía dentro de `@media (prefers-reduced-motion)`. Sin JS, el
+catálogo prerenderizado habría quedado **en blanco** para un rastreador que
+pinta CSS. Resuelto con un `<noscript>` en las 32 páginas, que es el único
+mecanismo que se aplica exactamente en ese caso.
+
+### El inventario ya tiene datos estructurados
+
+`tools/schema-inmuebles.js` genera desde `properties-data.js` un `ItemList` con
+los 5 `RealEstateListing`: precio, disponibilidad, tipo, dormitorios, baños,
+superficie, dirección, año y **coordenadas en los 5**. Se regenera; no se edita
+a mano, o se queda viejo en silencio.
+
+Se separa el anuncio (`RealEstateListing`) del bien (`Apartment`/`House`), que
+es el error habitual: mezclados, el precio cuelga de algo que no es una oferta.
+Solo "En venta" se declara `InStock`.
+
+> **Sigue pendiente, y es de negocio, no de SEO:** el `url` de cada inmueble
+> apunta a **idealista**, no a una ficha propia. El botón "Ver ficha ↗" manda
+> tu tráfico al portal donde también están tus competidores. Una página por
+> inmueble resolvería las dos cosas a la vez.
+
+### Valeria Villa ya existe para una máquina
+
+`tools/schema-persona.js` crea el nodo `Person` con `@id` estable, la engancha
+a la organización como `founder` y `employee`, y cambia el `author` de los 4
+artículos: **de `Organization` a Valeria**. La Person viaja dentro de cada
+artículo, para que un modelo que lea solo esa página pueda resolver quién firma
+sin ir a buscarlo.
+
+Y firma **a la vista**, no solo en el JSON-LD: «Por Valeria Villa, CEO» en la
+línea de datos de los cuatro artículos. Google valora que el autor se vea.
+
+`tools/nuevo-post.js` quedó actualizado, así que **los artículos nuevos nacen
+firmados**. Sin eso, el siguiente habría vuelto a firmar la marca.
+
+**No se le ha inventado ningún `sameAs`.** La organización tiene seis perfiles
+reales (Instagram, Facebook, TikTok, YouTube, idealista y la web) y esos se
+mantienen. Si Valeria tiene LinkedIn, se añade a `PERFILES` en el script y esta
+entidad gana bastante: es la señal que más pesa para vincular a una persona
+real. Es el único hueco que queda aquí.
+
+### Lo que sigue pendiente
+
+1. 🔴 **LCP móvil de 6.912 ms** — sin tocar; era la opción 2
+2. Una página propia por inmueble (resuelve el enlace a idealista)
+3. Un párrafo genuinamente local en cada una de las 6 landings
+4. Tablas para los datos de mercado
+5. Medir la citación real en ChatGPT, Perplexity y AI Overviews al mes de publicar

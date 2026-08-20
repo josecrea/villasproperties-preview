@@ -2576,3 +2576,8 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   .hero .herocopy,
   .hero .eye { text-shadow: 0 2px 22px rgba(6, 9, 8, .62), 0 1px 3px rgba(6, 9, 8, .5); }
 }
+
+/* La firma del artículo, dentro de la línea de datos que ya existe (categoría ·
+   fecha · lectura). Sin marcar en negrita: es información, no reclamo. */
+.post-firma a { border-bottom: 1px solid currentColor; }
+.post-firma a:hover { opacity: .65; }

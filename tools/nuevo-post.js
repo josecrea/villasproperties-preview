@@ -136,7 +136,10 @@ const html = `<!DOCTYPE html>
   '@context': 'https://schema.org', '@type': 'Article',
   headline: meta.titulo, description: meta.entradilla,
   datePublished: meta.fecha || hoy, dateModified: meta.fecha || hoy,
-  author: { '@type': 'Organization', name: "Villa's Properties" },
+  /* Firmado por una persona, no por la marca: un análisis sin autor
+     atribuible no lo cita nadie. La Person completa vive en contact.html
+     y aquí se referencia por @id — ver tools/schema-persona.js. */
+  author: { '@id': `${DOMINIO}/contact.html#valeria-villa` },
   publisher: { '@type': 'Organization', name: "Villa's Properties" },
   mainEntityOfPage: `${DOMINIO}/${fichero}`,
 })}</script>
@@ -148,6 +151,7 @@ ${cabecera}
 <main>
   <section class="pagehero"><div class="wrap">
     <div class="eye">${E(meta.categoria)} · ${meta.lectura || '5 min'}</div>
+    <div class="post-kicker"><span class="post-firma">Por <a href="contact.html" rel="author">Valeria Villa</a>, CEO</span></div>
     <h1>${E(meta.titulo)}</h1>
     <p class="pagelede">${E(meta.entradilla)}</p>
   </div></section>
