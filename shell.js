@@ -77,7 +77,7 @@
           <div><div class="eye">Follow</div><p><a href="https://villasproperties.es/website/social/instagram" target="_blank" rel="noopener">Instagram</a><br><a href="https://villasproperties.es/website/social/facebook" target="_blank" rel="noopener">Facebook</a><br><a href="https://villasproperties.es/website/social/tiktok" target="_blank" rel="noopener">TikTok</a><br><a href="https://villasproperties.es/website/social/youtube" target="_blank" rel="noopener">YouTube</a></p></div>
         </div>
         <div class="footer-bottom">
-          <span>© <span id="year">2026</span> Villa's Properties hecho con Amor · <a href="privacy.html" style="text-decoration:underline">Privacidad</a></span>
+          <span>© <span id="year">2026</span> Villa's Properties hecho con Amor · <a href="privacy.html" style="text-decoration:underline">Privacidad</a> · <a href="aviso-legal.html" style="text-decoration:underline">Aviso legal</a></span>
           <span><strong>🕒 Tenerife:</strong> <span id="tenerifeClock">--:--:--</span></span>
         </div>
       </div>`;
