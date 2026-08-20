@@ -9,10 +9,34 @@
   var dots = Array.prototype.slice.call(section.querySelectorAll('.tf-dot'));
   var count = layers.length;
   if (!count) return;
-  layers.forEach(function (layer) {
-    var src = layer.getAttribute('data-img');
-    if (src) { layer.style.backgroundImage = "url('" + src + "')"; layer.classList.add('has-photo'); }
-  });
+  /* Las cinco fotos de zona suman 309 KB y esta sección está muy por debajo del
+     pliegue, pero se asignaban todas nada más cargar: competían con el póster
+     del hero, que es el elemento que decide el LCP de la portada.
+
+     Ahora se asignan cuando la sección se acerca, con margen de sobra para que
+     lleguen antes de que se vea nada. Como son fondos CSS y no <img>, no valía
+     `loading="lazy"`. */
+  var pintarCapas = function () {
+    layers.forEach(function (layer) {
+      var src = layer.getAttribute('data-img');
+      if (!src) return;
+      layer.style.backgroundImage = "url('" + src + "')";
+      layer.classList.add('has-photo');
+    });
+  };
+
+  if ('IntersectionObserver' in window) {
+    var obsFotos = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        pintarCapas();
+        obsFotos.disconnect();
+      });
+    }, { rootMargin: '800px' });
+    obsFotos.observe(section);
+  } else {
+    pintarCapas();
+  }
   var current = -1, ticking = false;
   function setActive(index) {
     if (index === current) return;
