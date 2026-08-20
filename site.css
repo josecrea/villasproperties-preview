@@ -2582,13 +2582,3 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 .post-firma a { border-bottom: 1px solid currentColor; }
 .post-firma a:hover { opacity: .65; }
 
-/* Las tarjetas del catálogo llevan la foto como background inline, así que
-   `loading="lazy"` no les aplica. `content-visibility` consigue lo mismo por
-   otra vía: el navegador salta el pintado de lo que queda fuera de pantalla, y
-   con ello la descarga de su fondo. `contain-intrinsic-size` le da la altura
-   aproximada para que la barra de scroll no salte al entrar cada tarjeta. */
-.propertygrid .property,
-.catalogue-grid .property {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 520px;
-}

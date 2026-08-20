@@ -119,7 +119,22 @@ const MUESTRAS = [
     if (f) keyframes.push(...f);
   }
 
-  let critico = [...raiz, ...fuentes, ...forzadas, ...keyframes, ...usadas].join('');
+  /* La cobertura marca como "usada" cualquier regla que case con algún elemento
+     del documento, esté o no en pantalla. Con eso salían 70 KB, y un crítico de
+     ese tamaño deja de compensar: duplica reglas con site.css y cada recálculo
+     de estilo se paga dos veces. Medido con Lighthouse, el TBT subía de 1.247 a
+     5.382 ms.
+
+     Se filtra a lo que compone la primera pantalla —cabecera, hero, preloader y
+     los tokens de tipografía y color— y el resto lo trae site.css, que ya no
+     bloquea. */
+  const PRIMERA_PANTALLA = /^(:root|html|body|\*|a|img|h1|p\b|\.wrap|\.hero|\.head|\.brand|\.wordmark|\.lockup|\.monogram|\.nav|\.header|\.film|\.eye|\.btn|\.scroll-cue|\.skip|\.vp-|\.is-loaded|\.motion|\[data-|@)/;
+  const filtradas = [...usadas].filter((r) => {
+    const sel = r.slice(0, r.indexOf('{')).trim();
+    return sel.split(',').some((x) => PRIMERA_PANTALLA.test(x.trim()));
+  });
+
+  let critico = [...raiz, ...fuentes, ...forzadas, ...keyframes, ...filtradas].join('');
   /* Comprimir lo evidente: sobran espacios porque se ha cortado del fichero. */
   critico = critico.replace(/\s*([{}:;,>])\s*/g, '$1').replace(/;\}/g, '}').replace(/\s{2,}/g, ' ');
 
