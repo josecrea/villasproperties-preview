@@ -128,6 +128,19 @@
                 : `<input id="bo_${f.key}" data-field="${f.key}" type="${f.type}" value="${E(current[f.key] ?? '')}">`}
             </div>`).join('')}
         </div>
+        <div class="bo-near">
+          <div class="eye" style="margin-top:14px">Qué hay cerca</div>
+          <p class="bo-hint">La ficha muestra los servicios reales alrededor (supermercado, farmacia, colegio, playa…) con su distancia. Salen de las coordenadas de la <b>zona</b> —no del portal exacto— vía OpenStreetMap.</p>
+          <div class="fields">
+            <div class="field full"><label for="bo_coords">Coordenadas de la zona (latitud, longitud)</label>
+              <input id="bo_coords" type="text" autocomplete="off" placeholder="28.0817, -16.7350" value="${(current.coords || []).join(', ')}"></div>
+          </div>
+          <p class="bo-hint">¿No las sabes? Abre <a href="https://www.google.com/maps" target="_blank" rel="noopener">Google Maps</a>, pon el punto, haz clic derecho y copia los dos números de arriba.</p>
+          <div class="adminactions" style="flex-wrap:wrap">
+            <button class="btn" id="boNearBuscar" type="button">Buscar qué hay cerca</button>
+          </div>
+          <div id="boNearLista" class="bo-near-lista"></div>
+        </div>
       </section>
 
       <section class="bo-panel" data-panel="texto" hidden>
@@ -374,6 +387,76 @@
       window.alert('Ficha creada con la referencia ' + ref + '.\n\nAhora:\n1. Datos: precio, zona, metros, habitaciones.\n2. Textos: la descripción.\n3. Fotos: sube las imágenes.\n4. Publicar.');
     });
 
+    /* Coordenadas: se guardan en el inmueble en cuanto se escriben, para que el
+       commit las incluya y build-nearby (o la propia ficha) las use. */
+    $('#bo_coords')?.addEventListener('change', (e) => {
+      const m = e.target.value.split(/[ ,]+/).map(Number).filter((n) => !Number.isNaN(n));
+      current.coords = m.length === 2 ? m : [];
+    });
+
+    /* "Buscar qué hay cerca": Overpass (OpenStreetMap) es API pública, sin clave
+       y con CORS abierto, así que SÍ se puede llamar desde el navegador —al
+       revés que idealista. Trae los mismos servicios que build-nearby.cjs. */
+    $('#boNearBuscar')?.addEventListener('click', async () => {
+      const lista = $('#boNearLista');
+      const c = (current.coords || []);
+      if (c.length !== 2) { lista.innerHTML = '<p class="statusmsg">Escribe primero las coordenadas.</p>'; return; }
+      lista.innerHTML = '<p class="statusmsg">Buscando alrededor…</p>';
+      const R = 1200;
+      const consultas = [
+        ['Supermercado', 'shop=supermarket'], ['Farmacia', 'amenity=pharmacy'],
+        ['Centro de salud', 'amenity~"clinic|doctors|hospital"'], ['Colegio', 'amenity=school'],
+        ['Parada de guagua', 'highway=bus_stop'], ['Restauración', 'amenity~"restaurant|cafe|bar"'],
+        ['Playa', 'natural=beach'],
+      ];
+      const q = `[out:json][timeout:25];(` + consultas.map(([, f]) =>
+        `nwr[${f}](around:${R},${c[0]},${c[1]});`).join('') + `);out center;`;
+      try {
+        const res = await fetch('https://overpass-api.de/api/interpreter', {
+          method: 'POST', body: 'data=' + encodeURIComponent(q),
+        });
+        const data = await res.json();
+        const dist = (lat, lng) => {
+          const rad = (x) => x * Math.PI / 180, Rt = 6371000;
+          const dLat = rad(lat - c[0]), dLng = rad(lng - c[1]);
+          const a = Math.sin(dLat / 2) ** 2 + Math.cos(rad(c[0])) * Math.cos(rad(lat)) * Math.sin(dLng / 2) ** 2;
+          return Math.round(Rt * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+        };
+        const clasif = (t) => {
+          const tg = t.tags || {};
+          if (tg.shop === 'supermarket') return 'Supermercado';
+          if (tg.amenity === 'pharmacy') return 'Farmacia';
+          if (/clinic|doctors|hospital/.test(tg.amenity || '')) return 'Centro de salud';
+          if (tg.amenity === 'school') return 'Colegio';
+          if (tg.highway === 'bus_stop') return 'Parada de guagua';
+          if (/restaurant|cafe|bar/.test(tg.amenity || '')) return 'Restauración';
+          if (tg.natural === 'beach') return 'Playa';
+          return null;
+        };
+        const porTipo = {};
+        (data.elements || []).forEach((el) => {
+          const lat = el.lat || (el.center && el.center.lat), lng = el.lon || (el.center && el.center.lon);
+          if (!lat) return;
+          const tipo = clasif(el); if (!tipo) return;
+          const d = dist(lat, lng);
+          const nombre = (el.tags && el.tags.name) || null;
+          if (!porTipo[tipo] || d < porTipo[tipo].distancia) porTipo[tipo] = { distancia: d, nombre };
+          porTipo[tipo].total = (porTipo[tipo].total || 0) + 1;
+        });
+        const servicios = Object.entries(porTipo)
+          .map(([id, v]) => ({ etiqueta: id, distancia: v.distancia, nombre: v.nombre, total: v.total }))
+          .sort((a, b) => a.distancia - b.distancia);
+        if (!servicios.length) { lista.innerHTML = '<p class="statusmsg">No se encontró nada a 1,2 km. ¿Están bien las coordenadas?</p>'; return; }
+        current.nearby = { radio: R, servicios };
+        lista.innerHTML = '<ul class="bo-near-ul">' + servicios.map((sv) =>
+          `<li><strong>${sv.etiqueta}</strong>: ${sv.nombre ? sv.nombre + ' · ' : ''}a ${sv.distancia} m` +
+          `${sv.total > 1 ? ` (${sv.total} en 1,2 km)` : ''}</li>`).join('') + '</ul>' +
+          '<p class="statusmsg">Guardado en la ficha. Se publicará con el resto al pulsar Publicar.</p>';
+      } catch (e) {
+        lista.innerHTML = '<p class="statusmsg">No se pudo consultar OpenStreetMap: ' + (e.message || e) + '</p>';
+      }
+    });
+
     $('#boProperty').addEventListener('change', (e) => {
       current = props.find((p) => p.slug === e.target.value) || props[0];
       render();
@@ -514,8 +597,24 @@ if (window.VPStore) {
 
   /* Reúne el catálogo y TODAS las fotos con su ruta definitiva: el publicador
      compara con el repositorio y solo sube lo que ha cambiado. */
+  /* nearby-data.js: se reconstruye con lo que cada inmueble lleve en .nearby
+     (lo que devolvió "Buscar qué hay cerca"). Los no tocados conservan lo suyo,
+     para no borrar el resto al publicar uno. */
+  const nearbyFile = () => {
+    const previo = window.VP_NEARBY || {};
+    const mapa = {};
+    for (const p of props) {
+      if (p.nearby) mapa[p.ref] = p.nearby;
+      else if (previo[p.ref]) mapa[p.ref] = previo[p.ref];
+    }
+    return `/* Servicios reales alrededor de cada inmueble (OpenStreetMap).\n   PUBLICADO DESDE EL BACK OFFICE el ${new Date().toISOString().slice(0, 10)}. */\nwindow.VP_NEARBY = ${JSON.stringify(mapa, null, 2)};\n`;
+  };
+
   const collectFiles = async (log) => {
-    const files = [{ path: 'properties-data.js', bytes: new TextEncoder().encode(catalogueFile()) }];
+    const files = [
+      { path: 'properties-data.js', bytes: new TextEncoder().encode(catalogueFile()) },
+      { path: 'nearby-data.js', bytes: new TextEncoder().encode(nearbyFile()) },
+    ];
     for (const p of props) {
       const images = p.images || [];
       for (let i = 0; i < images.length; i++) {
