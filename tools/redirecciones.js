@@ -109,6 +109,54 @@ const faltan = MAPA.filter(([, d]) => {
   return !fs.existsSync(path.join(RAIZ, rel.endsWith('/') ? rel + 'index.html' : rel));
 });
 
+/* ---- Los ficheros de redirección ----
+   GitHub Pages sirve ficheros y nada más: no hay 301 de servidor, ni 410, ni
+   reescrituras. La única forma de conservar una URL indexada es publicar en su
+   ruta un HTML que lleve a la nueva.
+
+   Cada uno hace tres cosas, y las tres hacen falta:
+     · `canonical` — le dice a Google cuál es la URL buena. Es lo que traslada
+       el posicionamiento; sin esto la redirección no vale para SEO.
+     · `meta refresh` a 0 segundos — funciona sin JavaScript, que es como
+       navegan los rastreadores de las IA.
+     · `location.replace` — instantáneo en un navegador real, y `replace` en vez
+       de `href` para no dejar la redirección en el historial: con `href`, el
+       botón "atrás" devuelve aquí y vuelve a redirigir, atrapando al usuario. */
+const DESTINO = 'https://villasproperties.es';
+let ficheros = 0, saltados = 0;
+
+const plantilla = (destino, origen) => `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Villa’s Properties</title>
+<link rel="canonical" href="${DESTINO}${destino}">
+<meta name="robots" content="noindex,follow">
+<meta http-equiv="refresh" content="0; url=${destino}">
+<!-- Redirección de ${origen}, que estaba indexada en la web anterior.
+     Generado por tools/redirecciones.js — no editar a mano. -->
+<script>location.replace(${JSON.stringify(destino)});</script>
+</head>
+<body><p>Redirigiendo a <a href="${destino}">${DESTINO}${destino}</a>…</p></body>
+</html>
+`;
+
+for (const [origen, destino] of MAPA) {
+  if (origen === '/') continue;
+  const carpeta = path.join(RAIZ, origen.replace(/^\//, ''));
+  const indice = path.join(carpeta, 'index.html');
+  /* Si ya existe una redirección escrita a mano —el caso de /financiacion, que
+     sostiene la atribución de Bayteca— no se toca: regenerarla podría cambiar
+     el destino y romper la comisión sin dar ningún error. */
+  if (fs.existsSync(indice) && !fs.readFileSync(indice, 'utf8').includes('tools/redirecciones.js')) {
+    saltados += 1; continue;
+  }
+  fs.mkdirSync(carpeta, { recursive: true });
+  fs.writeFileSync(indice, plantilla(destino, origen), 'utf8');
+  ficheros += 1;
+}
+
 const md = `# Mapa de redirecciones — villasproperties.es
 
 > Generado por \`tools/redirecciones.js\`. **No editar a mano:** se regenera.
@@ -166,4 +214,6 @@ if (faltan.length) {
 } else {
   console.log('  ✔ todos los destinos existen');
 }
+console.log(`  ✔ ${ficheros} ficheros de redirección escritos${saltados ? ` · ${saltados} respetados por estar escritos a mano` : ''}`);
 console.log('\n  REDIRECCIONES.md · redirecciones.map (nginx) · _redirects (Netlify)');
+console.log('  Las 21 bajas caen en 404.html, que es lo único que permite Pages.');
