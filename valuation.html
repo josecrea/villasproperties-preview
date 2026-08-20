@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Valoración gratis de tu casa en Tenerife Sur — Villa’s Properties</title>
 <link rel="icon" type="image/webp" href="assets/brand/logo-placeholder.webp">
-<link rel="stylesheet" href="site.css?v=202608200012">
+<link rel="stylesheet" href="site.css?v=202608200103">
 <!-- seo:start -->
 <meta name="description" content="Calcula gratis lo que vale tu vivienda en Tenerife Sur con datos reales: precio de anuncio, salida realista y valor de escritura del Notariado.">
 <link rel="canonical" href="https://josecrea.github.io/villasproperties-preview/valuation.html">
@@ -54,7 +54,7 @@
         <li class="vw-dot" data-step="3"><span>03</span> Resultado</li>
       </ol>
 
-      <form id="vpValuation" novalidate>
+      <form id="vpValuation" toolname="valorar_vivienda" tooldescription="Estima el valor de mercado de una vivienda en Tenerife Sur a partir del municipio, la zona, el tipo, los metros y el estado. Devuelve un rango en euros con el precio por metro cuadrado de esa microzona y el contraste con el valor real de escritura. Úsala cuando alguien quiera saber cuánto vale su casa o piso en Adeje, Arona, Granadilla de Abona, San Miguel de Abona, Guía de Isora o Santiago del Teide." novalidate>
 
         <!-- Paso 1 -->
         <section class="vw-step is-active" data-step="1">
@@ -65,16 +65,16 @@
               <div class="fields" style="margin-top:26px">
                 <div class="field full">
                   <label for="vMunicipality">Municipio</label>
-                  <select id="vMunicipality"></select>
+                  <select id="vMunicipality" name="vMunicipality"></select>
                   <small class="vw-error" data-error-for="vMunicipality"></small>
                 </div>
                 <div class="field full">
                   <label for="vZone">Zona</label>
-                  <select id="vZone" disabled></select>
+                  <select id="vZone" disabled name="vZone"></select>
                 </div>
                 <div class="field full">
                   <label for="vAddress">Calle o urbanización <span class="vw-opt">opcional</span></label>
-                  <input id="vAddress" type="text" placeholder="Av. de Los Pueblos, Residencial…" autocomplete="off">
+                  <input id="vAddress" type="text" placeholder="Av. de Los Pueblos, Residencial…" autocomplete="off" name="vAddress">
                 </div>
               </div>
               <div class="vw-actions">
@@ -103,18 +103,18 @@
           <div class="fields" style="max-width:760px">
             <div class="field">
               <label for="vSurface">Superficie construida (m²)</label>
-              <input id="vSurface" type="number" min="15" max="2000" inputmode="numeric" placeholder="95">
+              <input id="vSurface" type="number" min="15" max="2000" inputmode="numeric" placeholder="95" name="vSurface">
               <small class="vw-error" data-error-for="vSurface"></small>
             </div>
             <div class="field">
               <label for="vBedrooms">Dormitorios</label>
-              <select id="vBedrooms">
+              <select id="vBedrooms" name="vBedrooms">
                 <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5 o más</option>
               </select>
             </div>
             <div class="field full">
               <label for="vCondition">Estado</label>
-              <select id="vCondition">
+              <select id="vCondition" name="vCondition">
                 <option value="reformar">A reformar</option>
                 <option value="bueno" selected>Buen estado</option>
                 <option value="reformado">Reformado</option>
@@ -126,10 +126,10 @@
           <fieldset class="vw-fieldset">
             <legend class="eye">Extras con demanda</legend>
             <div class="vw-chips">
-              <label class="vw-chip"><input type="checkbox" id="terrace"><span>Terraza</span></label>
-              <label class="vw-chip"><input type="checkbox" id="elevator"><span>Ascensor</span></label>
-              <label class="vw-chip"><input type="checkbox" id="seaView"><span>Vistas al mar</span></label>
-              <label class="vw-chip"><input type="checkbox" id="parking"><span>Garaje</span></label>
+              <label class="vw-chip"><input type="checkbox" id="terrace" name="terrace"><span>Terraza</span></label>
+              <label class="vw-chip"><input type="checkbox" id="elevator" name="elevator"><span>Ascensor</span></label>
+              <label class="vw-chip"><input type="checkbox" id="seaView" name="seaView"><span>Vistas al mar</span></label>
+              <label class="vw-chip"><input type="checkbox" id="parking" name="parking"><span>Garaje</span></label>
             </div>
           </fieldset>
 
@@ -152,20 +152,20 @@
             <div class="fields">
               <div class="field">
                 <label for="vName">Nombre</label>
-                <input id="vName" type="text" autocomplete="name">
+                <input id="vName" type="text" autocomplete="name" name="vName">
                 <small class="vw-error" data-error-for="vName"></small>
               </div>
               <div class="field">
                 <label for="vPhone">Teléfono / WhatsApp</label>
-                <input id="vPhone" type="tel" autocomplete="tel" placeholder="+34 600 000 000">
+                <input id="vPhone" type="tel" autocomplete="tel" placeholder="+34 600 000 000" name="vPhone">
                 <small class="vw-error" data-error-for="vPhone"></small>
               </div>
               <div class="field full">
                 <label for="vEmail">Email <span class="vw-opt">opcional</span></label>
-                <input id="vEmail" type="email" autocomplete="email">
+                <input id="vEmail" type="email" autocomplete="email" name="vEmail">
               </div>
               <div class="field full vw-consent">
-                <label><input type="checkbox" id="vPrivacy"><span>Acepto la <a href="privacy.html">política de privacidad</a> y que Villa’s Properties me contacte sobre esta valoración.</span></label>
+                <label><input type="checkbox" id="vPrivacy" name="vPrivacy"><span>Acepto la <a href="privacy.html">política de privacidad</a> y que Villa’s Properties me contacte sobre esta valoración.</span></label>
                 <small class="vw-error" data-error-for="vPrivacy"></small>
               </div>
               <div class="field full vw-actions">
@@ -261,12 +261,12 @@
 <div class="vp-hp" aria-hidden="true"><label for="vp_hp">No rellenes esto</label><input id="vp_hp" name="vp_hp" type="text" tabindex="-1" autocomplete="off"></div></main>
 
 <footer class="footer"><div class="wrap"><div class="footer-bottom"><span>© <span id="year">2026</span> Villa's Properties hecho con Amor</span><span><strong>🕒 Tenerife:</strong> <span id="tenerifeClock">--:--:--</span></span></div></div></footer>
-<script src="vp-safe.js?v=202608200012" defer></script><script src="vp-lead.js?v=202608200012" defer></script><script src="vp-consent.js?v=202608200012"></script><script src="shell.js?v=202608200012" defer></script><script src="app.js?v=202608200012" defer></script><script src="social.js?v=202608200012" defer></script>
-<script src="motion.js?v=202608200012" defer></script>
-<script src="market-data.js?v=202608200012" defer></script>
-<script src="valuation.js?v=202608200012" defer></script>
-<script src="map.js?v=202608200012" defer></script>
+<script src="vp-safe.js?v=202608200103" defer></script><script src="vp-lead.js?v=202608200103" defer></script><script src="vp-consent.js?v=202608200103"></script><script src="shell.js?v=202608200103" defer></script><script src="app.js?v=202608200103" defer></script><script src="social.js?v=202608200103" defer></script>
+<script src="motion.js?v=202608200103" defer></script>
+<script src="market-data.js?v=202608200103" defer></script>
+<script src="valuation.js?v=202608200103" defer></script>
+<script src="map.js?v=202608200103" defer></script>
 <script>document.getElementById('vDataDate').textContent=(window.VP_MARKET&&window.VP_MARKET.meta.updated)?new Intl.DateTimeFormat('es-ES',{month:'short',year:'numeric'}).format(new Date(window.VP_MARKET.meta.updated)):'—';</script>
-<script src="backoffice-auth.js?v=202608200012" defer></script>
+<script src="backoffice-auth.js?v=202608200103" defer></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Comprar vivienda en Tenerife Sur — Villa’s Properties</title>
 <link rel="icon" type="image/webp" href="assets/brand/logo-placeholder.webp">
-<link rel="stylesheet" href="site.css?v=202608200012">
+<link rel="stylesheet" href="site.css?v=202608200103">
 <!-- seo:start -->
 <meta name="description" content="Comprar vivienda en Tenerife Sur con criterio: screening de oportunidades, due diligence, financiación y cierre acompañado.">
 <link rel="canonical" href="https://josecrea.github.io/villasproperties-preview/buy.html">
@@ -76,23 +76,23 @@
     </div>
 
     <div class="buy-tool">
-      <form class="buy-form" id="buyForm" novalidate>
+      <form class="buy-form" id="buyForm" toolname="calcular_precio_realista_de_compra" tooldescription="Calcula, a partir del precio de anuncio de un inmueble, el precio realista de cierre según la diferencia media entre anuncio y escritura de ese municipio. Úsala cuando alguien pregunte cuánto puede negociar o si un anuncio está caro." novalidate>
         <div class="fields">
           <div class="field">
             <label for="buyTown">Municipio</label>
-            <select id="buyTown"></select>
+            <select id="buyTown" name="buyTown"></select>
           </div>
           <div class="field">
             <label for="buyZone">Zona</label>
-            <select id="buyZone"></select>
+            <select id="buyZone" name="buyZone"></select>
           </div>
           <div class="field">
             <label for="buyPrice">Precio del anuncio (€)</label>
-            <input id="buyPrice" type="number" inputmode="numeric" min="10000" step="1000" value="340000">
+            <input id="buyPrice" type="number" inputmode="numeric" min="10000" step="1000" value="340000" name="buyPrice">
           </div>
           <div class="field">
             <label for="buySqm">Superficie (m²)</label>
-            <input id="buySqm" type="number" inputmode="numeric" min="15" max="2000" value="90">
+            <input id="buySqm" type="number" inputmode="numeric" min="15" max="2000" value="90" name="buySqm">
           </div>
         </div>
       </form>
@@ -171,10 +171,10 @@
 </main>
 
 <footer class="footer"></footer>
-<script src="vp-safe.js?v=202608200012" defer></script><script src="vp-lead.js?v=202608200012" defer></script><script src="vp-consent.js?v=202608200012"></script><script src="shell.js?v=202608200012" defer></script><script src="app.js?v=202608200012" defer></script><script src="social.js?v=202608200012" defer></script>
-<script src="market-data.js?v=202608200012" defer></script>
-<script src="buy.js?v=202608200012" defer></script>
-<script src="motion.js?v=202608200012" defer></script>
-<script src="backoffice-auth.js?v=202608200012" defer></script>
+<script src="vp-safe.js?v=202608200103" defer></script><script src="vp-lead.js?v=202608200103" defer></script><script src="vp-consent.js?v=202608200103"></script><script src="shell.js?v=202608200103" defer></script><script src="app.js?v=202608200103" defer></script><script src="social.js?v=202608200103" defer></script>
+<script src="market-data.js?v=202608200103" defer></script>
+<script src="buy.js?v=202608200103" defer></script>
+<script src="motion.js?v=202608200103" defer></script>
+<script src="backoffice-auth.js?v=202608200103" defer></script>
 </body>
 </html>
