@@ -154,10 +154,11 @@
     document.body.classList.add('is-loaded');
   };
 
-  // 8 s: si Vimeo no ha respondido para entonces, es que no va a responder
-  // (p. ej. el dominio no está autorizado y devuelve 401). Mejor entrar con el
-  // fondo a medias que dejar al visitante mirando el logo.
-  window.setTimeout(quitar, 8000);
+  /* Red de seguridad. Eran 8 s de cuando el fondo era un iframe de Vimeo que
+     podía no responder nunca. Ahora solo se espera un WebP de 87 KB del mismo
+     dominio: si en 5 segundos no ha llegado, no va a llegar, y es mejor entrar
+     con el hero en color plano que dejar a nadie mirando el logo. */
+  window.setTimeout(quitar, 5000);
 
   var RESPIRO_VIDEO_MS = 700;   // margen tras montar el reproductor
 
@@ -172,39 +173,36 @@
     return c.permisoVideo;
   };
 
-  var esperarVideo = function (permitido) {
+  /* Qué se espera antes de descubrir la web.
+     ------------------------------------------
+     Esto esperaba a que el VÍDEO tuviera imagen (`canplay`). Con una conexión
+     de oficina no se nota, pero en 4G el vídeo son 1,7 MB y tarda más de ocho
+     segundos: el preloader agotaba su tope y el visitante miraba el logo casi
+     nueve segundos antes de ver nada. Medido: FCP y LCP de 9.064 ms en un
+     Pixel 7 a 1,6 Mbps.
+
+     Se espera al PÓSTER, que pesa 87 KB y es un fotograma del propio vídeo.
+     Cuando entra el movimiento, la imagen ya es la misma: no hay salto, no hay
+     nada a medias, y sigue cumpliéndose la idea de que la web no se descubre
+     por partes. Lo único que cambia es que el vídeo empieza a moverse un
+     momento después, y eso no se ve. */
+  var esperarImagenDelHero = function (permitido) {
     if (permitido === false) return Promise.resolve();
     return new Promise(function (res) {
       var con = navigator.connection || {};
       if (con.saveData === true || /(^|-)2g/.test(con.effectiveType || '')) return res();
-      /* Quien pide menos movimiento no recibe el vídeo del hero (lo decide
-         vp-video.js), así que aquí no hay nada que esperar: sin esta salida el
-         preloader se quedaría colgado hasta el tope de 8 s por un fichero que
-         nadie va a cargar. */
-      if (window.matchMedia
-        && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return res();
 
-      var v = document.querySelector('video');
-      if (v) {
-        if (v.readyState >= 3) return res();
-        v.addEventListener('canplay', res, { once: true });
-        v.addEventListener('error', res, { once: true });
-        return;
-      }
+      var v = document.querySelector('.hero-video, video');
+      var poster = v && v.getAttribute('poster');
+      if (!poster) return res();
 
-      var marco = document.querySelector('.hero-vimeo, .hero iframe');
-      if (!marco) return res();
-
-      // Si ya venía cargado, `load` no volverá a dispararse: se comprueba antes.
-      var yaEsta = false;
-      try { yaEsta = !!(marco.contentWindow && marco.contentDocument
-        && marco.contentDocument.readyState === 'complete'); } catch (e) { /* otro dominio */ }
-      if (yaEsta) return window.setTimeout(res, RESPIRO_VIDEO_MS);
-
-      marco.addEventListener('load', function () {
-        window.setTimeout(res, RESPIRO_VIDEO_MS);
-      }, { once: true });
-      marco.addEventListener('error', res, { once: true });
+      /* Ya en caché: `complete` evita quedarse esperando un onload que no va a
+         volver a dispararse. */
+      var img = new Image();
+      img.onload = res;
+      img.onerror = res;      // si el póster falla, entrar igual
+      img.src = poster;
+      if (img.complete) res();
     });
   };
 
@@ -212,7 +210,7 @@
     var fuentes = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
     fuentes
       .then(esperarPermiso)
-      .then(esperarVideo)
+      .then(esperarImagenDelHero)
       .then(function () {
         requestAnimationFrame(function () { requestAnimationFrame(quitar); });
       })

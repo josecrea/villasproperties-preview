@@ -89,7 +89,25 @@
     });
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else { init(); }
+  /* Cuándo arrancar, que resultó ser lo que decidía el rendimiento en móvil.
+     El <video> lleva preload="none" precisamente para no descargarse solo,
+     pero `arrancar()` le asigna el src y llama a load(), y eso ANULA el
+     preload. Haciéndolo en DOMContentLoaded, el vídeo de 1,7 MB salía a la red
+     a la vez que su propio póster de 87 KB y le robaba el ancho de banda: en
+     4G el póster —que es el elemento LCP— tardaba 5,9 segundos en pintar.
+
+     Ahora se espera al evento `load`, es decir a que el resto de la página
+     haya terminado, y encima a un hueco de inactividad. El usuario no nota la
+     diferencia porque el póster ya está puesto; lo único que cambia es que el
+     movimiento entra uno o dos segundos más tarde. */
+  var arrancarTodo = function () {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(init, { timeout: 2500 });
+    } else {
+      setTimeout(init, 250);
+    }
+  };
+
+  if (document.readyState === 'complete') { arrancarTodo(); }
+  else { window.addEventListener('load', arrancarTodo); }
 })();
