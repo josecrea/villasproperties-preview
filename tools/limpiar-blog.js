@@ -37,24 +37,64 @@ const APLICAR = process.argv.includes('--aplicar');
 /* El pie de Odoo empieza siempre por uno de estos. Se corta en el PRIMERO que
    aparezca, no en el último: "Leer siguiente" ya es plantilla, no artículo. */
 const INICIO_DEL_PIE = [
+  /^\s*\**#{0,3}\s*Compartir\b/i,          // el widget de compartir de Odoo
+  /^\s*\**#{0,3}\s*Archivar\s*\**\s*$/i,
+  /^\s*Todas las fechas/i,
   /^\s*Leer siguiente\s*$/i,
-  /^#+\s*Enlaces útiles/i,
-  /^#+\s*Síganos/i,
-  /^#+\s*Contáctenos/i,
-  /^#+\s*Nuestra empresa/i,
+  /^\s*\**#{0,3}\s*Enlaces útiles/i,
+  /^\s*\**#{0,3}\s*Síganos/i,
+  /^\s*\**#{0,3}\s*Contáctenos/i,
+  /^\s*\**#{0,3}\s*Nuestra empresa/i,
   /configurar sus redes sociales/i,
   /Permitir (todas las|solo las) cookies/i,
   /hecho con Amor/i,
 ];
 
+/* Restos sueltos que Odoo deja dentro del cuerpo y no marcan el final: se
+   borran línea a línea en vez de cortar por ellos. */
+/* El placeholder del editor a veces queda PEGADO al final de una línea de
+   texto real —"…vender tu casa en Tenerife! piece a escribir aquí…"— así que
+   cortar por él se llevaría el cierre del artículo. Se borra en línea. */
+const EN_LINEA = [
+  /* El exportador se comió las dos primeras letras en algún caso —quedó
+     "piece a escribir aquí"— así que no se ancla al principio de la palabra. */
+  /\s*\S*piece a escribir aquí\.{0,3}\s*$/i,
+  /\s*\**\s*COMPARTE\s*\**\s*$/i,
+];
+
+const RESTOS = [
+  /^\s*​+\s*$/,                             // líneas con solo espacios de ancho cero
+  /^\s*\**\s*\**\s*$/,                     // líneas con solo asteriscos sueltos
+];
+
+/* Después de cortar quedan colas: "en ​**", "# 2025 tenerife", "**COMPARTE**".
+   Son trozos del widget de Odoo que caen en líneas separadas, así que el corte
+   por marcador no los pilla. Se quitan desde el final mientras la línea no
+   parezca prosa: pocas palabras y sin puntuación de cierre. Se para en la
+   primera que sí lo parezca, para no comerse el cierre del artículo. */
+const podarCola = (texto) => {
+  const lineas = texto.split('\n')
+    .map((l) => EN_LINEA.reduce((acc, re) => acc.replace(re, ''), l));
+  while (lineas.length) {
+    const l = lineas[lineas.length - 1].trim();
+    const palabras = l.replace(/[*#​]/g, '').trim().split(/\s+/).filter(Boolean);
+    const esProsa = palabras.length >= 6 || /[.!?»)]$/.test(l);
+    if (l === '' || !esProsa) { lineas.pop(); continue; }
+    break;
+  }
+  return lineas.join('\n').trim();
+};
+
 const cortar = (texto) => {
   const lineas = texto.split('\n');
   for (let i = 0; i < lineas.length; i += 1) {
     if (INICIO_DEL_PIE.some((re) => re.test(lineas[i]))) {
-      return { texto: lineas.slice(0, i).join('\n').trim(), cortadas: lineas.length - i };
+      const limpio = podarCola(lineas.slice(0, i).join('\n'));
+      return { texto: limpio, cortadas: lineas.length - limpio.split('\n').length };
     }
   }
-  return { texto: texto.trim(), cortadas: 0 };
+  const limpio = podarCola(texto);
+  return { texto: limpio, cortadas: texto.split('\n').length - limpio.split('\n').length };
 };
 
 /* Dos párrafos idénticos seguidos son casi siempre plantilla duplicada. Se
@@ -106,7 +146,10 @@ for (const f of ficheros) {
   dobles.slice(0, 2).forEach((d) => console.log(`       repetido: «${d}…»`));
 
   if (APLICAR && (cortadas || vacios)) {
-    const limpio = texto.replace(/^#{2,3}\s*$/gm, '').replace(/\n{3,}/g, '\n\n').trim();
+    const limpio = texto
+      .split('\n').filter((l) => !RESTOS.some((re) => re.test(l))).join('\n')
+      .replace(/^#{2,3}\s*$/gm, '')
+      .replace(/\n{3,}/g, '\n\n').trim();
     /* El salto antes del --- es obligatorio: nuevo-post.js busca "\n---" para
        separar cabecera de cuerpo, y sin él da "Falta la línea ---". */
     fs.writeFileSync(ruta, `${cabecera}\n---\n${limpio}\n`, 'utf8');
