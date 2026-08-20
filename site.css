@@ -2616,3 +2616,34 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
      lectura de una frase larga. */
   text-transform: none;
 }
+
+/* ── Reseñas de Google ───────────────────────────────────────────────────
+   Las estrellas son un carácter tipográfico, no un icono: heredan el color y
+   el tamaño del texto, así que no hay que mantener un SVG en paralelo. Se les
+   da el dorado de reseña porque en gris no se leen como puntuación. */
+.review-stars { color: #e8a33d; letter-spacing: .08em; }
+.reviewmeta time { opacity: .62; }
+.reviewmeta strong { font-weight: 600; }
+
+/* La navegación del carrusel y el enlace a la ficha comparten fila: el botón
+   pesa más que las flechas, que es lo que se busca — quien quiere comprobar
+   las reseñas debe poder ir a Google sin buscar el enlace. */
+.reviewnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+.review-cta { white-space: nowrap; }
+
+@media (max-width: 560px) {
+  .reviewnav { flex-direction: column-reverse; align-items: stretch; }
+  .review-cta { justify-content: center; }
+}
+
+/* El botón que lleva a la ficha de Google es el único enlace de salida de la
+   sección y en el móvil se pulsa con el dedo: 38 px de alto se quedaban por
+   debajo del mínimo de 44 que recomienda la WCAG para objetivos táctiles. */
+.review-cta { min-height: 44px; padding-block: 12px; }
