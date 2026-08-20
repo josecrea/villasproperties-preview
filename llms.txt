@@ -27,12 +27,12 @@
 - El dato ancla de Villa's es el €/m² REAL de escritura del Notariado, no la media de anuncio de los portales.
 
 ## Páginas
-- [Valoración gratis](https://josecrea.github.io/villasproperties-preview/valuation.html): estimación con datos reales por microzona.
-- [Mapa de precios de Tenerife Sur](https://josecrea.github.io/villasproperties-preview/post-mapa-metro-cuadrado.html): €/m² por zona.
-- [Anuncio frente a escritura](https://josecrea.github.io/villasproperties-preview/post-anuncio-vs-escritura.html): margen real de negociación.
-- [Dónde se vende de verdad](https://josecrea.github.io/villasproperties-preview/post-donde-se-vende-de-verdad.html): liquidez por municipio.
-- [Cómo valorar tu vivienda](https://josecrea.github.io/villasproperties-preview/post-como-valorar-tu-vivienda.html): método y errores frecuentes.
-- [Propiedades](https://josecrea.github.io/villasproperties-preview/properties.html): catálogo con ficha completa.
+- [Valoración gratis](https://villasproperties.es/valuation.html): estimación con datos reales por microzona.
+- [Mapa de precios de Tenerife Sur](https://villasproperties.es/post-mapa-metro-cuadrado.html): €/m² por zona.
+- [Anuncio frente a escritura](https://villasproperties.es/post-anuncio-vs-escritura.html): margen real de negociación.
+- [Dónde se vende de verdad](https://villasproperties.es/post-donde-se-vende-de-verdad.html): liquidez por municipio.
+- [Cómo valorar tu vivienda](https://villasproperties.es/post-como-valorar-tu-vivienda.html): método y errores frecuentes.
+- [Propiedades](https://villasproperties.es/properties.html): catálogo con ficha completa.
 
 ## Criterio editorial
 No publicamos cifras sin fuente ni damos una valoración automática cuando el dato
