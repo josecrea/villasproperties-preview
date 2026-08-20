@@ -96,6 +96,7 @@
           ${props.map((p) => `<option value="${E(p.slug)}"${p.slug === current.slug ? ' selected' : ''}>${E(p.titleShort || p.title)} · ${euro(p.price)}</option>`).join('')}
         </select>
       </div>
+        <button class="btn" id="boNuevo" type="button" style="margin-top:8px">+ Añadir inmueble (pega el enlace de idealista)</button>
 
       <div class="bo-tabs" role="tablist">
         <button class="bo-tab is-on" data-tab="fotos" type="button">Fotos</button>
@@ -337,6 +338,42 @@
   };
 
   const wire = () => {
+    $('#boNuevo')?.addEventListener('click', () => {
+      /* idealista bloquea el scraping (DataDome) y el navegador bloquea leer
+         idealista.com desde otro dominio (CORS): no se puede traer el precio ni
+         las fotos automáticamente. Lo que SÍ se puede es sacar la referencia de
+         la URL y crear la ficha en blanco, para completarla en las pestañas y
+         subir las fotos, que ya las tienes. */
+      const url = window.prompt('Pega el enlace del anuncio de idealista\n(ej. https://www.idealista.com/inmueble/111258127/):');
+      if (!url) return;
+      const ref = (url.match(/inmueble\/(\d{6,})/) || url.match(/(\d{6,})/) || [])[1];
+      if (!ref) { window.alert('No encuentro la referencia en ese enlace. Debe llevar un número, como .../inmueble/111258127/'); return; }
+      if (props.some((p) => p.ref === ref)) {
+        current = props.find((p) => p.ref === ref);
+        render(); window.alert('Ese inmueble ya estaba en el catálogo. Lo he abierto para que lo edites.');
+        return;
+      }
+      const slug = 'idealista-' + ref;
+      const nuevo = {
+        ref, slug,
+        titleShort: 'Nuevo inmueble ' + ref,
+        title: 'Nuevo inmueble (completar)',
+        town: '', zone: '', address: '',
+        type: 'Apartamento', status: 'En venta', strategy: 'Vivienda / segunda residencia',
+        price: 0, pricePerM2: 0, built: 0, useful: 0, beds: 0, baths: 0,
+        floor: '', lift: false, orientation: '', year: null,
+        condition: '', community: 0, energy: 'Pendiente de etiqueta',
+        features: [], equipment: [], highlight: '',
+        description: ['Completa la descripción de este inmueble.'],
+        coords: [], images: [], video: null, floorplans: [], tour: null, documents: [],
+        url,
+      };
+      props.unshift(nuevo);
+      current = nuevo;
+      render();
+      window.alert('Ficha creada con la referencia ' + ref + '.\n\nAhora:\n1. Datos: precio, zona, metros, habitaciones.\n2. Textos: la descripción.\n3. Fotos: sube las imágenes.\n4. Publicar.');
+    });
+
     $('#boProperty').addEventListener('change', (e) => {
       current = props.find((p) => p.slug === e.target.value) || props[0];
       render();
