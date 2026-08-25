@@ -39,7 +39,7 @@
       <img class="brand-logo" src="assets/brand/logo-placeholder.webp" alt="" width="44" height="44">
       <div class="lockup">
         <div class="wordmark"><span>VILL</span><span class="a">A</span><span>’S&nbsp;PROPERTIES</span></div>
-        <div class="brand-sub">PROPERTY INTELLIGENCE · TENERIFE</div>
+        <div class="brand-sub">INTELIGENCIA INMOBILIARIA · TENERIFE</div>
       </div>
     </a>`;
 
@@ -70,7 +70,7 @@
         <div class="footergrid">
           <div class="lockup">
             <div class="wordmark"><span>VILLA’S&nbsp;PROPERTIES</span></div>
-            <div class="brand-sub">PROPERTY INTELLIGENCE · TENERIFE</div>
+            <div class="brand-sub">INTELIGENCIA INMOBILIARIA · TENERIFE</div>
           </div>
           <div><div class="eye">Explore</div><p><a href="properties.html">Properties</a><br><a href="sell.html">Sell</a><br><a href="buy.html">Buy</a><br><a href="finance.html">Finance</a><br><a href="invest.html">Invest</a><br><a href="valuation.html">Valoración gratis</a></p></div>
           <div><div class="eye">Intelligence</div><p><a href="intelligence.html">ACM &amp; Market Impact</a><br><a href="insights.html">Insights / Blog</a><br><a href="advisory.html">Advisory</a><br><a href="case-studies.html">Case Studies</a></p></div>
