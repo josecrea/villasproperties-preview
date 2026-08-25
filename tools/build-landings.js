@@ -26,7 +26,11 @@ const fs = require('fs');
 const path = require('path');
 
 const RAIZ = path.join(__dirname, '..');
-const DOMINIO = 'https://josecrea.github.io/villasproperties-preview';
+/* 🔴 25-ago-2026: el dominio comercial, NO el de Pages. Se usa en canonical,
+   og:url, los breadcrumbs y el sitemap: apuntarlo a github.io le dice a Google
+   que la versión buena de cada landing está fuera de villasproperties.es.
+   Mismo fallo que arrastraba tools/build-seo.js. */
+const DOMINIO = 'https://villasproperties.es';
 
 /* Coordenadas REALES de cada municipio. Las landings de la web actual llevan
    las seis las mismas —las de la empresa—, que para SEO local es como no
