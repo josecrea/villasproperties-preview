@@ -6,11 +6,14 @@
    theme-color y JSON-LD según el tipo. Y a nivel de sitio: robots.txt,
    sitemap.xml, llms.txt y site.webmanifest.
 
-   Uso:  node tools/build-seo.js                          (noindex: es un preview)
-         node tools/build-seo.js --index --si-publicar   (abre la indexación)
+   Uso:  node tools/build-seo.js --index --si-publicar   (lo normal: es PRODUCCIÓN)
+         node tools/build-seo.js --si-desindexar         (sacar la web de Google, a sabiendas)
 
-   El preview se mantiene en noindex por decisión de Jose hasta que la web esté
-   acabada: indexarlo ahora lo pondría a competir con villasproperties.es.
+   ⚠️ 25-ago-2026: este repo NACIÓ como preview y hoy sirve el dominio comercial
+   (Pages → CNAME villasproperties.es, rama main). Dos cosas quedaron del pasado y
+   ambas borraban la web de Google sin romper nada a la vista — corregidas:
+     · BASE apuntaba a josecrea.github.io → reescribía los 42 canonical y el sitemap.
+     · sin flags ponía noindex,nofollow + Disallow: / → ahora aborta.
 */
 'use strict';
 
@@ -18,29 +21,41 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const BASE = 'https://josecrea.github.io/villasproperties-preview/';
-/* Publicar es una decisión de negocio, no un flag que se teclea por inercia:
-   indexar el preview duplicaría contenido con villasproperties.es. Por eso
-   --index exige confirmación explícita. */
+/* 🔴 El dominio comercial, NO el de Pages: cada build reescribe canonical, og:url y
+   sitemap con este valor. Apuntarlo a github.io le dice a Google que la versión
+   buena de cada página está fuera de villasproperties.es. */
+const BASE = 'https://villasproperties.es/';
+
 const WANTS_INDEX = process.argv.includes('--index');
 const CONFIRMED = process.argv.includes('--si-publicar');
 const PUBLISH = WANTS_INDEX && CONFIRMED;
-if (WANTS_INDEX && !CONFIRMED) {
-  console.error('\n[seo] --index NO aplicado.');
-  console.error('[seo] Indexar este preview lo pone a competir con villasproperties.es');
-  console.error('[seo] (contenido duplicado). Si de verdad quieres publicarlo:');
-  console.error('[seo]   node tools/build-seo.js --index --si-publicar\n');
+
+/* Candado: por defecto este script ponía noindex,nofollow en todas las páginas y
+   Disallow: / en robots.txt. Eso era correcto cuando esto era un preview; hoy es
+   producción, así que aborta en vez de desindexar en silencio. */
+if (!PUBLISH && !process.argv.includes('--si-desindexar')) {
+  console.error('\n[seo] ABORTADO: sin --index --si-publicar este script pondría');
+  console.error('[seo] noindex,nofollow en TODAS las páginas y Disallow: / en robots.txt.');
+  console.error('[seo] Esto es PRODUCCIÓN (villasproperties.es).\n');
+  console.error('[seo]   Publicar:    node tools/build-seo.js --index --si-publicar');
+  console.error('[seo]   Desindexar:  node tools/build-seo.js --si-desindexar   (a sabiendas)\n');
+  process.exit(1);
 }
 const TODAY = '2026-08-18';
 
 const ORG = {
   name: "Villa's Properties",
   legalName: 'VILLVERG SL',
+  /* NAP canónico = el de la ficha de Google Business (decisión de Jose, 25-ago-2026).
+     Tiene que coincidir AL BYTE con GBP, llms.txt, el pie de la web y los directorios:
+     si no coincide, Google no confirma la entidad y no hay pack local.
+     El teléfono se queda en el 667: el 679 de la ficha es el de okservice y se
+     corrige allí, no aquí (los 26 enlaces de WhatsApp del sitio son de Villa's). */
   phone: '+34667384965',
-  street: 'Calle Ángel Arocha, 24',
-  locality: 'Granadilla de Abona',
+  street: 'Calle Mencey Anaga, 23',
+  locality: 'Las Chafiras',
   region: 'Santa Cruz de Tenerife',
-  postal: '38594',
+  postal: '38639',
   country: 'ES',
   areaServed: ['Adeje', 'Arona', 'Granadilla de Abona', 'San Miguel de Abona', 'Guía de Isora', 'Santiago del Teide'],
   sameAs: [
@@ -56,7 +71,7 @@ const ORG = {
 /* description + tipo por página. Las que no aparecen heredan una genérica. */
 const PAGES = {
   'index.html': {
-    title: "Villa's Properties — Property Intelligence · Tenerife",
+    title: "Inmobiliaria en Tenerife Sur | Villa's Properties",
     desc: 'Inmobiliaria en Tenerife Sur con análisis de mercado propio: compra, venta, inversión y financiación con datos reales de cada microzona.',
     type: 'home', priority: '1.0',
   },
@@ -281,7 +296,11 @@ fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Villa's Properties
 
 > Inmobiliaria en Tenerife Sur (VILLVERG SL) con análisis de mercado propio.
 > Cubre Adeje, Arona, Granadilla de Abona, San Miguel de Abona, Guía de Isora y
-> Santiago del Teide. Contacto: ${ORG.phone} (WhatsApp).
+> Santiago del Teide.
+>
+> ${ORG.name} · ${ORG.legalName}
+> ${ORG.street}, ${ORG.postal} ${ORG.locality}, ${ORG.region}
+> Contacto: ${ORG.phone} (WhatsApp).
 
 ## Qué hacemos
 - Venta con estrategia de precio: rango de anuncio, salida realista y contraste con el valor de escritura del Notariado.
