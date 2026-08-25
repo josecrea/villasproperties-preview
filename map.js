@@ -62,7 +62,7 @@
       </header>
       <div class="mp-sources">
         <div><span>idealista</span><b>${perM2(town.eurM2)}</b><small>${DATES.idealista || ''}</small></div>
-        <div><span>Escritura</span><b>${town.notaria ? perM2(town.notaria) : '—'}</b><small>Notariado</small></div>
+        <div><span>Escritura</span><b>${town.notaria ? perM2(town.notaria) : '—'}</b><small>precio escriturado</small></div>
         <div><span>Operaciones</span><b>${town.catastroCV ? String(town.catastroCV).replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '—'}</b><small>Catastro ${DATES.catastro || ''}</small></div>
       </div>
       <ul class="mp-zones">

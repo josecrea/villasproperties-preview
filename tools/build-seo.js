@@ -85,7 +85,7 @@ const PAGES = {
   },
   'valuation.html': {
     title: 'Valoración gratis de tu casa en Tenerife Sur — Villa’s Properties',
-    desc: 'Calcula gratis lo que vale tu vivienda en Tenerife Sur con datos reales: precio de anuncio, salida realista y valor de escritura del Notariado.',
+    desc: 'Calcula gratis lo que vale tu vivienda en Tenerife Sur con datos reales: precio de anuncio, salida realista y valor escriturado.',
     type: 'faq', priority: '0.9',
   },
   'insights.html': {
@@ -113,7 +113,7 @@ const PAGES = {
     type: 'article', priority: '0.8', published: TODAY, category: 'Mercado',
   },
   'post-anuncio-vs-escritura.html': {
-    desc: 'La distancia entre el precio de anuncio y el de escritura en Tenerife Sur, municipio a municipio, con datos del Notariado.',
+    desc: 'La distancia entre el precio de anuncio y el precio escriturado en Tenerife Sur, municipio a municipio.',
     type: 'article', priority: '0.8', published: TODAY, category: 'Venta',
   },
   'post-donde-se-vende-de-verdad.html': {
@@ -159,7 +159,7 @@ const faqLd = () => ({
   mainEntity: [
     ['¿La valoración es realmente gratis?', 'Sí. La estimación automática y la primera revisión por un asesor local no tienen coste ni obligan a vender con Villa’s Properties.'],
     ['¿Una valoración de mercado es una tasación?', 'No. Una tasación homologada (ECO/805/2003) la firma una sociedad de tasación con visita e informe registral y sirve para el banco. La valoración de mercado sirve para decidir a qué precio salir.'],
-    ['¿De dónde salen los €/m² del valorador?', 'De cuatro fuentes contrastadas: idealista (precio de oferta), Fotocasa (índice de compra), RealAdvisor (mediana por tipología) y el Portal Estadístico del Notariado (valor real de escritura). El Catastro aporta el valor de referencia. Se actualizan cada mes.'],
+    ['¿De dónde salen los €/m² del valorador?', 'De cuatro fuentes contrastadas: idealista (precio de oferta), Fotocasa (índice de compra), RealAdvisor (mediana por tipología) y el precio escriturado (valor real de la compraventa). El Catastro aporta el valor de referencia. Se actualizan cada mes.'],
     ['¿Por qué a veces no dais una cifra?', 'Porque un terreno, un inmueble singular o un municipio sin serie de datos fiable no se valoran con un €/m² de vivienda. Preferimos abstenernos a dar un número que no significa nada.'],
     ['¿Qué municipios cubre la valoración en Tenerife Sur?', 'Adeje, Arona, Granadilla de Abona, San Miguel de Abona, Guía de Isora y Santiago del Teide, con desglose por microzona.'],
   ].map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
@@ -303,27 +303,27 @@ fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Villa's Properties
 > Contacto: ${ORG.phone} (WhatsApp).
 
 ## Qué hacemos
-- Venta con estrategia de precio: rango de anuncio, salida realista y contraste con el valor de escritura del Notariado.
+- Venta con estrategia de precio: rango de anuncio, salida realista y contraste con el valor escriturado.
 - Compra con due diligence: screening, documentación, financiación y cierre.
 - Inversión: yield, CAPEX, liquidez del municipio y estrategia de salida.
 - Valoración gratuita en dos minutos con datos reales por microzona.
 
 ## Datos que publicamos (actualización mensual)
 - €/m² de oferta por municipio y por microzona (26 zonas del sur), fuente idealista.
-- €/m² real de escritura por municipio, fuente Portal Estadístico del Notariado.
+- €/m² escriturado por municipio: el valor real declarado en la compraventa ante notario.
 - Número de compraventas de vivienda al año por municipio, fuente Catastro.
-- Contraste entre precio de anuncio y precio de escritura, ponderado por operaciones.
+- Contraste entre el precio de anuncio y el precio escriturado, ponderado por operaciones.
 
 ## Cifras destacadas (datos de julio de 2026)
 - Rango del sur: 6.233 €/m² en Playa de las Américas frente a 2.099 €/m² en el casco de Granadilla (2,97 veces).
-- Diferencia media entre anuncio y escritura ponderada por operaciones: 21,4%.
+- Diferencia media entre lo anunciado y lo escriturado, ponderada por operaciones: 21,4%.
 - Compraventas anuales en los seis municipios del sur: 8.552; Arona concentra el 40,2%.
 - Municipio que más sube a 12 meses: San Miguel de Abona (+10,2%). El único que cae: Guía de Isora (-4,8%).
 
 ## Páginas
 - [Valoración gratis](${BASE}valuation.html): estimación con datos reales por microzona.
 - [Mapa de precios de Tenerife Sur](${BASE}post-mapa-metro-cuadrado.html): €/m² por zona.
-- [Anuncio frente a escritura](${BASE}post-anuncio-vs-escritura.html): margen real de negociación.
+- [Anuncio frente a lo escriturado](${BASE}post-anuncio-vs-escritura.html): margen real de negociación.
 - [Dónde se vende de verdad](${BASE}post-donde-se-vende-de-verdad.html): liquidez por municipio.
 - [Cómo valorar tu vivienda](${BASE}post-como-valorar-tu-vivienda.html): método y errores frecuentes.
 - [Propiedades](${BASE}properties.html): catálogo con ficha completa.

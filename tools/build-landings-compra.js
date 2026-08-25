@@ -12,7 +12,7 @@
  * puede ganar Villa's es la pregunta que hay DEBAJO de esa búsqueda: cuánto se
  * paga de verdad aquí, cuánto margen hay entre lo que se pide y lo que se firma,
  * y qué se compra con el presupuesto que uno tiene. Eso sale del dato del
- * Notariado, que ninguna agencia de la comarca publica porque a ninguna le
+ * precio escriturado, que ninguna agencia de la comarca publica porque a ninguna le
  * interesa decir en voz alta que el precio de anuncio es ficción.
  *
  * POR QUÉ TAMBIÉN POR NÚCLEO Y NO SOLO POR MUNICIPIO
@@ -312,7 +312,7 @@ for (const [k, cfg] of Object.entries(MUNI)) {
       ? `Entre ${E(ctx.cara.label)} y ${E(ctx.barata.label)} hay ${dec((ctx.cara.eurM2 / ctx.barata.eurM2).toFixed(2))} veces de diferencia. La media municipal no describe ninguna casa concreta.`
       : 'La media municipal no describe ninguna casa concreta.',
     presupuestos: tablaPresupuestos(zonas, n),
-    etiquetaNotaria: 'lo que se firma · Notariado',
+    etiquetaNotaria: 'lo que se firma · escriturado',
     pieMargen: `El precio de escritura es la media de TODAS las compraventas del municipio, casco y costa incluidos. No es el descuento que vas a conseguir en una casa concreta: es la prueba de que en ${E(n)} el precio publicado y el precio de cierre no son lo mismo.`,
     otras, parVender: SLUG_VENDER[k],
     parVenderTexto: `¿Estás del otro lado y lo que quieres es vender?`,
@@ -369,7 +369,7 @@ for (const nu of NUCLEOS) {
     ctx, faq, filasZonas: filasDe(hermanas),
     tablaPie: `${E(n)} dentro de ${E(m.name)}: así queda frente a las demás zonas del municipio.`,
     presupuestos: tablaPresupuestos(hermanas, m.name),
-    etiquetaNotaria: `media de ${m.name} · Notariado`,
+    etiquetaNotaria: `media de ${m.name} · escriturado`,
     pieMargen: `Las dos cifras no son comparables sin más: los ${fmt(z.eurM2)} €/m² son lo que se pide en ${E(n)}, y los ${fmt(m.notaria)} €/m² son la media de escritura de TODO ${E(m.name)}, casco incluido. ${E(n)} está por encima de esa media, así que el margen real aquí es menor que la resta —pero el precio de anuncio sigue sin ser el de cierre.`,
     otras, parVender: SLUG_VENDER[nu.muni],
     parVenderTexto: `¿Lo que quieres es vender en ${E(m.name)}?`,

@@ -44,7 +44,7 @@
     /* Panel de contexto */
     const rows = [
       ['Oferta publicada', perM2(town.eurM2), `idealista ${market.meta.dates?.idealista || ''}`],
-      ['Escritura real', town.notaria ? perM2(town.notaria) : '—', 'Notariado'],
+      ['Escritura real', town.notaria ? perM2(town.notaria) : '—', 'precio escriturado'],
       ['Operaciones al año', town.catastroCV ? group(town.catastroCV) : '—', `Catastro ${market.meta.dates?.catastro || ''}`],
       ['Doce meses', `${town.var1a >= 0 ? '+' : ''}${String(town.var1a).replace('.', ',')}%`, town.var1a >= 0 ? 'sube' : 'baja'],
     ];

@@ -105,7 +105,7 @@
         : deedPrice
           ? `Aplicando la distancia media entre anuncio y escritura de ${town.name}, una operación como esta se movería en torno a <strong>${euro(deedPrice)}</strong>. Es una referencia de negociación, no una tasación.`
           : 'Sin dato de escritura publicado para este municipio.'}</p>
-      <p class="sell-note">Precios de oferta de idealista (${market.meta.dates?.idealista || ''}) y valor de escritura del Portal Estadístico del Notariado. Datos de ${market.meta.updated || 's/f'}. Orientativo: no sustituye una tasación ni una visita.</p>`;
+      <p class="sell-note">Precios de oferta de idealista (${market.meta.dates?.idealista || ''}) y valor de escritura del precio escriturado. Datos de ${market.meta.updated || 's/f'}. Orientativo: no sustituye una tasación ni una visita.</p>`;
   };
 
   /* ---------- Margen por municipio ---------- */

@@ -9,27 +9,27 @@
 > Contacto: +34667384965 (WhatsApp).
 
 ## Qué hacemos
-- Venta con estrategia de precio: rango de anuncio, salida realista y contraste con el valor de escritura del Notariado.
+- Venta con estrategia de precio: rango de anuncio, salida realista y contraste con el valor escriturado.
 - Compra con due diligence: screening, documentación, financiación y cierre.
 - Inversión: yield, CAPEX, liquidez del municipio y estrategia de salida.
 - Valoración gratuita en dos minutos con datos reales por microzona.
 
 ## Datos que publicamos (actualización mensual)
 - €/m² de oferta por municipio y por microzona (26 zonas del sur), fuente idealista.
-- €/m² real de escritura por municipio, fuente Portal Estadístico del Notariado.
+- €/m² escriturado por municipio: el valor real declarado en la compraventa ante notario.
 - Número de compraventas de vivienda al año por municipio, fuente Catastro.
-- Contraste entre precio de anuncio y precio de escritura, ponderado por operaciones.
+- Contraste entre el precio de anuncio y el precio escriturado, ponderado por operaciones.
 
 ## Cifras destacadas (datos de julio de 2026)
 - Rango del sur: 6.233 €/m² en Playa de las Américas frente a 2.099 €/m² en el casco de Granadilla (2,97 veces).
-- Diferencia media entre anuncio y escritura ponderada por operaciones: 21,4%.
+- Diferencia media entre lo anunciado y lo escriturado, ponderada por operaciones: 21,4%.
 - Compraventas anuales en los seis municipios del sur: 8.552; Arona concentra el 40,2%.
 - Municipio que más sube a 12 meses: San Miguel de Abona (+10,2%). El único que cae: Guía de Isora (-4,8%).
 
 ## Páginas
 - [Valoración gratis](https://villasproperties.es/valuation.html): estimación con datos reales por microzona.
 - [Mapa de precios de Tenerife Sur](https://villasproperties.es/post-mapa-metro-cuadrado.html): €/m² por zona.
-- [Anuncio frente a escritura](https://villasproperties.es/post-anuncio-vs-escritura.html): margen real de negociación.
+- [Anuncio frente a lo escriturado](https://villasproperties.es/post-anuncio-vs-escritura.html): margen real de negociación.
 - [Dónde se vende de verdad](https://villasproperties.es/post-donde-se-vende-de-verdad.html): liquidez por municipio.
 - [Cómo valorar tu vivienda](https://villasproperties.es/post-como-valorar-tu-vivienda.html): método y errores frecuentes.
 - [Propiedades](https://villasproperties.es/properties.html): catálogo con ficha completa.

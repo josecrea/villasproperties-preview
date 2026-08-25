@@ -52,7 +52,7 @@ const main = () => {
    eurM2 / var1a / zonas .... idealista, precio medio de OFERTA por m²
    piso / casa / ra ......... RealAdvisor, mediana por tipología
    fc ....................... Fotocasa, índice de compra de pisos
-   notaria .................. €/m² REAL de escritura (Portal Estadístico del Notariado)
+   notaria .................. €/m² REAL de escritura (precio escriturado)
    catastro / catastroCV .... Catastro: €/m² de referencia y nº de compraventas del año
 */
 window.VP_MARKET = ${JSON.stringify(payload, null, 2)};

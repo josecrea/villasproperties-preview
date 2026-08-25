@@ -67,7 +67,7 @@ const MUNI = {
    hace de verdad. Se conservan y se les actualiza la cifra. */
 const FAQ_COMUN = (n, d) => [
   [`¿Por qué el precio de escritura de ${n} es más bajo que el de los portales?`,
-   `Porque los ${fmt(d.notaria)} €/m² del Notariado son la media de TODAS las compraventas del municipio —casco, medianías y costa—, mientras que el €/m² de los portales es lo que se pide, y se pide más en la zona cara. No es que se venda barato: es que se está midiendo otra cosa.`],
+   `Porque los ${fmt(d.notaria)} €/m² escriturados son la media de TODAS las compraventas del municipio —casco, medianías y costa—, mientras que el €/m² de los portales es lo que se pide, y se pide más en la zona cara. No es que se venda barato: es que se está midiendo otra cosa.`],
   [`¿Qué gastos tiene el vendedor en ${n}?`,
    `Habitualmente la plusvalía municipal (IIVTNU) del Ayuntamiento de ${n} salvo pacto en contrario, la cancelación registral de la hipoteca si la hubiera, el certificado energético y la ganancia patrimonial en el IRPF. Se calcula antes de firmar, no después.`],
   ['¿Puedo vender si tengo la vivienda alquilada?',
@@ -184,7 +184,7 @@ ${cabecera}
     <div><h2>El número que importa<br>es el que se escritura.</h2></div></div>
     <div class="bankcifras">
       <div><strong>${fmt(m.eurM2)} €/m²</strong><small>lo que se pide · idealista ${E(MERCADO.meta.dates.idealista)}</small></div>
-      ${m.notaria ? `<div><strong>${fmt(m.notaria)} €/m²</strong><small>lo que se firma · Notariado</small></div>` : ''}
+      ${m.notaria ? `<div><strong>${fmt(m.notaria)} €/m²</strong><small>lo que se firma · escriturado</small></div>` : ''}
       ${brecha ? `<div><strong>${brecha} %</strong><small>distancia entre pedir y firmar</small></div>` : ''}
     </div>
     <p class="bankpie">La diferencia no es un descuento que puedas negociar sin más: el dato de
