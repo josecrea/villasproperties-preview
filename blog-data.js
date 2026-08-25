@@ -12,6 +12,7 @@ window.VP_POSTS = [
     read: '8 min',
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'brecha',
   },
   {
     slug: 'post-suelo-urbano-canarias-125000-viviendas.html',
@@ -22,6 +23,7 @@ window.VP_POSTS = [
     read: '6 min',
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'suelo',
   },
   {
     slug: 'post-por-que-tu-casa-no-se-vende-en-tenerife-8.html',
@@ -32,6 +34,7 @@ window.VP_POSTS = [
     read: '27 min',
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'exposicion',
   },
   {
     slug: 'post-el-precio-de-la-vivienda-en-espana-se-ha-incrementado-un-45-en-los-ultimos-diez-anos-7.html',
@@ -42,6 +45,7 @@ window.VP_POSTS = [
     read: '6 min',
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'ciclo',
   },
   {
     slug: 'post-como-vender-una-casa-fase-2-6.html',
@@ -52,6 +56,7 @@ window.VP_POSTS = [
     read: '6 min',
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'proceso',
   },
   {
     slug: 'post-como-vender-una-casa-5.html',
@@ -62,6 +67,7 @@ window.VP_POSTS = [
     read: '6 min',
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'proceso',
   },
   {
     slug: 'post-de-adeje-al-norte-las-zonas-de-tenerife-que-marcaran-la-revalorizacion-en-2026-4.html',
@@ -72,6 +78,7 @@ window.VP_POSTS = [
     read: '4 min',
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'zonas',
   },
   {
     slug: 'post-invertir-en-tenerife-por-que-la-seguridad-juridica-es-mas-importante-que-la-rentabilidad-3.html',
@@ -82,6 +89,7 @@ window.VP_POSTS = [
     read: '4 min',
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'juridico',
   },
   {
     slug: 'post-cuanto-vale-realmente-mi-villa-en-tenerife-la-clave-esta-en-la-precision-no-en-la-prisa-2.html',
@@ -92,6 +100,7 @@ window.VP_POSTS = [
     read: '4 min',
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'metodo',
   },
   {
     slug: 'post-estudio-anual-del-mercado-inmobiliario-1.html',
@@ -102,6 +111,7 @@ window.VP_POSTS = [
     read: '4 min',
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'ciclo',
   },
   {
     slug: 'post-mapa-metro-cuadrado.html',
@@ -113,6 +123,7 @@ window.VP_POSTS = [
     featured: true,
     accent: 'sand',
     figure: 'chart',
+    bg: 'mapa',
   },
   {
     slug: 'post-anuncio-vs-escritura.html',
@@ -123,6 +134,7 @@ window.VP_POSTS = [
     read: '7 min',
     accent: 'atlantic',
     figure: 'gap',
+    bg: 'brecha',
   },
   {
     slug: 'post-donde-se-vende-de-verdad.html',
@@ -133,6 +145,7 @@ window.VP_POSTS = [
     read: '5 min',
     accent: 'ink',
     figure: 'volume',
+    bg: 'liquidez',
   },
   {
     slug: 'post-como-valorar-tu-vivienda.html',
@@ -143,6 +156,7 @@ window.VP_POSTS = [
     read: '8 min',
     accent: 'atlantic',
     figure: 'method',
+    bg: 'metodo',
   },
   {
     slug: 'https://villasproperties.es/blog/4/por-que-tu-casa-no-se-vende-en-tenerife-8',
@@ -154,6 +168,7 @@ window.VP_POSTS = [
     external: true,
     accent: 'ink',
     figure: 'method',
+    bg: 'exposicion',
   },
   {
     slug: 'https://villasproperties.es/blog/4/el-precio-de-la-vivienda-en-espana-se-ha-incrementado-un-45-en-los-ultimos-diez-anos-7',
@@ -165,6 +180,7 @@ window.VP_POSTS = [
     external: true,
     accent: 'atlantic',
     figure: 'chart',
+    bg: 'ciclo',
   },
   {
     slug: 'https://villasproperties.es/blog/4/invertir-en-tenerife-por-que-la-seguridad-juridica-es-mas-importante-que-la-rentabilidad-3',
@@ -176,5 +192,6 @@ window.VP_POSTS = [
     external: true,
     accent: 'sand',
     figure: 'gap',
+    bg: 'juridico',
   },
 ];

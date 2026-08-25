@@ -2647,3 +2647,63 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
    sección y en el móvil se pulsa con el dedo: 38 px de alto se quedaban por
    debajo del mínimo de 44 que recomienda la WCAG para objetivos táctiles. */
 .review-cta { min-height: 44px; padding-block: 12px; }
+
+/* ── Fondos de las tarjetas de Insights ─────────────────────────────────────
+   La imagen va DEBAJO del gráfico (las barras, la línea, los puntos), que se
+   dibuja con :after. Por eso entra como ::before y no como background del
+   contenedor: el gradiente de data-accent tiene que seguir viéndose por encima
+   para que el gráfico no se pierda sobre la foto.
+   El fichero por defecto es .svg; al sustituirlo por una imagen generada basta
+   con cambiar la extensión en --fig-bg de la regla de abajo.            */
+
+/* Dos fondos apilados: el .webp va encima del .svg. Si el .webp no existe todavía
+   —404— el navegador simplemente no lo pinta y se ve el SVG. Así, para cambiar el
+   fondo de un tema basta con dejar el fichero en assets/fig/ con el nombre del
+   tema: no hay que tocar CSS ni HTML. Ver assets/fig/PROMPTS.md. */
+.pcard-fig[data-bg]::before{
+  content:"";position:absolute;inset:-6%;
+  background-image:var(--fig-bg);background-size:cover;background-position:center;
+  opacity:.9;
+  /* Sigue al cursor. Sin --mx/--my (sin JS o sin ratón) vale 0: queda centrado. */
+  transform:translate3d(calc(var(--mx,0) * 10px), calc(var(--my,0) * 10px), 0) scale(1.02);
+  transition:transform .5s cubic-bezier(.16,1,.3,1), opacity .5s ease;
+  will-change:transform;
+}
+/* fig:start — generado por tools/build-figuras.js, no editar a mano */
+.pcard-fig[data-bg="mapa"]{--fig-bg:url(assets/fig/mapa.svg)}
+.pcard-fig[data-bg="suelo"]{--fig-bg:url(assets/fig/suelo.svg)}
+.pcard-fig[data-bg="brecha"]{--fig-bg:url(assets/fig/brecha.svg)}
+.pcard-fig[data-bg="liquidez"]{--fig-bg:url(assets/fig/liquidez.svg)}
+.pcard-fig[data-bg="metodo"]{--fig-bg:url(assets/fig/metodo.svg)}
+.pcard-fig[data-bg="exposicion"]{--fig-bg:url(assets/fig/exposicion.svg)}
+.pcard-fig[data-bg="ciclo"]{--fig-bg:url(assets/fig/ciclo.svg)}
+.pcard-fig[data-bg="juridico"]{--fig-bg:url(assets/fig/juridico.svg)}
+.pcard-fig[data-bg="proceso"]{--fig-bg:url(assets/fig/proceso.svg)}
+.pcard-fig[data-bg="zonas"]{--fig-bg:url(assets/fig/zonas.svg)}
+/* fig:end */
+
+/* Los círculos y el gráfico, por encima del fondo. */
+.pcard-fig i,.pcard-fig b{z-index:1}
+.pcard-fig:after{z-index:2}
+
+/* Al pasar el ratón el fondo se acerca un punto: da profundidad sin moverse
+   tanto como para marear. */
+.pcard:hover .pcard-fig[data-bg]::before,
+.pfeat:hover .pcard-fig[data-bg]::before{
+  transform:translate3d(calc(var(--mx,0) * 16px), calc(var(--my,0) * 16px), 0) scale(1.07);
+  opacity:1;
+}
+/* Los círculos decorativos también siguen al cursor, en sentido contrario:
+   es lo que produce la sensación de capas a distinta profundidad. */
+.pcard:hover .pcard-fig i,.pfeat:hover .pcard-fig i{
+  transform:translate(calc(-9% + var(--mx,0) * -14px), calc(9% + var(--my,0) * -14px)) scale(1.06);
+}
+.pcard:hover .pcard-fig b,.pfeat:hover .pcard-fig b{
+  transform:translate(calc(12% + var(--mx,0) * 18px), calc(-14% + var(--my,0) * 18px)) scale(1.1);
+}
+
+@media (prefers-reduced-motion:reduce){
+  .pcard-fig[data-bg]::before,
+  .pcard:hover .pcard-fig[data-bg]::before,
+  .pfeat:hover .pcard-fig[data-bg]::before{transform:none;transition:none}
+}

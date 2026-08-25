@@ -20,7 +20,10 @@
 
   /* Miniatura generativa: cada artículo tiene su propia composición geométrica
      en vez de una foto de stock que no dice nada. */
-  const figure = (post) => `<div class="pcard-fig" data-fig="${post.figure || 'plain'}" data-accent="${post.accent || 'sand'}" aria-hidden="true"><i></i><b></b></div>`;
+  /* data-bg elige el fondo de la tarjeta (assets/fig/*.svg). Tiene que salir de
+     aquí y no solo del HTML pre-renderizado: este listado se repinta en cliente,
+     así que un atributo escrito a mano en insights.html se pierde al cargar. */
+  const figure = (post) => `<div class="pcard-fig" data-fig="${post.figure || 'plain'}" data-accent="${post.accent || 'sand'}"${post.bg ? ` data-bg="${post.bg}"` : ''} aria-hidden="true"><i></i><b></b></div>`;
 
   const linkAttrs = (post) => (post.external
     ? `href="${U(post.slug)}" target="_blank" rel="noopener"`
