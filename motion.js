@@ -53,40 +53,71 @@
      por letra. */
   const titular = document.querySelector('.hero h1');
   if (titular && !titular.dataset.split) {
-    // Los <br> no aportan espacio, así que se reponen para que no se lea
-    // "Tenerife.Property.Different." de corrido.
-    const texto = titular.innerHTML.replace(/<br\s*\/?>/gi, ' ')
-      .replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-    titular.setAttribute('aria-label', texto);
     titular.dataset.split = '1';
 
     const HUE_INICIAL = 168;   // turquesa, como la primera letra coloreada
     const HUE_PASO = 13;       // ~28 letras -> una vuelta completa al círculo
-    let i = 0;
 
-    // Se recorren los nodos para respetar los <br> que separan las tres líneas.
-    const salida = document.createDocumentFragment();
-    titular.childNodes.forEach((nodo) => {
-      if (nodo.nodeName === 'BR') { salida.appendChild(document.createElement('br')); return; }
-      (nodo.textContent || '').split('').forEach((ch) => {
-        if (ch === ' ') { salida.appendChild(document.createTextNode(' ')); return; }
-        const s = document.createElement('span');
-        s.className = 'ltr';
-        s.textContent = ch;
-        s.style.setProperty('--i', i);
-        s.style.setProperty('--c', 'hsl(' + ((HUE_INICIAL + i * HUE_PASO) % 360) + ' 62% 79%)');
-        s.setAttribute('aria-hidden', 'true');
-        salida.appendChild(s);
-        i++;
+    // Pinta un texto (una o varias líneas) letra a letra con el MISMO arcoíris:
+    // el color depende solo de la POSICIÓN de la letra, no del idioma, así que la
+    // secuencia de colores es idéntica se muestre "Tenerife..." o "Inmobiliaria...".
+    // `lineas` es un array; entre líneas se repone el <br>.
+    const pintar = (lineas) => {
+      let i = 0;
+      const salida = document.createDocumentFragment();
+      lineas.forEach((linea, idx) => {
+        if (idx > 0) salida.appendChild(document.createElement('br'));
+        linea.split('').forEach((ch) => {
+          if (ch === ' ') { salida.appendChild(document.createTextNode(' ')); return; }
+          const s = document.createElement('span');
+          s.className = 'ltr';
+          s.textContent = ch;
+          s.style.setProperty('--i', i);
+          s.style.setProperty('--c', 'hsl(' + ((HUE_INICIAL + i * HUE_PASO) % 360) + ' 62% 79%)');
+          s.setAttribute('aria-hidden', 'true');
+          salida.appendChild(s);
+          i++;
+        });
       });
-    });
-    titular.textContent = '';
-    titular.appendChild(salida);
+      titular.textContent = '';
+      titular.appendChild(salida);
+      // Reflow forzado: si no, el navegador ve el span nacer y cambiar de color en
+      // el mismo frame, no registra el blanco de partida y salta al color final
+      // sin transición — la ola se veía de golpe.
+      void titular.offsetWidth;
+    };
 
-    // Reflow forzado: si no, el navegador ve el span nacer y cambiar de color en
-    // el mismo frame, no registra el blanco de partida y salta al color final
-    // sin transición — la ola se veía de golpe.
-    void titular.offsetWidth;
+    // Dos versiones del titular en el HTML (data-alt-en / data-alt-es), con "|" por
+    // línea. Se muestra INGLÉS primero, se espera unos segundos y se alterna al
+    // español, en bucle. El texto del HTML sigue siendo el español (SEO y sin-JS).
+    const en = (titular.dataset.altEn || '').split('|').filter(Boolean);
+    const es = (titular.dataset.altEs || '').split('|').filter(Boolean);
+    const alterna = en.length && es.length;
+
+    if (alterna) {
+      // aria-label fijo en español: es el idioma real de la página; no conviene que
+      // un lector de pantalla lo relea cada pocos segundos.
+      titular.setAttribute('aria-label', es.join(' '));
+      const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (quieto) {
+        pintar(es);   // sin movimiento: español fijo, sin alternancia ni ola
+      } else {
+        pintar(en);                      // primero en inglés
+        let mostrandoEn = true;
+        setInterval(() => {
+          mostrandoEn = !mostrandoEn;
+          pintar(mostrandoEn ? en : es);
+        }, 3800);                        // ~unos segundos en cada idioma
+      }
+    } else {
+      // Fallback (resto de páginas): trocea el texto tal cual está en el HTML.
+      const texto = titular.innerHTML.replace(/<br\s*\/?>/gi, ' ')
+        .replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+      titular.setAttribute('aria-label', texto);
+      const lineas = titular.innerHTML.replace(/<br\s*\/?>/gi, '|')
+        .replace(/<[^>]+>/g, '').split('|').map((s) => s.replace(/\s+/g, ' ').trim());
+      pintar(lineas);
+    }
   }
 
   /* ---------- Titulares de sección: contorno + sólido ----------
