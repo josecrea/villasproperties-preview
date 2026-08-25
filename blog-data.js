@@ -4,6 +4,16 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-vender-casa-tenerife-sur.html',
+    category: 'Venta',
+    title: "Vender casa en Tenerife Sur: precio real, impuestos y plazos",
+    dek: "En Tenerife Sur se firma entre un 9% y un 25% por debajo de lo que se pide. Precio real por municipio, cuánto te queda neto, la retención del 3% a no residentes y los plazos de venta.",
+    date: '2026-08-25',
+    read: '8 min',
+    accent: 'atlantic',
+    figure: 'chart',
+  },
+  {
     slug: 'post-suelo-urbano-canarias-125000-viviendas.html',
     category: 'Mercado',
     title: "Canarias tiene suelo para 125.000 viviendas. Once mil son casas",
