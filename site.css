@@ -2676,7 +2676,7 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 .pcard-fig[data-bg="liquidez"]{--fig-bg:url(assets/fig/liquidez.webp),url(assets/fig/liquidez.svg)}
 .pcard-fig[data-bg="metodo"]{--fig-bg:url(assets/fig/metodo.webp),url(assets/fig/metodo.svg)}
 .pcard-fig[data-bg="exposicion"]{--fig-bg:url(assets/fig/exposicion.webp),url(assets/fig/exposicion.svg)}
-.pcard-fig[data-bg="ciclo"]{--fig-bg:url(assets/fig/ciclo.svg)}
+.pcard-fig[data-bg="ciclo"]{--fig-bg:url(assets/fig/ciclo.webp),url(assets/fig/ciclo.svg)}
 .pcard-fig[data-bg="juridico"]{--fig-bg:url(assets/fig/juridico.webp),url(assets/fig/juridico.svg)}
 .pcard-fig[data-bg="proceso"]{--fig-bg:url(assets/fig/proceso.webp),url(assets/fig/proceso.svg)}
 .pcard-fig[data-bg="zonas"]{--fig-bg:url(assets/fig/zonas.webp),url(assets/fig/zonas.svg)}
