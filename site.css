@@ -2670,16 +2670,16 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
   will-change:transform;
 }
 /* fig:start — generado por tools/build-figuras.js, no editar a mano */
-.pcard-fig[data-bg="mapa"]{--fig-bg:url(assets/fig/mapa.svg)}
-.pcard-fig[data-bg="suelo"]{--fig-bg:url(assets/fig/suelo.svg)}
-.pcard-fig[data-bg="brecha"]{--fig-bg:url(assets/fig/brecha.svg)}
-.pcard-fig[data-bg="liquidez"]{--fig-bg:url(assets/fig/liquidez.svg)}
-.pcard-fig[data-bg="metodo"]{--fig-bg:url(assets/fig/metodo.svg)}
-.pcard-fig[data-bg="exposicion"]{--fig-bg:url(assets/fig/exposicion.svg)}
+.pcard-fig[data-bg="mapa"]{--fig-bg:url(assets/fig/mapa.webp),url(assets/fig/mapa.svg)}
+.pcard-fig[data-bg="suelo"]{--fig-bg:url(assets/fig/suelo.webp),url(assets/fig/suelo.svg)}
+.pcard-fig[data-bg="brecha"]{--fig-bg:url(assets/fig/brecha.webp),url(assets/fig/brecha.svg)}
+.pcard-fig[data-bg="liquidez"]{--fig-bg:url(assets/fig/liquidez.webp),url(assets/fig/liquidez.svg)}
+.pcard-fig[data-bg="metodo"]{--fig-bg:url(assets/fig/metodo.webp),url(assets/fig/metodo.svg)}
+.pcard-fig[data-bg="exposicion"]{--fig-bg:url(assets/fig/exposicion.webp),url(assets/fig/exposicion.svg)}
 .pcard-fig[data-bg="ciclo"]{--fig-bg:url(assets/fig/ciclo.svg)}
-.pcard-fig[data-bg="juridico"]{--fig-bg:url(assets/fig/juridico.svg)}
-.pcard-fig[data-bg="proceso"]{--fig-bg:url(assets/fig/proceso.svg)}
-.pcard-fig[data-bg="zonas"]{--fig-bg:url(assets/fig/zonas.svg)}
+.pcard-fig[data-bg="juridico"]{--fig-bg:url(assets/fig/juridico.webp),url(assets/fig/juridico.svg)}
+.pcard-fig[data-bg="proceso"]{--fig-bg:url(assets/fig/proceso.webp),url(assets/fig/proceso.svg)}
+.pcard-fig[data-bg="zonas"]{--fig-bg:url(assets/fig/zonas.webp),url(assets/fig/zonas.svg)}
 /* fig:end */
 
 /* Los círculos y el gráfico, por encima del fondo. */
