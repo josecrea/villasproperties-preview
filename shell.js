@@ -56,7 +56,6 @@
         ${brand}
         <nav class="nav">
           ${NAV.map(([href, label]) => `<a href="${href}"${href === active ? ' class="is-current" aria-current="page"' : ''}>${label}</a>`).join('')}
-          <button class="admin" id="openAdmin" type="button">⚙ Back Office</button>
           <a class="advisor" href="${advisor}">Valoración gratis</a>
         </nav>
         <button class="menu-toggle" id="mobileAdmin" type="button">⚙ Config</button>
@@ -79,6 +78,10 @@
         <div class="footer-bottom">
           <span>© <span id="year">2026</span> Villa's Properties hecho con Amor · <a href="privacy.html" style="text-decoration:underline">Privacidad</a> · <a href="aviso-legal.html" style="text-decoration:underline">Aviso legal</a></span>
           <span><strong>🕒 Tenerife:</strong> <span id="tenerifeClock">--:--:--</span></span>
+            <button class="admin footer-admin" id="openAdmin" type="button">
+              <span class="footer-admin__t">Private back office</span>
+              <span class="footer-admin__s">Acceso restringido</span>
+            </button>
         </div>
       </div>`;
   }

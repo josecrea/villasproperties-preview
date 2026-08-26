@@ -2793,3 +2793,56 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 }
 .dark .btn[href*="wa.me"]:hover,
 .section.dark .btn[href*="wa.me"]:hover{background:#1EBE5A;border-color:#1EBE5A;color:#0B141A}
+
+/* Back office: fuera de la navegación y al pie, que es donde se espera un
+   acceso privado. Discreto pero legible. */
+.footer-admin{
+  display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px;
+  background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left;
+  font:inherit;
+}
+.footer-admin__t{
+  font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);transition:color .25s ease;
+}
+.footer-admin__s{font-size:10px;letter-spacing:.06em;color:var(--muted)}
+.footer-admin:hover .footer-admin__t{color:var(--atlantic-btn)}
+.footer .footer-admin__t,.footer .footer-admin__s{color:inherit}
+.footer .footer-admin__s{opacity:.7}
+.footer .footer-admin:hover .footer-admin__t{text-decoration:underline}
+
+/* ── Estado :hover ──────────────────────────────────────────────────────────
+   El relleno de .btn es un background-image que crece de 0% a 100% al pasar el
+   ratón, y a la vez el texto pasa a blanco. Pero `.btn.fill` declara
+   `background:#fff` con el atajo, y el atajo BORRA ese background-image: el
+   relleno nunca llega, el texto se vuelve blanco igual y el botón desaparece.
+   Pasaba en "Contact", "Ver las 11 reseñas en Google" y "Ampliar".            */
+.btn.fill:hover,
+.btn.fill:focus-visible{
+  background:var(--atlantic-btn);
+  color:#fff;
+  border-color:var(--atlantic-btn);
+}
+/* Sobre fondo oscuro el relleno claro sigue siendo lo legible: se invierte. */
+.dark .btn.fill:hover,
+.section.dark .btn.fill:hover{background:var(--paper);color:var(--ink-deep);border-color:var(--paper)}
+/* WhatsApp conserva su verde también al pasar por encima. */
+.btn.fill[href*="wa.me"]:hover,
+.btn[href*="wa.me"]:focus-visible{background:#1EBE5A;color:#0B141A;border-color:#1EBE5A}
+
+/* Mismo atajo, mismo efecto, en las dos variantes propias. */
+.btn.pricemap-expand:hover,
+.btn.review-cta:hover{background:var(--atlantic-btn);color:#fff;border-color:var(--atlantic-btn)}
+
+/* "Valoración gratis": el relleno del hover se pinta con currentColor y el mismo
+   hover cambia `color`. currentColor se resuelve con el color NUEVO, así que
+   relleno y texto acaban siendo el mismo: 1:1. Se fija el relleno a un color
+   propio y el texto a su contrapuesto, según el tema del header. */
+.nav .advisor{
+  background-image:linear-gradient(var(--adv-fill,currentColor),var(--adv-fill,currentColor));
+}
+.header[data-theme="paper"] .nav .advisor:hover,
+.header:not([data-theme]) .nav .advisor:hover{--adv-fill:var(--ink);color:var(--paper)}
+.header[data-theme="hero"] .nav .advisor:hover,
+.header[data-theme="dark"] .nav .advisor:hover,
+.header[data-theme="green"] .nav .advisor:hover{--adv-fill:#fff;color:var(--ink-deep)}
