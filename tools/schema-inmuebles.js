@@ -31,6 +31,10 @@ const path = require('path');
 
 const RAIZ = path.join(__dirname, '..');
 const DOMINIO = 'https://josecrea.github.io/villasproperties-preview';
+/* Dominio público real (el del CNAME). Lo que se publique aquí es lo que acaba
+   viajando fuera: el agente de voz Julia lee este mismo JSON-LD y manda el
+   enlace por WhatsApp al cliente. Tiene que ser la web, no el preview. */
+const CANONICO = 'https://villasproperties.es';
 const MARCA = 'data-schema="inmuebles"';
 
 global.window = {};
@@ -70,7 +74,17 @@ const ficha = (p) => {
   return {
     '@type': 'RealEstateListing',
     '@id': `${DOMINIO}/properties.html#${p.slug || p.ref}`,
-    url: p.url || `${DOMINIO}/properties.html`,
+    /* 22-sep-2026: aquí iba `p.url`, que es el anuncio de IDEALISTA. El agente
+       de voz (Julia) lee este campo y era el enlace que mandaba al cliente por
+       WhatsApp: mandábamos tráfico al portal en vez de a la web propia, y el
+       cliente veía la ficha del portal con su publicidad y sus competidores.
+       Ahora apunta a nuestra ficha, que ya existe y responde 200.
+       `p.url` se conserva en properties-data.js como referencia del anuncio. */
+    url: `${CANONICO}/property.html?ref=${p.ref}`,
+    /* Sin imagen, el envío por WhatsApp salía sin foto: una vivienda sin foto
+       no se vende. Se usa la galería propia (assets/img/<slug>/), descargada,
+       no enlazada al portal. */
+    image: p.slug ? `${CANONICO}/assets/img/${p.slug}/01.webp` : undefined,
     name: p.titleShort || p.title,
     description: Array.isArray(p.description) ? p.description[0] : (p.description || undefined),
     about: bien,
