@@ -25,7 +25,9 @@
  *           impacta. Apunta a 16-23 caracteres por línea. «|» es el salto a mano.
  *  cita     ≤ 140 caracteres → 2-3 líneas en el bloque crema del estado de WhatsApp.
  *  pruebas  3 o 4, ≤ 32 caracteres cada una → una fila en el feed y en el estado.
- *  kicker   tipo de vivienda · lugar. Va en versalitas doradas encima del gancho.
+ *  kicker   tipo de vivienda · lugar, ≤30 caracteres: en versalitas espaciadas
+ *           se parte en dos líneas enseguida. El municipio no hace falta, ya lo
+ *           dicen la cinta del story y la etiqueta del mapa.
  *  post     solo para COPY.md (el texto del post); puede ser más largo.
  *  foto     número de foto del catálogo que abre el creativo (por defecto la 01).
  *           La 01 no siempre vende: en el casco de Adeje es un muro en sombra.
@@ -40,7 +42,7 @@
 module.exports = {
   /* 395.000 € · 88 m² · 2/1 · Torviscas, Costa Adeje · reforma integral, terraza 15 m² a la piscina, oeste */
   111258127: {
-    kicker: 'Apartamento · Residencial La Pineda · Costa Adeje',
+    kicker: 'Apartamento · Costa Adeje',
     gancho: 'Reformado entero.|Solo falta la maleta.',
     cita: 'La reforma ya está hecha. Llegas, abres la terraza de 15 m² y la piscina está abajo.',
     pruebas: ['Terraza de 15 m² a la piscina', 'Reforma integral, para entrar', 'Sol de tarde: orientación oeste', 'Aire acondicionado · ascensor'],
@@ -58,7 +60,7 @@ module.exports = {
 
   /* 189.000 € · 56 m² · 2/1 · Los Abrigos · bajo elevado, cocina abierta, sur, paseo marítimo a pie */
   112230501: {
-    kicker: 'Entreplanta · Los Abrigos · Granadilla de Abona',
+    kicker: 'Entreplanta · Los Abrigos',
     gancho: 'La luz de un primero.|El mar a un paseo.',
     cita: 'Bajo elevado varios metros sobre la calle: intimidad y luz de sur. Cocina abierta equipada y el paseo marítimo de Los Abrigos a pie.',
     pruebas: ['Elevado sobre la calle', 'Cocina abierta equipada', 'Orientación sur · ascensor', 'Comunidad 22 €/mes'],
@@ -68,7 +70,7 @@ module.exports = {
   /* 179.000 € · 50 m² (35 int. + 15 terraza) · 1/1 · casco de Adeje · vistas al mar, sur, 1ª sin ascensor */
   110909579: {
     foto: 2, // la 01 es el muro de la terraza en sombra; la 02 es la terraza con el mar
-    kicker: 'Apartamento · Casco de Adeje · Primera planta',
+    kicker: 'Apartamento · Casco de Adeje',
     gancho: '35 m² dentro.|15 m² mirando al mar.',
     cita: 'Adeje pueblo, sur, y una terraza de 15 m² con el mar delante. Una puesta al día mínima: te acompañamos en la reforma y en la hipoteca.',
     pruebas: ['Terraza de 15 m² al mar', 'Orientación sur', 'Comunidad 32 €/mes', 'Te acompañamos en la reforma'],

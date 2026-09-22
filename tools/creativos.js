@@ -327,11 +327,11 @@ ${BASE(W, H)}
 body{background:var(--negro)}
 .lienzo{background:var(--negro)}
 /* marco superior: la foto en un marco negro fino, como una lámina */
-.marco{position:absolute;left:0;right:0;top:0;height:910px;background:var(--negro)}
-.foto{position:absolute;left:44px;right:44px;top:206px;height:660px;background:url('${b64(fotoDe(p))}') center 45% / cover no-repeat;
+.marco{position:absolute;left:0;right:0;top:0;height:846px;background:var(--negro)}
+.foto{position:absolute;left:44px;right:44px;top:202px;height:600px;background:url('${b64(fotoDe(p))}') center 45% / cover no-repeat;
   box-shadow:0 30px 80px rgba(0,0,0,.6)}
 .foto::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 2px rgba(230,189,106,.55)}
-.sello{position:absolute;right:70px;bottom:1080px;background:rgba(11,10,8,.62);backdrop-filter:blur(3px);
+.sello{position:absolute;right:70px;bottom:1146px;background:rgba(11,10,8,.62);backdrop-filter:blur(3px);
   padding:20px 24px 16px;border:1px solid rgba(230,189,106,.4)}
 .sello .mapa figcaption{font-size:19px;letter-spacing:.18em;color:var(--oro)}
 /* etiqueta sobre la foto */
@@ -339,7 +339,7 @@ body{background:var(--negro)}
 .marca{position:absolute;right:44px;top:210px;display:flex;align-items:center;gap:16px;background:rgba(11,10,8,.72);padding:14px 26px 14px 16px;backdrop-filter:blur(6px)}
 .marca img{width:66px;height:66px}.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:34px;color:var(--crema);line-height:1}
 /* bloque crema: información, legible a un palmo. Orden: kicker → gancho → cita → precio → datos → pruebas → CTA */
-.papel{position:absolute;left:0;right:0;top:910px;bottom:0;background:var(--papel);color:var(--tinta);padding:46px 68px 178px;display:flex;flex-direction:column}
+.papel{position:absolute;left:0;right:0;top:846px;bottom:0;background:var(--papel);color:var(--tinta);padding:46px 68px 178px;display:flex;flex-direction:column}
 .papel::before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--oro-3),var(--oro-2),var(--oro-3))}
 .kicker{font-size:25px;letter-spacing:.26em;text-transform:uppercase;color:var(--oro-tinta);font-weight:600}
 .gancho{margin-top:16px;font-family:'EB Garamond',serif;font-weight:600;font-size:${cuerpoTitular(t.gancho, 820, { max: 84, min: 58 })}px;line-height:1;letter-spacing:-.01em;color:var(--tinta);max-width:800px;text-wrap:balance}
@@ -501,6 +501,21 @@ async function desbordes(page) {
       if (el.scrollWidth > el.clientWidth + 2) {
         avisos.push(`el pie de página no cabe por ${el.scrollWidth - el.clientWidth} px`);
       }
+    }
+    // el kicker va en versalitas muy espaciadas: en dos líneas se desordena
+    for (const el of document.querySelectorAll('.kicker, .gancho .k')) {
+      const lh = parseFloat(getComputedStyle(el).lineHeight) || 0;
+      if (lh && el.getBoundingClientRect().height > lh * 1.5) {
+        avisos.push(`el kicker «${el.textContent.trim().slice(0, 34)}…» se parte en dos líneas`);
+      }
+    }
+    // el pie del estado se empuja al fondo con margin-top:auto. Si no le queda
+    // holgura es que el bloque va lleno y el siguiente texto largo lo revienta.
+    const ultimo = document.querySelector('.papel .rasgos');
+    const pieWa = document.querySelector('.papel .cta');
+    if (ultimo && pieWa) {
+      const hueco = pieWa.getBoundingClientRect().top - ultimo.getBoundingClientRect().bottom;
+      if (hueco < 24) avisos.push(`el bloque crema va lleno: solo ${Math.round(hueco)} px hasta el pie`);
     }
     // la cinta diagonal va rotada: su caja miente. Lo que importa es que su
     // esquina más baja no llegue al primer texto que tiene debajo.
