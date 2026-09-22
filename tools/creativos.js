@@ -275,15 +275,17 @@ body{color:var(--crema)}
 .marca{position:absolute;left:64px;top:272px;display:flex;align-items:center;gap:24px}
 .marca img{width:172px;height:172px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.55))}
 .marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:70px;line-height:1;text-shadow:0 2px 10px rgba(0,0,0,.6)}
-.marca .s{font-size:29px;letter-spacing:.32em;text-transform:uppercase;color:var(--oro);margin-top:12px;text-shadow:0 2px 10px rgba(0,0,0,.7)}
-.esquina{position:absolute;right:56px;top:322px;z-index:3}
-.estado{font-size:25px;letter-spacing:.34em;text-transform:uppercase;border:2px solid var(--oro);color:var(--oro);padding:14px 24px 12px;border-radius:999px;background:rgba(11,10,8,.45)}
+.marca .s{font-size:30px;letter-spacing:.3em;text-transform:uppercase;color:var(--oro-2);font-weight:500;margin-top:12px;text-shadow:0 2px 8px rgba(0,0,0,.95),0 0 26px rgba(0,0,0,.8)}
+.fila{display:flex;align-items:center;gap:26px;margin-bottom:22px}
+.estado{flex:none;font-size:30px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;border:2px solid var(--oro);color:var(--oro-2);padding:15px 28px 12px;border-radius:999px;background:rgba(11,10,8,.72);box-shadow:0 6px 28px rgba(0,0,0,.55)}
 /* bloque inferior: el precio manda */
-.pie{position:absolute;left:64px;right:64px;bottom:268px}
+.pie{position:absolute;left:64px;right:64px;bottom:268px;z-index:1}
+.pie::before{content:'';position:absolute;left:-90px;right:-90px;top:132px;bottom:-320px;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(11,10,8,0) 0%,rgba(11,10,8,.74) 16%,rgba(11,10,8,.93) 38%,var(--negro) 66%)}
 /* mapa: sello de ubicación arriba a la derecha, lejos del texto */
 .sello .mapa figcaption{font-size:20px;letter-spacing:.18em;color:var(--oro)}
 /* kicker en versalitas doradas + gancho grande: lo que se lee en el segundo que dura el pulgar */
-.kicker{font-size:27px;letter-spacing:.3em;text-transform:uppercase;color:var(--oro);margin-bottom:20px;text-shadow:0 2px 10px rgba(0,0,0,.7)}
+.kicker{font-size:27px;letter-spacing:.17em;text-transform:uppercase;color:var(--oro-2);font-weight:500;line-height:1.3;text-shadow:0 2px 10px rgba(0,0,0,.9),0 0 30px rgba(0,0,0,.7);text-shadow:0 2px 10px rgba(0,0,0,.7)}
 .gancho{font-family:'EB Garamond',serif;font-weight:600;font-size:${cuerpoTitular(t.gancho, 950)}px;line-height:.98;letter-spacing:-.012em;max-width:950px;text-wrap:balance;text-shadow:0 2px 12px rgba(0,0,0,.55)}
 .precio{margin-top:30px;font-style:italic;font-weight:500;font-size:250px;line-height:.82;letter-spacing:-.035em;white-space:nowrap;filter:drop-shadow(0 8px 30px rgba(0,0,0,.6))}
 .precio i{font-style:italic;font-size:.42em;vertical-align:baseline;margin-left:10px}
@@ -299,15 +301,14 @@ body{color:var(--crema)}
 .contacto .q{font-size:25px;letter-spacing:.26em;text-transform:uppercase;color:var(--oro);font-weight:600}
 .contacto .tel{font-family:'EB Garamond',serif;font-weight:600;font-size:78px;line-height:1;margin-top:14px;white-space:nowrap;filter:drop-shadow(0 3px 14px rgba(0,0,0,.6))}
 .contacto .web{display:flex;align-items:baseline;gap:28px;margin-top:18px}
-.contacto .web b{font-size:34px;letter-spacing:.14em;color:var(--crema);font-weight:500}
-.contacto .web span{font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,234,215,.55);white-space:nowrap}
+.contacto .web b{font-size:46px;letter-spacing:.1em;color:var(--crema);font-weight:500}
+.contacto .web span{font-size:21px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,234,215,.55);white-space:nowrap}
 </style></head><body><div class="lienzo">
 <div class="foto"></div><div class="velo"></div><div class="grano"></div>
 <div class="marca"><img src="${LOGO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div></div>
-<div class="esquina"><div class="estado">${esc(p.status)}</div></div>
 <section class="pie">
   <div class="cinta"><span>${esc(zonaCorta(p))} &nbsp;·&nbsp; ${esc(p.town)} &nbsp;·&nbsp; ${esc(zonaCorta(p))} &nbsp;·&nbsp; ${esc(p.town)} &nbsp;·&nbsp; ${esc(zonaCorta(p))} &nbsp;·&nbsp; ${esc(p.town)}</span></div>
-  <div class="kicker">${esc(t.kicker)}</div>
+  <div class="fila"><span class="estado">${esc(p.status)}</span><span class="kicker">${esc(t.kicker)}</span></div>
   <h1 class="gancho">${gancho(t.gancho)}</h1>
   <div class="precio serif oro-texto">${esc(num(p.price))}<i>€</i></div>
   <div class="datos"><b>${esc(datos)}</b></div>
@@ -497,7 +498,8 @@ async function desbordes(page) {
     // bloques que nunca deben pisarse (el fallo del feed: el pie creció y se
     // comió el pie de página, y ninguna caja «desbordaba» nada)
     const pares = [['.rasgos', '.cta'], ['.datos', '.cta'], ['.datos', '.contacto'], ['.precio', '.datos'],
-                   ['.gancho', '.precio'], ['.cita', '.precio'], ['.sello', '.gancho']  /* .sello ya NO se compara con .contacto: vive dentro de él */];
+                   ['.gancho', '.precio'], ['.cita', '.precio'], ['.sello', '.gancho'],  /* .sello ya NO se compara con .contacto: vive dentro de él */
+                   ['.marca', '.estado'], ['.fila', '.gancho']];
     for (const [a, b] of pares) {
       const ea = document.querySelector(a), eb = document.querySelector(b);
       if (!ea || !eb) continue;
@@ -517,7 +519,8 @@ async function desbordes(page) {
     }
     // el kicker va en versalitas muy espaciadas: en dos líneas se desordena
     for (const el of document.querySelectorAll('.kicker, .gancho .k')) {
-      const lh = parseFloat(getComputedStyle(el).lineHeight) || 0;
+      const cs = getComputedStyle(el);
+      const lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.25;
       if (lh && el.getBoundingClientRect().height > lh * 1.5) {
         avisos.push(`el kicker «${el.textContent.trim().slice(0, 34)}…» se parte en dos líneas`);
       }
@@ -533,7 +536,7 @@ async function desbordes(page) {
     // la cinta diagonal va rotada: su caja miente. Lo que importa es que su
     // esquina más baja no llegue al primer texto que tiene debajo.
     const cinta = document.querySelector('.cinta');
-    const primero = document.querySelector('.pie .kicker');
+    const primero = document.querySelector('.pie .fila, .pie .kicker');
     if (cinta && primero) {
       const a = cinta.getBoundingClientRect(), b = primero.getBoundingClientRect();
       if (a.bottom > b.top) avisos.push(`la cinta pisa el kicker ${Math.round(a.bottom - b.top)} px`);

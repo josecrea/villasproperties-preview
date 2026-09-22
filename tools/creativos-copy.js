@@ -25,7 +25,8 @@
  *           impacta. Apunta a 16-23 caracteres por línea. «|» es el salto a mano.
  *  cita     ≤ 140 caracteres → 2-3 líneas en el bloque crema del estado de WhatsApp.
  *  pruebas  3 o 4, ≤ 32 caracteres cada una → una fila en el feed y en el estado.
- *  kicker   tipo de vivienda · lugar, ≤30 caracteres: en versalitas espaciadas
+ *  kicker   tipo de vivienda · lugar, ≤28 caracteres: comparte fila con el botón
+ *           «En venta» y en versalitas espaciadas
  *           se parte en dos líneas enseguida. El municipio no hace falta, ya lo
  *           dicen la cinta del story y la etiqueta del mapa.
  *  post     solo para COPY.md (el texto del post); puede ser más largo.
@@ -51,7 +52,7 @@ module.exports = {
 
   /* 255.000 € · 110/85 m² · 2/2 · Cabo Blanco · garaje + trastero + lavadero, balcón 12 m², cabe 3ª hab */
   111230958: {
-    kicker: 'Apartamento · Cabo Blanco · Arona',
+    kicker: 'Apartamento · Cabo Blanco',
     gancho: 'Cabe otra habitación.|Y el coche.',
     cita: '85 m² útiles, dos baños y un balcón de 12 m² al sur. Garaje, trastero y lavadero incluidos, y una cocina donde cabe la tercera habitación.',
     pruebas: ['Garaje y trastero incluidos', '2 baños completos', 'Balcón de 12 m² al sur', 'Comunidad 30 €/mes'],
