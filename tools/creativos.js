@@ -146,6 +146,9 @@ const llano = (s) => String(s || '').replace(/\s*\|\s*/g, ' ');
  * Para qué: en un story de un segundo, «Cabo Blanco» no le dice nada a quien no
  * es de aquí. La silueta de la isla con un punto sí, y además retiene: el ojo se
  * para a buscar dónde cae. Contorno real de OSM, ver tenerife-mapa.js.
+ *
+ * La etiqueta es el MUNICIPIO, no la zona: «Torviscas Centro y Alto» se partía
+ * en tres líneas bajo un mapa de 176 px. La zona concreta ya va en el kicker.
  */
 const MAPA = require('./tenerife-mapa.js');
 const mapa = (p, { ancho = 200, claro = false, etiqueta = true } = {}) => {
@@ -163,7 +166,7 @@ const mapa = (p, { ancho = 200, claro = false, etiqueta = true } = {}) => {
     <circle cx="${x}" cy="${y}" r="7.5" fill="${trazo}" opacity=".22"/>
     <circle cx="${x}" cy="${y}" r="3.4" fill="${trazo}" stroke="${claro ? 'var(--papel)' : 'var(--negro)'}" stroke-width="1.1"/>
   </svg>
-  ${etiqueta ? `<figcaption style="color:${texto}">${esc(zonaCorta(p))}</figcaption>` : ''}
+  ${etiqueta ? `<figcaption style="color:${texto}">${esc(p.town || zonaCorta(p))}</figcaption>` : ''}
 </figure>`;
 };
 /* CSS del mapita, común a los tres formatos. */
@@ -336,61 +339,82 @@ function htmlWa(p) {
   const t = textos(p);
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
 ${BASE(W, H)}
-body{background:var(--negro)}
-.lienzo{background:var(--negro)}
-/* marco superior: la foto en un marco negro fino, como una lámina */
-.marco{position:absolute;left:0;right:0;top:0;height:846px;background:var(--negro)}
-.foto{position:absolute;left:44px;right:44px;top:202px;height:600px;background:url('${b64(fotoDe(p))}') center 45% / cover no-repeat;
-  box-shadow:0 30px 80px rgba(0,0,0,.6)}
-.foto::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 2px rgba(230,189,106,.55)}
-.sello{position:absolute;right:70px;bottom:1146px;background:rgba(11,10,8,.62);backdrop-filter:blur(3px);
-  padding:20px 24px 16px;border:1px solid rgba(230,189,106,.4)}
-.sello .mapa figcaption{font-size:19px;letter-spacing:.18em;color:var(--oro)}
-/* etiqueta sobre la foto */
-.etq{position:absolute;left:44px;top:210px;background:var(--oro);color:var(--negro);font-size:24px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;padding:18px 30px 16px}
-.marca{position:absolute;right:44px;top:210px;display:flex;align-items:center;gap:16px;background:rgba(11,10,8,.72);padding:14px 26px 14px 16px;backdrop-filter:blur(6px)}
-.marca img{width:84px;height:84px}.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:43px;color:var(--crema);line-height:1}
-/* bloque crema: información, legible a un palmo. Orden: kicker → gancho → cita → precio → datos → pruebas → CTA */
-.papel{position:absolute;left:0;right:0;top:846px;bottom:0;background:var(--papel);color:var(--tinta);padding:46px 68px 178px;display:flex;flex-direction:column}
-.papel::before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--oro-3),var(--oro-2),var(--oro-3))}
-.kicker{font-size:25px;letter-spacing:.26em;text-transform:uppercase;color:var(--oro-tinta);font-weight:600}
-.gancho{margin-top:16px;font-family:'EB Garamond',serif;font-weight:600;font-size:${cuerpoTitular(t.gancho, 820, { max: 84, min: 58 })}px;line-height:1;letter-spacing:-.01em;color:var(--tinta);max-width:800px;text-wrap:balance}
-.cita{margin-top:20px;font-size:32px;line-height:1.34;color:var(--tinta-2);max-width:880px;font-weight:400}
-.precio{margin-top:26px;display:flex;align-items:baseline;gap:22px}
-.precio b{font-style:italic;font-weight:600;font-size:128px;line-height:.9;letter-spacing:-.02em;color:var(--tinta)}
-.precio span{font-size:24px;letter-spacing:.24em;text-transform:uppercase;color:var(--tinta-2)}
-.olas{margin:20px 0 14px;filter:saturate(1.1) brightness(.75)}
-.datos{display:flex;gap:52px;align-items:flex-end}
-.dato b{display:block;font-weight:600;font-size:66px;line-height:1;color:var(--tinta)}.dato b i{font-style:normal;font-size:.55em;color:var(--tinta-2);margin-left:4px}
-.dato span{display:block;font-size:20px;letter-spacing:.22em;text-transform:uppercase;color:var(--oro-tinta);margin-top:10px}
-.rasgos{list-style:none;display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:20px;font-size:25px;color:var(--tinta-2)}.rasgos li::before{content:'—';color:var(--oro-3);margin-right:8px}
-/* en flujo, empujado al final del bloque: nunca se pisa con lo de arriba */
-.cta{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
-.cta .p{font-family:'EB Garamond',serif;font-size:56px;font-weight:600;color:var(--tinta);line-height:1}
-.cta .p small{display:block;font-family:'Jost',sans-serif;font-size:22px;letter-spacing:.02em;color:var(--tinta-2);font-weight:400;margin-top:12px;line-height:1.3;max-width:660px}
-.cta .p small b{color:var(--tinta);font-weight:600;letter-spacing:.18em}
-.cta .ref{font-size:26px;letter-spacing:.08em;color:var(--tinta);font-weight:500;white-space:nowrap;text-align:right;line-height:1.4}
-.cta .ref i{display:block;font-style:normal;font-size:.7em;color:var(--tinta-2);font-weight:400;letter-spacing:.14em}
+/* Pieza CLARA de extremo a extremo. Un estado de WhatsApp se ve sobre el fondo
+ * oscuro de la aplicacion: una hoja de papel entera destaca mas que una pieza
+ * mitad negra, y ademas se lee a un palmo sin esfuerzo. El oro queda como unico
+ * acento y el negro solo como tinta. */
+html,body{background:var(--papel)}
+.lienzo{background:var(--papel);color:var(--tinta)}
+.grano{opacity:.10;mix-blend-mode:multiply}
+/* filetes de pagina arriba y abajo: enmarcan la hoja */
+.filete{position:absolute;left:0;right:0;height:10px;background:linear-gradient(90deg,var(--oro-3),var(--oro-2) 45%,var(--oro-3))}
+.filete.arr{top:0}.filete.aba{bottom:0}
+/* zonas seguras: 200 arriba (progreso + nombre) y 180 abajo (campo de respuesta) */
+.hoja{position:absolute;inset:0;padding:200px 66px 180px;display:flex;flex-direction:column}
+.cab{display:flex;align-items:center;justify-content:space-between;gap:30px;padding-bottom:26px;border-bottom:1px solid rgba(154,107,31,.35)}
+.marca{display:flex;align-items:center;gap:20px}
+.marca img{width:104px;height:104px}
+.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:46px;line-height:1;color:var(--tinta)}
+.marca .s{font-size:19px;letter-spacing:.34em;text-transform:uppercase;color:var(--oro-tinta);margin-top:9px;font-weight:600}
+.estado{flex:none;font-size:25px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--papel);background:var(--oro-tinta);padding:15px 26px 12px}
+/* la foto, como una lamina pegada en la hoja */
+.foto{position:relative;flex:none;height:560px;margin-top:24px;background:url('${b64(fotoDe(p))}') center 45% / cover no-repeat;
+  box-shadow:0 22px 50px rgba(26,23,18,.28)}
+.foto::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 2px rgba(154,107,31,.55)}
+/* el mapa, sobre la esquina de la foto y en papel: no hace falta oscurecer nada */
+.sello{position:absolute;right:24px;bottom:24px;background:var(--papel);padding:18px 22px 14px;border:1px solid rgba(154,107,31,.45);box-shadow:0 10px 30px rgba(26,23,18,.25)}
+.sello .mapa figcaption{font-size:18px;letter-spacing:.16em;color:var(--oro-tinta);font-weight:600}
+/* texto */
+.texto{flex:1;display:flex;flex-direction:column;padding-top:30px}
+.kicker{font-size:26px;letter-spacing:.24em;text-transform:uppercase;color:var(--oro-tinta);font-weight:600}
+.gancho{margin-top:16px;font-family:'EB Garamond',serif;font-weight:600;font-size:${cuerpoTitular(t.gancho, 830, { max: 86, min: 58 })}px;line-height:1;letter-spacing:-.01em;color:var(--tinta);max-width:830px}
+.cita{margin-top:18px;font-size:31px;line-height:1.34;color:var(--tinta-2);max-width:900px}
+.precio{margin-top:26px;display:flex;align-items:baseline;gap:24px}
+.precio b{font-style:italic;font-weight:600;font-size:132px;line-height:.86;letter-spacing:-.02em;color:var(--tinta)}
+.precio span{font-size:25px;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-2)}
+.olas{margin:22px 0 16px;filter:saturate(1.15) brightness(.62)}
+.datos{display:flex;gap:56px;align-items:flex-end}
+.dato b{display:block;font-weight:600;font-size:68px;line-height:1;color:var(--tinta)}
+.dato b i{font-style:normal;font-size:.52em;color:var(--tinta-2);margin-left:5px}
+.dato span{display:block;font-size:20px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro-tinta);margin-top:10px;font-weight:600}
+.rasgos{list-style:none;display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:20px;font-size:25px;color:var(--tinta-2)}
+.rasgos li::before{content:'—';color:var(--oro-3);margin-right:9px}
+/* contacto: empujado al final de la hoja, nunca se pisa con lo de arriba */
+.contacto{margin-top:auto;padding-top:26px;border-top:2px solid rgba(154,107,31,.45)}
+.contacto .q{font-family:'EB Garamond',serif;font-size:58px;font-weight:600;color:var(--tinta);line-height:1}
+.contacto .q small{display:block;font-family:'Jost',sans-serif;font-size:23px;color:var(--tinta-2);font-weight:400;margin-top:12px;line-height:1.3}
+.contacto .q small b{color:var(--tinta);font-weight:600;letter-spacing:.16em}
+.contacto .via{display:flex;align-items:baseline;justify-content:space-between;gap:30px;margin-top:22px}
+.contacto .via b{font-size:38px;letter-spacing:.06em;color:var(--tinta);font-weight:600}
+.contacto .via b i{font-style:normal;color:var(--oro-tinta);margin:0 14px}
+.contacto .via span{font-size:21px;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta-2);white-space:nowrap}
 </style></head><body><div class="lienzo">
-<div class="marco"></div><div class="foto"></div>
-<div class="etq">${esc(p.status)}</div>
-<div class="marca"><img src="${LOGO_DISCO}" alt=""><div class="n">Villa’s Properties</div></div>
-<div class="sello">${mapa(p, { ancho: 190 })}</div>
-<section class="papel">
-  <div class="kicker">${esc(t.kicker)}</div>
-  <h1 class="gancho">${gancho(t.gancho)}</h1>
-  <p class="cita">${esc(t.cita)}</p>
-  <div class="precio"><b class="serif">${esc(precio(p.price))}</b>${p.pricePerM2 ? `<span>${esc(num(p.pricePerM2))} €/m²</span>` : ''}</div>
-  <div class="olas"></div>
-  <div class="datos">
-    <div class="dato"><b class="serif">${p.built}<i>m²</i></b><span>construidos</span></div>
-    <div class="dato"><b class="serif">${p.beds}</b><span>${p.beds === 1 ? 'dormitorio' : 'dormitorios'}</span></div>
-    <div class="dato"><b class="serif">${p.baths}</b><span>${p.baths === 1 ? 'baño' : 'baños'}</span></div>
-    ${e ? `<div class="dato"><b class="serif">${e}</b><span>energía</span></div>` : ''}
-  </div>
-  <ul class="rasgos">${t.pruebas.slice(0, 3).map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
-<footer class="cta"><div class="p">¿Te la enseño?<small>Responde <b>VISITA</b> y te mando la ficha completa.</small></div><div class="ref">${WEB}<i>Ref. ${esc(p.ref)}</i></div></footer>
-</section>
+<div class="filete arr"></div><div class="filete aba"></div>
+<div class="hoja">
+  <header class="cab">
+    <div class="marca"><img src="${LOGO_DISCO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div></div>
+    <div class="estado">${esc(p.status)}</div>
+  </header>
+  <figure class="foto"><div class="sello">${mapa(p, { ancho: 176, claro: true })}</div></figure>
+  <section class="texto">
+    <div class="kicker">${esc(t.kicker)}</div>
+    <h1 class="gancho">${gancho(t.gancho)}</h1>
+    <p class="cita">${esc(t.cita)}</p>
+    <div class="precio"><b class="serif">${esc(precio(p.price))}</b>${p.pricePerM2 ? `<span>${esc(num(p.pricePerM2))} €/m²</span>` : ''}</div>
+    <div class="olas"></div>
+    <div class="datos">
+      <div class="dato"><b class="serif">${p.built}<i>m²</i></b><span>construidos</span></div>
+      <div class="dato"><b class="serif">${p.beds}</b><span>${p.beds === 1 ? 'dormitorio' : 'dormitorios'}</span></div>
+      <div class="dato"><b class="serif">${p.baths}</b><span>${p.baths === 1 ? 'baño' : 'baños'}</span></div>
+      ${e ? `<div class="dato"><b class="serif">${e}</b><span>energía</span></div>` : ''}
+    </div>
+    <ul class="rasgos">${t.pruebas.slice(0, 3).map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
+    <footer class="contacto">
+      <div class="q">¿Te la enseño?<small>Responde <b>VISITA</b> a este estado y te mando la ficha completa.</small></div>
+      <div class="via"><b>${WEB}<i>·</i>${TEL.replace('+34 ', '')}</b><span>Ref. ${esc(p.ref)}</span></div>
+    </footer>
+  </section>
+</div>
 </div></body></html>`;
 }
 
