@@ -1,0 +1,23 @@
+{
+  "name": "villasproperties-preview",
+  "version": "1.0.0",
+  "description": "Public static preview for review purposes only.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josecrea/villasproperties-preview.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/josecrea/villasproperties-preview/issues"
+  },
+  "homepage": "https://github.com/josecrea/villasproperties-preview#readme",
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

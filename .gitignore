@@ -4,3 +4,5 @@
 *.bak
 *.orig
 *.rej
+node_modules/
+creativos/
