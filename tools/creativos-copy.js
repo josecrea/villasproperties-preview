@@ -20,8 +20,9 @@
  *
  * LÍMITES DE FORMA (los impone la plantilla, no el gusto)
  * ------------------------------------------------------
- *  gancho   ≤ 42 caracteres → en el story cabe en 2 líneas a 84 px sin pisar la cinta.
- *           «|» marca el salto de línea a mano (para que un número no se separe de su palabra).
+ *  gancho   2 líneas, y la MÁS LARGA manda: el story calcula el cuerpo a partir de
+ *           ella (`cuerpoTitular`). ≤21 car. → 103 px · 23 → 94 · 28 → 77 y ya no
+ *           impacta. Apunta a 16-23 caracteres por línea. «|» es el salto a mano.
  *  cita     ≤ 140 caracteres → 2-3 líneas en el bloque crema del estado de WhatsApp.
  *  pruebas  3 o 4, ≤ 32 caracteres cada una → una fila en el feed y en el estado.
  *  kicker   tipo de vivienda · lugar. Va en versalitas doradas encima del gancho.
@@ -49,7 +50,7 @@ module.exports = {
   /* 255.000 € · 110/85 m² · 2/2 · Cabo Blanco · garaje + trastero + lavadero, balcón 12 m², cabe 3ª hab */
   111230958: {
     kicker: 'Apartamento · Cabo Blanco · Arona',
-    gancho: 'Cabe una tercera habitación.|Y el coche.',
+    gancho: 'Cabe otra habitación.|Y el coche.',
     cita: '85 m² útiles, dos baños y un balcón de 12 m² al sur. Garaje, trastero y lavadero incluidos, y una cocina donde cabe la tercera habitación.',
     pruebas: ['Garaje y trastero incluidos', '2 baños completos', 'Balcón de 12 m² al sur', 'Comunidad 30 €/mes'],
     post: 'Edificio de 2007 con ascensor. El metro sale a 2.318 €, casi la mitad que en nuestro apartamento de Costa Adeje (4.489 €/m²). Uno de cada dos compradores que nos escribieron este año buscaba en Arona.',
@@ -68,7 +69,7 @@ module.exports = {
   110909579: {
     foto: 2, // la 01 es el muro de la terraza en sombra; la 02 es la terraza con el mar
     kicker: 'Apartamento · Casco de Adeje · Primera planta',
-    gancho: '35 m² dentro.|15 m² fuera, mirando al mar.',
+    gancho: '35 m² dentro.|15 m² mirando al mar.',
     cita: 'Adeje pueblo, sur, y una terraza de 15 m² con el mar delante. Una puesta al día mínima: te acompañamos en la reforma y en la hipoteca.',
     pruebas: ['Terraza de 15 m² al mar', 'Orientación sur', 'Comunidad 32 €/mes', 'Te acompañamos en la reforma'],
     post: 'Vivienda habitual, segunda residencia o inversión con poca obra. Nos encargamos de la puesta a punto y del estudio de financiación.',
