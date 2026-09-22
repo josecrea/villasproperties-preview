@@ -106,8 +106,17 @@ const foto = (p, i = 1) => path.join(RAIZ, 'assets/img', p.slug, String(i).padSt
 
 /* Copy por vivienda. Los límites son los de la plantilla (ver creativos-copy.js). */
 const COPY = require('./creativos-copy.js');
+const avisos = []; // lo que no cuadra; se vuelca al final para que no pase desapercibido
+/* Qué foto abre el creativo. La 01 del catálogo no siempre es la que vende:
+ * en el casco de Adeje es un muro en sombra y la terraza con el mar es la 02. */
+const fotoDe = (p) => {
+  const n = (COPY[p.ref] || {}).foto || 1;
+  const f = foto(p, n);
+  if (fs.existsSync(f)) return f;
+  avisos.push(`${p.ref} no tiene la foto ${String(n).padStart(2, '0')}.webp — se usa la 01`);
+  return foto(p, 1);
+};
 const LIMITES = { gancho: 42, cita: 140, prueba: 32 };
-const avisos = [];
 const textos = (p) => {
   const c = COPY[p.ref];
   if (!c) {
@@ -153,7 +162,7 @@ function htmlFeed(p) {
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
 ${BASE(W, H)}
 body{color:var(--crema)}
-.foto{position:absolute;inset:0;background:url('${b64(foto(p))}') center 45% / cover no-repeat;transform:scale(1.02)}
+.foto{position:absolute;inset:0;background:url('${b64(fotoDe(p))}') center 45% / cover no-repeat;transform:scale(1.02)}
 .velo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,8,.78) 0%,rgba(11,10,8,.42) 26%,rgba(11,10,8,.06) 40%,rgba(11,10,8,.30) 50%,rgba(11,10,8,.80) 66%,rgba(11,10,8,.96) 84%,var(--negro) 100%)}
 .cab{position:absolute;left:64px;right:64px;top:60px;display:flex;align-items:flex-start;justify-content:space-between;gap:40px}
 .marca{display:flex;align-items:center;gap:18px}.marca img{width:84px;height:84px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
@@ -210,7 +219,7 @@ function htmlStory(p) {
 ${BASE(W, H)}
 body{color:var(--crema)}
 /* la foto ocupa todo; recorte alto para que respire con el precio abajo */
-.foto{position:absolute;inset:0;background:url('${b64(foto(p))}') center 50% / cover no-repeat;transform:scale(1.03)}
+.foto{position:absolute;inset:0;background:url('${b64(fotoDe(p))}') center 50% / cover no-repeat;transform:scale(1.03)}
 /* velo fuerte abajo; arriba solo lo justo para el logo */
 .velo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,8,.55) 0%,rgba(11,10,8,.10) 16%,rgba(11,10,8,0) 30%,rgba(11,10,8,.15) 46%,rgba(11,10,8,.75) 60%,rgba(11,10,8,.97) 74%,var(--negro) 100%)}
 /* cinta diagonal con la zona: recorre la pieza y rompe la cuadrícula */
@@ -270,7 +279,7 @@ body{background:var(--negro)}
 .lienzo{background:var(--negro)}
 /* marco superior: la foto en un marco negro fino, como una lámina */
 .marco{position:absolute;left:0;right:0;top:0;height:1000px;background:var(--negro)}
-.foto{position:absolute;left:44px;right:44px;top:214px;height:740px;background:url('${b64(foto(p))}') center 45% / cover no-repeat;
+.foto{position:absolute;left:44px;right:44px;top:214px;height:740px;background:url('${b64(fotoDe(p))}') center 45% / cover no-repeat;
   box-shadow:0 30px 80px rgba(0,0,0,.6)}
 .foto::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 2px rgba(230,189,106,.55)}
 /* etiqueta sobre la foto */
@@ -314,7 +323,7 @@ body{background:var(--negro)}
     ${e ? `<div class="dato"><b class="serif">${e}</b><span>energía</span></div>` : ''}
   </div>
   <ul class="rasgos">${t.pruebas.slice(0, 3).map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
-<footer class="cta"><div class="p">¿Te la enseño?<small>Responde <b>VISITA</b> a este estado y te mando la ficha completa con todas las fotos.</small></div><div class="ref">Ref. ${esc(p.ref)} · ${WEB}</div></footer>
+<footer class="cta"><div class="p">¿Te la enseño?<small>Responde <b>VISITA</b> y te mando la ficha completa.</small></div><div class="ref">Ref. ${esc(p.ref)} · ${WEB}</div></footer>
 </section>
 </div></body></html>`;
 }
@@ -369,8 +378,11 @@ function copy(p) {
     console.log(`  ✔ ${p.ref}  ${p.slug}  (${formatos.join(', ')})`);
   }
   await browser.close();
-  fs.writeFileSync(path.join(OUT, 'COPY.md'), copies.join('\n'));
-  console.log(`\n  ${n} creativos (${props.length} propiedades × ${formatos.length} formatos) en creativos/ · COPY.md`);
+  /* Con una sola referencia NO se toca COPY.md: si no, una prueba puntual borra
+   * el copy de las otras cinco viviendas. Se deja aparte para poder mirarlo. */
+  const destinoCopy = soloRef ? `COPY-${soloRef}.md` : 'COPY.md';
+  fs.writeFileSync(path.join(OUT, destinoCopy), copies.join('\n'));
+  console.log(`\n  ${n} creativos (${props.length} propiedades × ${formatos.length} formatos) en creativos/ · ${destinoCopy}`);
   const unicos = [...new Set(avisos)];
   if (unicos.length) console.warn(`\n  ⚠ TEXTO — ${unicos.length} aviso(s):\n` + unicos.map((a) => `    · ${a}`).join('\n'));
 })().catch((e) => { console.error('  🔴', e.message); process.exit(1); });

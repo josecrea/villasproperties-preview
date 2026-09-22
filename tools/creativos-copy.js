@@ -26,6 +26,8 @@
  *  pruebas  3 o 4, ≤ 32 caracteres cada una → una fila en el feed y en el estado.
  *  kicker   tipo de vivienda · lugar. Va en versalitas doradas encima del gancho.
  *  post     solo para COPY.md (el texto del post); puede ser más largo.
+ *  foto     número de foto del catálogo que abre el creativo (por defecto la 01).
+ *           La 01 no siempre vende: en el casco de Adeje es un muro en sombra.
  *
  * DATO DE DEMANDA que se usa en `post` (verificado 22-sep-2026 sobre
  * ~/villasproperties-captacion/sofia/datos/compradores.csv, 173 compradores que
@@ -64,6 +66,7 @@ module.exports = {
 
   /* 179.000 € · 50 m² (35 int. + 15 terraza) · 1/1 · casco de Adeje · vistas al mar, sur, 1ª sin ascensor */
   110909579: {
+    foto: 2, // la 01 es el muro de la terraza en sombra; la 02 es la terraza con el mar
     kicker: 'Apartamento · Casco de Adeje · Primera planta',
     gancho: '35 m² dentro.|15 m² fuera, mirando al mar.',
     cita: 'Adeje pueblo, sur, y una terraza de 15 m² con el mar delante. Una puesta al día mínima: te acompañamos en la reforma y en la hipoteca.',
@@ -82,6 +85,7 @@ module.exports = {
 
   /* 135.000 € · 60 m² · 2/1 · El Fraile · loft en planta baja, cocina integrada, sur — el precio de entrada más bajo */
   111928810: {
+    foto: 2, // la 01 es la cocina con la lavadora; la 02 es el salón-comedor
     kicker: 'Loft · El Fraile · Arona',
     gancho: 'Dos dormitorios|para dejar de alquilar.',
     cita: 'Dos dormitorios, baño completo y cocina integrada en 60 m² a pie de calle. La primera vivienda, o la que se alquila todo el año.',
