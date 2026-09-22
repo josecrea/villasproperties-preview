@@ -204,8 +204,8 @@ body{color:var(--crema)}
 .foto{position:absolute;inset:0;background:url('${b64(fotoDe(p))}') center 45% / cover no-repeat;transform:scale(1.02)}
 .velo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,8,.82) 0%,rgba(11,10,8,.48) 24%,rgba(11,10,8,.12) 35%,rgba(11,10,8,.52) 45%,rgba(11,10,8,.88) 57%,rgba(11,10,8,.97) 70%,var(--negro) 84%,var(--negro) 100%)}
 .cab{position:absolute;left:64px;right:64px;top:60px;display:flex;align-items:flex-start;justify-content:space-between;gap:40px}
-.marca{display:flex;align-items:center;gap:20px}.marca img{width:96px;height:96px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
-.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:41px;line-height:1}.marca .s{font-size:19px;letter-spacing:.3em;text-transform:uppercase;color:var(--oro);margin-top:9px}
+.marca{display:flex;align-items:center;gap:22px}.marca img{width:122px;height:122px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
+.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:53px;line-height:1}.marca .s{font-size:23px;letter-spacing:.3em;text-transform:uppercase;color:var(--oro);margin-top:10px}
 .estado{font-size:19px;letter-spacing:.3em;text-transform:uppercase;border:1.5px solid rgba(243,234,215,.6);padding:14px 22px 12px;border-radius:999px;background:rgba(11,10,8,.28);white-space:nowrap;margin-top:16px}
 /* el gancho arriba: grande, en dos líneas como mucho, con el kicker en versalitas doradas */
 .gancho{position:absolute;left:64px;right:300px;top:192px;max-width:700px;text-shadow:0 2px 6px rgba(0,0,0,.65),0 8px 40px rgba(0,0,0,.6)}
@@ -225,7 +225,7 @@ body{color:var(--crema)}
 .datos{display:flex;gap:50px;align-items:flex-end}.dato b{display:block;font-weight:600;font-size:60px;line-height:1}.dato b i{font-style:normal;font-size:.55em;color:var(--crema-2);margin-left:4px}
 .dato span{display:block;font-size:18px;letter-spacing:.24em;text-transform:uppercase;color:var(--oro);margin-top:9px}
 .rasgos{list-style:none;display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:20px;font-size:23px;color:var(--crema-2)}.rasgos li::before{content:'—';color:var(--oro);margin-right:8px}
-.cta{margin-top:26px;padding-top:22px;border-top:1px solid rgba(230,189,106,.25);display:flex;justify-content:space-between;align-items:baseline;gap:30px;font-size:19px;letter-spacing:.14em;text-transform:uppercase;color:var(--crema-2);white-space:nowrap}.cta b{color:var(--oro);font-weight:600}.ref{font-size:17px;letter-spacing:.14em;color:rgba(243,234,215,.55)}
+.cta{margin-top:24px;padding-top:22px;border-top:1px solid rgba(230,189,106,.3);display:flex;justify-content:space-between;align-items:baseline;gap:30px;font-size:26px;letter-spacing:.1em;color:var(--crema);white-space:nowrap}.cta b{color:var(--oro);font-weight:600}.cta .ref{font-size:22px;letter-spacing:.1em;color:var(--crema-2)}.cta .ref i{font-style:normal;font-size:.72em;color:rgba(243,234,215,.5)}
 </style></head><body><div class="lienzo">
 <div class="foto"></div><div class="velo"></div><div class="grano"></div>
 <header class="cab"><div class="marca"><img src="${LOGO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div></div><div class="estado">${esc(p.status)}</div></header>
@@ -243,7 +243,7 @@ body{color:var(--crema)}
     ${e ? `<div class="dato"><b class="serif">${e}</b><span>energía</span></div>` : ''}
   </div>
   <ul class="rasgos">${t.pruebas.slice(0, 2).map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
-  <footer class="cta"><div><b>${CTA_WA}</b> &nbsp;·&nbsp; ${TEL.replace('+34 ', '')}</div><div class="ref">${WEB} &nbsp;·&nbsp; ${esc(p.ref)}</div></footer>
+  <footer class="cta"><div>WhatsApp &nbsp;<b>${TEL.replace('+34 ', '')}</b></div><div class="ref">${WEB} &nbsp; <i>Ref. ${esc(p.ref)}</i></div></footer>
 </section>
 </div></body></html>`;
 }
@@ -272,17 +272,16 @@ body{color:var(--crema)}
   font-size:37px;font-weight:600;letter-spacing:.38em;text-transform:uppercase;padding:22px 0;white-space:nowrap;overflow:hidden;
   box-shadow:0 18px 60px rgba(0,0,0,.55)}
 .cinta span{display:inline-block;padding-left:230px}
-.marca{position:absolute;left:64px;top:290px;display:flex;align-items:center;gap:20px}
-.marca img{width:126px;height:126px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.55))}
-.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:54px;line-height:1;text-shadow:0 2px 10px rgba(0,0,0,.6)}
-.marca .s{font-size:23px;letter-spacing:.34em;text-transform:uppercase;color:var(--crema-2);margin-top:10px;text-shadow:0 2px 10px rgba(0,0,0,.7)}
-.estado{position:absolute;right:64px;top:330px;font-size:23px;letter-spacing:.36em;text-transform:uppercase;border:2px solid var(--oro);color:var(--oro);padding:14px 22px 12px;border-radius:999px;background:rgba(11,10,8,.35)}
+.marca{position:absolute;left:64px;top:272px;display:flex;align-items:center;gap:24px}
+.marca img{width:172px;height:172px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.55))}
+.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:70px;line-height:1;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.marca .s{font-size:29px;letter-spacing:.32em;text-transform:uppercase;color:var(--oro);margin-top:12px;text-shadow:0 2px 10px rgba(0,0,0,.7)}
+.esquina{position:absolute;right:56px;top:322px;z-index:3}
+.estado{font-size:25px;letter-spacing:.34em;text-transform:uppercase;border:2px solid var(--oro);color:var(--oro);padding:14px 24px 12px;border-radius:999px;background:rgba(11,10,8,.45)}
 /* bloque inferior: el precio manda */
-.pie{position:absolute;left:64px;right:64px;bottom:296px}
+.pie{position:absolute;left:64px;right:64px;bottom:268px}
 /* mapa: sello de ubicación arriba a la derecha, lejos del texto */
-.sello{position:absolute;right:64px;top:440px;background:rgba(11,10,8,.55);backdrop-filter:blur(3px);
-  padding:22px 26px 18px;border:1px solid rgba(230,189,106,.35)}
-.sello .mapa figcaption{font-size:21px;letter-spacing:.2em;color:var(--oro)}
+.sello .mapa figcaption{font-size:20px;letter-spacing:.18em;color:var(--oro)}
 /* kicker en versalitas doradas + gancho grande: lo que se lee en el segundo que dura el pulgar */
 .kicker{font-size:27px;letter-spacing:.3em;text-transform:uppercase;color:var(--oro);margin-bottom:20px;text-shadow:0 2px 10px rgba(0,0,0,.7)}
 .gancho{font-family:'EB Garamond',serif;font-weight:600;font-size:${cuerpoTitular(t.gancho, 950)}px;line-height:.98;letter-spacing:-.012em;max-width:950px;text-wrap:balance;text-shadow:0 2px 12px rgba(0,0,0,.55)}
@@ -290,25 +289,37 @@ body{color:var(--crema)}
 .precio i{font-style:italic;font-size:.42em;vertical-align:baseline;margin-left:10px}
 .datos{margin-top:36px;font-size:39px;letter-spacing:.08em;text-transform:uppercase;color:var(--crema)}
 .datos b{color:var(--oro);font-weight:500}
-/* pie en dos filas: la acción arriba, la referencia debajo. Nada se parte. */
-.cta{position:absolute;left:64px;right:64px;bottom:200px;display:flex;flex-direction:column;align-items:flex-start;gap:12px;text-transform:uppercase}
-.cta .p{font-size:30px;letter-spacing:.16em;color:var(--crema);font-weight:500;white-space:nowrap}.cta .p b{color:var(--oro);font-weight:600}
-.cta .ref{font-size:21px;color:rgba(243,234,215,.62);letter-spacing:.16em;white-space:nowrap}
-/* flecha «desliza» sutil, propia de stories */
-.desliza{position:absolute;left:0;right:0;bottom:262px;text-align:center;font-size:15px;letter-spacing:.4em;text-transform:uppercase;color:rgba(243,234,215,.55)}
+/* Contacto: lo que tiene que quedarse en la cabeza es el TELÉFONO, así que va
+ * en serif grande y lo demás lo acompaña. Va EN FLUJO dentro del pie: colgado de
+ * su propio anclaje inferior se pisaba con los datos en cuanto el titular crecía,
+ * y además caía en los 250 px de abajo que tapa la barra de respuesta.
+ * OJO: nada de acentos graves en estos comentarios, van dentro de una plantilla. */
+.contacto{margin-top:40px;padding-top:30px;border-top:1px solid rgba(230,189,106,.35);
+  display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+.contacto .q{font-size:25px;letter-spacing:.26em;text-transform:uppercase;color:var(--oro);font-weight:600}
+.contacto .tel{font-family:'EB Garamond',serif;font-weight:600;font-size:78px;line-height:1;margin-top:14px;white-space:nowrap;filter:drop-shadow(0 3px 14px rgba(0,0,0,.6))}
+.contacto .web{display:flex;align-items:baseline;gap:28px;margin-top:18px}
+.contacto .web b{font-size:34px;letter-spacing:.14em;color:var(--crema);font-weight:500}
+.contacto .web span{font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,234,215,.55);white-space:nowrap}
 </style></head><body><div class="lienzo">
 <div class="foto"></div><div class="velo"></div><div class="grano"></div>
 <div class="marca"><img src="${LOGO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div></div>
-<div class="estado">${esc(p.status)}</div>
-<div class="sello">${mapa(p, { ancho: 230 })}</div>
+<div class="esquina"><div class="estado">${esc(p.status)}</div></div>
 <section class="pie">
   <div class="cinta"><span>${esc(zonaCorta(p))} &nbsp;·&nbsp; ${esc(p.town)} &nbsp;·&nbsp; ${esc(zonaCorta(p))} &nbsp;·&nbsp; ${esc(p.town)} &nbsp;·&nbsp; ${esc(zonaCorta(p))} &nbsp;·&nbsp; ${esc(p.town)}</span></div>
   <div class="kicker">${esc(t.kicker)}</div>
   <h1 class="gancho">${gancho(t.gancho)}</h1>
   <div class="precio serif oro-texto">${esc(num(p.price))}<i>€</i></div>
   <div class="datos"><b>${esc(datos)}</b></div>
+  <footer class="contacto">
+    <div>
+      <div class="q">${CTA_WA}</div>
+      <div class="tel serif oro-texto">${TEL.replace('+34 ', '')}</div>
+      <div class="web"><b>${WEB}</b><span>Ref. ${esc(p.ref)}</span></div>
+    </div>
+    <div class="sello">${mapa(p, { ancho: 210 })}</div>
+  </footer>
 </section>
-<footer class="cta"><div class="p"><b>${CTA_WA}</b> &nbsp;·&nbsp; ${TEL.replace('+34 ', '')}</div><div class="ref">${WEB} &nbsp;·&nbsp; Ref. ${esc(p.ref)}</div></footer>
 </div></body></html>`;
 }
 
@@ -337,7 +348,7 @@ body{background:var(--negro)}
 /* etiqueta sobre la foto */
 .etq{position:absolute;left:44px;top:210px;background:var(--oro);color:var(--negro);font-size:24px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;padding:18px 30px 16px}
 .marca{position:absolute;right:44px;top:210px;display:flex;align-items:center;gap:16px;background:rgba(11,10,8,.72);padding:14px 26px 14px 16px;backdrop-filter:blur(6px)}
-.marca img{width:66px;height:66px}.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:34px;color:var(--crema);line-height:1}
+.marca img{width:84px;height:84px}.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:43px;color:var(--crema);line-height:1}
 /* bloque crema: información, legible a un palmo. Orden: kicker → gancho → cita → precio → datos → pruebas → CTA */
 .papel{position:absolute;left:0;right:0;top:846px;bottom:0;background:var(--papel);color:var(--tinta);padding:46px 68px 178px;display:flex;flex-direction:column}
 .papel::before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--oro-3),var(--oro-2),var(--oro-3))}
@@ -357,7 +368,8 @@ body{background:var(--negro)}
 .cta .p{font-family:'EB Garamond',serif;font-size:56px;font-weight:600;color:var(--tinta);line-height:1}
 .cta .p small{display:block;font-family:'Jost',sans-serif;font-size:22px;letter-spacing:.02em;color:var(--tinta-2);font-weight:400;margin-top:12px;line-height:1.3;max-width:660px}
 .cta .p small b{color:var(--tinta);font-weight:600;letter-spacing:.18em}
-.cta .ref{font-size:19px;letter-spacing:.14em;color:var(--tinta-2);white-space:nowrap}
+.cta .ref{font-size:26px;letter-spacing:.08em;color:var(--tinta);font-weight:500;white-space:nowrap;text-align:right;line-height:1.4}
+.cta .ref i{display:block;font-style:normal;font-size:.7em;color:var(--tinta-2);font-weight:400;letter-spacing:.14em}
 </style></head><body><div class="lienzo">
 <div class="marco"></div><div class="foto"></div>
 <div class="etq">${esc(p.status)}</div>
@@ -376,7 +388,7 @@ body{background:var(--negro)}
     ${e ? `<div class="dato"><b class="serif">${e}</b><span>energía</span></div>` : ''}
   </div>
   <ul class="rasgos">${t.pruebas.slice(0, 3).map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
-<footer class="cta"><div class="p">¿Te la enseño?<small>Responde <b>VISITA</b> y te mando la ficha completa.</small></div><div class="ref">Ref. ${esc(p.ref)} · ${WEB}</div></footer>
+<footer class="cta"><div class="p">¿Te la enseño?<small>Responde <b>VISITA</b> y te mando la ficha completa.</small></div><div class="ref">${WEB}<i>Ref. ${esc(p.ref)}</i></div></footer>
 </section>
 </div></body></html>`;
 }
@@ -413,8 +425,8 @@ body{color:var(--crema)}
 .sub b{color:var(--oro);font-weight:500}
 .olas{margin:30px auto 26px;max-width:520px}
 .accion{font-size:30px;letter-spacing:.16em;text-transform:uppercase;color:var(--crema);font-weight:500}
-.accion b{color:var(--oro);font-weight:600}
-.web{position:absolute;left:0;right:0;bottom:210px;text-align:center;font-size:26px;letter-spacing:.26em;text-transform:uppercase;color:var(--crema-2)}
+.accion b{font-family:'EB Garamond',serif;font-size:1.9em;letter-spacing:.01em;color:var(--oro);font-weight:600;display:block;margin-top:16px}
+.web{position:absolute;left:0;right:0;bottom:196px;text-align:center;font-size:36px;letter-spacing:.14em;color:var(--crema);font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--crema-2)}
 </style></head><body><div class="lienzo">
 <div class="foto"></div><div class="velo"></div><div class="grano"></div>
 <div class="marca"><img src="${LOGO}" alt=""><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div>
@@ -423,7 +435,7 @@ ${cierre
     ? `<h1 class="titular">¿Cuál te enseño<br>primero?</h1>
   <p class="sub">Dime la referencia o el pueblo y te mando la ficha completa.</p>
   <div class="olas"></div>
-  <div class="accion">Escríbeme · <b>${TEL.replace('+34 ', '')}</b></div>`
+  <div class="accion">Escríbeme<b>${TEL.replace('+34 ', '')}</b></div>`
     : `<h1 class="titular">${props.length === 1 ? 'Una vivienda' : `${props.length} viviendas`}<br>en venta en el sur</h1>
   <p class="sub">${lista}. Desde <b>${precio(desde)}</b>.</p>
   <div class="olas"></div>
@@ -475,7 +487,7 @@ async function desbordes(page) {
       }
     }
     // nada importante puede salirse del lienzo ni caer en la zona segura de abajo
-    for (const sel of ['.cta', '.datos', '.precio', '.gancho', '.rasgos']) {
+    for (const sel of ['.cta', '.contacto', '.datos', '.precio', '.gancho', '.rasgos']) {
       for (const el of document.querySelectorAll(sel)) {
         const r = el.getBoundingClientRect();
         if (r.bottom > alto + 1) avisos.push(`«${sel}» se sale ${Math.round(r.bottom - alto)} px por abajo`);
@@ -484,7 +496,8 @@ async function desbordes(page) {
     }
     // bloques que nunca deben pisarse (el fallo del feed: el pie creció y se
     // comió el pie de página, y ninguna caja «desbordaba» nada)
-    const pares = [['.rasgos', '.cta'], ['.datos', '.cta'], ['.precio', '.datos'], ['.gancho', '.precio'], ['.cita', '.precio']];
+    const pares = [['.rasgos', '.cta'], ['.datos', '.cta'], ['.datos', '.contacto'], ['.precio', '.datos'],
+                   ['.gancho', '.precio'], ['.cita', '.precio'], ['.sello', '.gancho']  /* .sello ya NO se compara con .contacto: vive dentro de él */];
     for (const [a, b] of pares) {
       const ea = document.querySelector(a), eb = document.querySelector(b);
       if (!ea || !eb) continue;
