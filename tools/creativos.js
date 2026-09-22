@@ -28,7 +28,7 @@
  * ---------
  * Editorial mediterráneo, desde el logo (casa + olas en oro sobre negro):
  * negro profundo, crema papel, el oro como único acento. Foto real siempre
- * (es una vivienda que existe). Cormorant Garamond + Jost, en assets/fonts/.
+ * (es una vivienda que existe). EB Garamond + Jost, en assets/fonts/.
  *
  * TEXTO (22-sep-2026, «los textos están flojos»)
  * ----------------------------------------------
@@ -146,7 +146,7 @@ ${FUENTES}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:${W}px;height:${H}px;overflow:hidden;background:var(--negro);font-family:'Jost',sans-serif;-webkit-font-smoothing:antialiased}
 .lienzo{position:relative;width:${W}px;height:${H}px;overflow:hidden}
-.serif{font-family:'Cormorant Garamond',serif;font-variant-numeric:lining-nums}
+.serif{font-family:'EB Garamond',serif;font-variant-numeric:lining-nums}
 .grano{position:absolute;inset:0;opacity:.14;mix-blend-mode:overlay;pointer-events:none;background-image:${GRANO}}
 .olas{height:18px;width:100%;background:${OLAS} left center / 100% 18px no-repeat}
 .oro-texto{background:linear-gradient(100deg,var(--oro-2) 0%,var(--oro) 45%,var(--oro-3) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -166,13 +166,13 @@ body{color:var(--crema)}
 .velo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,8,.78) 0%,rgba(11,10,8,.42) 26%,rgba(11,10,8,.06) 40%,rgba(11,10,8,.30) 50%,rgba(11,10,8,.80) 66%,rgba(11,10,8,.96) 84%,var(--negro) 100%)}
 .cab{position:absolute;left:64px;right:64px;top:60px;display:flex;align-items:flex-start;justify-content:space-between;gap:40px}
 .marca{display:flex;align-items:center;gap:18px}.marca img{width:84px;height:84px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
-.marca .n{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;line-height:1}.marca .s{font-size:15px;letter-spacing:.32em;text-transform:uppercase;color:var(--oro);margin-top:8px}
+.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:34px;line-height:1}.marca .s{font-size:15px;letter-spacing:.32em;text-transform:uppercase;color:var(--oro);margin-top:8px}
 .estado{font-size:15px;letter-spacing:.34em;text-transform:uppercase;border:1.5px solid rgba(243,234,215,.55);padding:12px 18px 10px;border-radius:999px;background:rgba(11,10,8,.28);white-space:nowrap;margin-top:16px}
 /* el gancho arriba: grande, en dos líneas como mucho, con el kicker en versalitas doradas */
 .gancho{position:absolute;left:64px;right:64px;top:196px;max-width:720px;text-shadow:0 2px 6px rgba(0,0,0,.65),0 8px 40px rgba(0,0,0,.6)}
 .gancho::before{content:'';display:block;width:64px;height:2px;background:var(--oro);margin-bottom:20px;box-shadow:0 0 18px rgba(230,189,106,.55)}
 .gancho .k{font-size:15px;letter-spacing:.34em;text-transform:uppercase;color:var(--oro);margin-bottom:14px}
-.gancho .g{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:56px;line-height:1.02;letter-spacing:-.01em;text-wrap:balance}
+.gancho .g{font-family:'EB Garamond',serif;font-weight:600;font-size:56px;line-height:1.02;letter-spacing:-.01em;text-wrap:balance}
 .pie{position:absolute;left:64px;right:64px;bottom:64px}
 .lugar{font-size:19px;letter-spacing:.36em;text-transform:uppercase;color:var(--oro);margin-bottom:14px}
 /* la cita de apoyo, no el título de la ficha: el gancho ya está arriba */
@@ -230,14 +230,14 @@ body{color:var(--crema)}
 .cinta span{display:inline-block;padding-left:110px}
 .marca{position:absolute;left:64px;top:290px;display:flex;align-items:center;gap:20px}
 .marca img{width:110px;height:110px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.55))}
-.marca .n{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:44px;line-height:1;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:44px;line-height:1;text-shadow:0 2px 10px rgba(0,0,0,.6)}
 .marca .s{font-size:18px;letter-spacing:.34em;text-transform:uppercase;color:var(--crema-2);margin-top:8px;text-shadow:0 2px 10px rgba(0,0,0,.7)}
 .estado{position:absolute;right:64px;top:318px;font-size:18px;letter-spacing:.36em;text-transform:uppercase;border:2px solid var(--oro);color:var(--oro);padding:14px 22px 12px;border-radius:999px;background:rgba(11,10,8,.35)}
 /* bloque inferior: el precio manda */
 .pie{position:absolute;left:64px;right:64px;bottom:300px}
 /* kicker en versalitas doradas + gancho grande: lo que se lee en el segundo que dura el pulgar */
 .kicker{font-size:20px;letter-spacing:.36em;text-transform:uppercase;color:var(--oro);margin-bottom:18px;text-shadow:0 2px 10px rgba(0,0,0,.7)}
-.gancho{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:84px;line-height:.98;letter-spacing:-.015em;max-width:940px;text-wrap:balance;text-shadow:0 2px 12px rgba(0,0,0,.55)}
+.gancho{font-family:'EB Garamond',serif;font-weight:600;font-size:84px;line-height:.98;letter-spacing:-.015em;max-width:940px;text-wrap:balance;text-shadow:0 2px 12px rgba(0,0,0,.55)}
 .precio{margin-top:30px;font-style:italic;font-weight:500;font-size:250px;line-height:.82;letter-spacing:-.035em;white-space:nowrap;filter:drop-shadow(0 8px 30px rgba(0,0,0,.6))}
 .precio i{font-style:italic;font-size:.42em;vertical-align:baseline;margin-left:10px}
 .datos{margin-top:34px;font-size:27px;letter-spacing:.14em;text-transform:uppercase;color:var(--crema)}
@@ -285,12 +285,12 @@ body{background:var(--negro)}
 /* etiqueta sobre la foto */
 .etq{position:absolute;left:44px;top:214px;background:var(--oro);color:var(--negro);font-size:19px;font-weight:600;letter-spacing:.34em;text-transform:uppercase;padding:16px 26px 14px}
 .marca{position:absolute;right:44px;top:214px;display:flex;align-items:center;gap:14px;background:rgba(11,10,8,.72);padding:12px 22px 12px 14px;backdrop-filter:blur(6px)}
-.marca img{width:56px;height:56px}.marca .n{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:28px;color:var(--crema);line-height:1}
+.marca img{width:56px;height:56px}.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:28px;color:var(--crema);line-height:1}
 /* bloque crema: información, legible a un palmo. Orden: kicker → gancho → cita → precio → datos → pruebas → CTA */
 .papel{position:absolute;left:0;right:0;top:1000px;bottom:0;background:var(--papel);color:var(--tinta);padding:50px 72px 186px;display:flex;flex-direction:column}
 .papel::before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--oro-3),var(--oro-2),var(--oro-3))}
 .kicker{font-size:18px;letter-spacing:.32em;text-transform:uppercase;color:var(--oro-tinta);font-weight:600}
-.gancho{margin-top:14px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:60px;line-height:1;letter-spacing:-.01em;color:var(--tinta);max-width:920px;text-wrap:balance}
+.gancho{margin-top:14px;font-family:'EB Garamond',serif;font-weight:600;font-size:60px;line-height:1;letter-spacing:-.01em;color:var(--tinta);max-width:920px;text-wrap:balance}
 .cita{margin-top:18px;font-size:25px;line-height:1.36;color:var(--tinta-2);max-width:900px;font-weight:400}
 .precio{margin-top:26px;display:flex;align-items:baseline;gap:22px}
 .precio b{font-style:italic;font-weight:600;font-size:110px;line-height:.9;letter-spacing:-.02em;color:var(--tinta)}
@@ -302,7 +302,7 @@ body{background:var(--negro)}
 .rasgos{list-style:none;display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:18px;font-size:19px;color:var(--tinta-2)}.rasgos li::before{content:'—';color:var(--oro-3);margin-right:8px}
 /* en flujo, empujado al final del bloque: nunca se pisa con lo de arriba */
 .cta{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
-.cta .p{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:600;color:var(--tinta);line-height:1}
+.cta .p{font-family:'EB Garamond',serif;font-size:44px;font-weight:600;color:var(--tinta);line-height:1}
 .cta .p small{display:block;font-family:'Jost',sans-serif;font-size:17px;letter-spacing:.04em;color:var(--tinta-2);font-weight:400;margin-top:10px;line-height:1.35;max-width:640px}
 .cta .p small b{color:var(--tinta);font-weight:600;letter-spacing:.18em}
 .cta .ref{font-size:14px;letter-spacing:.2em;color:var(--tinta-2);white-space:nowrap}
@@ -329,6 +329,56 @@ body{background:var(--negro)}
 }
 
 const PLANTILLAS = { feed: htmlFeed, story: htmlStory, wa: htmlWa };
+
+/* =====================================================================
+   MARCA 1080×1920 — portada y cierre de una serie de stories
+   No van por vivienda: abren y cierran la tanda. El fondo es el ÚNICO
+   material generado con IA de todo esto, y a propósito: es un paisaje de
+   la costa sur, no un inmueble. Las viviendas se enseñan con su foto real.
+   Los números (cuántas, desde cuánto, municipios) salen del catálogo.
+   ===================================================================== */
+const FONDO_MARCA = path.join(RAIZ, 'assets/brand/portada-costa-sur-ia.jpg');
+
+function htmlMarca(cierre) {
+  const [W, H] = [1080, 1920];
+  const desde = Math.min(...props.map((p) => p.price));
+  const municipios = [...new Set(props.map((p) => p.town))].sort();
+  const ultimo = municipios.pop();
+  const lista = municipios.length ? `${municipios.join(', ')} y ${ultimo}` : ultimo;
+  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
+${BASE(W, H)}
+body{color:var(--crema)}
+.foto{position:absolute;inset:0;background:url('${b64(FONDO_MARCA)}') center 42% / cover no-repeat}
+.velo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,8,.62) 0%,rgba(11,10,8,.18) 22%,rgba(11,10,8,.30) 46%,rgba(11,10,8,.82) 64%,rgba(11,10,8,.97) 80%,var(--negro) 100%)}
+.marca{position:absolute;left:0;right:0;top:300px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.marca img{width:150px;height:150px;filter:drop-shadow(0 10px 30px rgba(0,0,0,.6))}
+.marca .n{font-family:'EB Garamond',serif;font-weight:600;font-size:62px;line-height:1;margin-top:26px;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.marca .s{font-size:20px;letter-spacing:.44em;text-transform:uppercase;color:var(--oro);margin-top:16px}
+.pie{position:absolute;left:70px;right:70px;bottom:290px;text-align:center}
+.titular{font-family:'EB Garamond',serif;font-weight:600;font-size:${cierre ? 92 : 78}px;line-height:1;letter-spacing:-.015em;text-wrap:balance;text-shadow:0 2px 14px rgba(0,0,0,.5)}
+.sub{margin-top:26px;font-size:28px;line-height:1.4;color:var(--crema-2);text-wrap:balance}
+.sub b{color:var(--oro);font-weight:500}
+.olas{margin:30px auto 26px;max-width:520px}
+.accion{font-size:23px;letter-spacing:.2em;text-transform:uppercase;color:var(--crema);font-weight:500}
+.accion b{color:var(--oro);font-weight:600}
+.web{position:absolute;left:0;right:0;bottom:214px;text-align:center;font-size:20px;letter-spacing:.3em;text-transform:uppercase;color:var(--crema-2)}
+</style></head><body><div class="lienzo">
+<div class="foto"></div><div class="velo"></div><div class="grano"></div>
+<div class="marca"><img src="${LOGO}" alt=""><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div>
+<section class="pie">
+${cierre
+    ? `<h1 class="titular">¿Cuál te enseño<br>primero?</h1>
+  <p class="sub">Dime la referencia o el pueblo y te mando la ficha completa.</p>
+  <div class="olas"></div>
+  <div class="accion">Escríbeme · <b>${TEL.replace('+34 ', '')}</b></div>`
+    : `<h1 class="titular">${props.length === 1 ? 'Una vivienda' : `${props.length} viviendas`}<br>en venta en el sur</h1>
+  <p class="sub">${lista}. Desde <b>${precio(desde)}</b>.</p>
+  <div class="olas"></div>
+  <div class="accion">Desliza para verlas</div>`}
+</section>
+<div class="web">${WEB}</div>
+</div></body></html>`;
+}
 
 /* ---------- copy de cada post ---------- */
 function copy(p) {
@@ -376,6 +426,26 @@ function copy(p) {
     }
     copies.push(copy(p));
     console.log(`  ✔ ${p.ref}  ${p.slug}  (${formatos.join(', ')})`);
+  }
+  /* Portada y cierre de la serie: una sola vez, no por vivienda. */
+  if (!soloRef) {
+    if (!fs.existsSync(FONDO_MARCA)) {
+      avisos.push(`falta assets/brand/portada-costa-sur-ia.jpg — sin portada ni cierre de serie`);
+    } else {
+      for (const [nombre, esCierre] of [['portada', false], ['cierre', true]]) {
+        const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
+        const doc = htmlMarca(esCierre);
+        if (dejarHtml) fs.writeFileSync(path.join(OUT, `serie-${nombre}.html`), doc);
+        await page.setContent(doc, { waitUntil: 'load' });
+        await page.evaluate(() => document.fonts.ready);
+        await page.waitForTimeout(150);
+        await page.screenshot({ path: path.join(OUT, `serie-${nombre}.png`), type: 'png' });
+        await page.screenshot({ path: path.join(OUT, `serie-${nombre}.jpg`), type: 'jpeg', quality: 90 });
+        await page.close();
+        n++;
+      }
+      console.log('  ✔ serie-portada · serie-cierre');
+    }
   }
   await browser.close();
   /* Con una sola referencia NO se toca COPY.md: si no, una prueba puntual borra

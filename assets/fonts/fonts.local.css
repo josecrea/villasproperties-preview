@@ -1,7 +1,11 @@
-@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-display:block;src:url('CormorantGaramond-500i.woff2') format('woff2');}
-@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:600;font-display:block;src:url('CormorantGaramond-600i.woff2') format('woff2');}
-@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500;font-display:block;src:url('CormorantGaramond-500.woff2') format('woff2');}
-@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:600;font-display:block;src:url('CormorantGaramond-600.woff2') format('woff2');}
-@font-face{font-family:'Jost';font-style:normal;font-weight:400;font-display:block;src:url('Jost-400.woff2') format('woff2');}
-@font-face{font-family:'Jost';font-style:normal;font-weight:500;font-display:block;src:url('Jost-500.woff2') format('woff2');}
-@font-face{font-family:'Jost';font-style:normal;font-weight:600;font-display:block;src:url('Jost-600.woff2') format('woff2');}
+/* Serif de titulares: EB Garamond.
+ * 22-sep-2026 — se venía de Cormorant Garamond y se cambió porque coloca el
+ * acento agudo DESPLAZADO a la derecha de la vocal: a 84-92 px «habitación» y
+ * «Cuál» parecían erratas. Comprobado que no era el CSS, ni la descarga, ni el
+ * interletraje: es el diseño de esa fuente. EB Garamond es el mismo revival de
+ * Garamond, con los diacríticos bien puestos. Comparación en
+ * ~/Desktop/creativos-villas/comparativa-tipografia.png
+ * Son fuentes VARIABLES: 500 y 600 comparten fichero y el rango va en font-weight. */
+@font-face{font-family:'EB Garamond';font-style:italic;font-weight:400 700;font-display:block;src:url('EBGaramond-500i.woff2') format('woff2');}
+@font-face{font-family:'EB Garamond';font-style:normal;font-weight:400 700;font-display:block;src:url('EBGaramond-500.woff2') format('woff2');}
+@font-face{font-family:'Jost';font-style:normal;font-weight:300 700;font-display:block;src:url('Jost-400.woff2') format('woff2');}
