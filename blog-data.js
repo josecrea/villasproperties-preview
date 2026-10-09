@@ -4,6 +4,17 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-segunda-residencia-tenerife.html',
+    category: 'Guía',
+    title: "Segunda residencia en Tenerife: qué mirar antes de comprar y qué cuesta mantenerla cada año",
+    dek: "Para quien compra en Tenerife una casa para usarla por temporadas, no para invertir: dónde compensa según el presupuesto, qué mirar que un residente no mira, cuánto cuesta tenerla cerrada nueve meses y qué puede hacer con ella el resto del año. Con datos propios y la norma detrás.",
+    date: '2026-10-09',
+    read: '9 min',
+    accent: 'atlantic',
+    figure: 'chart',
+    bg: 'zonas',
+  },
+  {
     slug: 'post-comprar-vivienda-tenerife-desde-la-ue.html',
     category: 'Guía',
     title: "Cómo comprar una vivienda en Tenerife si vives en otro país de la UE: pasos, NIE, poder, cuenta, hipoteca y plazos",

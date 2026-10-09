@@ -120,6 +120,12 @@ const PAGES = {
     desc: '8.552 compraventas al año en el sur de Tenerife: Arona firma 4 de cada 10 y Guía de Isora una de cada dieciocho.',
     type: 'article', priority: '0.8', published: TODAY, category: 'Inversión',
   },
+  'post-segunda-residencia-tenerife.html': {
+    title: 'Segunda residencia en Tenerife (2026): qué mirar antes de comprar y qué cuesta al año',
+    desc: 'Para quien compra en Tenerife una casa para usarla por temporadas, no para invertir: dónde compensa según el presupuesto, qué mirar que un residente no mira, cuánto cuesta tenerla cerrada nueve meses y qué puede hacer con ella el resto del año. Con datos propios y la norma detrás.',
+    priority: '0.8', published: '2026-10-09', category: 'Guía',
+    /* Sin type:'article': el Article (firmado por Valeria) y el FAQPage ya van en el post. */
+  },
   'post-comprar-vivienda-tenerife-desde-la-ue.html': {
     title: 'Comprar vivienda en Tenerife desde otro país de la UE (2026): NIE, poder, cuenta, hipoteca y plazos',
     desc: 'Qué hace falta de verdad para comprar en Tenerife viviendo en Bélgica, Países Bajos, Francia o Alemania: el NIE, firmar sin viajar, si hace falta cuenta en España, cuánto financia el banco y cuánto tarda cada paso. Con la norma detrás y un ejemplo sobre 300.000 €.',
