@@ -114,6 +114,52 @@ const cierreH = () => doc(1920, 1080, false, `
 <div class="web"><b>${WEB}</b><span>Ref. ${esc(p.ref)}</span></div></footer></section>
 <div class="sello">${mapa(330)}</div>`);
 
+/* ---- PORTADA y CIERRE cuadrados 1080×1080 ----
+ * El recorrido de la vivienda se graba en vertical, así que la pieza larga para la
+ * ficha se recorta a cuadrado: no deforma y se pierde solo el techo y algo de suelo.
+ * El fondo es el MISMO fotograma vertical, recortado por el centro igual que lo
+ * recorta el vídeo (`center / cover`): si no, la portada enseñaría un encuadre que
+ * luego no aparece. El texto va abajo, como en la vertical: el velo lateral de la
+ * apaisada se come media pieza cuando el lienzo es cuadrado. */
+const portadaC = () => doc(1080, 1080, false, `
+.foto{position:absolute;inset:0;background:url('${b64(FONDO_V)}') center / cover no-repeat;transform:scale(1.03)}
+.velo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,8,.72) 0%,rgba(11,10,8,.30) 16%,rgba(11,10,8,.08) 32%,rgba(11,10,8,.42) 56%,rgba(11,10,8,.90) 76%,rgba(11,10,8,.97) 100%)}
+.marca{position:absolute;left:60px;top:56px}.marca img{width:116px;height:116px}.marca .n{font-size:50px}.marca .s{font-size:22px;margin-top:10px}
+.pie{position:absolute;left:60px;right:60px;bottom:72px}
+.cinta{margin:0 -220px 46px -140px;font-size:28px;padding:16px 0}
+.fila{display:flex;align-items:center;gap:20px;margin-bottom:18px}.estado{font-size:24px;padding:12px 24px 10px}.kicker{font-size:23px}
+.gancho{font-size:${cuerpo(950, 88, 52)}px;max-width:950px}
+.datos{margin-top:24px;font-size:30px;letter-spacing:.08em;text-transform:uppercase;color:var(--oro)}`,
+`<div class="foto"></div><div class="velo"></div>
+<div class="marca"><img src="${LOGO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div></div>
+<section class="pie"><div class="cinta"><span>${cintaTxt}</span></div>
+<div class="fila"><span class="estado">${esc(p.status)}</span><span class="kicker">${esc(kicker)}</span></div>
+<h1 class="gancho">${gancho}</h1><div class="datos">${esc(datos)}</div></section>`);
+
+const cierreC = () => doc(1080, 1080, false, `
+.foto{position:absolute;inset:0;background:url('${b64(path.join(RAIZ, 'assets/img', p.slug, '01.webp'))}') center / cover no-repeat;filter:blur(2px);transform:scale(1.05)}
+.velo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,10,8,.92) 0%,rgba(11,10,8,.88) 40%,rgba(11,10,8,.95) 100%)}
+.marca{position:absolute;left:60px;top:56px}.marca img{width:110px;height:110px}.marca .n{font-size:46px}.marca .s{font-size:20px;margin-top:9px}
+.pie{position:absolute;left:60px;right:60px;bottom:66px}
+.fila{display:flex;align-items:center;gap:20px;margin-bottom:16px}.estado{font-size:21px;padding:11px 22px 9px}.kicker{font-size:21px}
+.gancho{font-size:${cuerpo(960, 66, 42)}px;max-width:960px}
+.precio{margin-top:14px;font-style:italic;font-weight:500;font-size:128px;line-height:.85;letter-spacing:-.035em;white-space:nowrap;filter:drop-shadow(0 8px 30px rgba(0,0,0,.6))}.precio i{font-size:.42em;margin-left:10px}
+.datos{margin-top:18px;font-size:26px;letter-spacing:.08em;text-transform:uppercase;color:var(--oro)}
+.contacto{margin-top:22px;padding-top:20px;border-top:1px solid rgba(230,189,106,.35);display:flex;gap:40px;align-items:flex-end;justify-content:space-between}
+.contacto .q{font-size:18px;letter-spacing:.24em;text-transform:uppercase;color:var(--oro);font-weight:600}
+.contacto .tel{font-family:'EB Garamond',serif;font-weight:600;font-size:54px;line-height:1;margin-top:9px;white-space:nowrap}
+.contacto .web b{font-size:30px;letter-spacing:.1em;color:var(--crema);font-weight:500}.contacto .web span{display:block;font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,234,215,.55);margin-top:7px}
+.sello{position:absolute;right:60px;top:56px}`,
+`<div class="foto"></div><div class="velo"></div>
+<div class="marca"><img src="${LOGO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div></div>
+<div class="sello">${mapa(190)}</div>
+<section class="pie"><div class="fila"><span class="estado">${esc(p.status)}</span><span class="kicker">${esc(kicker)}</span></div>
+<h1 class="gancho">${gancho}</h1>
+<div class="precio serif oro-texto">${esc(num(p.price))}<i>€</i></div>
+<div class="datos">${esc(datos)}</div>
+<footer class="contacto"><div><div class="q">Pide visita por WhatsApp</div><div class="tel serif oro-texto">${TEL}</div></div>
+<div class="web"><b>${WEB}</b><span>Ref. ${esc(p.ref)}</span></div></footer></section>`);
+
 /* ---- transparentes: cabecera de marca pequeña y etiqueta de estancia ---- */
 const marcaT = (W, H) => doc(W, H, true, `
 .marca{position:absolute;left:${W < H ? 64 : 72}px;top:${W < H ? 290 : 56}px}.marca img{width:${W < H ? 104 : 92}px;height:${W < H ? 104 : 92}px}
@@ -136,10 +182,16 @@ const nombre = (s) => s.toLowerCase().replace(/ /g, '_').replace(/ñ/g, 'n');
     await page.setContent(html, { waitUntil: 'load' }); await page.evaluate(() => document.fonts.ready); await page.waitForTimeout(120);
     await page.screenshot({ path: path.join(OUT, file), type: 'png', omitBackground: !!transparente }); await page.close();
   };
-  await render(1080, 1920, portadaV(), 'portada-v.png'); await render(1920, 1080, portadaH(), 'portada-h.png');
+  await render(1080, 1920, portadaV(), 'portada-v.png');
+  await render(1920, 1080, portadaH(), 'portada-h.png');
+  await render(1080, 1080, portadaC(), 'portada-c.png');
   await render(1920, 1080, cierreH(), 'end-h.png');
-  await render(1080, 1920, marcaT(1080, 1920), 'logo-v.png', true); await render(1920, 1080, marcaT(1920, 1080), 'logo-h.png', true);
-  for (const e of ESTANCIAS) { await render(1080, 1920, etiquetaT(1080, 1920, e), `label-v-${nombre(e)}.png`, true); await render(1920, 1080, etiquetaT(1920, 1080, e), `label-h-${nombre(e)}.png`, true); }
+  await render(1080, 1080, cierreC(), 'end-c.png');
+  // marca y etiquetas son el mismo documento en los tres formatos: se miden solos
+  for (const [W, H, t] of [[1080, 1920, 'v'], [1920, 1080, 'h'], [1080, 1080, 'c']]) {
+    await render(W, H, marcaT(W, H), `logo-${t}.png`, true);
+    for (const e of ESTANCIAS) await render(W, H, etiquetaT(W, H, e), `label-${t}-${nombre(e)}.png`, true);
+  }
   const story = path.join(RAIZ, 'creativos', `${p.slug}-story.png`);
   if (fs.existsSync(story)) fs.copyFileSync(story, path.join(OUT, 'end-v.png')); else console.warn('sin story: genera creativos.js primero');
   await browser.close(); console.log('rótulos en', OUT, fs.readdirSync(OUT).length);
