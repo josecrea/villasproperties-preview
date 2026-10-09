@@ -46,8 +46,14 @@ const TEL = '+34 667 384 965';
 const [W, H] = [1080, 1920];
 
 const args = process.argv.slice(2);
-const soloRef = args.find((a) => /^\d{6,}$/.test(a));
 const sinGif = args.includes('--sin-gif');
+
+/* La referencia es el argumento suelto: cualquier número que NO vaya detrás de
+ * una `--opcion`. Antes se pedían 6 dígitos o más para no confundirla con el
+ * valor de `--fps 20`, y el Biltmore —ref 14541, cinco dígitos— no colaba por
+ * el filtro: `shorts.js 14541` se entendía como "todas" y generaba las siete
+ * viviendas en silencio. Filtrar por longitud era adivinar; esto lo sabe. */
+const soloRef = args.find((a, i) => /^\d+$/.test(a) && !(i > 0 && args[i - 1].startsWith('--')));
 
 /* Lee `--opcion valor`. Escrito a lo tonto —`args[args.indexOf('--fps') + 1]`—
  * cuando la opción NO está, indexOf da -1 y coge args[0]: con `shorts.js
