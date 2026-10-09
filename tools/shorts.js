@@ -48,12 +48,14 @@ const [W, H] = [1080, 1920];
 const args = process.argv.slice(2);
 const sinGif = args.includes('--sin-gif');
 
-/* La referencia es el argumento suelto: cualquier número que NO vaya detrás de
- * una `--opcion`. Antes se pedían 6 dígitos o más para no confundirla con el
- * valor de `--fps 20`, y el Biltmore —ref 14541, cinco dígitos— no colaba por
- * el filtro: `shorts.js 14541` se entendía como "todas" y generaba las siete
- * viviendas en silencio. Filtrar por longitud era adivinar; esto lo sabe. */
-const soloRef = args.find((a, i) => /^\d+$/.test(a) && !(i > 0 && args[i - 1].startsWith('--')));
+/* La referencia es el argumento suelto: el que no es una opción ni el valor de una.
+ * Antes se pedían 6 dígitos o más para no confundirla con el valor de `--fps 20`, y el
+ * Biltmore —ref 14541, cinco dígitos— no colaba: `shorts.js 14541` se entendía como
+ * "todas" y generaba las siete viviendas en silencio. Tampoco vale exigir que sea un
+ * número: las referencias internas no lo son. Lo que sí se sabe es qué opciones llevan
+ * valor detrás, así que es eso lo que se mira. */
+const CON_VALOR = ['--fps', '--segundos'];
+const soloRef = args.find((a, i) => !a.startsWith('--') && !(i > 0 && CON_VALOR.includes(args[i - 1])));
 
 /* Lee `--opcion valor`. Escrito a lo tonto —`args[args.indexOf('--fps') + 1]`—
  * cuando la opción NO está, indexOf da -1 y coge args[0]: con `shorts.js
@@ -81,7 +83,11 @@ if (!props.length) { console.error('  No hay propiedades que encajen.'); process
 
 /* ---------- helpers (los mismos criterios que creativos.js) ---------- */
 const num = (n) => new Intl.NumberFormat('es-ES', { useGrouping: 'always' }).format(n);
-const precio = (n) => num(n) + ' €';
+const precio = (n) => (Number.isFinite(n) && n > 0 ? num(n) + ' €' : 'Precio a consultar');
+/* Mismos huecos que en creativos.js: una captación puede no tener precio cerrado ni
+ * coordenadas todavía. El hueco se dice con palabras y el mapa simplemente no se pinta. */
+const hayPrecio = (p) => Number.isFinite(p.price) && p.price > 0;
+const camas = (p) => (p.beds > 0 ? plural(p.beds, 'dormitorio', 'dormitorios') : (p.type || 'Estudio'));
 const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const b64 = (f) => `data:${f.endsWith('.png') ? 'image/png' : 'image/webp'};base64,${fs.readFileSync(f).toString('base64')}`;
 const plural = (n, s, pl) => `${n} ${n === 1 ? s : pl}`;
@@ -140,8 +146,9 @@ function html(p) {
   const fs_ = fotos(p);
   const n = fs_.length;
   const seg = 100 / n;                       // % de la línea de tiempo por foto
-  const [mx, my] = MAPA.punto(p.coords[0], p.coords[1]);
-  const datos = [`${p.built} m²`, plural(p.beds, 'dormitorio', 'dormitorios'), plural(p.baths, 'baño', 'baños')].join('   ·   ');
+  const hayMapa = Array.isArray(p.coords) && p.coords.length === 2;
+  const [mx, my] = hayMapa ? MAPA.punto(p.coords[0], p.coords[1]) : [0, 0];
+  const datos = [`${p.built} m²`, camas(p), plural(p.baths, 'baño', 'baños')].join('   ·   ');
 
   /* Una animación por foto: aparece, acompaña con un acercamiento lento y se va.
    * El cruce de ~0,3 s entre diapositivas evita el corte seco, y las opacidades
@@ -226,6 +233,7 @@ ${keyframesFotos}
 .cita{margin-top:24px;font-size:31px;line-height:1.34;color:var(--crema-2);max-width:900px;text-shadow:0 2px 10px rgba(0,0,0,.85)}
 .precio{font-style:italic;font-weight:500;font-size:250px;line-height:.82;letter-spacing:-.035em;white-space:nowrap;filter:drop-shadow(0 8px 30px rgba(0,0,0,.65))}
 .precio i{font-style:italic;font-size:.42em;margin-left:10px}
+.precio.precio-pendiente{font-size:88px;line-height:1.1;color:var(--oro-2);opacity:.92;filter:none}
 .m2{margin-top:18px;font-size:30px;letter-spacing:.2em;text-transform:uppercase;color:var(--crema-2)}
 .datos{font-size:42px;letter-spacing:.06em;text-transform:uppercase;color:var(--oro-2);font-weight:500;text-shadow:0 2px 10px rgba(0,0,0,.9)}
 .rasgos{list-style:none;margin-top:30px;font-size:34px;line-height:1.85;color:var(--crema);text-shadow:0 2px 10px rgba(0,0,0,.9)}
@@ -251,7 +259,7 @@ ${capas}
 
 <section class="acto a2">
   <div class="kicker">${esc(p.town)}</div>
-  <div class="precio serif oro-texto">${esc(num(p.price))}<i>€</i></div>
+  ${hayPrecio(p) ? `<div class="precio serif oro-texto">${esc(num(p.price))}<i>€</i></div>` : '<div class="precio serif precio-pendiente">Precio a consultar</div>'}
   ${p.pricePerM2 ? `<div class="m2">${esc(num(p.pricePerM2))} €/m²</div>` : ''}
 </section>
 
@@ -268,14 +276,14 @@ ${capas}
       <div class="web">${WEB}</div>
       <div class="ref">Ref. ${esc(p.ref)}</div>
     </div>
-    <figure class="mapa">
+    ${hayMapa ? `<figure class="mapa">
       <svg viewBox="0 0 ${MAPA.W} ${MAPA.H}" width="210" height="${Math.round(210 * MAPA.H / MAPA.W)}">
         <path d="${MAPA.SILUETA}" fill="rgba(243,234,215,.10)" stroke="var(--oro)" stroke-width="1.1" stroke-linejoin="round"/>
         <circle cx="${mx}" cy="${my}" r="7.5" fill="var(--oro)" opacity=".22"/>
         <circle cx="${mx}" cy="${my}" r="3.4" fill="var(--oro)" stroke="var(--negro)" stroke-width="1.1"/>
       </svg>
       <figcaption>${esc(p.town)}</figcaption>
-    </figure>
+    </figure>` : ''}
   </div>
 </section>
 </div></body></html>`;
