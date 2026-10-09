@@ -53,6 +53,52 @@ window.VP_PROPERTIES = [
     url: 'https://www.idealista.com/pro/villas-properties/inmueble/111258127/',
   },
   {
+    /* ALTA 9-oct-2026 desde escritura (protocolo 4.766 de 26-sep-2016, notario Samaniego)
+       + Catastro 1046301CS4014S0225XB + fotos propias Insta360 X4 del 28-sep-2026.
+       Precio 299.000 € fijado por Jose el 9-oct-2026 (3.602 €/m² sobre 83 m² construidos).
+       🔴 CEE de 22-04-2014 (letra F) CADUCADO el 19/04/2024: Jose pidió publicar la F;
+       hay que renovarlo para anunciar legalmente. Sin confirmar: ascensor.
+       Garajes: se venden APARTE (no incluidos). Útil 72 m² según el CEE. */
+    ref: '14541',
+    slug: 'las-chafiras-biltmore',
+    titleShort: 'Apartamento de 3 dormitorios en Las Chafiras',
+    title: 'Apartamento de 3 dormitorios con terraza y vistas a la piscina',
+    town: 'San Miguel de Abona',
+    zone: 'Las Chafiras',
+    address: 'Calle Mencey Tegueste, 6',
+    zoneKey: 'san-miguel',
+    zoneId: 'las-chafiras',
+    type: 'Apartamento',
+    status: 'En venta',
+    strategy: 'Vivienda / segunda residencia',
+    price: 299000,
+    pricePerM2: 3602,
+    built: 83,
+    useful: 72,
+    beds: 3,
+    baths: 2,
+    floor: '2ª planta exterior',
+    lift: false,
+    orientation: 'Oeste',
+    year: 2006,
+    condition: 'Segunda mano · buen estado',
+    community: 63,
+    energy: 'F · 257,95 kWh/m² año · 74,62 kg CO2/m² año',
+    features: ['Terraza de 10 m² con vistas a la piscina', 'Armarios empotrados', 'Dos baños completos: bañera y ducha', 'Cocina equipada', 'Plazas de garaje disponibles aparte'],
+    equipment: ['Aire acondicionado', 'Piscina comunitaria', 'Jardín comunitario'],
+    highlight: 'Residencial Biltmore Jardín de San Miguel: piscina, jardines y a pocos minutos del aeropuerto de Tenerife Sur.',
+    description: [
+      'Apartamento de 3 dormitorios y 2 baños en el residencial Biltmore Jardín de San Miguel, en Las Chafiras. Son 83 m² construidos según escritura, con 72 m² útiles, y una terraza de 10 m² abierta sobre la zona ajardinada y la piscina de la comunidad.',
+      'La distribución es clara: recibidor, salón-comedor con cocina abierta y salida directa a la terraza, dormitorio principal con armarios empotrados, un segundo dormitorio con dos camas y un tercero que hoy funciona como habitación de invitados. Los dos baños son completos, uno con bañera y otro con ducha.',
+      'La vivienda está en segunda planta, es exterior y cuenta con aire acondicionado. Se entrega amueblada y lista para entrar a vivir, con la comunidad al corriente de pago.',
+      'Las Chafiras es el nudo de servicios del sur de la isla: comercios, colegios, polígono y la autopista TF-1 a mano, con el aeropuerto de Tenerife Sur, Golf del Sur y las playas de El Médano a pocos minutos en coche.',
+      'Y desde julio de 2026 cuenta con La Gran Manzana, el nuevo centro comercial de Las Chafiras junto a la TF-1: 18.000 m² con supermercado, moda, hogar, restauración y cines, el primero de España diseñado para autoabastecerse de energía y agua. Vivir en el Biltmore es tenerlo a un paso.',
+      'Las plazas de garaje se ofrecen aparte. Acompañamos la compra con estudio de financiación y con el estado real del inmueble, la comunidad y la documentación.',
+    ],
+    coords: [28.058, -16.6168],
+    photos: 20,
+  },
+  {
     ref: '111230958',
     slug: 'cabo-blanco-arona',
     titleShort: 'Apartamento con garaje en Cabo Blanco',
