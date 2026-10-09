@@ -120,6 +120,13 @@ const PAGES = {
     desc: '8.552 compraventas al año en el sur de Tenerife: Arona firma 4 de cada 10 y Guía de Isora una de cada dieciocho.',
     type: 'article', priority: '0.8', published: TODAY, category: 'Inversión',
   },
+  'post-impuestos-comprar-vivienda-canarias.html': {
+    title: 'Impuestos al comprar vivienda en Canarias (2026): ITP, IGIC, AJD, IRNR y plusvalía',
+    desc: 'Cuánto cuesta comprar en Canarias además del precio, qué se paga cada año, qué pasa al alquilar o vender, y qué cambia si no eres residente. Con el artículo de ley detrás de cada cifra y un ejemplo sobre 300.000 €.',
+    priority: '0.8', published: '2026-10-09', category: 'Guía',
+    /* Sin type:'article' a propósito: el Article (firmado por Valeria) y el FAQPage
+       ya van escritos en el propio post, fuera del bloque seo. */
+  },
   'post-como-valorar-tu-vivienda.html': {
     desc: 'Las tres cifras que necesitas para poner precio a tu casa en Tenerife y los cinco errores que cuestan meses de exposición.',
     type: 'article', priority: '0.8', published: TODAY, category: 'Guía',

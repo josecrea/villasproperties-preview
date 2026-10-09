@@ -4,6 +4,17 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-impuestos-comprar-vivienda-canarias.html',
+    category: 'Guía',
+    title: "Impuestos al comprar vivienda en Canarias: lo que paga el comprador, residente o extranjero",
+    dek: "Cuánto cuesta comprar en Canarias además del precio, qué se paga cada año, qué pasa al alquilar o vender, y qué cambia si no eres residente. Con el artículo de ley detrás de cada cifra y un ejemplo sobre 300.000 €.",
+    date: '2026-10-09',
+    read: '9 min',
+    accent: 'atlantic',
+    figure: 'chart',
+    bg: 'juridico',
+  },
+  {
     slug: 'post-vender-casa-tenerife-sur.html',
     category: 'Venta',
     title: "Vender casa en Tenerife Sur: precio real, impuestos y plazos",
