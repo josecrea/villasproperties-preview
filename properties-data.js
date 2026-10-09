@@ -57,7 +57,7 @@ window.VP_PROPERTIES = [
        + Catastro 1046301CS4014S0225XB + fotos propias Insta360 X4 del 28-sep-2026.
        Precio 299.000 € fijado por Jose el 9-oct-2026 (3.602 €/m² sobre 83 m² construidos).
        🔴 CEE de 22-04-2014 (letra F) CADUCADO el 19/04/2024: Jose pidió publicar la F;
-       hay que renovarlo para anunciar legalmente. Sin confirmar: ascensor.
+       hay que renovarlo para anunciar legalmente. Ascensor: SÍ (Jose, 9-oct).
        Garajes: se venden APARTE (no incluidos). Útil 72 m² según el CEE. */
     ref: '14541',
     slug: 'las-chafiras-biltmore',
@@ -78,7 +78,7 @@ window.VP_PROPERTIES = [
     beds: 3,
     baths: 2,
     floor: '2ª planta exterior',
-    lift: false,
+    lift: true,
     orientation: 'Oeste',
     year: 2006,
     condition: 'Segunda mano · buen estado',
