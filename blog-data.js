@@ -4,12 +4,12 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
-    slug: 'post-segunda-residencia-tenerife.html',
+    slug: 'post-segunda-residencia-costa-adeje.html',
     category: 'Guía',
-    title: "Segunda residencia en Tenerife: qué mirar antes de comprar y qué cuesta mantenerla cada año",
-    dek: "Para quien compra en Tenerife una casa para usarla por temporadas, no para invertir: dónde compensa según el presupuesto, qué mirar que un residente no mira, cuánto cuesta tenerla cerrada nueve meses y qué puede hacer con ella el resto del año. Con datos propios y la norma detrás.",
+    title: "Segunda residencia en Costa Adeje para compradores belgas, neerlandeses y alemanes: zonas, costes y trámites",
+    dek: "Para belgas, neerlandeses y alemanes que buscan una casa propia en Costa Adeje para pasar temporadas, no para invertir: qué zona de Adeje según el presupuesto, qué mirar antes de ofertar, cuánto cuesta comprarla y mantenerla, y el trámite de NIE, apostilla y fiscalidad en su país. Con un ejemplo real sobre un apartamento de 395.000 €.",
     date: '2026-10-09',
-    read: '9 min',
+    read: '11 min',
     accent: 'atlantic',
     figure: 'chart',
     bg: 'zonas',

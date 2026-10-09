@@ -120,9 +120,10 @@ const PAGES = {
     desc: '8.552 compraventas al año en el sur de Tenerife: Arona firma 4 de cada 10 y Guía de Isora una de cada dieciocho.',
     type: 'article', priority: '0.8', published: TODAY, category: 'Inversión',
   },
-  'post-segunda-residencia-tenerife.html': {
-    title: 'Segunda residencia en Tenerife (2026): qué mirar antes de comprar y qué cuesta al año',
-    desc: 'Para quien compra en Tenerife una casa para usarla por temporadas, no para invertir: dónde compensa según el presupuesto, qué mirar que un residente no mira, cuánto cuesta tenerla cerrada nueve meses y qué puede hacer con ella el resto del año. Con datos propios y la norma detrás.',
+
+  'post-segunda-residencia-costa-adeje.html': {
+    title: 'Segunda residencia en Costa Adeje (2026): zonas, costes y trámites para belgas, neerlandeses y alemanes',
+    desc: 'Para belgas, neerlandeses y alemanes que buscan una casa propia en Costa Adeje para pasar temporadas, no para invertir: qué zona de Adeje según el presupuesto, qué mirar antes de ofertar, cuánto cuesta comprarla y mantenerla, y el trámite de NIE, apostilla y fiscalidad en su país. Con un ejemplo real sobre un apartamento de 395.000 €.',
     priority: '0.8', published: '2026-10-09', category: 'Guía',
     /* Sin type:'article': el Article (firmado por Valeria) y el FAQPage ya van en el post. */
   },
