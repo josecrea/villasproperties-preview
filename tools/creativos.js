@@ -67,7 +67,10 @@ require(path.join(RAIZ, 'properties-data.js'));
 const todas = global.window.VP_PROPERTIES || [];
 
 const args = process.argv.slice(2);
-const soloRef = args.find((a) => /^\d{6,}$/.test(a));
+/* La referencia es el argumento numérico suelto. Pedir 6 dígitos o más dejaba fuera al
+ * Biltmore —ref 14541—: `creativos.js 14541` se entendía como "todas" y regeneraba el
+ * catálogo entero en silencio. Filtrar por longitud era adivinar. */
+const soloRef = args.find((a, i) => /^\d+$/.test(a) && !(i > 0 && args[i - 1].startsWith('--')));
 const dejarHtml = args.includes('--html');
 const pedidos = args.filter((a) => FORMATOS[a]);
 const formatos = pedidos.length ? pedidos : Object.keys(FORMATOS);
