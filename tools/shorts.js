@@ -97,16 +97,41 @@ const FUENTES = fs.readFileSync(path.join(RAIZ, 'assets/fonts/fonts.local.css'),
   .replace(/url\('([^']+)'\)/g, (_, f) => `url('${b64(path.join(RAIZ, 'assets/fonts', f))}')`);
 const LOGO = b64(path.join(RAIZ, 'assets/brand/logo-mark.png'));
 
-/* Fotos reales de la vivienda, en orden, hasta MAX_FOTOS. La primera es la que
- * el copy haya elegido como portada: si la 01 es un muro, no abre el vídeo. */
+/* Fotos reales de la vivienda, hasta MAX_FOTOS. La primera es la que el copy
+ * haya elegido como portada: si la 01 es un muro, no abre el vídeo.
+ *
+ * Las otras cuatro van REPARTIDAS por la cabecera de la ficha, no son las
+ * cuatro siguientes ni cuatro cualesquiera. Dos razones:
+ *
+ * - Seguidas, salía un vídeo del Biltmore entero en el balcón: sus cinco
+ *   primeras fotos son terraza, piscina y vistas. Quien ve diez segundos de
+ *   terraza no sabe si la casa le sirve.
+ * - Repartidas por la ficha ENTERA, el vídeo acababa en el pasillo y en una
+ *   pared de azulejos: el final de una ficha es relleno —detalles, armarios,
+ *   un trozo de techo— y con el texto encima no se entiende qué se está viendo.
+ *
+ * La ficha ya está ordenada por lo que mejor vende, así que el short se queda
+ * en su parte alta (CABECERA) y reparte ahí dentro: variedad de estancias sin
+ * bajar al relleno. El orden de la ficha se respeta. */
+const CABECERA = 0.6;          // porción alta de la ficha de la que se elige
+
 function fotos(p) {
   const dir = path.join(RAIZ, 'assets/img', p.slug);
   if (!fs.existsSync(dir)) return [];
   const todas = fs.readdirSync(dir).filter((f) => /^\d+\.webp$/.test(f)).sort();
+  if (!todas.length) return [];
   const portada = String((COPY[p.ref] || {}).foto || 1).padStart(2, '0') + '.webp';
-  const resto = todas.filter((f) => f !== portada);
-  return [todas.includes(portada) ? portada : todas[0], ...resto]
-    .filter(Boolean).slice(0, MAX_FOTOS).map((f) => path.join(dir, f));
+  const primera = todas.includes(portada) ? portada : todas[0];
+  const resto = todas.filter((f) => f !== primera);
+  // con ficha corta no hay relleno que esquivar: se usa entera
+  const alto = resto.slice(0, Math.max(MAX_FOTOS - 1, Math.ceil(resto.length * CABECERA)));
+  const cuantas = MAX_FOTOS - 1;
+  /* Si no sobran fotos no hay nada que repartir: van las que hay. Repartir
+   * igualmente duplicaba una —el loft de El Fraile salía con la misma foto dos
+   * veces seguidas, que en el vídeo se ve como que se ha quedado congelado. */
+  const repartidas = alto.length <= cuantas ? alto
+    : Array.from({ length: cuantas }, (_, i) => alto[Math.round((i + 1) * alto.length / (cuantas + 1))]);
+  return [primera, ...new Set(repartidas)].map((f) => path.join(dir, f));
 }
 
 /* ---------- el documento animado ---------- */
