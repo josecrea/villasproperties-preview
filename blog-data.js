@@ -4,6 +4,17 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-comprar-vivienda-tenerife-desde-la-ue.html',
+    category: 'Guía',
+    title: "Cómo comprar una vivienda en Tenerife si vives en otro país de la UE: pasos, NIE, poder, cuenta, hipoteca y plazos",
+    dek: "Qué hace falta de verdad para comprar en Tenerife viviendo en Bélgica, Países Bajos, Francia o Alemania: el NIE, firmar sin viajar, si hace falta cuenta en España, cuánto financia el banco y cuánto tarda cada paso. Con la norma detrás y un ejemplo sobre 300.000 €.",
+    date: '2026-10-09',
+    read: '8 min',
+    accent: 'atlantic',
+    figure: 'chart',
+    bg: 'proceso',
+  },
+  {
     slug: 'post-impuestos-comprar-vivienda-canarias.html',
     category: 'Guía',
     title: "Impuestos al comprar vivienda en Canarias: lo que paga el comprador, residente o extranjero",
