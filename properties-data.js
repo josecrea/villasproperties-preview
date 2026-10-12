@@ -55,40 +55,47 @@ window.VP_PROPERTIES = [
   {
     /* ALTA 9-oct-2026 desde escritura (protocolo 4.766 de 26-sep-2016, notario Samaniego)
        + Catastro 1046301CS4014S0225XB + fotos propias Insta360 X4 del 28-sep-2026.
-       Precio 299.000 € fijado por Jose el 9-oct-2026 (3.602 €/m² sobre 83 m² construidos).
+       12-oct-2026: ALINEADO CON IDEALISTA, que es la fuente de los datos publicados
+       (Jose: «manda idealista»). Anuncio 112795519, leído el 12-oct: Ático, 93 m²
+       construidos y 90 m² útiles, 3 hab., 2 baños, orientación sur, 2ª planta exterior
+       con ascensor, comunidad 72 €/mes, 3.215 €/m². Antes aquí ponía 83/72/Apartamento/
+       Oeste/63, que era la lectura literal de la escritura: 82,98 m² construidos + 10,39
+       de terraza (= 93,37). Los 93 de idealista son vivienda + terraza; por eso la
+       descripción lo desglosa, para que las dos fuentes digan lo mismo sin mentir.
        🔴 CEE de 22-04-2014 (letra F) CADUCADO el 19/04/2024: Jose pidió publicar la F;
-       hay que renovarlo para anunciar legalmente. Ascensor: SÍ (Jose, 9-oct).
-       Garajes: se venden APARTE (no incluidos). Útil 72 m² según el CEE. */
+       hay que renovarlo para anunciar legalmente.
+       Garajes: se venden APARTE (16,46 y 16,66 m², no incluidos en el precio). */
     ref: '14541',
     slug: 'las-chafiras-biltmore',
-    titleShort: 'Apartamento de 3 dormitorios en Las Chafiras',
-    title: 'Apartamento de 3 dormitorios con terraza y vistas a la piscina',
+    titleShort: 'Ático de 3 dormitorios en Las Chafiras',
+    title: 'Ático de 3 dormitorios con terraza y vistas a la piscina',
     town: 'San Miguel de Abona',
     zone: 'Las Chafiras',
     address: 'Calle Mencey Tegueste, 6',
     zoneKey: 'san-miguel',
     zoneId: 'las-chafiras',
-    type: 'Apartamento',
+    type: 'Ático',
     status: 'En venta',
     strategy: 'Vivienda / segunda residencia',
+    url: 'https://www.idealista.com/inmueble/112795519/',
     price: 299000,
-    pricePerM2: 3602,
-    built: 83,
-    useful: 72,
+    pricePerM2: 3215,
+    built: 93,
+    useful: 90,
     beds: 3,
     baths: 2,
     floor: '2ª planta exterior',
     lift: true,
-    orientation: 'Oeste',
+    orientation: 'Sur',
     year: 2006,
     condition: 'Segunda mano · buen estado',
-    community: 63,
+    community: 72,
     energy: 'F · 257,95 kWh/m² año · 74,62 kg CO2/m² año',
     features: ['Terraza de 10 m² con vistas a la piscina', 'Armarios empotrados', 'Dos baños completos: bañera y ducha', 'Cocina equipada', 'Plazas de garaje disponibles aparte'],
     equipment: ['Aire acondicionado', 'Piscina comunitaria', 'Jardín comunitario'],
     highlight: 'Residencial Biltmore Jardín de San Miguel: piscina, jardines y a pocos minutos del aeropuerto de Tenerife Sur.',
     description: [
-      'Apartamento de 3 dormitorios y 2 baños en el residencial Biltmore Jardín de San Miguel, en Las Chafiras. Son 83 m² construidos según escritura, con 72 m² útiles, y una terraza de 10 m² abierta sobre la zona ajardinada y la piscina de la comunidad.',
+      'Ático de 3 dormitorios y 2 baños en el residencial Biltmore Jardín de San Miguel, en Las Chafiras. Son 93 m² construidos —83 m² de vivienda según escritura más 10 m² de terraza privada— abiertos sobre la zona ajardinada y la piscina de la comunidad.',
       'La distribución es clara: recibidor, salón-comedor con cocina abierta y salida directa a la terraza, dormitorio principal con armarios empotrados, un segundo dormitorio con dos camas y un tercero que hoy funciona como habitación de invitados. Los dos baños son completos, uno con bañera y otro con ducha.',
       'La vivienda está en segunda planta, es exterior y cuenta con aire acondicionado. Se entrega amueblada y lista para entrar a vivir, con la comunidad al corriente de pago.',
       'Las Chafiras es el nudo de servicios del sur de la isla: comercios, colegios, polígono y la autopista TF-1 a mano, con el aeropuerto de Tenerife Sur, Golf del Sur y las playas de El Médano a pocos minutos en coche.',
@@ -291,7 +298,10 @@ window.VP_PROPERTIES = [
     ],
     coords: [28.0355, -16.6205],
     photos: 5,
-    url: 'https://www.idealista.com/pro/villas-properties/inmueble/111734875/',
+    /* SIN url a idealista: el anuncio 111734875 da 404 desde el 12-oct-2026. No se ha
+       vendido — Jose retiró la promoción porque el plan de idealista no da para más
+       anuncios y entró el Biltmore. La vivienda SIGUE a la venta y se enseña aquí; el
+       botón «Ver en idealista» se oculta solo cuando no hay url. */
   },
 ];
 
