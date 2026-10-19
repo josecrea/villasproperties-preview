@@ -35,7 +35,7 @@ Polaco sería el siguiente; de momento lo cubre el inglés.
 | comprar-casa-arona.html | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | finance.html | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | property.html | ✓ | | | | | |
-| property-brief.html | ✓ | | | | | |
+| property-brief.html | ✓ | ✓ (`nl/zoekprofiel.html`) | ✓ (`fr/brief-recherche.html`) | ✓ (`it/brief-ricerca.html`) | ✓ (`en/property-brief.html`) | ✓ (`de/suchprofil.html`) |
 
 Ronda 4 (19-oct, commits `f2fab09`/`c5afa4b`/`3e62e05`): inglés y alemán completados para
 index/contact/guia-comprador. Reciprocidad de hreflang a 6 idiomas en 17 páginas, 0/0.
@@ -49,17 +49,58 @@ contradice el 60-70 % que la propia guía del comprador (ya publicada) documenta
 residentes. Pendiente para la siguiente ronda: `comprar-casa-adeje.html`,
 `comprar-casa-arona.html`, `property.html`, `property-brief.html` — las 4 en los 5 idiomas.
 
-Ronda 6 (19-oct, rama `feat/idiomas-r6-landings`): **comprar-casa-adeje.html y
-comprar-casa-arona.html completadas en los 5 idiomas** (35 páginas totales en el verificador,
-sigue 0 huérfanos / 0 canonical cruzados). Novedad: por primera vez se traduce el **slug** (son
-landings de búsqueda) — `huis-kopen-adeje.html` (nl), `acheter-maison-adeje.html` (fr),
-`comprare-casa-adeje.html` (it), `buy-house-adeje.html` (en), `haus-kaufen-adeje.html` (de), y
-análogos para Arona. El verificador asumía que el nombre de fichero es el mismo en todos los
-idiomas (igual que index/contact/guia-comprador/finance); se corrigió para calcular el
-x-default esperado a partir del propio `hreflang="es"` declarado por la página en lugar de
-mangle de ruta — si no, marcaba 10 falsos positivos. `property.html` y `property-brief.html`
-quedan para la siguiente ronda (property-brief.html está además fuera de alcance: lo toca el
-otro dev en paralelo).
+Ronda 6 (19-oct, ramas `feat/idiomas-r6-landings` y `feat/idiomas-r6-brief`, fusionadas en
+`feat/idiomas-nl-fr-it`): **tres páginas completadas en los 5 idiomas** —
+`comprar-casa-adeje.html`, `comprar-casa-arona.html` y `property-brief.html`.
+El verificador cuenta ahora **41 páginas**, con 0 huérfanos y 0 canonical cruzados.
+
+**Novedad: se traduce el slug.** Son páginas de búsqueda, así que el nombre del fichero es parte
+del trabajo: `huis-kopen-adeje.html` (nl), `acheter-maison-adeje.html` (fr),
+`comprare-casa-adeje.html` (it), `buy-house-adeje.html` (en), `haus-kaufen-adeje.html` (de), sus
+análogos de Arona, y para el brief `nl/zoekprofiel.html`, `fr/brief-recherche.html`,
+`it/brief-ricerca.html`, `en/property-brief.html`, `de/suchprofil.html`. Los
+`<link rel="alternate">` de las seis versiones, incluidos los originales en español de la raíz,
+se actualizaron en consecuencia.
+
+**Un fallo real del verificador, encontrado dos veces.** `verificar-idiomas.js` y
+`check_links.py` asumían que el nombre de fichero es el mismo en todos los idiomas, lo cual era
+cierto para index/contact/guia-comprador/finance y falso en cuanto se traduce el slug: marcaba
+**10 falsos positivos**. Se corrigió derivando el `x-default` esperado del propio `hreflang="es"`
+que declara cada página, en vez de adivinarlo quitando el prefijo de idioma. Los **dos devs de
+la ronda llegaron a ese fallo y a la misma corrección por separado**, sin verse entre ellos; al
+fusionar se conservó una sola copia.
+
+**El formulario, traducido sin romper el lead.** Se tradujo solo lo visible: `<label>`, texto de
+`<option>`, `<span>` de cada `.chip`, `placeholder`, `.chiplabel`/`.chipnota`, botones y
+`#briefStatus`. Los `name`, `value`, `id`, `for` y el honeypot `vp_hp` se dejaron byte a byte
+iguales al español, y se verificó campo a campo que el orden coincide en las seis versiones. Los
+atributos `toolname`/`tooldescription` del `<form>` siguen intactos y en español, porque no son
+para el usuario.
+
+**La promesa de financiación, cerrada.** La ronda 5 había dejado en español la tarjeta del
+«hasta el 100 % según perfil» para no extender a cinco idiomas una promesa que no se sostiene
+para no residentes. Ahora las cinco traducciones de `finance.html` llevan la cifra real: **60–70 %**
+del menor de precio o tasación, con **30–40 %** de capital propio más **8 %** de gastos, y sin
+`lang="es"`. El `finance.html` en español de la raíz **no se tocó**: esa decisión es de Jose, y
+hay un informe aparte sobre ella en `~/villas-cierre-2026-10-19/HALLAZGO-FINANCIACION-LEY-5-2019.md`.
+
+**`property.html` queda fuera, y no por falta de tiempo.** Es una cáscara vacía
+(`<main id="propertyView"></main>`) que rellena `property.js` desde `properties-data.js`. Una
+copia estática en una isla pasaría todos los chequeos y saldría en español en el navegador: es
+el caso de libro de «verde por curl». Si hay que traducirla, el trabajo está en la capa de
+JavaScript, no en el HTML.
+
+**Pendiente en marcha:** `property-brief.js` compone el mensaje de WhatsApp y el resumen de
+`#briefStatus` tras enviar con cadenas en español (`Objetivo:`, `Presupuesto máximo:`, `dorm.`,
+`Comprar para vivir`…), y es un único script compartido por las seis islas. El formulario
+funciona y el lead no se pierde, pero quien lo rellena en neerlandés ve la confirmación en
+español. Lo detectó el dev de la OT-B sin arreglarlo, por no ser su fichero; ya tiene orden de
+trabajo propia (OT-C, rama `feat/idiomas-r6-brief-js`), con la condición dura de que el camino
+del español no cambie ni un carácter.
+
+**Defecto preexistente, señalado y no tocado:** el selector de idioma en nav y footer de
+`nl/index.html` tiene el bloque hreflang y el `lang-switch` duplicados. Viene de rondas
+anteriores.
 
 ## Reglas que no se negocian
 - Isla cerrada: las otras 76 páginas no se tocan. Los enlaces que salen apuntan al español,

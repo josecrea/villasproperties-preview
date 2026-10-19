@@ -17,6 +17,8 @@ FILES = [
     "nl/huis-kopen-adeje.html", "fr/acheter-maison-adeje.html", "it/comprare-casa-adeje.html", "en/buy-house-adeje.html", "de/haus-kaufen-adeje.html",
     "comprar-casa-arona.html",
     "nl/huis-kopen-arona.html", "fr/acheter-maison-arona.html", "it/comprare-casa-arona.html", "en/buy-house-arona.html", "de/haus-kaufen-arona.html",
+    "property-brief.html",
+    "nl/zoekprofiel.html", "fr/brief-recherche.html", "it/brief-ricerca.html", "en/property-brief.html", "de/suchprofil.html",
 ]
 
 fallos = []

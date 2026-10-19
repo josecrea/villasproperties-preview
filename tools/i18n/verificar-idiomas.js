@@ -39,6 +39,8 @@ const PAGINAS = [
   'nl/huis-kopen-adeje.html', 'fr/acheter-maison-adeje.html', 'it/comprare-casa-adeje.html', 'en/buy-house-adeje.html', 'de/haus-kaufen-adeje.html',
   'comprar-casa-arona.html',
   'nl/huis-kopen-arona.html', 'fr/acheter-maison-arona.html', 'it/comprare-casa-arona.html', 'en/buy-house-arona.html', 'de/haus-kaufen-arona.html',
+  'property-brief.html',
+  'nl/zoekprofiel.html', 'fr/brief-recherche.html', 'it/brief-ricerca.html', 'en/property-brief.html', 'de/suchprofil.html',
 ];
 
 const dentro = (s, re) => { const m = s.match(re); return m ? m[1] : ''; };
@@ -101,13 +103,17 @@ const langOfRuta = (ruta) => {
     const grupoTieneEs = !ruta.includes('guia-comprador.html');
     const xd = v.alternas.find((a) => a.lang === 'x-default');
     if (grupoTieneEs && !xd) f('sin hreflang x-default (el grupo sí tiene versión española)');
-    // El nombre del fichero español no siempre coincide con el de la isla:
-    // desde la ronda 6 el slug se traduce (p.ej. comprar-casa-adeje.html ->
-    // nl/huis-kopen-adeje.html), así que el x-default esperado se toma del
-    // propio hreflang="es" declarado por la página, no de mangle de ruta.
+    // El nombre del fichero español no coincide con el de la isla: desde la ronda 6 el slug
+    // se traduce (comprar-casa-adeje.html -> nl/huis-kopen-adeje.html, property-brief.html ->
+    // nl/zoekprofiel.html), así que "quitar el prefijo nl|fr|it|en|de/" ya NO identifica la
+    // versión española. El x-default esperado se toma del propio hreflang="es" que declara la
+    // página. Sin este arreglo el verificador daba 10 falsos positivos.
+    // Nota: los dos devs de la ronda 6 encontraron este fallo por separado y escribieron la
+    // misma corrección; esta es la copia conservada al fusionar.
     const esAlt = v.alternas.find((a) => a.lang === 'es');
     const paginaEs = ruta.replace(/^(nl|fr|it|en|de)\//, '');
-    const esperadoXd = esAlt ? esAlt.href : (paginaEs === 'index.html' ? BASE_CANON + '/' : BASE_CANON + '/' + paginaEs);
+    const esperadoXd = esAlt ? esAlt.href
+      : (paginaEs === 'index.html' ? BASE_CANON + '/' : BASE_CANON + '/' + paginaEs);
     if (grupoTieneEs && xd && xd.href !== esperadoXd) f(`x-default a ${xd.href}, no a la versión española`);
     if (!grupoTieneEs && xd) f('tiene x-default pero el grupo no tiene versión española (sería un alternate falso)');
 
