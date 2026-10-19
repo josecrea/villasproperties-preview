@@ -29,10 +29,10 @@ const REMOTE = process.argv[2] || null;
 // Páginas de la isla: una entrada por fichero real en el repo.
 const PAGINAS = [
   'contact.html',
-  'nl/contact.html', 'fr/contact.html', 'it/contact.html',
-  'nl/guia-comprador.html', 'fr/guia-comprador.html', 'it/guia-comprador.html',
+  'nl/contact.html', 'fr/contact.html', 'it/contact.html', 'en/contact.html', 'de/contact.html',
+  'nl/guia-comprador.html', 'fr/guia-comprador.html', 'it/guia-comprador.html', 'en/guia-comprador.html', 'de/guia-comprador.html',
   'index.html',
-  'nl/index.html', 'fr/index.html', 'it/index.html',
+  'nl/index.html', 'fr/index.html', 'it/index.html', 'en/index.html', 'de/index.html',
 ];
 
 const dentro = (s, re) => { const m = s.match(re); return m ? m[1] : ''; };
@@ -63,7 +63,7 @@ async function leer(rutaRel, cache) {
 }
 
 const langOfRuta = (ruta) => {
-  const m = ruta.match(/^(nl|fr|it)\//);
+  const m = ruta.match(/^(nl|fr|it|en|de)\//);
   return m ? m[1] : 'es';
 };
 
@@ -92,7 +92,7 @@ const langOfRuta = (ruta) => {
     }
 
     // x-default sólo es obligatorio si el grupo tiene versión española (contact.html sí; guia-comprador.html no).
-    const grupoTieneEs = ['contact.html', 'nl/contact.html', 'fr/contact.html', 'it/contact.html', 'index.html', 'nl/index.html', 'fr/index.html', 'it/index.html'].includes(ruta);
+    const grupoTieneEs = !ruta.includes('guia-comprador.html');
     const xd = v.alternas.find((a) => a.lang === 'x-default');
     if (grupoTieneEs && !xd) f('sin hreflang x-default (el grupo sí tiene versión española)');
     const esperadoXd = ruta.includes('index.html') ? BASE_CANON + '/' : BASE_CANON + '/contact.html';

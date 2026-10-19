@@ -33,6 +33,8 @@
     nl: { properties: 'Properties', sell: 'Verkopen', buy: 'Kopen', finance: 'Financiering', news: 'Nieuws', advisor: 'Gratis waardebepaling', claim: 'VASTGOEDINTELLIGENTIE · TENERIFE', explore: 'Verkennen', intelligenceEye: 'Intelligence', follow: 'Volgen', privacy: 'Privacybeleid', legal: 'Juridische kennisgeving', backoffice: 'Private back office', restricted: 'Beperkte toegang' },
     fr: { properties: 'Properties', sell: 'Vendre', buy: 'Acheter', finance: 'Financement', news: 'Actualités', advisor: 'Estimation gratuite', claim: 'INTELLIGENCE IMMOBILIÈRE · TENERIFE', explore: 'Explorer', intelligenceEye: 'Intelligence', follow: 'Suivre', privacy: 'Confidentialité', legal: 'Mentions légales', backoffice: 'Private back office', restricted: 'Accès restreint' },
     it: { properties: 'Properties', sell: 'Vendere', buy: 'Comprare', finance: 'Finanziamento', news: 'Notizie', advisor: 'Valutazione gratuita', claim: "INTELLIGENCE IMMOBILIARE · TENERIFE", explore: 'Esplora', intelligenceEye: 'Intelligence', follow: 'Segui', privacy: 'Privacy', legal: 'Note legali', backoffice: 'Private back office', restricted: 'Accesso riservato' },
+    en: { properties: 'Properties', sell: 'Sell', buy: 'Buy', finance: 'Finance', news: 'News', advisor: 'Free valuation', claim: 'DATA-DRIVEN PROPERTY INTELLIGENCE · TENERIFE', explore: 'Explore', intelligenceEye: 'Intelligence', follow: 'Follow', privacy: 'Privacy', legal: 'Legal notice', backoffice: 'Private back office', restricted: 'Restricted access' },
+    de: { properties: 'Properties', sell: 'Verkaufen', buy: 'Kaufen', finance: 'Finanzierung', news: 'Neuigkeiten', advisor: 'Kostenlose Bewertung', claim: 'IMMOBILIENINTELLIGENZ · TENERIFFA', explore: 'Entdecken', intelligenceEye: 'Intelligence', follow: 'Folgen', privacy: 'Datenschutz', legal: 'Impressum', backoffice: 'Private back office', restricted: 'Eingeschränkter Zugang' },
   };
   const T = I18N_NAV[LANG] || I18N_NAV.es;
   /* Las páginas de la isla viven un nivel más abajo (nl/ fr/ it/): todo
@@ -41,7 +43,7 @@
   const ISLAND_BASE = LANG !== 'es' ? '../' : '';
   /* Enlaces que salen de la isla (todo lo que no sea contact.html/guia-comprador
      en su propio idioma) van al español, marcados: hreflang + title localizado. */
-  const FOREIGN_TITLE = { nl: 'deze pagina is in het Spaans', fr: 'cette page est en espagnol', it: 'questa pagina è in spagnolo' };
+  const FOREIGN_TITLE = { nl: 'deze pagina is in het Spaans', fr: 'cette page est en espagnol', it: 'questa pagina è in spagnolo', en: 'this page is in Spanish', de: 'diese Seite ist auf Spanisch' };
   const outMark = LANG !== 'es' ? ` hreflang="es" title="${FOREIGN_TITLE[LANG]}"` : '';
 
   const NAV = [

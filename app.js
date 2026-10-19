@@ -125,6 +125,8 @@
       nl:{properties:'Properties',sell:'Verkopen',buy:'Kopen',finance:'Financiering',news:'Nieuws',advisor:'Gratis waardebepaling',talk:'Praat met een adviseur'},
       fr:{properties:'Properties',sell:'Vendre',buy:'Acheter',finance:'Financement',news:'Actualités',advisor:'Estimation gratuite',talk:'Parler à un conseiller'},
       it:{properties:'Properties',sell:'Vendere',buy:'Comprare',finance:'Finanziamento',news:'Notizie',advisor:'Valutazione gratuita',talk:'Parla con un consulente'},
+      en:{properties:'Properties',sell:'Sell',buy:'Buy',finance:'Finance',news:'News',advisor:'Free valuation',talk:'Talk to an advisor'},
+      de:{properties:'Properties',sell:'Verkaufen',buy:'Kaufen',finance:'Finanzierung',news:'Neuigkeiten',advisor:'Kostenlose Bewertung',talk:'Mit einem Berater sprechen'},
     };
     const mdT=MD_T[mdLang]||MD_T.es;
     const drawer=document.createElement('div'); drawer.id='mobileDrawer'; drawer.innerHTML=`<nav><a href="${mdBase}properties.html"${mdOut}>${mdT.properties}</a><a href="${mdBase}sell.html"${mdOut}>${mdT.sell}</a><a href="${mdBase}buy.html"${mdOut}>${mdT.buy}</a><a href="${mdBase}finance.html"${mdOut}>${mdT.finance}</a><a href="${mdBase}insights.html"${mdOut}>${mdT.news}</a><a href="${mdBase}valuation.html"${mdOut}>${mdT.advisor}</a><a href="contact.html">${mdT.talk}</a></nav>`;

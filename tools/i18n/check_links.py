@@ -7,10 +7,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 FILES = [
     "contact.html",
-    "nl/contact.html", "fr/contact.html", "it/contact.html",
-    "nl/guia-comprador.html", "fr/guia-comprador.html", "it/guia-comprador.html",
+    "nl/contact.html", "fr/contact.html", "it/contact.html", "en/contact.html", "de/contact.html",
+    "nl/guia-comprador.html", "fr/guia-comprador.html", "it/guia-comprador.html", "en/guia-comprador.html", "de/guia-comprador.html",
     "index.html",
-    "nl/index.html", "fr/index.html", "it/index.html",
+    "nl/index.html", "fr/index.html", "it/index.html", "en/index.html", "de/index.html",
 ]
 
 fallos = []
