@@ -114,7 +114,20 @@
   if(headerIn && !$('#menuToggle')){
     const menu=document.createElement('button'); menu.id='menuToggle'; menu.type='button'; menu.className='menu-toggle'; menu.textContent='Menu';
     const config=$('#mobileAdmin'); headerIn.insertBefore(menu,config||null);
-    const drawer=document.createElement('div'); drawer.id='mobileDrawer'; drawer.innerHTML='<nav><a href="properties.html">Properties</a><a href="sell.html">Sell</a><a href="buy.html">Buy</a><a href="finance.html">Finance</a><a href="insights.html">News</a><a href="valuation.html">Valoración gratis</a><a href="contact.html">Talk to an advisor</a></nav>';
+    /* atelier:villas-idiomas: igual que shell.js, el menú móvil pisaba todo
+       con rutas/textos fijos en es. Mismo criterio: por defecto (es) idéntico
+       a antes; en la isla nl/fr/it, rutas con '../' y textos localizados. */
+    const mdLang=(document.documentElement.getAttribute('lang')||'es').toLowerCase();
+    const mdBase=mdLang!=='es'?'../':'';
+    const mdOut=mdLang!=='es'?` hreflang="es"`:'';
+    const MD_T={
+      es:{properties:'Properties',sell:'Sell',buy:'Buy',finance:'Finance',news:'News',advisor:'Valoración gratis',talk:'Talk to an advisor'},
+      nl:{properties:'Properties',sell:'Verkopen',buy:'Kopen',finance:'Financiering',news:'Nieuws',advisor:'Gratis waardebepaling',talk:'Praat met een adviseur'},
+      fr:{properties:'Properties',sell:'Vendre',buy:'Acheter',finance:'Financement',news:'Actualités',advisor:'Estimation gratuite',talk:'Parler à un conseiller'},
+      it:{properties:'Properties',sell:'Vendere',buy:'Comprare',finance:'Finanziamento',news:'Notizie',advisor:'Valutazione gratuita',talk:'Parla con un consulente'},
+    };
+    const mdT=MD_T[mdLang]||MD_T.es;
+    const drawer=document.createElement('div'); drawer.id='mobileDrawer'; drawer.innerHTML=`<nav><a href="${mdBase}properties.html"${mdOut}>${mdT.properties}</a><a href="${mdBase}sell.html"${mdOut}>${mdT.sell}</a><a href="${mdBase}buy.html"${mdOut}>${mdT.buy}</a><a href="${mdBase}finance.html"${mdOut}>${mdT.finance}</a><a href="${mdBase}insights.html"${mdOut}>${mdT.news}</a><a href="${mdBase}valuation.html"${mdOut}>${mdT.advisor}</a><a href="contact.html">${mdT.talk}</a></nav>`;
     drawer.style.cssText='position:fixed;z-index:70;inset:76px 0 auto 0;background:#fbfaf7;color:#20242a;border-bottom:1px solid rgba(32,36,42,.16);padding:20px;transform:translateY(-140%);transition:transform .3s ease';
     const nav=drawer.querySelector('nav'); nav.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:0';
     [...nav.children].forEach(a=>a.style.cssText='padding:15px 8px;border-bottom:1px solid rgba(32,36,42,.12);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase');
