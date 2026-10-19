@@ -7,29 +7,43 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = "https://villasproperties.es/"
-MEMBERS = {"nl": "nl/guia-comprador.html", "fr": "fr/guia-comprador.html", "it": "it/guia-comprador.html"}
-LABEL = {"nl": "NL", "fr": "FR", "it": "IT"}
+MEMBERS = {
+    "nl": "nl/guia-comprador.html", "fr": "fr/guia-comprador.html", "it": "it/guia-comprador.html",
+    "en": "en/guia-comprador.html", "de": "de/guia-comprador.html",
+}
+LABEL = {"nl": "NL", "fr": "FR", "it": "IT", "en": "EN", "de": "DE"}
 
 TITLE = {
     "nl": "Gids voor de koper — 10 vragen | Villa's Properties",
     "fr": "Guide de l'acheteur — 10 questions | Villa's Properties",
     "it": "Guida per l'acquirente — 10 domande | Villa's Properties",
+    "en": "Buyer's guide — 10 questions | Villa's Properties",
+    "de": "Käuferleitfaden — 10 Fragen | Villa's Properties",
 }
 DESC = {
     "nl": "De 10 vragen die Belgische koper ons het meest stellen over een woning kopen in Tenerife: kosten, NIE, hypotheek, belastingen en verhuur.",
     "fr": "Les 10 questions que les acheteurs belges nous posent le plus souvent sur l'achat d'un bien à Tenerife : frais, NIE, crédit, fiscalité et location.",
     "it": "Le 10 domande più frequenti degli acquirenti italiani sull'acquisto di una casa a Tenerife: spese, NIE, mutuo, fiscalità e affitto.",
+    "en": "The 10 questions international buyers ask us most about buying a home in Tenerife: costs, NIE, mortgage, tax and renting it out.",
+    "de": "Die 10 Fragen, die uns deutsche Käufer am häufigsten zum Hauskauf auf Teneriffa stellen: Kosten, NIE, Hypothek, Steuern und Vermietung.",
 }
-EYE = {"nl": "GIDS VOOR DE KOPER", "fr": "GUIDE DE L'ACHETEUR", "it": "GUIDA PER L'ACQUIRENTE"}
+EYE = {
+    "nl": "GIDS VOOR DE KOPER", "fr": "GUIDE DE L'ACHETEUR", "it": "GUIDA PER L'ACQUIRENTE",
+    "en": "BUYER'S GUIDE", "de": "KÄUFERLEITFADEN",
+}
 H1 = {
     "nl": "Een woning kopen<br>in Tenerife.",
     "fr": "Acheter un bien<br>à Tenerife.",
     "it": "Comprare casa<br>a Tenerife.",
+    "en": "Buying a home<br>in Tenerife.",
+    "de": "Ein Haus kaufen<br>auf Teneriffa.",
 }
 LEDE = {
     "nl": "10 vragen, met concrete cijfers en zonder beloftes die we niet kunnen waarmaken.",
     "fr": "10 questions, avec des chiffres concrets et sans promesses que nous ne pourrions pas tenir.",
     "it": "10 domande, con numeri concreti e senza promesse che non potremmo mantenere.",
+    "en": "10 questions, with real numbers and no promises we couldn't keep.",
+    "de": "10 Fragen, mit konkreten Zahlen und ohne Versprechen, die wir nicht halten könnten.",
 }
 NOTE_NEW_TRANSLATION = {
     "it": "<p class=\"muted\" style=\"margin-top:10px\"><em>Traduzione nuova, in attesa di revisione umana (adattata dalla versione spagnola originale).</em></p>",
@@ -38,9 +52,17 @@ DISCLAIMER = {
     "nl": "Informatie van algemene aard, geen fiscaal of juridisch advies. Bijgewerkt op 9 oktober 2026.",
     "fr": "Information générale, ni conseil fiscal ni conseil juridique. Mise à jour le 9 octobre 2026.",
     "it": "Informazione di carattere generale, non consulenza fiscale o legale. Aggiornata il 9 ottobre 2026.",
+    "en": "General information, not tax or legal advice. Updated on 9 October 2026.",
+    "de": "Allgemeine Information, keine Steuer- oder Rechtsberatung. Aktualisiert am 9. Oktober 2026.",
 }
-WHATSAPP_CTA = {"nl": "Stel uw vraag via WhatsApp ↗", "fr": "Posez votre question sur WhatsApp ↗", "it": "Fai la tua domanda su WhatsApp ↗"}
-FOREIGN_TITLE = {"nl": "deze pagina is in het Spaans", "fr": "cette page est en espagnol", "it": "questa pagina è in spagnolo"}
+WHATSAPP_CTA = {
+    "nl": "Stel uw vraag via WhatsApp ↗", "fr": "Posez votre question sur WhatsApp ↗", "it": "Fai la tua domanda su WhatsApp ↗",
+    "en": "Ask us on WhatsApp ↗", "de": "Ihre Frage per WhatsApp ↗",
+}
+FOREIGN_TITLE = {
+    "nl": "deze pagina is in het Spaans", "fr": "cette page est en espagnol", "it": "questa pagina è in spagnolo",
+    "en": "this page is in Spanish", "de": "diese Seite ist auf Spanisch",
+}
 
 # 10-question bodies, already localized/adapted (see sources: GIDS-KOPER-NL.md,
 # GUIDE-ACHETEUR-FR.md, and for IT the new adaptation from GUIA-COMPRADOR-BELGA-ES.md)
@@ -81,6 +103,30 @@ QA = {
         ("E se vendo più avanti?", "Spagna: 19&nbsp;% sulla plusvalenza (residenti UE); l'acquirente trattiene il 3&nbsp;% del prezzo come anticipo (art. 25.2 TRLIRNR), recuperabile; pi&ugrave; la &laquo;plusval&iacute;a&raquo; comunale. Italia: da dichiarare nell'anno della vendita."),
         ("Cosa fa Villa's Properties?", "Visita di persona o in video, documentazione dell'immobile (nota simple, comunit&agrave;, IBI, <strong>certificato energetico</strong>), coordinamento con il suo avvocato e il notaio, assistenza in italiano. Condizioni: ci scriva."),
     ],
+    "en": [
+        ("What does buying cost on top of the price?", "Transfer tax (ITP) in the Canary Islands: 6.5% on resale homes (on the higher of the price or the &laquo;valor de referencia&raquo;). On top of that: notary &euro;600&ndash;1,200, land registry &euro;400&ndash;800, a gestor&iacute;a &euro;300&ndash;600, and an independent lawyer (&plusmn;1% + IGIC). Budget &plusmn;8% overall. Example: &euro;395,000 &rarr; &plusmn;&euro;31,900. New-build: 7% IGIC + AJD instead of ITP."),
+        ("Do I need an NIE?", "Yes, before signing. It's requested at the Spanish consulate in your home country or at the Polic&iacute;a Nacional in Tenerife; with a power of attorney, your lawyer can handle it for you."),
+        ("Do I need to open a Spanish bank account?", "Not compulsory: the deed records the means of payment and a transfer from abroad is valid. It's still convenient for direct-debiting IBI (council tax), community fees and utilities."),
+        ("Do I need to travel to sign?", "No. A notarised power of attorney in your home country plus an apostille lets your lawyer sign on your behalf. Most buyers still make one trip to view the property."),
+        ("Can I get a mortgage?", "Spanish banks typically lend non-residents 60&ndash;70% of the lower of the price or the valuation. Plan for 30&ndash;40% of your own funds plus the &plusmn;8% in costs."),
+        ("What do I pay every year?", "IBI (council tax), community fees, utilities, and Spanish non-resident income tax (IRNR, form 210): 19% on 1.1% (or 2%) of the cadastral value. Example: a &euro;120,000 cadastral value &rarr; &plusmn;&euro;251/year."),
+        ("What about tax back home?", "Most buyers still need to declare the purchase (and, later, any rental income or capital gain) to their home tax authority. Spain has a double-taxation treaty with the UK, Romania, Ukraine, Hungary and Poland, among others, so you won't be taxed twice &mdash; but check the specific declaration and deadline that applies where you live, since it varies by country."),
+        ("Can I rent it out to tourists (Airbnb)?", "Generally not straight away. Canary Islands Law 6/2025: tourist letting is only allowed where the local municipal plan expressly permits it (max. 10% of homes), the property is at least 10 years old, and the licence runs for 5 years; <strong>an existing licence is extinguished when the property is sold</strong> (transitional provision 1.11). Since 3 April 2025, prior approval by 3/5 of the owners' community is also required (art. 17.12 LPH). Long-term letting remains possible. <strong>We make no promise of tourist-rental income.</strong>"),
+        ("What if I sell later on?", "Spain: 19% on the capital gain (EU residents); the buyer withholds 3% of the price as an advance payment (art. 25.2 TRLIRNR), which is recoverable; plus the municipal &laquo;plusval&iacute;a&raquo;. Your home country: usually declared pro rata for that tax year."),
+        ("What does Villa's Properties do?", "In-person or video viewing, property documentation (land registry extract, community of owners, IBI, <strong>energy performance certificate</strong>), coordination with your lawyer and the notary, and support in English. Terms: just ask us."),
+    ],
+    "de": [
+        ("Was kostet der Kauf zusätzlich zum Preis?", "Grunderwerbsteuer (ITP) auf den Kanaren: 6,5&nbsp;% bei Bestandsimmobilien (auf den höheren Betrag aus Kaufpreis oder &laquo;valor de referencia&raquo;). Dazu kommen Notar 600&ndash;1.200&nbsp;&euro;, Grundbuchamt 400&ndash;800&nbsp;&euro;, Gestor&iacute;a 300&ndash;600&nbsp;&euro; und ein unabhängiger Anwalt (&plusmn;&nbsp;1&nbsp;% + IGIC). Rechnen Sie insgesamt mit &plusmn;&nbsp;8&nbsp;%. Beispiel Poris/Arico: eine Wohnung mit 70&nbsp;m&sup2; zu 1.923&nbsp;&euro;/m&sup2; (&asymp;&nbsp;135.000&nbsp;&euro;) &rarr; Nebenkosten &asymp;&nbsp;10.800&nbsp;&euro;. Neubau: 7&nbsp;% IGIC + AJD statt ITP."),
+        ("Brauche ich eine NIE?", "Ja, vor der Unterzeichnung. Zu beantragen beim spanischen Konsulat in Deutschland oder bei der Polic&iacute;a Nacional auf Teneriffa; mit einer Vollmacht erledigt das Ihr Anwalt für Sie."),
+        ("Muss ich ein spanisches Bankkonto eröffnen?", "Nicht zwingend: Die notarielle Urkunde weist die Zahlungsmittel aus, und eine Überweisung aus Deutschland ist gültig. Praktisch ist es trotzdem für die Lastschrift von IBI (Grundsteuer), Gemeinschaftskosten und Versorgern."),
+        ("Muss ich zur Unterzeichnung nach Teneriffa reisen?", "Nein. Eine notarielle Vollmacht in Deutschland plus Apostille genügt, damit Ihr Anwalt die Urkunde für Sie unterschreibt. Üblich ist trotzdem eine Reise für die Besichtigung."),
+        ("Bekomme ich eine Hypothek?", "Spanische Banken finanzieren Nicht-Residenten in der Regel bis 60&ndash;70&nbsp;% des niedrigeren Werts aus Kaufpreis oder Gutachten. Rechnen Sie mit 30&ndash;40&nbsp;% Eigenkapital plus den &plusmn;&nbsp;8&nbsp;% Nebenkosten."),
+        ("Was zahle ich jedes Jahr?", "IBI (Grundsteuer), Gemeinschaftskosten, Versorger und die spanische Nicht-Residenten-Steuer (IRNR, Formular 210): 19&nbsp;% auf 1,1&nbsp;% (oder 2&nbsp;%) des Katasterwerts. Beispiel: Katasterwert 80.000&nbsp;&euro; &rarr; &asymp;&nbsp;167&nbsp;&euro;/Jahr."),
+        ("Und das deutsche Finanzamt?", "Ausländische Immobilien sind in der Steuererklärung anzugeben (Anlage AUS bei Vermietung bzw. Veräußerungsgewinnen); das Doppelbesteuerungsabkommen Deutschland&ndash;Spanien verhindert eine doppelte Besteuerung, wirkt sich aber über den Progressionsvorbehalt auf Ihren Steuersatz aus. Eine Selbstnutzung ohne Einkünfte ist in Deutschland grundsätzlich nicht erklärungspflichtig &mdash; im Zweifel den Steuerberater fragen."),
+        ("Kann ich an Touristen vermieten (Airbnb)?", "In der Regel nicht ohne Weiteres. Kanarisches Gesetz 6/2025: Touristische Vermietung ist nur dort erlaubt, wo der kommunale Bebauungsplan sie ausdrücklich zulässt (max.&nbsp;10&nbsp;% der Wohnungen), die Immobilie mindestens 10 Jahre alt ist und die Lizenz 5 Jahre gilt; <strong>eine bestehende Lizenz erlischt beim Verkauf</strong> (Übergangsbestimmung 1.11). Seit dem 3. April 2025 ist außerdem die vorherige Zustimmung von 3/5 der Eigentümergemeinschaft erforderlich (Art. 17.12 LPH). Langzeitvermietung bleibt möglich. <strong>Wir versprechen keine touristische Rendite.</strong>"),
+        ("Und wenn ich später verkaufe?", "Spanien: 19&nbsp;% auf den Veräußerungsgewinn (EU-Ansässige); der Käufer behält 3&nbsp;% des Preises als Vorauszahlung ein (Art. 25.2 TRLIRNR), die erstattungsfähig ist; zuzüglich der kommunalen &laquo;plusval&iacute;a&raquo;. Deutschland: in der Regel anteilig für das betreffende Steuerjahr zu erklären."),
+        ("Was macht Villa's Properties?", "Besichtigung vor Ort oder per Video, Objektdokumentation (Grundbuchauszug, Eigentümergemeinschaft, IBI, <strong>Energieausweis</strong>), Koordination mit Ihrem Anwalt und dem Notar, Begleitung auf Deutsch. Konditionen: einfach fragen."),
+    ],
 }
 
 ROOT_HEADER = """<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><link rel="icon" type="image/webp" href="../assets/brand/logo-placeholder.webp"><link rel="stylesheet" href="../site.css?v=202610121758"><noscript><style>[data-reveal],[data-stagger],[data-stagger-group]>*,.hero-content>*{{opacity:1!important;transform:none!important;clip-path:none!important}}</style></noscript>
@@ -108,7 +154,10 @@ ROOT_HEADER = """<!doctype html><html lang="{lang}"><head><meta charset="utf-8">
 <script src="../vp-safe.js?v=202610121758" defer></script><script src="../vp-consent.js?v=202610121758" defer></script><script src="../shell.js?v=202610121758" defer></script><script src="../app.js?v=202610121758" defer></script><script src="../motion.js?v=202610121758" defer></script>
 </body></html>"""
 
-SKIP = {"nl": "Naar de inhoud", "fr": "Aller au contenu", "it": "Vai al contenuto"}
+SKIP = {
+    "nl": "Naar de inhoud", "fr": "Aller au contenu", "it": "Vai al contenuto",
+    "en": "Skip to content", "de": "Zum Inhalt springen",
+}
 
 
 def hreflang_block():
@@ -134,7 +183,7 @@ def faq_html(lang):
 
 
 def build(lang):
-    og = {"nl": "nl_NL", "fr": "fr_FR", "it": "it_IT"}[lang]
+    og = {"nl": "nl_NL", "fr": "fr_FR", "it": "it_IT", "en": "en_GB", "de": "de_DE"}[lang]
     html = ROOT_HEADER.format(
         lang=lang, title=TITLE[lang], desc=DESC[lang], canonical=BASE + MEMBERS[lang], og=og,
         hreflang=hreflang_block(), skip=SKIP[lang], foreign_title=FOREIGN_TITLE[lang],
@@ -146,7 +195,7 @@ def build(lang):
 
 
 if __name__ == "__main__":
-    for lang in ("nl", "fr", "it"):
+    for lang in ("nl", "fr", "it", "en", "de"):
         out = ROOT / MEMBERS[lang]
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(build(lang), encoding="utf-8")
