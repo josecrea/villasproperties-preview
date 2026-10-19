@@ -33,17 +33,21 @@ Polaco sería el siguiente; de momento lo cubre el inglés.
 | guia-comprador.html | — | ✓ | ✓ | ✓ | ✓ | ✓ |
 | comprar-casa-adeje.html | ✓ | | | | | |
 | comprar-casa-arona.html | ✓ | | | | | |
-| finance.html | ✓ | | | | | |
+| finance.html | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | property.html | ✓ | | | | | |
 | property-brief.html | ✓ | | | | | |
 
-Ronda 4 (19-oct, commits `f2fab09`/`c5afa4b`/pendiente): inglés y alemán completados para las
-3 páginas existentes. Reciprocidad de hreflang ahora a 6 idiomas (antes 4) en las 17 páginas de
-la isla — `node tools/i18n/verificar-idiomas.js` y `python3 tools/i18n/check_links.py` en 0.
-`shell.js`/`app.js` ampliados con las tablas de nav/claim/CTA en/de; comprobado en navegador
-(Playwright) que nav, claim y selector sobreviven a su reescritura en runtime en las 6 páginas
-nuevas. Pendiente: `finance.html` en los 5 idiomas (no se llegó por tiempo) y las 4 páginas
-restantes del recorrido en los 5 idiomas.
+Ronda 4 (19-oct, commits `f2fab09`/`c5afa4b`/`3e62e05`): inglés y alemán completados para
+index/contact/guia-comprador. Reciprocidad de hreflang a 6 idiomas en 17 páginas, 0/0.
+
+Ronda 5 (19-oct, commit `f46f7c2`): **finance.html completada en los 5 idiomas** (23 páginas
+totales en el verificador, sigue 0 huérfanos / 0 canonical cruzados). Se paró aquí tras la
+página 1 de las 5 pedidas, por tiempo — commit hecho y rama reanudable. 🚩 Cifra encontrada sin
+respaldo en el ES original: "Hasta el 100 % según perfil" (financiación) no se tradujo; se dejó
+marcada `lang="es"` en las 5 páginas y se señaló en la entrega en lugar de traducirla, porque
+contradice el 60-70 % que la propia guía del comprador (ya publicada) documenta para no
+residentes. Pendiente para la siguiente ronda: `comprar-casa-adeje.html`,
+`comprar-casa-arona.html`, `property.html`, `property-brief.html` — las 4 en los 5 idiomas.
 
 ## Reglas que no se negocian
 - Isla cerrada: las otras 76 páginas no se tocan. Los enlaces que salen apuntan al español,
