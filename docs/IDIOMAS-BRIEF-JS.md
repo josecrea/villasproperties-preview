@@ -1,46 +1,64 @@
-# property-brief.js — consciente del idioma (ronda 6, OT-C)
+# `property-brief.js` consciente del idioma — ronda 6
 
-## Qué se tocó
+## Qué pasaba
 
-`property-brief.js`. Patrón copiado de `shell.js`:
-`LANG = (document.documentElement.getAttribute('lang') || 'es').toLowerCase()`,
-diccionario `I18N_BRIEF` por idioma, respaldo `I18N_BRIEF[LANG] || I18N_BRIEF.es`.
+`property-brief.html` se tradujo a los cinco idiomas, pero `property-brief.js` es **un único
+script compartido por las seis islas** y llevaba las cadenas en español a fuego. Resultado: el
+visitante rellenaba el formulario entero en neerlandés, pulsaba enviar, y la confirmación y el
+mensaje de WhatsApp le salían en español. Es el último metro del embudo.
 
-## Qué se tradujo
+## Cómo está resuelto
 
-- Texto de `#briefStatus` antes de enviar (validación) y después (resumen de confirmación).
-- Mensaje de WhatsApp completo (saludo, etiquetas de cada línea).
-- Mensaje del botón "Limpiar".
-- Formato numérico del presupuesto por locale (`toLocaleString(T.locale)`): es/nl/de
-  usan punto de millar, fr usa espacio, en usa coma. Con `lang="es"` el locale es
-  `es-ES`, igual que antes — no cambia el camino español.
+Mismo patrón que `shell.js`, que ya resolvió este problema en este repo:
 
-## Qué NO se tradujo (a propósito)
+```js
+const LANG = (document.documentElement.getAttribute('lang') || 'es').toLowerCase();
+const T = I18N_BRIEF[LANG] || I18N_BRIEF.es;
+```
 
-- Los grupos de casillas (`briefTipo`, `briefVistas`, `briefExtras`): el código
-  nunca tradujo por un diccionario de texto. `marcadas()` lee
-  `el.parentElement.textContent` directamente del DOM vivo, que ya está en el
-  idioma de la página (el HTML de cada isla trae el `<span>` traducido). No se
-  tocó ese mecanismo: traducirlo por `value` habría sido una reescritura
-  innecesaria de algo que ya funcionaba correctamente por idioma.
-- El `asunto` del lead que se manda a `VPLead`/Odoo: se deja siempre en español
-  a propósito porque es un campo interno que lee el equipo (habla español), no
-  el visitante. No forma parte del contrato visible al usuario.
-- `name`/`value` de campos y checkboxes, claves de `localStorage` (`vpPropertyBriefV3`):
-  intactos.
+Decisiones que conviene no deshacer sin pensarlo:
 
-## Verificación
+- **`OBJETIVOS` se queda en español.** Es el asunto del lead que entra en Odoo y lo lee el
+  equipo, que habla español. Traducirlo cambiaría el formato que consume Odoo. Lo que el
+  visitante lee usa `T.objetivos`, que sí está traducido. Son dos cosas distintas a propósito.
+- **Las etiquetas de las casillas no están en el diccionario.** `read()` toma el texto visible
+  del `<span>` de cada casilla marcada, y ese texto ya viene traducido de la página. Por eso en
+  neerlandés sale «Vrijstaande villa» y «Zwembad» sin que el script sepa nada de ello.
+- **El importe se formatea con el locale del idioma** (`T.locale`), no con `es-ES` fijo.
+- **El escapado contra XSS sigue aplicándose antes de `innerHTML`**: `T.enviado()` recibe el
+  resumen ya escapado por `E`.
+- **`name`, `value`, `id` y las claves de `localStorage` no se tocan.** El honeypot sigue siendo
+  `vp_hp`.
 
-- Control negativo (es antes vs después): byte a byte idéntico en `#briefStatus`
-  y en el mensaje de WhatsApp decodificado, comparado contra `git show
-  d4bd3d5:property-brief.js` (el "antes" de esta OT) con un stub de DOM en Node.
-- Runtime real en Playwright: `nl/zoekprofiel.html` y `de/suchprofil.html`,
-  formulario relleno y enviado, confirmación y WhatsApp en el idioma de la
-  página. Capturas en `docs/capturas-idiomas/brief-nl-confirmacion.png` y
-  `brief-de-confirmacion.png`.
-- Respaldo: `lang="pl"` (no está en el diccionario) cae a español sin
-  `undefined` ni huecos.
-- RED-TEAM: un `value` de cada uno de los 3 grupos de checkbox (`briefTipo`,
-  `briefVistas`, `briefExtras`) con etiqueta visible traducida y sin relación
-  textual con el español, en nl/de/pl — ningún `undefined`, porque el mecanismo
-  lee el DOM, no un diccionario keyed por texto.
+## Verificación: el control negativo
+
+Lo que importa aquí no es que el neerlandés funcione, es que **el español no se mueva**: son 76
+páginas en producción. Se comprobó con DOM real (jsdom 29.1.1, instalado en `/tmp`, fuera del
+repo y sin tocar las dependencias del proyecto), cargando las **páginas reales** y comparando el
+mensaje de WhatsApp y el `innerHTML` de `#briefStatus`:
+
+| comprobación | resultado |
+|---|---|
+| los 4 escenarios se ejecutan sin fallo | SÍ |
+| camino del español idéntico antes/después | SÍ |
+| el neerlandés sí cambia, o sea la prueba no es vacía | SÍ |
+| `lang="pl"` cae al español sin romperse | SÍ |
+
+**La cuarta fila es la que da valor a la segunda.** En el primer intento el control dio
+«español idéntico: SÍ» con las dos versiones fallando igual por un stub de DOM demasiado pobre:
+un verde perfectamente vacío. Solo se detectó porque la prueba exige además que el neerlandés
+**tenga** que diferir. Una comparación que solo sabe decir «iguales» no es una comparación.
+
+Formato del importe medido en los seis idiomas, que confirma que `T.locale` está vivo:
+
+```
+es  250.000 €     nl  250.000 €     fr  250 000 €
+it  250.000 €     en  250,000 €     de  250.000 €
+```
+
+## Lo que NO se verificó
+
+No se abrió un navegador real: Playwright estaba denegado en la sesión. jsdom ejecuta el script
+sobre el HTML real, así que cubre la lógica y el DOM, pero **no** el renderizado ni la
+interacción de verdad. Si alguien quiere cerrarlo del todo, falta rellenar y enviar el brief a
+mano en `nl/zoekprofiel.html` desde un navegador.
