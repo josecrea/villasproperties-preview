@@ -67,7 +67,11 @@ require(path.join(RAIZ, 'properties-data.js'));
 const todas = global.window.VP_PROPERTIES || [];
 
 const args = process.argv.slice(2);
-const soloRef = args.find((a) => /^\d{6,}$/.test(a));
+/* La referencia es el argumento que no es ni un formato ni una opción. Antes se pedían
+ * 6 dígitos o más y el Biltmore —ref 14541— no colaba: el comando se entendía como
+ * "todas" y regeneraba el catálogo entero en silencio. Tampoco vale exigir que sea un
+ * número: las referencias internas no lo son. */
+const soloRef = args.find((a) => !FORMATOS[a] && !a.startsWith('--'));
 const dejarHtml = args.includes('--html');
 const pedidos = args.filter((a) => FORMATOS[a]);
 const formatos = pedidos.length ? pedidos : Object.keys(FORMATOS);
@@ -76,7 +80,13 @@ if (!props.length) { console.error('  No hay propiedades que encajen.'); process
 
 /* ---------- helpers ---------- */
 const num = (n) => new Intl.NumberFormat('es-ES', { useGrouping: 'always' }).format(n);
-const precio = (n) => num(n) + ' €';
+const precio = (n) => (Number.isFinite(n) && n > 0 ? num(n) + ' €' : 'Precio a consultar');
+/* Una vivienda recién captada puede no tener precio cerrado, municipio ni coordenadas.
+ * Pintar «0 €» o un hueco entre separadores no es neutral: parece un error de la
+ * agencia. El hueco se dice con palabras y el resto de la pieza sale igual. */
+const hayPrecio = (p) => Number.isFinite(p.price) && p.price > 0;
+// un estudio no tiene «0 dormitorios»: lo que tiene es ser un estudio
+const camas = (p) => (p.beds > 0 ? plural(p.beds, 'dormitorio', 'dormitorios') : (p.type || 'Estudio'));
 const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const b64 = (f) => `data:${f.endsWith('.png') ? 'image/png' : f.endsWith('.webp') ? 'image/webp' : 'font/woff2'};base64,${fs.readFileSync(f).toString('base64')}`;
 
@@ -241,7 +251,7 @@ body{color:var(--crema)}
   <div class="olas"></div>
   <div class="datos">
     <div class="dato"><b class="serif">${p.built}<i>m²</i></b><span>construidos</span></div>
-    <div class="dato"><b class="serif">${p.beds}</b><span>${p.beds === 1 ? 'dormitorio' : 'dormitorios'}</span></div>
+    ${p.beds > 0 ? `<div class="dato"><b class="serif">${p.beds}</b><span>${p.beds === 1 ? 'dormitorio' : 'dormitorios'}</span></div>` : `<div class="dato"><b class="serif">${esc(p.type || 'Estudio')}</b><span>vivienda</span></div>`}
     <div class="dato"><b class="serif">${p.baths}</b><span>${p.baths === 1 ? 'baño' : 'baños'}</span></div>
     ${e ? `<div class="dato"><b class="serif">${e}</b><span>energía</span></div>` : ''}
   </div>
@@ -259,7 +269,7 @@ body{color:var(--crema)}
 function htmlStory(p) {
   const [W, H] = FORMATOS.story;
   const t = textos(p);
-  const datos = [`${p.built} m²`, plural(p.beds, 'dormitorio', 'dormitorios'), plural(p.baths, 'baño', 'baños')].join('   ·   ');
+  const datos = [`${p.built} m²`, camas(p), plural(p.baths, 'baño', 'baños')].join('   ·   ');
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
 ${BASE(W, H)}
 body{color:var(--crema)}
@@ -274,6 +284,7 @@ body{color:var(--crema)}
 .cinta{position:relative;margin:0 -260px 78px -160px;transform:rotate(-6deg);background:var(--oro);color:var(--negro);
   font-size:37px;font-weight:600;letter-spacing:.38em;text-transform:uppercase;padding:22px 0;white-space:nowrap;overflow:hidden;
   box-shadow:0 18px 60px rgba(0,0,0,.55)}
+.precio-pendiente{font-style:italic;color:var(--oro-2);opacity:.92;letter-spacing:-.01em}
 .cinta span{display:inline-block;padding-left:230px}
 .marca{position:absolute;left:64px;top:272px;display:flex;align-items:center;gap:24px}
 .marca img{width:172px;height:172px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.55))}
@@ -291,6 +302,7 @@ body{color:var(--crema)}
 .kicker{font-size:27px;letter-spacing:.17em;text-transform:uppercase;color:var(--oro-2);font-weight:500;line-height:1.3;text-shadow:0 2px 10px rgba(0,0,0,.9),0 0 30px rgba(0,0,0,.7);text-shadow:0 2px 10px rgba(0,0,0,.7)}
 .gancho{font-family:'EB Garamond',serif;font-weight:600;font-size:${cuerpoTitular(t.gancho, 950)}px;line-height:.98;letter-spacing:-.012em;max-width:950px;text-wrap:balance;text-shadow:0 2px 12px rgba(0,0,0,.55)}
 .precio{margin-top:30px;font-style:italic;font-weight:500;font-size:250px;line-height:.82;letter-spacing:-.035em;white-space:nowrap;filter:drop-shadow(0 8px 30px rgba(0,0,0,.6))}
+.precio.precio-pendiente{font-size:92px;line-height:1.05;margin-top:40px}
 .precio i{font-style:italic;font-size:.42em;vertical-align:baseline;margin-left:10px}
 .datos{margin-top:36px;font-size:39px;letter-spacing:.08em;text-transform:uppercase;color:var(--crema)}
 .datos b{color:var(--oro);font-weight:500}
@@ -310,10 +322,10 @@ body{color:var(--crema)}
 <div class="foto"></div><div class="velo"></div><div class="grano"></div>
 <div class="marca"><img src="${LOGO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div></div>
 <section class="pie">
-  <div class="cinta"><span>${esc(zonaCorta(p))} &nbsp;·&nbsp; ${esc(p.town)} &nbsp;·&nbsp; ${esc(zonaCorta(p))} &nbsp;·&nbsp; ${esc(p.town)} &nbsp;·&nbsp; ${esc(zonaCorta(p))} &nbsp;·&nbsp; ${esc(p.town)}</span></div>
+  <div class="cinta"><span>${Array(3).fill([zonaCorta(p), String(p.town || '').trim()].filter(Boolean).map(esc).join(' &nbsp;·&nbsp; ')).join(' &nbsp;·&nbsp; ')}</span></div>
   <div class="fila"><span class="estado">${esc(p.status)}</span><span class="kicker">${esc(t.kicker)}</span></div>
   <h1 class="gancho">${gancho(t.gancho)}</h1>
-  <div class="precio serif oro-texto">${esc(num(p.price))}<i>€</i></div>
+  ${hayPrecio(p) ? `<div class="precio serif oro-texto">${esc(num(p.price))}<i>€</i></div>` : '<div class="precio serif precio-pendiente">Precio a consultar</div>'}
   <div class="datos"><b>${esc(datos)}</b></div>
   <footer class="contacto">
     <div>
@@ -404,7 +416,7 @@ html,body{background:var(--papel)}
     <div class="olas"></div>
     <div class="datos">
       <div class="dato"><b class="serif">${p.built}<i>m²</i></b><span>construidos</span></div>
-      <div class="dato"><b class="serif">${p.beds}</b><span>${p.beds === 1 ? 'dormitorio' : 'dormitorios'}</span></div>
+      ${p.beds > 0 ? `<div class="dato"><b class="serif">${p.beds}</b><span>${p.beds === 1 ? 'dormitorio' : 'dormitorios'}</span></div>` : `<div class="dato"><b class="serif">${esc(p.type || 'Estudio')}</b><span>vivienda</span></div>`}
       <div class="dato"><b class="serif">${p.baths}</b><span>${p.baths === 1 ? 'baño' : 'baños'}</span></div>
       ${e ? `<div class="dato"><b class="serif">${e}</b><span>energía</span></div>` : ''}
     </div>
@@ -431,7 +443,7 @@ const FONDO_MARCA = path.join(RAIZ, 'assets/brand/portada-costa-sur-ia.jpg');
 
 function htmlMarca(cierre) {
   const [W, H] = [1080, 1920];
-  const desde = Math.min(...props.map((p) => p.price));
+  const desde = Math.min(...props.filter(hayPrecio).map((p) => p.price));
   const municipios = [...new Set(props.map((p) => p.town))].sort();
   const ultimo = municipios.pop();
   const lista = municipios.length ? `${municipios.join(', ')} y ${ultimo}` : ultimo;
@@ -473,7 +485,7 @@ ${cierre
 /* ---------- copy de cada post ---------- */
 function copy(p) {
   const t = textos(p);
-  const datos = `${p.built} m² · ${plural(p.beds, 'dormitorio', 'dormitorios')} · ${plural(p.baths, 'baño', 'baños')}`;
+  const datos = `${p.built} m² · ${camas(p)} · ${plural(p.baths, 'baño', 'baños')}`;
   return [
     `## ${llano(t.gancho)}`,
     `_${t.kicker} · ${precio(p.price)}_`, ``,
@@ -489,7 +501,7 @@ function copy(p) {
     `**Estado de WhatsApp (texto que acompaña a la imagen)**`, ``,
     `${llano(t.gancho)} ${precio(p.price)}, ${lugar(p)}. Responde VISITA y te mando la ficha completa.`, ``,
     `**Hashtags**`, ``,
-    `#TenerifeSur #${String(p.town).replace(/\s+/g, '')} #${String(p.zone || '').split('(')[0].replace(/[^\wáéíóúñ]/gi, '')} #Inmobiliaria #VillasProperties #CompraVivienda`, ``,
+    [`#TenerifeSur`, p.town && `#${String(p.town).replace(/\s+/g, '')}`, p.zone && `#${String(p.zone).split('(')[0].replace(/[^\wáéíóúñ]/gi, '')}`, `#Inmobiliaria`, `#VillasProperties`, `#CompraVivienda`].filter(Boolean).join(' '), ``,
   ].join('\n');
 }
 
