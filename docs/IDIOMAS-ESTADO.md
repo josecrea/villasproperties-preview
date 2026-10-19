@@ -31,8 +31,8 @@ Polaco sería el siguiente; de momento lo cubre el inglés.
 | index.html | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | contact.html | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | guia-comprador.html | — | ✓ | ✓ | ✓ | ✓ | ✓ |
-| comprar-casa-adeje.html | ✓ | | | | | |
-| comprar-casa-arona.html | ✓ | | | | | |
+| comprar-casa-adeje.html | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| comprar-casa-arona.html | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | finance.html | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | property.html | ✓ | | | | | |
 | property-brief.html | ✓ | | | | | |
@@ -48,6 +48,18 @@ marcada `lang="es"` en las 5 páginas y se señaló en la entrega en lugar de tr
 contradice el 60-70 % que la propia guía del comprador (ya publicada) documenta para no
 residentes. Pendiente para la siguiente ronda: `comprar-casa-adeje.html`,
 `comprar-casa-arona.html`, `property.html`, `property-brief.html` — las 4 en los 5 idiomas.
+
+Ronda 6 (19-oct, rama `feat/idiomas-r6-landings`): **comprar-casa-adeje.html y
+comprar-casa-arona.html completadas en los 5 idiomas** (35 páginas totales en el verificador,
+sigue 0 huérfanos / 0 canonical cruzados). Novedad: por primera vez se traduce el **slug** (son
+landings de búsqueda) — `huis-kopen-adeje.html` (nl), `acheter-maison-adeje.html` (fr),
+`comprare-casa-adeje.html` (it), `buy-house-adeje.html` (en), `haus-kaufen-adeje.html` (de), y
+análogos para Arona. El verificador asumía que el nombre de fichero es el mismo en todos los
+idiomas (igual que index/contact/guia-comprador/finance); se corrigió para calcular el
+x-default esperado a partir del propio `hreflang="es"` declarado por la página en lugar de
+mangle de ruta — si no, marcaba 10 falsos positivos. `property.html` y `property-brief.html`
+quedan para la siguiente ronda (property-brief.html está además fuera de alcance: lo toca el
+otro dev en paralelo).
 
 ## Reglas que no se negocian
 - Isla cerrada: las otras 76 páginas no se tocan. Los enlaces que salen apuntan al español,
