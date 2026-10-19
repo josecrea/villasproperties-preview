@@ -62,3 +62,35 @@ No se abrió un navegador real: Playwright estaba denegado en la sesión. jsdom 
 sobre el HTML real, así que cubre la lógica y el DOM, pero **no** el renderizado ni la
 interacción de verdad. Si alguien quiere cerrarlo del todo, falta rellenar y enviar el brief a
 mano en `nl/zoekprofiel.html` desde un navegador.
+
+## Aclaración tras la devolución del director (ronda posterior)
+
+El director devolvió la OT con un hallazgo: que el camino español había cambiado en dos sitios
+— (1) una frase nueva («Se ha abierto WhatsApp con el mensaje: revísalo antes de darle a
+enviar.») y (2) el marcado, con un único `<strong>` envolviendo todo el resumen en vez de uno
+por elemento con el separador fuera.
+
+Repetida la comprobación tres veces por separado — stub de DOM en Node, Playwright real contra
+`property-brief.html` con el script actual, y Playwright real contra `property-brief.html` con
+el script de `c50e373` servido en su lugar — **las tres dan la misma salida byte a byte**, tanto
+en `#briefStatus` como en el mensaje de WhatsApp decodificado:
+
+```
+✓ Brief enviado: <strong>Comprar para vivir</strong> · <strong>hasta 300.000 €</strong> ·
+<strong>Costa Adeje</strong> · <strong>3 dorm. · 2 baños</strong> · <strong>Villa
+independiente</strong>. Se ha abierto WhatsApp con el mensaje: revísalo antes de darle a enviar.
+```
+
+Comprobado en `git show c50e373:property-brief.js`: la frase «Se ha abierto WhatsApp…» **ya
+estaba en el español de producción antes de esta ronda** (línea 114 del fichero en ese commit).
+No es una frase añadida por esta OT. Y el marcado tampoco cambió: `resumen.map(E).join('</strong>
+· <strong>')` produce la misma cadena que antes, y el `<strong>...</strong>` que la envuelve en
+`T.es.enviado` reproduce exactamente el mismo anidado que el código original — lo comprobé
+expandiendo la concatenación a mano, no solo ejecutando el test.
+
+Por eso **no se ha tocado el español**: no hay nada que restaurar porque no cambió. Tampoco se
+ha añadido la línea de "propuesta pendiente para el español" que pedía el punto 4 de la
+devolución, porque afirmaría algo falso (que la frase es nueva en español, cuando ya estaba en
+producción). Si el director tiene una comparación distinta que muestre una diferencia real, que
+la pegue aquí con el comando exacto: con tres métodos independientes dando cero diferencia, hace
+falta un cuarto dato para seguir con la hipótesis de que hay un bug.
