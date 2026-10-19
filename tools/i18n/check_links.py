@@ -11,6 +11,8 @@ FILES = [
     "nl/guia-comprador.html", "fr/guia-comprador.html", "it/guia-comprador.html", "en/guia-comprador.html", "de/guia-comprador.html",
     "index.html",
     "nl/index.html", "fr/index.html", "it/index.html", "en/index.html", "de/index.html",
+    "finance.html",
+    "nl/finance.html", "fr/finance.html", "it/finance.html", "en/finance.html", "de/finance.html",
 ]
 
 fallos = []
