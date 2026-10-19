@@ -9,6 +9,8 @@ FILES = [
     "contact.html",
     "nl/contact.html", "fr/contact.html", "it/contact.html",
     "nl/guia-comprador.html", "fr/guia-comprador.html", "it/guia-comprador.html",
+    "index.html",
+    "nl/index.html", "fr/index.html", "it/index.html",
 ]
 
 fallos = []

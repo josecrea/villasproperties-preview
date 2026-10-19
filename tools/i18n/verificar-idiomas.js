@@ -31,6 +31,8 @@ const PAGINAS = [
   'contact.html',
   'nl/contact.html', 'fr/contact.html', 'it/contact.html',
   'nl/guia-comprador.html', 'fr/guia-comprador.html', 'it/guia-comprador.html',
+  'index.html',
+  'nl/index.html', 'fr/index.html', 'it/index.html',
 ];
 
 const dentro = (s, re) => { const m = s.match(re); return m ? m[1] : ''; };
@@ -70,7 +72,7 @@ const langOfRuta = (ruta) => {
   const fallos = [];
   for (const ruta of PAGINAS) {
     const lang = langOfRuta(ruta);
-    const url = BASE_CANON + '/' + ruta;
+    const url = ruta === 'index.html' ? BASE_CANON + '/' : BASE_CANON + '/' + ruta;
     const v = await leer(ruta, cache);
     const f = (txt) => fallos.push(`${ruta}: ${txt}`);
     if (v.status !== 200) { f(`HTTP ${v.status}`); continue; }
@@ -82,7 +84,7 @@ const langOfRuta = (ruta) => {
 
     // Reciprocidad: cada alternate (menos x-default) debe apuntar de vuelta.
     for (const a of v.alternas.filter((x) => x.lang !== 'x-default')) {
-      const rel = a.href.replace(BASE_CANON + '/', '');
+      const rel = a.href.replace(BASE_CANON + '/', '') || 'index.html';
       const d = await leer(rel, cache);
       if (d.status !== 200) { f(`hreflang="${a.lang}" apunta a ${a.href}, que da HTTP ${d.status} (hreflang huérfano)`); continue; }
       if (d.lang !== a.lang) f(`hreflang="${a.lang}" apunta a una página con lang="${d.lang}"`);
@@ -90,10 +92,11 @@ const langOfRuta = (ruta) => {
     }
 
     // x-default sólo es obligatorio si el grupo tiene versión española (contact.html sí; guia-comprador.html no).
-    const grupoTieneEs = ['contact.html', 'nl/contact.html', 'fr/contact.html', 'it/contact.html'].includes(ruta);
+    const grupoTieneEs = ['contact.html', 'nl/contact.html', 'fr/contact.html', 'it/contact.html', 'index.html', 'nl/index.html', 'fr/index.html', 'it/index.html'].includes(ruta);
     const xd = v.alternas.find((a) => a.lang === 'x-default');
     if (grupoTieneEs && !xd) f('sin hreflang x-default (el grupo sí tiene versión española)');
-    if (grupoTieneEs && xd && xd.href !== BASE_CANON + '/contact.html') f(`x-default a ${xd.href}, no a la versión española`);
+    const esperadoXd = ruta.includes('index.html') ? BASE_CANON + '/' : BASE_CANON + '/contact.html';
+    if (grupoTieneEs && xd && xd.href !== esperadoXd) f(`x-default a ${xd.href}, no a la versión española`);
     if (!grupoTieneEs && xd) f('tiene x-default pero el grupo no tiene versión española (sería un alternate falso)');
 
     // El selector no debe ofrecer un idioma que no exista para esta página.
