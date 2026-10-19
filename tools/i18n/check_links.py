@@ -13,6 +13,8 @@ FILES = [
     "nl/index.html", "fr/index.html", "it/index.html", "en/index.html", "de/index.html",
     "finance.html",
     "nl/finance.html", "fr/finance.html", "it/finance.html", "en/finance.html", "de/finance.html",
+    "property-brief.html",
+    "nl/zoekprofiel.html", "fr/brief-recherche.html", "it/brief-ricerca.html", "en/property-brief.html", "de/suchprofil.html",
 ]
 
 fallos = []

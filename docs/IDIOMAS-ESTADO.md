@@ -35,7 +35,7 @@ Polaco sería el siguiente; de momento lo cubre el inglés.
 | comprar-casa-arona.html | ✓ | | | | | |
 | finance.html | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | property.html | ✓ | | | | | |
-| property-brief.html | ✓ | | | | | |
+| property-brief.html | ✓ | ✓ (`nl/zoekprofiel.html`) | ✓ (`fr/brief-recherche.html`) | ✓ (`it/brief-ricerca.html`) | ✓ (`en/property-brief.html`) | ✓ (`de/suchprofil.html`) |
 
 Ronda 4 (19-oct, commits `f2fab09`/`c5afa4b`/`3e62e05`): inglés y alemán completados para
 index/contact/guia-comprador. Reciprocidad de hreflang a 6 idiomas en 17 páginas, 0/0.
@@ -48,6 +48,32 @@ marcada `lang="es"` en las 5 páginas y se señaló en la entrega en lugar de tr
 contradice el 60-70 % que la propia guía del comprador (ya publicada) documenta para no
 residentes. Pendiente para la siguiente ronda: `comprar-casa-adeje.html`,
 `comprar-casa-arona.html`, `property.html`, `property-brief.html` — las 4 en los 5 idiomas.
+
+Ronda 6 (19-oct, rama `feat/idiomas-r6-brief`): **property-brief.html completada en los 5
+idiomas**, con slug traducido en cada isla (`nl/zoekprofiel.html`, `fr/brief-recherche.html`,
+`it/brief-ricerca.html`, `en/property-brief.html`, `de/suchprofil.html`) — los `<link
+rel="alternate">` de las seis versiones y los de la raíz en español se actualizaron en consecuencia.
+Se tradujo solo lo visible: `<label>`, texto de `<option>`, `<span>` de cada `.chip`,
+`placeholder`, `.chiplabel`/`.chipnota`, botones y `#briefStatus`. `name`, `value`, `id`, `for` y
+el honeypot (`vp_hp`) se dejaron byte a byte iguales al original — verificado campo a campo
+(mismo orden de `name`/`value`/`id`/`for` en las 6 versiones). `toolname`/`tooldescription` del
+`<form>` intactos, en español. Se cerró también la tarjeta de financiación que ronda 5 dejó en
+español en `finance.html` (NL/FR/IT/EN/DE): pasa a la cifra real para no residentes (60–70 % del
+menor de precio o tasación, 30–40 % de capital propio + 8 % de gastos), sin `lang="es"`. El
+`finance.html` y el `property-brief.html` en español de la raíz no se tocaron en su texto visible.
+`tools/i18n/verificar-idiomas.js` y `tools/i18n/check_links.py` tenían la lista de páginas y el
+cálculo de `x-default` **codificados asumiendo que el nombre de fichero es igual en todos los
+idiomas**; con slug traducido eso rompía, así que se corrigió `verificar-idiomas.js` para derivar
+el `x-default` esperado del propio `hreflang="es"` de la página en vez de adivinarlo quitando el
+prefijo de idioma, y se añadieron las 6 páginas nuevas a ambos scripts. 🚩 Hallazgo para el
+director, no arreglado aquí: `property-brief.js` es un script único compartido por las 6 islas y
+compone el mensaje de WhatsApp y el resumen de `#briefStatus` tras el envío con cadenas
+**hardcodeadas en español** (`Objetivo:`, `Presupuesto máximo:`, `dorm.`, `baños`, `Comprar para
+vivir`…), igual que `OBJETIVOS`. El formulario funciona y el lead no se pierde (los `value`
+intocables llegan igual), pero un visitante que rellena el brief en neerlandés/francés/italiano/
+inglés/alemán ve la confirmación final y genera el WhatsApp en español. No estaba en el reparto
+de ficheros de esta OT (no es de los 10 asignados) y tocarlo afecta a las 6 islas a la vez: se
+deja para que el director lo convierta en su propia orden de trabajo.
 
 ## Reglas que no se negocian
 - Isla cerrada: las otras 76 páginas no se tocan. Los enlaces que salen apuntan al español,

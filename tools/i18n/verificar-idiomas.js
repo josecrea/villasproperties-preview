@@ -35,6 +35,8 @@ const PAGINAS = [
   'nl/index.html', 'fr/index.html', 'it/index.html', 'en/index.html', 'de/index.html',
   'finance.html',
   'nl/finance.html', 'fr/finance.html', 'it/finance.html', 'en/finance.html', 'de/finance.html',
+  'property-brief.html',
+  'nl/zoekprofiel.html', 'fr/brief-recherche.html', 'it/brief-ricerca.html', 'en/property-brief.html', 'de/suchprofil.html',
 ];
 
 const dentro = (s, re) => { const m = s.match(re); return m ? m[1] : ''; };
@@ -97,8 +99,15 @@ const langOfRuta = (ruta) => {
     const grupoTieneEs = !ruta.includes('guia-comprador.html');
     const xd = v.alternas.find((a) => a.lang === 'x-default');
     if (grupoTieneEs && !xd) f('sin hreflang x-default (el grupo sí tiene versión española)');
+    // El esperado se toma del propio alternate hreflang="es" de la página, no de adivinar
+    // el nombre de fichero: con slugs traducidos (atelier:villas-idiomas ronda 6,
+    // property-brief.html → zoekprofiel.html/brief-recherche.html/etc.) el nombre del
+    // fichero NO coincide entre idiomas, así que "quitar el prefijo nl/fr/it/en/de/" ya
+    // no identifica la versión española.
+    const esAlt = v.alternas.find((a) => a.lang === 'es');
     const paginaEs = ruta.replace(/^(nl|fr|it|en|de)\//, '');
-    const esperadoXd = paginaEs === 'index.html' ? BASE_CANON + '/' : BASE_CANON + '/' + paginaEs;
+    const esperadoXd = esAlt ? esAlt.href
+      : (paginaEs === 'index.html' ? BASE_CANON + '/' : BASE_CANON + '/' + paginaEs);
     if (grupoTieneEs && xd && xd.href !== esperadoXd) f(`x-default a ${xd.href}, no a la versión española`);
     if (!grupoTieneEs && xd) f('tiene x-default pero el grupo no tiene versión española (sería un alternate falso)');
 
