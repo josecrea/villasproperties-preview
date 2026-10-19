@@ -2846,3 +2846,12 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 .header[data-theme="hero"] .nav .advisor:hover,
 .header[data-theme="dark"] .nav .advisor:hover,
 .header[data-theme="green"] .nav .advisor:hover{--adv-fill:#fff;color:var(--ink-deep)}
+
+/* --- i18n language switch (atelier:villas-idiomas, isla nl/fr/it) --- */
+.lang-switch{display:flex;align-items:center;gap:6px;margin-left:12px;padding-left:12px;border-left:1px solid color-mix(in srgb,var(--ink) 15%,transparent)}
+.lang-switch a{font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);opacity:.55;padding:4px 6px;border-radius:4px;text-decoration:none;transition:opacity .15s ease,background-color .15s ease}
+.lang-switch a:hover,.lang-switch a:focus-visible{opacity:1;background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.lang-switch a[aria-current="true"]{opacity:1;color:var(--atlantic)}
+.lang-switch a:focus-visible{outline:2px solid var(--atlantic);outline-offset:2px}
+.faqlist dt{font-weight:700;margin-top:22px;font-size:1.02rem}
+.faqlist dd{margin:6px 0 0;opacity:.85;line-height:1.6}
