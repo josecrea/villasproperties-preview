@@ -19,6 +19,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { TEXTOS, recortaDesc, esLanding, tituloLanding } = require('./seo-textos');
 
 const ROOT = path.join(__dirname, '..');
 /* 🔴 El dominio comercial, NO el de Pages: cada build reescribe canonical, og:url y
@@ -222,9 +223,16 @@ const esFicha = (f) => f.startsWith('vivienda-');
 files.filter((f) => !esFicha(f)).forEach((file) => {
   const filePath = path.join(ROOT, file);
   let html = fs.readFileSync(filePath, 'utf8');
-  const meta = PAGES[file] || {};
+  /* TEXTOS (seo-textos.js) manda sobre PAGES. Si no hay descripción propia se conserva la que
+     escribió el generador de la página (og:description fuera del bloque seo) antes de caer en
+     la genérica: así las landings dejan de heredar la misma descripción las 15. */
+  const meta = { ...(PAGES[file] || {}), ...(TEXTOS[file] || {}) };
+  const htmlSinBloque = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), '');
+  const ogPrevio = (htmlSinBloque.match(/<meta property="og:description" content="([^"]*)"/) || [, ''])[1]
+    .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  if (esLanding(file) && !meta.title) meta.title = tituloLanding(titleOf(html));
   const title = meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`;
-  const desc = meta.desc || GENERIC;
+  const desc = recortaDesc(meta.desc || ogPrevio || GENERIC);
   const canonical = `${BASE}${file === 'index.html' ? '' : file}`;
   const image = `${BASE}assets/brand/venta-notaria.webp`;
   const noindex = !PUBLISH || meta.noindex;
@@ -258,6 +266,8 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
   html = html.replace(/\s*<meta name="theme-color"[^>]*>/g, '');
   html = html.replace(/\s*<link rel="canonical"[^>]*>/g, '');
   if (meta.title) html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`);
+  /* og:title y twitter:title que escribió el generador (fuera del bloque) siguen al <title>. */
+  if (meta.title) html = html.replace(/(<meta (?:property="og:title"|name="twitter:title") content=")[^"]*(">)/g, `$1${esc(meta.title)}$2`);
 
   html = html.replace('</head>', `${block}\n</head>`);
   fs.writeFileSync(filePath, html, 'utf8');
@@ -287,7 +297,7 @@ ${PUBLISH ? `Sitemap: ${BASE}sitemap.xml` : '# Sitemap: se publicará al abrir l
 
 /* ---------- sitemap.xml ---------- */
 const urls = files
-  .filter((f) => !(PAGES[f] || {}).noindex && f !== '404.html'
+  .filter((f) => !(PAGES[f] || {}).noindex && !(TEXTOS[f] || {}).noindex && f !== '404.html'
     && !(esFicha(f) && /<meta name="robots" content="noindex/.test(fs.readFileSync(path.join(ROOT, f), 'utf8'))))
   .map((f) => `  <url>
     <loc>${BASE}${f === 'index.html' ? '' : f}</loc>
