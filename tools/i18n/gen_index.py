@@ -16,7 +16,8 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SRC = (ROOT / "index.html").read_text(encoding="utf-8")
+from comun import leer_fuente, traducir, reescribir_rutas
+SRC = leer_fuente("index.html")
 BASE = "https://villasproperties.es/"
 
 MEMBERS = {
@@ -391,12 +392,20 @@ SKIP_PREFIXES = ("http://", "https://", "mailto:", "tel:", "#", "/", "data:")
 
 
 def fix_relative_paths(html: str) -> str:
-    def repl(m):
-        attr, quote, val = m.group(1), m.group(2), m.group(3)
-        if val.startswith(SKIP_PREFIXES):
-            return m.group(0)
-        return f'{attr}={quote}../{val}{quote}'
-    return re.sub(r'(href|src|action|data-src|data-poster|data-img)=(["\'])([^"\']+)\2', repl, html)
+    return reescribir_rutas(html)
+
+
+TARJETA_ESCRITURA = (
+    '<article class="insight"><span class="eye">Venta</span><div><h3>Lo que pides y lo que se firma.</h3>'
+    '<p>Ponderando por operaciones, en el sur se escritura un 21% por debajo del precio de anuncio. '
+    'Municipio a municipio.</p></div><a class="eye" href="post-anuncio-vs-escritura.html">Leer el análisis ↗</a></article>'
+)
+TARJETA_SUR_SUBE = (
+    '<article class="insight"><span class="eye">Venta</span><div><h3>El sur sube.</h3>'
+    '<p>En el último año el metro cuadrado ha subido en los seis municipios del sur: de +1,9% en San Miguel '
+    'de Abona a +5,3% en Guía de Isora (idealista, jul 2026).</p></div>'
+    '<a class="eye" href="valuation.html">Valora tu casa ↗</a></article>'
+)
 
 
 def build(lang: str) -> str:
@@ -440,11 +449,14 @@ def build(lang: str) -> str:
     # (shell.js rescues it before overwriting .header at runtime; see shell.js fix)
     html = re.sub(r'(<header class="header"[^>]*>.*?<nav class="nav">.*?</nav>)', lambda m: m.group(1) + selector(lang), html, count=1, flags=re.S)
 
-    for es, trs in T.items():
-        if es in ("title", "desc"):
-            continue  # already applied above as targeted meta/title replacements
-        if lang in trs:
-            html = html.replace(es, trs[lang])
+    # Regla de negocio (Jose, 27-oct-2026): los datos de portada enganchan, no
+    # asustan. Fuera la tarjeta "se escritura un 21% por debajo"; entra "El sur
+    # sube" con enlace a la valoración. Solo en las copias traducidas: el
+    # index.html español de la raíz se cambia en otro PR.
+    #TARJETA#
+
+    # title/desc ya se aplicaron arriba como sustituciones puntuales de meta.
+    html = traducir(html, T, lang, omitir=("title", "desc"))
 
     # Mark the untranslated blocks explicitly as Spanish (per instruction: a
     # marked block beats a machine translation).
