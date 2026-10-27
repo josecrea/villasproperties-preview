@@ -202,10 +202,6 @@
       ? 'Requiere revisión'
       : (data.zone ? 'Afinada por zona' : 'Orientación amplia');
 
-    /* Contraste de escritura: qué se firma de verdad en notaría frente a lo que
-       se pide en el anuncio. Es la referencia que manda cuando hay que decidir. */
-    const deedRatio = town.notaria && town.eurM2 ? town.notaria / town.eurM2 : null;
-
     return {
       ...data,
       baseM2,
@@ -215,8 +211,6 @@
       high: mid * (1 + spread),
       realisticLow,
       realisticHigh,
-      deedRatio,
-      deedValue: deedRatio ? mid * deedRatio : null,
       confidence,
     };
   };
@@ -229,9 +223,8 @@
     rows.push([`${town.name} · municipio`, perM2(town.eurM2), `idealista ${DATES.idealista || ''}`.trim()]);
     if (town.fc) rows.push([`${town.name} · pisos`, perM2(town.fc), `Fotocasa ${DATES.fotocasa || ''}`.trim()]);
     if (town.ra) rows.push([`${town.name} · mediana`, perM2(town.ra), `RealAdvisor ${DATES.realadvisor || ''}`.trim()]);
-    if (town.notaria) rows.push([`${town.name} · escritura real`, perM2(town.notaria), 'precio escriturado']);
-    if (town.catastro) rows.push([`${town.name} · referencia`, perM2(town.catastro), `Catastro ${DATES.catastro || ''}`.trim()]);
     if (town.var1a !== null && town.var1a !== undefined) rows.push(['Evolución 12 meses', delta(town.var1a), 'idealista']);
+    if (town.catastroCV) rows.push([`${town.name} · ventas al año`, groupThousands(town.catastroCV), `Catastro ${DATES.catastro || ''}`.trim()]);
     return rows;
   };
 
@@ -250,29 +243,29 @@
     </div>`;
   };
 
-  /* Contraste de escritura: bloque completo. Con diferencias extremas (San Miguel
-     y Santiago del Teide superan el 50%) la cifra dejaría de significar lo que
-     se paga por una vivienda como la tuya: lo que refleja es una mezcla de
-     producto distinta y pocas operaciones. Ahí damos la señal, no el número. */
-  const DEED_GAP_MAX = 0.35;
-
-  const deedCard = (est) => {
-    if (!est.deedRatio) {
-      return '<strong>—</strong><p>Sin dato de escritura publicado para este municipio.</p>';
+  /* Tarjetas gancho del resultado. Esta página capta vendedores: los datos
+     tienen que animar a dar el paso, no asustar. Por eso NO se enseña aquí la
+     distancia entre anuncio y escritura ni la «salida realista» por debajo del
+     anuncio: esa conversación se tiene en la visita, con el ACM delante
+     (regla de Jose, 27-oct-2026). Solo datos verdaderos y con fuente. */
+  const hookCards = (est) => {
+    const town = est.town;
+    const cards = [];
+    if (typeof town.var1a === 'number' && town.var1a > 0) {
+      cards.push(`<article class="vw-card">
+            <div class="eye">Tu zona se revaloriza</div>
+            <strong>${delta(town.var1a)}</strong>
+            <p>Es lo que ha subido el metro cuadrado en ${town.name} en los últimos doce meses (idealista, ${DATES.idealista || 's/f'}). Vendes en un mercado que sube.</p>
+          </article>`);
     }
-    const gap = Math.round((1 - est.deedRatio) * 100);
-    if (1 - est.deedRatio > DEED_GAP_MAX) {
-      return `<strong>−${gap}%</strong><p>En ${est.town.name} la escritura media queda un ${gap}% por debajo de la oferta. Una diferencia así refleja mezcla de producto y pocas operaciones, no lo que se paga por una vivienda como la tuya: lo revisamos caso a caso.</p>`;
+    if (town.catastroCV) {
+      cards.push(`<article class="vw-card">
+            <div class="eye">Hay comprador</div>
+            <strong>${groupThousands(town.catastroCV)} ventas</strong>
+            <p>Viviendas vendidas en ${town.name} en ${DATES.catastro || 'el último año'}, según el Catastro. La demanda está ahí: la clave es salir al precio correcto.</p>
+          </article>`);
     }
-    return `<strong>${euro(est.deedValue)}</strong><p>En ${est.town.name} lo que se firma en notaría está un <b>${gap}%</b> por debajo del precio medio de oferta. ${deedReading(est)}</p>`;
-  };
-
-  /* Lectura del contraste: dónde cae la escritura respecto a la banda de salida.
-     Si queda por encima, el municipio aguanta precio y hay menos que ceder. */
-  const deedReading = (est) => {
-    if (est.deedValue > est.realisticHigh) return 'Aquí el mercado aguanta: la escritura queda por encima de tu banda de salida.';
-    if (est.deedValue < est.realisticLow) return 'Aquí pesa la negociación: la escritura queda por debajo de tu banda de salida.';
-    return 'Encaja dentro de tu banda de salida: es el terreno donde se cierra.';
+    return cards.join('\n          ');
   };
 
   const renderResult = (est) => {
@@ -320,15 +313,7 @@
         ${zoneScale(est)}
 
         <div class="vw-cards">
-          <article class="vw-card">
-            <div class="eye">Salida realista</div>
-            <strong>${euro(est.realisticLow)} – ${euro(est.realisticHigh)}</strong>
-            <p>El precio al que una vivienda como la tuya se mueve sin quemarse en el mercado. Entre un 10% y un 15% por debajo del anuncio.</p>
-          </article>
-          <article class="vw-card">
-            <div class="eye">Contraste de escritura</div>
-            ${deedCard(est)}
-          </article>
+          ${hookCards(est)}
           <article class="vw-card">
             <div class="eye">Qué falta para cerrar</div>
             <strong>Revisión local</strong>
