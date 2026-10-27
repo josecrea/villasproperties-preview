@@ -86,4 +86,10 @@ def reescribir_rutas(html: str) -> str:
             nuevo = _prefijar(val)
         return f"{attr}={q}{nuevo}{q}"
 
-    return _ATTR_URL.sub(repl, html)
+    html = _ATTR_URL.sub(repl, html)
+    # Fondos en linea: style="background-image:url(assets/...)" (con o sin comillas)
+    return re.sub(
+        r'url\((["\']?)([^)"\']+)\1\)',
+        lambda m: f"url({m.group(1)}{_prefijar(m.group(2))}{m.group(1)})",
+        html,
+    )
