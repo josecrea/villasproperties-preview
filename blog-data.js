@@ -4,6 +4,16 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-newsletter-sur-de-tenerife-2026-10-27.html',
+    category: 'Mercado',
+    title: "Las Rosas sube un 16,6 %: el sur de Tenerife en cifras",
+    dek: "Cuatro de los seis municipios del sur cierran septiembre por encima del año pasado. Repasamos precios, zonas al alza y las noticias que importan.",
+    date: '2026-10-27',
+    read: '4 min',
+    accent: 'atlantic',
+    figure: 'chart',
+  },
+  {
     slug: 'post-vender-casa-tenerife-sur.html',
     category: 'Venta',
     title: "Vender casa en Tenerife Sur: precio real, impuestos y plazos",
