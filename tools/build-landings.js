@@ -18,6 +18,11 @@
  *   - se enlazan entre sí (interlinking), que es lo que Google premia
  *   - usan el mismo CSS y la misma cabecera que el resto: no hay estilos nuevos
  *
+ * 🔴 27-oct-2026 · REGLA DE JOSE: son landings de CAPTACIÓN de vendedores. Los datos
+ * tienen que enganchar, no asustar: nada de «lo que se pide y lo que se firma» ni de
+ * la distancia anuncio/escritura. Se cuenta lo que juega a favor del que vende —que
+ * el precio sube (var1a) y que hay comprador (catastroCV)— con su fuente.
+ *
  * Uso:  node tools/build-landings.js
  */
 'use strict';
@@ -66,8 +71,8 @@ const MUNI = {
 /* Las preguntas vienen de las landings que ya funcionan: son las que la gente
    hace de verdad. Se conservan y se les actualiza la cifra. */
 const FAQ_COMUN = (n, d) => [
-  [`¿Por qué el precio de escritura de ${n} es más bajo que el de los portales?`,
-   `Porque los ${fmt(d.notaria)} €/m² escriturados son la media de TODAS las compraventas del municipio —casco, medianías y costa—, mientras que el €/m² de los portales es lo que se pide, y se pide más en la zona cara. No es que se venda barato: es que se está midiendo otra cosa.`],
+  [`¿Es buen momento para vender en ${n}?`,
+   `El metro cuadrado en ${n} ha subido un ${pct(d.var1a)} en el último año (idealista, ${MERCADO.meta.dates.idealista}) y en ${MERCADO.meta.dates.catastro} se vendieron ${fmt(d.catastroCV)} viviendas en el municipio, según el Catastro. Hay demanda: la clave es salir al precio correcto desde el primer día.`],
   [`¿Qué gastos tiene el vendedor en ${n}?`,
    `Habitualmente la plusvalía municipal (IIVTNU) del Ayuntamiento de ${n} salvo pacto en contrario, la cancelación registral de la hipoteca si la hubiera, el certificado energético y la ganancia patrimonial en el IRPF. Se calcula antes de firmar, no después.`],
   ['¿Puedo vender si tengo la vivienda alquilada?',
@@ -79,6 +84,7 @@ const FAQ_COMUN = (n, d) => [
 ];
 
 const fmt = (n) => (n == null ? '—' : String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+const pct = (v) => (v == null ? '—' : `${v > 0 ? '+' : ''}${String(v).replace('.', ',')} %`);
 const E = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
   .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -104,7 +110,6 @@ for (const [k, m] of Object.entries(MERCADO.municipios)) {
   if (!cfg) { console.log(`  ⚠ sin configuración: ${k}`); continue; }
   const n = m.name;
   const fichero = `${SLUG[k]}.html`;
-  const brecha = m.notaria ? ((m.eurM2 - m.notaria) / m.eurM2 * 100).toFixed(1).replace('.', ',') : null;
   const zonas = (m.zonas || []).slice().sort((a, b) => b.eurM2 - a.eurM2);
   const cara = zonas[0]; const barata = zonas[zonas.length - 1];
 
@@ -114,8 +119,12 @@ for (const [k, m] of Object.entries(MERCADO.municipios)) {
     ...FAQ_COMUN(n, m),
   ];
 
+  /* La columna de 12 meses solo sale si hay dato por zona: el refresco automático
+     de sep-2026 dejó de traer var1a por zona y salía una columna de guiones. */
+  const conVar = zonas.some((z) => z.var1a != null);
   const filasZonas = zonas.map((z) => `<tr><td>${E(z.label)}</td><td>${fmt(z.eurM2)} €/m²</td>`
-    + `<td>${z.var1a != null ? (z.var1a > 0 ? '+' : '') + String(z.var1a).replace('.', ',') + ' %' : '—'}</td></tr>`).join('');
+    + (conVar ? `<td>${z.var1a != null ? (z.var1a > 0 ? '+' : '') + String(z.var1a).replace('.', ',') + ' %' : '—'}</td>` : '')
+    + '</tr>').join('');
 
   const otras = claves.filter((x) => x !== k).map((x) =>
     `<a class="btn" href="${SLUG[x]}.html">${E(MERCADO.municipios[x].name)}</a>`).join('');
@@ -142,8 +151,9 @@ for (const [k, m] of Object.entries(MERCADO.municipios)) {
   };
 
   const titulo = `Vender casa en ${n}: precio real por zonas | Villa’s Properties`;
-  const desc = `Cuánto vale de verdad tu vivienda en ${n}: ${fmt(m.eurM2)} €/m² de anuncio`
-    + (m.notaria ? ` frente a ${fmt(m.notaria)} €/m² de escritura ante notario` : '')
+  const desc = `Cuánto vale tu vivienda en ${n}: ${fmt(m.eurM2)} €/m² de media`
+    + (m.var1a > 0 ? `, ${pct(m.var1a)} en un año` : '')
+    + (m.catastroCV ? ` y ${fmt(m.catastroCV)} compraventas al año` : '')
     + '. Valoración gratuita y sin compromiso.';
 
   const html = `<!DOCTYPE html>
@@ -173,23 +183,24 @@ ${cabecera}
 
   <section class="pagehero"><div class="wrap">
     <div class="eye">${E(n.toUpperCase())} · ${E(cfg.comarca)}</div>
-    <h1>Vender casa en ${E(n)}:<br>lo que se pide y lo que se firma.</h1>
+    <h1>Vender casa en ${E(n)}:<br>un mercado que sube.</h1>
     <p class="pagelede">En ${E(n)} se piden <strong>${fmt(m.eurM2)} €/m²</strong> de media`
-    + (m.notaria ? ` y se firman ante notario <strong>${fmt(m.notaria)} €/m²</strong>` : '')
+    + (m.var1a > 0 ? `, un <strong>${pct(m.var1a).replace('+', '')}</strong> más que hace un año` : '')
+    + (m.catastroCV ? `, y se venden <strong>${fmt(m.catastroCV)} viviendas</strong> al año` : '')
     + `. ${E(cfg.gancho)}</p>
   </div></section>
 
   <section class="section tight"><div class="wrap">
     <div class="head" data-reveal><div class="eye">01 · ${E(n)} en cifras</div>
-    <div><h2>El número que importa<br>es el que se escritura.</h2></div></div>
+    <div><h2>Un mercado que sube<br>y que compra.</h2></div></div>
     <div class="bankcifras">
-      <div><strong>${fmt(m.eurM2)} €/m²</strong><small>lo que se pide · idealista ${E(MERCADO.meta.dates.idealista)}</small></div>
-      ${m.notaria ? `<div><strong>${fmt(m.notaria)} €/m²</strong><small>lo que se firma · escriturado</small></div>` : ''}
-      ${brecha ? `<div><strong>${brecha} %</strong><small>distancia entre pedir y firmar</small></div>` : ''}
+      <div><strong>${fmt(m.eurM2)} €/m²</strong><small>precio medio · idealista ${E(MERCADO.meta.dates.idealista)}</small></div>
+      ${m.var1a > 0 ? `<div><strong>${pct(m.var1a)}</strong><small>en los últimos doce meses · idealista</small></div>` : ''}
+      ${m.catastroCV ? `<div><strong>${fmt(m.catastroCV)}</strong><small>viviendas vendidas en ${E(MERCADO.meta.dates.catastro)} · Catastro</small></div>` : ''}
     </div>
-    <p class="bankpie">La diferencia no es un descuento que puedas negociar sin más: el dato de
-    escritura es la media de todas las compraventas del municipio, casco incluido. Sirve para
-    saber dónde está el suelo, no para poner precio a ciegas.</p>
+    <p class="bankpie">La media del municipio es el punto de partida, no el precio de tu casa: la
+    zona, la planta, las vistas y el estado son lo que lo mueve. Por eso la valoración se hace
+    vivienda a vivienda.</p>
   </div></section>
 
   <section class="section"><div class="wrap">
@@ -197,9 +208,9 @@ ${cabecera}
     <div><h2>El €/m² de ${E(n)},<br>zona a zona.</h2>
     <p class="muted">La media municipal no describe ninguna casa concreta.${cara && barata && cara !== barata
       ? ` Entre ${E(cara.label)} y ${E(barata.label)} hay ${(cara.eurM2 / barata.eurM2).toFixed(2).replace('.', ',')} veces de diferencia.` : ''}</p></div></div>
-    <table class="post-table"><thead><tr><th>Zona</th><th>€/m² de anuncio</th><th>12 meses</th></tr></thead>
+    <table class="post-table"><thead><tr><th>Zona</th><th>€/m² de anuncio</th>${conVar ? '<th>12 meses</th>' : ''}</tr></thead>
     <tbody>${filasZonas}</tbody></table>
-    <p class="bankpie">Fuente: idealista, ${E(MERCADO.meta.dates.idealista)}. Precio de anuncio, no de cierre.</p>
+    <p class="bankpie">Fuente: idealista, ${E(MERCADO.meta.dates.idealista)}. Precio medio de anuncio por zona.</p>
   </div></section>
 
   <section class="section tight"><div class="wrap">
@@ -214,8 +225,8 @@ ${cabecera}
   <section class="sell-cta" data-header-theme="green"><div class="wrap" style="position:relative;z-index:1">
     <div class="eye">Valoración gratis · sin compromiso</div>
     <h2>¿Empezamos por<br>el número real?</h2>
-    <p style="max-width:580px">Te decimos qué se pide en tu zona de ${E(n)}, qué se firma de verdad
-    y en qué punto de esa horquilla está tu vivienda.</p>
+    <p style="max-width:580px">Te decimos cuánto se pide en tu zona de ${E(n)}, cómo se está moviendo
+    y a qué precio salir para vender bien y sin quemar la vivienda.</p>
     <div class="actions" style="justify-content:flex-start;margin-top:25px">
       <a class="btn fill" href="valuation.html?municipio=${encodeURIComponent(k)}">Valorar mi vivienda ↗</a>
       <a class="btn" href="https://wa.me/34667384965" target="_blank" rel="noopener">WhatsApp</a>
