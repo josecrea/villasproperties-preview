@@ -228,6 +228,12 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
      la genérica: así las landings dejan de heredar la misma descripción las 15. */
   const meta = { ...(PAGES[file] || {}), ...(TEXTOS[file] || {}) };
   const htmlSinBloque = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), '');
+  /* IDIOMAS (PR #5): los <link rel="alternate" hreflang> los escribe tools/i18n, no este script.
+     Se CONSERVAN: los que viven dentro del bloque se copian al nuevo bloque (si no, se borran
+     al reescribirlo) y los que viven fuera no se tocan. Sin #5 no hay ninguno y no cambia nada. */
+  const bloquePrevio = (html.match(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}`)) || [''])[0];
+  const hreflangPrevio = (bloquePrevio.match(/<link rel="alternate" hreflang="[^"]*"[^>]*>/g) || [])
+    .filter((t) => !htmlSinBloque.includes(t));
   const ogPrevio = (htmlSinBloque.match(/<meta property="og:description" content="([^"]*)"/) || [, ''])[1]
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   if (esLanding(file) && !meta.title) meta.title = tituloLanding(titleOf(html));
@@ -256,11 +262,15 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
     `<meta name="twitter:image" content="${image}">`,
     '<link rel="manifest" href="site.webmanifest">',
     `<script type="application/ld+json">${JSON.stringify(buildLd(file, meta, title))}</script>`,
+    ...(hreflangPrevio.length ? [hreflangPrevio.join('')] : []),
     MARK_END,
   ].join('\n');
 
   /* Fuera lo anterior: el bloque generado sustituye a las metas sueltas. */
-  html = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), '');
+  /* El bloque nuevo ocupa el sitio del viejo (no se recoloca al final del <head>). */
+  const HUECO = '<!--SEO-HUECO-->';
+  const tieneBloque = html.includes(MARK_START);
+  html = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), () => (tieneBloque ? `${HUECO}\n` : ''));
   html = html.replace(/\s*<meta name="description"[^>]*>/g, '');
   html = html.replace(/\s*<meta name="robots"[^>]*>/g, '');
   html = html.replace(/\s*<meta name="theme-color"[^>]*>/g, '');
@@ -269,7 +279,7 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
   /* og:title y twitter:title que escribió el generador (fuera del bloque) siguen al <title>. */
   if (meta.title) html = html.replace(/(<meta (?:property="og:title"|name="twitter:title") content=")[^"]*(">)/g, `$1${esc(meta.title)}$2`);
 
-  html = html.replace('</head>', `${block}\n</head>`);
+  html = tieneBloque ? html.replace(HUECO, () => block) : html.replace('</head>', () => `${block}\n</head>`);
   fs.writeFileSync(filePath, html, 'utf8');
   touched += 1;
 });
@@ -304,8 +314,19 @@ const urls = files
     <lastmod>${TODAY}</lastmod>
     <priority>${esFicha(f) ? '0.8' : (PAGES[f] || {}).priority || '0.5'}</priority>
   </url>`).join('\n');
+/* IDIOMAS (PR #5): las páginas nl/ fr/ it/ las lista tools/i18n, no este script. Las entradas que ya
+   están en el sitemap se CONSERVAN tal cual (con su lastmod) mientras el fichero siga existiendo;
+   si no hay ninguna (sin #5) no cambia nada. */
+const sitemapPrevio = (() => {
+  try { return fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8'); } catch (e) { return ''; }
+})();
+const urlsIdiomas = (sitemapPrevio.match(/ {2}<url>[\s\S]*?<\/url>/g) || []).filter((u) => {
+  const loc = (u.match(/<loc>([^<]*)<\/loc>/) || [, ''])[1];
+  const rel = loc.startsWith(BASE) ? loc.slice(BASE.length) : '';
+  return /^(nl|fr|it)\/[^/]+\.html$/.test(rel) && fs.existsSync(path.join(ROOT, rel));
+}).join('\n');
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, 'utf8');
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}${urlsIdiomas ? `\n${urlsIdiomas}` : ''}\n</urlset>\n`, 'utf8');
 
 /* Viviendas en venta (properties-data.js = fuente única) para llms.txt. */
 global.window = {};
