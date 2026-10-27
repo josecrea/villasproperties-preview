@@ -223,7 +223,8 @@
     rows.push([`${town.name} · municipio`, perM2(town.eurM2), `idealista ${DATES.idealista || ''}`.trim()]);
     if (town.fc) rows.push([`${town.name} · pisos`, perM2(town.fc), `Fotocasa ${DATES.fotocasa || ''}`.trim()]);
     if (town.ra) rows.push([`${town.name} · mediana`, perM2(town.ra), `RealAdvisor ${DATES.realadvisor || ''}`.trim()]);
-    if (town.var1a !== null && town.var1a !== undefined) rows.push(['Evolución 12 meses', delta(town.var1a), 'idealista']);
+    /* Página de captación: la evolución solo se enseña cuando acompaña (sube). */
+    if (typeof town.var1a === 'number' && town.var1a > 0) rows.push(['Evolución 12 meses', delta(town.var1a), 'idealista']);
     if (town.catastroCV) rows.push([`${town.name} · ventas al año`, groupThousands(town.catastroCV), `Catastro ${DATES.catastro || ''}`.trim()]);
     return rows;
   };
