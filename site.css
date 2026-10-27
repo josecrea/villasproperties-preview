@@ -2846,3 +2846,120 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 .header[data-theme="hero"] .nav .advisor:hover,
 .header[data-theme="dark"] .nav .advisor:hover,
 .header[data-theme="green"] .nav .advisor:hover{--adv-fill:#fff;color:var(--ink-deep)}
+
+/* ---------- Informe PDF a cambio de contacto (vp-lead.js) ----------
+   Misma piel que el aviso de cookies: papel, tinta y una línea; nada de
+   modal genérico con sombra difusa. */
+.vp-informe {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: color-mix(in srgb, var(--ink) 45%, transparent);
+  animation: vp-informe-fondo .3s ease both;
+}
+@keyframes vp-informe-fondo { from { opacity: 0; } to { opacity: 1; } }
+.vp-informe__caja {
+  position: relative;
+  width: min(460px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  padding: 30px 28px 26px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 60px rgba(16, 20, 22, .18);
+  animation: vp-informe-in .5s cubic-bezier(.16, 1, .3, 1) both;
+}
+/* Propia y no la de cookies: aquella lleva el translate(-50%) de su centrado
+   y sacaba la ficha media pantalla a la izquierda. */
+@keyframes vp-informe-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vp-informe, .vp-informe__caja { animation: none; }
+}
+.vp-informe__cerrar {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+.vp-informe__eye {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.vp-informe__titulo { margin: 0 0 10px; font-size: clamp(24px, 4vw, 30px); line-height: 1.1; }
+.vp-informe__texto { margin: 0 0 20px; font-size: 14px; line-height: 1.55; color: var(--muted); }
+.vp-informe__campo {
+  display: block;
+  margin: 0 0 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+.vp-informe__campo span { font-weight: 400; color: var(--muted); }
+.vp-informe__campo input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;               /* 16px: por debajo, iOS hace zoom al enfocar */
+  font-weight: 400;
+}
+.vp-informe__campo input:focus-visible,
+.vp-informe__permiso input:focus-visible,
+.vp-informe__cerrar:focus-visible,
+.vp-informe__si:focus-visible { outline: 2px solid var(--atlantic); outline-offset: 3px; }
+.vp-informe__hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.vp-informe__permiso {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 4px 0 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+  cursor: pointer;
+}
+.vp-informe__permiso input { flex: none; width: 18px; height: 18px; margin-top: 1px; accent-color: var(--ink); }
+.vp-informe__permiso a { color: var(--ink); }
+.vp-informe__error { min-height: 1.2em; margin: 0 0 10px; font-size: 13px; color: #b3261e; }
+.vp-informe__si {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 15px 18px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.vp-informe__si:hover { opacity: .85; }
+.vp-informe [hidden] { display: none; }
