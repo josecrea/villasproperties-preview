@@ -455,6 +455,12 @@ def build(lang: str) -> str:
     # index.html español de la raíz se cambia en otro PR.
     #TARJETA#
 
+    # Regla de negocio (Jose, 27-oct-2026): los datos de portada enganchan, no
+    # asustan. Fuera la tarjeta "se escritura un 21% por debajo"; entra "El sur
+    # sube" con enlace a la valoración. Solo en las copias traducidas: el
+    # index.html español de la raíz se cambia en otro PR.
+    html = html.replace(TARJETA_ESCRITURA, TARJETA_SUR_SUBE, 1)
+
     # title/desc ya se aplicaron arriba como sustituciones puntuales de meta.
     html = traducir(html, T, lang, omitir=("title", "desc"))
 
