@@ -401,9 +401,11 @@ TARJETA_ESCRITURA = (
     'Municipio a municipio.</p></div><a class="eye" href="post-anuncio-vs-escritura.html">Leer el análisis ↗</a></article>'
 )
 TARJETA_SUR_SUBE = (
-    '<article class="insight"><span class="eye">Venta</span><div><h3>El sur sube.</h3>'
-    '<p>En el último año el metro cuadrado ha subido en los seis municipios del sur: de +1,9% en San Miguel '
-    'de Abona a +5,3% en Guía de Isora (idealista, jul 2026).</p></div>'
+    # 27-oct: con idealista sep-2026 no todo sube (San Miguel 0 %, Santiago −2 %): la tarjeta
+    # gancho va por la demanda (Catastro), que es estable. Mismo texto que la portada española.
+    '<article class="insight"><span class="eye">Venta</span><div><h3>Tu casa tiene comprador.</h3>'
+    '<p>En 2025 se vendieron 8.552 viviendas en los seis municipios del sur, 3.441 solo en Arona '
+    '(Catastro). Descubre cuánto vale la tuya.</p></div>'
     '<a class="eye" href="valuation.html">Valora tu casa ↗</a></article>'
 )
 
