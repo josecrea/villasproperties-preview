@@ -18,9 +18,16 @@
   const duplicateHeroLockup=$('.hero .hero-content > .lockup');
   if(duplicateHeroLockup) duplicateHeroLockup.remove();
 
+  /* atelier:villas-idiomas: las páginas nl/ fr/ it/ (en/ de/) viven un nivel
+     más abajo que el sitio español. Toda URL relativa que este script EMITE
+     (fichas, financiación, fotos, rutas locales) necesita '../' ahí. En español
+     (o sin lang) RAIZ es '' y el comportamiento es idéntico al de siempre. */
+  const RAIZ=((document.documentElement.getAttribute('lang')||'es').toLowerCase()!=='es')?'../':'';
+  const alRaiz=v=>(!RAIZ||!v||/^([a-z][a-z0-9+.-]*:|\/|#|\.\.\/)/i.test(v))?v:RAIZ+v;
+  /* contact.html sí existe dentro de cada carpeta de idioma: no lleva '../'. */
   const localRoutes=[
-    ['https://villasproperties.es/valoracion-gratis-tenerife','valuation.html'],
-    ['https://villasproperties.es/market-impact','market-impact.html'],
+    ['https://villasproperties.es/valoracion-gratis-tenerife',alRaiz('valuation.html')],
+    ['https://villasproperties.es/market-impact',alRaiz('market-impact.html')],
     ['https://villasproperties.es/contactus','contact.html']
   ];
   $$('a[href]').forEach(a=>{
@@ -98,7 +105,7 @@
   const renderProps=()=>{
     $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
       const lista = grid.id==='propertyGrid' ? demoProps.slice(0,TOPE_PORTADA) : demoProps;
-      grid.innerHTML=lista.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${U(p.url)}" aria-label="Ver ficha de ${E(p.name)}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${U(window.VPStore?VPStore.mediaSrc(p.images[0]):p.images[0])})"${window.VPStore?VPStore.mediaAttr(p.images[0]):''}`:''}></div><span class="tag">${E(p.status)} · ${E(p.strategy)}</span></a><div class="pinfo"><div><h3><a href="${U(p.url)}">${E(p.name)}</a></h3><div class="meta">${E(p.zone)} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${E(p.name)}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${E(p.ref||'—')}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${U(p.url)}">Ver ficha ↗</a><a class="btn" href="finance.html">Financiar</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
+      grid.innerHTML=lista.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${alRaiz(U(p.url))}" aria-label="Ver ficha de ${E(p.name)}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${alRaiz(U(window.VPStore?VPStore.mediaSrc(p.images[0]):p.images[0]))})"${window.VPStore?VPStore.mediaAttr(p.images[0]):''}`:''}></div><span class="tag">${E(p.status)} · ${E(p.strategy)}</span></a><div class="pinfo"><div><h3><a href="${alRaiz(U(p.url))}">${E(p.name)}</a></h3><div class="meta">${E(p.zone)} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${E(p.name)}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${E(p.ref||'—')}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${alRaiz(U(p.url))}">Ver ficha ↗</a><a class="btn" href="${alRaiz('finance.html')}">Financiar</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
     });
   };
   renderProps();

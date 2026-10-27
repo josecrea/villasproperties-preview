@@ -453,7 +453,6 @@ def build(lang: str) -> str:
     # asustan. Fuera la tarjeta "se escritura un 21% por debajo"; entra "El sur
     # sube" con enlace a la valoración. Solo en las copias traducidas: el
     # index.html español de la raíz se cambia en otro PR.
-    #TARJETA#
 
     # Regla de negocio (Jose, 27-oct-2026): los datos de portada enganchan, no
     # asustan. Fuera la tarjeta "se escritura un 21% por debajo"; entra "El sur
