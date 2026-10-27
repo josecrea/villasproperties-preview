@@ -78,7 +78,6 @@
     { key: 'baths', label: 'Baños', type: 'number' },
     { key: 'town', label: 'Municipio', type: 'text' },
     { key: 'zone', label: 'Zona', type: 'text' },
-    { key: 'address', label: 'Dirección', type: 'text' },
     { key: 'status', label: 'Estado comercial', type: 'select', options: ['En venta', 'Reservado', 'Vendido', 'Off-market'] },
     { key: 'strategy', label: 'Estrategia', type: 'text' },
     { key: 'year', label: 'Año', type: 'number' },
@@ -121,7 +120,7 @@
       <section class="bo-panel" data-panel="datos" hidden>
         <div class="fields">
           ${FIELDS.map((f) => `
-            <div class="field${['title', 'titleShort', 'address'].includes(f.key) ? ' full' : ''}">
+            <div class="field${['title', 'titleShort'].includes(f.key) ? ' full' : ''}">
               <label for="bo_${f.key}">${f.label}</label>
               ${f.type === 'select'
                 ? `<select id="bo_${f.key}" data-field="${f.key}">${f.options.map((o) => `<option${current[f.key] === o ? ' selected' : ''}>${E(o)}</option>`).join('')}</select>`
@@ -371,7 +370,7 @@
         ref, slug,
         titleShort: 'Nuevo inmueble ' + ref,
         title: 'Nuevo inmueble (completar)',
-        town: '', zone: '', address: '',
+        town: '', zone: '',
         type: 'Apartamento', status: 'En venta', strategy: 'Vivienda / segunda residencia',
         price: 0, pricePerM2: 0, built: 0, useful: 0, beds: 0, baths: 0,
         floor: '', lift: false, orientation: '', year: null,
@@ -575,7 +574,7 @@
 
   const catalogueFile = () => {
     const clean = props.map((p) => {
-      const { photos, ...rest } = p;
+      const { photos, address, ...rest } = p; // calle y numero del vendedor: nunca se publican
       return { ...rest, images: (p.images || []).map((src, i) => (store.isLocal(src) ? finalPath(p.slug, i) : src)) };
     });
     return `/* Villa's Properties — catálogo de inmuebles (fuente única).
@@ -677,7 +676,7 @@ if (window.VPStore) {
   const exportData = () => {
     /* Las rutas locales se traducen a la ruta definitiva del repositorio. */
     const clean = props.map((p) => {
-      const { photos, ...rest } = p;
+      const { photos, address, ...rest } = p; // calle y numero del vendedor: nunca se publican
       return { ...rest, images: (p.images || []).map((src, i) => (store.isLocal(src) ? finalPath(p.slug, i) : src)) };
     });
 
