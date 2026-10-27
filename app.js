@@ -79,7 +79,7 @@
     market:'—',yield:'—',psm:String(p.pricePerM2).replace(/\B(?=(\d{3})+(?!\d))/g,'.'),docs:'Ficha',
     area:p.built,beds:p.beds,baths:p.baths,parking:/garaje/i.test(p.features.join(' ')),
     pool:/piscina/i.test(p.equipment.join(' ')),terrace:(p.features.join(' ').match(/(?:Terraza|Balcón) de (\d+) m²/)||[])[1]||0,
-    images:p.images,url:`property.html?ref=${p.ref}`,ref:p.ref,town:p.town,psmRaw:p.pricePerM2
+    images:p.images,url:p.slug?`vivienda-${p.slug}.html`:`property.html?ref=${p.ref}`,ref:p.ref,town:p.town,psmRaw:p.pricePerM2
   }));
   const waMoreInfo=p=>`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(`Hola, me interesa "${p.name}" en ${p.zone} (${fmt(p.price)}). ¿Me podéis dar más información?`)}`;
   const waShare=p=>`https://wa.me/?text=${encodeURIComponent(`${p.name} · ${p.zone} · ${fmt(p.price)} — Villa's Properties\n${location.href}`)}`;

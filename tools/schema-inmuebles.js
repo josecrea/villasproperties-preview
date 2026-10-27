@@ -80,7 +80,7 @@ const ficha = (p) => {
        cliente veía la ficha del portal con su publicidad y sus competidores.
        Ahora apunta a nuestra ficha, que ya existe y responde 200.
        `p.url` se conserva en properties-data.js como referencia del anuncio. */
-    url: `${CANONICO}/property.html?ref=${p.ref}`,
+    url: p.slug ? `${CANONICO}/vivienda-${p.slug}.html` : `${CANONICO}/property.html?ref=${p.ref}`,
     /* Sin imagen, el envío por WhatsApp salía sin foto: una vivienda sin foto
        no se vende. Se usa la galería propia (assets/img/<slug>/), descargada,
        no enlazada al portal. */
