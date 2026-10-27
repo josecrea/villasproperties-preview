@@ -79,7 +79,16 @@
        va a reemplazar ese <nav>, así que se rescata ANTES de pisarlo y se
        reinserta después (en vez de hacer que cada página lo regenere). */
     const savedSwitch = header.querySelector('.lang-switch');
-    const switchHtml = savedSwitch ? savedSwitch.outerHTML : '';
+    /* Páginas españolas SIN selector estático (la mayoría): se ofrece igualmente
+       ES · NL · FR · IT, pero como esas páginas no tienen equivalente traducido
+       se enlaza a la PORTADA de cada idioma, sin rel="alternate" ni hreflang
+       (no son equivalentes). Los enlaces llevan lang y aria-label. */
+    const FALLBACK_SWITCH = `<div class="lang-switch" role="navigation" aria-label="Idioma / Taal / Langue / Lingua">`
+      + `<a href="${location.pathname}" lang="es" aria-label="Español" aria-current="true">ES</a>`
+      + `<a href="/nl/index.html" lang="nl" aria-label="Nederlands">NL</a>`
+      + `<a href="/fr/index.html" lang="fr" aria-label="Français">FR</a>`
+      + `<a href="/it/index.html" lang="it" aria-label="Italiano">IT</a></div>`;
+    const switchHtml = savedSwitch ? savedSwitch.outerHTML : (LANG === 'es' ? FALLBACK_SWITCH : '');
     header.innerHTML = `
       <div class="wrap headerin">
         ${brand}
