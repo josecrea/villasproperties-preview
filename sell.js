@@ -36,14 +36,17 @@
 
     /* Titular: lo que juega a favor del que vende. Nada de distancia anuncio/escritura
        (regla de Jose, 27-oct-2026: los datos enganchan, no asustan). */
-    $('sellRise').textContent = typeof town.var1a === 'number' ? `un ${pct(town.var1a).replace('+', '')}` : '—';
-    $('sellOps').textContent = town.catastroCV ? group(town.catastroCV) : '—';
+    const sube = typeof town.var1a === 'number' && town.var1a > 0;
+    const ventas = town.catastroCV ? `se vendieron <strong>${group(town.catastroCV)}</strong> viviendas en ${market.meta.dates?.catastro || 'el último año'}` : '';
+    $('sellLedeDatos').innerHTML = sube
+      ? `el metro cuadrado ha subido <strong>un ${pct(town.var1a).replace('+', '')}</strong> en el último año${ventas ? ` y ${ventas}` : ''}`
+      : (ventas || `el precio medio publicado es de <strong>${perM2(town.eurM2)}</strong>`);
 
     /* Panel de contexto */
     const rows = [
       ['Oferta publicada', perM2(town.eurM2), `idealista ${market.meta.dates?.idealista || ''}`],
       ['Operaciones al año', town.catastroCV ? group(town.catastroCV) : '—', `Catastro ${market.meta.dates?.catastro || ''}`],
-      ['Doce meses', `${town.var1a >= 0 ? '+' : ''}${String(town.var1a).replace('.', ',')}%`, town.var1a >= 0 ? 'sube' : 'baja'],
+      ...(sube ? [['Doce meses', pct(town.var1a), 'sube']] : []),
     ];
     $('sellTicker').innerHTML = `
       <div class="eye">${town.name} · hoy</div>
@@ -59,7 +62,12 @@
     $('figAnuncio').textContent = zones.length
       ? `${perM2(low)} – ${perM2(top)}`
       : perM2(town.eurM2);
-    $('figSube').textContent = typeof town.var1a === 'number' ? pct(town.var1a) : '—';
+    /* Si el precio no sube este mes, la tarjeta enseña el precio medio: nunca una bajada. */
+    $('figSubeTag').textContent = sube ? 'Revalorización' : 'Precio medio';
+    $('figSube').textContent = sube ? pct(town.var1a) : perM2(town.eurM2);
+    $('figSubeTxt').textContent = sube
+      ? 'Lo que ha subido el metro cuadrado en tu municipio en los últimos doce meses, según idealista.'
+      : 'El precio medio que se publica hoy en tu municipio, según idealista.';
     $('figDemanda').textContent = town.catastroCV ? `${group(town.catastroCV)} ventas` : '—';
 
     $('sellFigNote').innerHTML = `En ${town.name}: precio de anuncio por microzona, de ${zones.length ? zones[zones.length - 1].label : 'la media'} a ${zones.length ? zones[0].label : 'la media'}; revalorización de idealista y compraventas del Catastro (${market.meta.dates?.catastro || ''}). Datos de ${market.meta.updated || 's/f'}.`;

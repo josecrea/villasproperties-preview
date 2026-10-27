@@ -72,7 +72,8 @@ const MUNI = {
    hace de verdad. Se conservan y se les actualiza la cifra. */
 const FAQ_COMUN = (n, d) => [
   [`¿Es buen momento para vender en ${n}?`,
-   `El metro cuadrado en ${n} ha subido un ${pct(d.var1a)} en el último año (idealista, ${MERCADO.meta.dates.idealista}) y en ${MERCADO.meta.dates.catastro} se vendieron ${fmt(d.catastroCV)} viviendas en el municipio, según el Catastro. Hay demanda: la clave es salir al precio correcto desde el primer día.`],
+   (d.var1a > 0 ? `El metro cuadrado en ${n} ha subido un ${pct(d.var1a)} en el último año (idealista, ${MERCADO.meta.dates.idealista}) y en` : 'En')
+   + ` ${MERCADO.meta.dates.catastro} se vendieron ${fmt(d.catastroCV)} viviendas en ${n}, según el Catastro. Hay demanda: la clave es salir al precio correcto desde el primer día.`],
   [`¿Qué gastos tiene el vendedor en ${n}?`,
    `Habitualmente la plusvalía municipal (IIVTNU) del Ayuntamiento de ${n} salvo pacto en contrario, la cancelación registral de la hipoteca si la hubiera, el certificado energético y la ganancia patrimonial en el IRPF. Se calcula antes de firmar, no después.`],
   ['¿Puedo vender si tengo la vivienda alquilada?',
@@ -121,7 +122,9 @@ for (const [k, m] of Object.entries(MERCADO.municipios)) {
 
   /* La columna de 12 meses solo sale si hay dato por zona: el refresco automático
      de sep-2026 dejó de traer var1a por zona y salía una columna de guiones. */
-  const conVar = zonas.some((z) => z.var1a != null);
+  /* Landing de captación: la variación por zona NO se enseña (habría zonas en negativo,
+     p. ej. Las Chafiras −4,3 % en sep-2026). Solo el precio de cada zona. */
+  const conVar = false;
   const filasZonas = zonas.map((z) => `<tr><td>${E(z.label)}</td><td>${fmt(z.eurM2)} €/m²</td>`
     + (conVar ? `<td>${z.var1a != null ? (z.var1a > 0 ? '+' : '') + String(z.var1a).replace('.', ',') + ' %' : '—'}</td>` : '')
     + '</tr>').join('');
@@ -183,7 +186,7 @@ ${cabecera}
 
   <section class="pagehero"><div class="wrap">
     <div class="eye">${E(n.toUpperCase())} · ${E(cfg.comarca)}</div>
-    <h1>Vender casa en ${E(n)}:<br>un mercado que sube.</h1>
+    <h1>Vender casa en ${E(n)}:<br>${m.var1a > 0 ? 'un mercado que sube' : 'un mercado con comprador'}.</h1>
     <p class="pagelede">En ${E(n)} se piden <strong>${fmt(m.eurM2)} €/m²</strong> de media`
     + (m.var1a > 0 ? `, un <strong>${pct(m.var1a).replace('+', '')}</strong> más que hace un año` : '')
     + (m.catastroCV ? `, y se venden <strong>${fmt(m.catastroCV)} viviendas</strong> al año` : '')
@@ -192,7 +195,7 @@ ${cabecera}
 
   <section class="section tight"><div class="wrap">
     <div class="head" data-reveal><div class="eye">01 · ${E(n)} en cifras</div>
-    <div><h2>Un mercado que sube<br>y que compra.</h2></div></div>
+    <div><h2>${m.var1a > 0 ? 'Un mercado que sube<br>y que compra.' : 'Un mercado<br>que compra.'}</h2></div></div>
     <div class="bankcifras">
       <div><strong>${fmt(m.eurM2)} €/m²</strong><small>precio medio · idealista ${E(MERCADO.meta.dates.idealista)}</small></div>
       ${m.var1a > 0 ? `<div><strong>${pct(m.var1a)}</strong><small>en los últimos doce meses · idealista</small></div>` : ''}

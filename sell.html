@@ -40,14 +40,13 @@
     <div class="sell-hero-grid">
       <div class="sell-hero-copy">
         <div class="eye">Vender · propietarios</div>
-        <h1>Tu zona sube.<br>Hay <em>comprador</em>.</h1>
+        <h1>Tu casa tiene<br><em>comprador</em>.</h1>
         <p class="sell-lede">
           En <span class="sell-town-pick">
             <span class="sell-town-label" id="sellTownLabel" aria-hidden="true">—</span>
             <select id="sellTown" aria-label="Elige tu municipio"></select>
-          </span> el metro cuadrado ha subido <strong id="sellRise">—</strong> en el último año
-          y se vendieron <strong id="sellOps">—</strong> viviendas. La demanda está ahí: la
-          clave es salir al precio correcto, con los números delante.
+          </span> <span id="sellLedeDatos">se venden cada año cientos de viviendas</span>. La demanda
+          está ahí: la clave es salir al precio correcto, con los números delante.
         </p>
         <div class="sell-actions">
           <a class="btn green" href="valuation.html">Valorar mi vivienda ↗</a>
@@ -96,9 +95,9 @@
         <p>El rango al que hoy se publica una vivienda como la tuya en tu microzona, ajustado por tipología, estado y extras con demanda real.</p>
       </article>
       <article class="sell-figure is-key" data-stagger>
-        <span class="sell-figure-tag">Revalorización</span>
+        <span class="sell-figure-tag" id="figSubeTag">Revalorización</span>
         <strong id="figSube">—</strong>
-        <p>Lo que ha subido el metro cuadrado en tu municipio en los últimos doce meses, según idealista. Vendes en un mercado que sube.</p>
+        <p id="figSubeTxt">Lo que ha subido el metro cuadrado en tu municipio en los últimos doce meses, según idealista.</p>
       </article>
       <article class="sell-figure" data-stagger>
         <span class="sell-figure-tag">Demanda</span>
