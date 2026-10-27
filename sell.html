@@ -34,20 +34,19 @@
 <header class="header solid"></header>
 
 <main id="contenido">
-<!-- 01 · Apertura: el dato incómodo, no un eslogan -->
+<!-- 01 · Apertura: el dato que juega a favor del que vende (regla de Jose, 27-oct-2026) -->
 <section class="sell-hero" data-header-theme="paper">
   <div class="wrap">
     <div class="sell-hero-grid">
       <div class="sell-hero-copy">
         <div class="eye">Vender · propietarios</div>
-        <h1>Lo que pides<br>no es lo que<br><em>se firma</em>.</h1>
+        <h1>Tu casa tiene<br><em>comprador</em>.</h1>
         <p class="sell-lede">
           En <span class="sell-town-pick">
             <span class="sell-town-label" id="sellTownLabel" aria-hidden="true">—</span>
             <select id="sellTown" aria-label="Elige tu municipio"></select>
-          </span> la escritura media queda <strong id="sellGap">—</strong> por debajo del precio
-          que se publica. Esa distancia es la conversación que vas a tener con el
-          comprador. Mejor tenerla con los números delante.
+          </span> <span id="sellLedeDatos">se venden cada año cientos de viviendas</span>. La demanda
+          está ahí: la clave es salir al precio correcto, con los números delante.
         </p>
         <div class="sell-actions">
           <a class="btn green" href="valuation.html">Valorar mi vivienda ↗</a>
@@ -70,7 +69,7 @@
       <div class="sell-split-num" aria-hidden="true">01</div>
       <div>
         <h2 class="sell-h2">Un anuncio caro no espera:<br>se gasta.</h2>
-        <p>El interés de una vivienda se concentra en sus primeras semanas de publicación. Si el precio de salida no encaja con lo que el mercado firma, ese interés se consume mirando y no ofertando, y la siguiente conversación ya no es sobre el precio: es sobre por qué lleva tanto tiempo publicada.</p>
+        <p>El interés de una vivienda se concentra en sus primeras semanas de publicación. Si el precio de salida no encaja con lo que el mercado paga, ese interés se consume mirando y no ofertando, y la siguiente conversación ya no es sobre el precio: es sobre por qué lleva tanto tiempo publicada.</p>
         <p>Por eso no empezamos por el cartel. Empezamos por las tres cifras que gobiernan la decisión.</p>
       </div>
     </div>
@@ -96,14 +95,14 @@
         <p>El rango al que hoy se publica una vivienda como la tuya en tu microzona, ajustado por tipología, estado y extras con demanda real.</p>
       </article>
       <article class="sell-figure is-key" data-stagger>
-        <span class="sell-figure-tag">Salida realista</span>
-        <strong id="figSalida">—</strong>
-        <p>Entre un 10% y un 15% por debajo del anuncio. Es la banda en la que una vivienda se mueve sin quemarse en el portal.</p>
+        <span class="sell-figure-tag" id="figSubeTag">Revalorización</span>
+        <strong id="figSube">—</strong>
+        <p id="figSubeTxt">Lo que ha subido el metro cuadrado en tu municipio en los últimos doce meses, según idealista.</p>
       </article>
       <article class="sell-figure" data-stagger>
-        <span class="sell-figure-tag">Escritura</span>
-        <strong id="figEscritura">—</strong>
-        <p>Lo que de verdad se firma ante notario en tu municipio, según lo escriturado. La referencia que manda al negociar.</p>
+        <span class="sell-figure-tag">Demanda</span>
+        <strong id="figDemanda">—</strong>
+        <p>Viviendas vendidas en tu municipio el último año, según el Catastro. Es la prueba de que hay comprador.</p>
       </article>
     </div>
     <p class="sell-note" id="sellFigNote">Cifras por metro cuadrado del municipio seleccionado.</p>
@@ -158,7 +157,7 @@
         <span class="sell-step-n">04</span>
         <div>
           <h3>Negociar</h3>
-          <p>Cada oferta se contrasta con la escritura real de la zona y con la solvencia del comprador. Arras redactadas con condiciones y plazos claros.</p>
+          <p>Cada oferta se contrasta con el mercado real de la zona y con la solvencia del comprador. Arras redactadas con condiciones y plazos claros.</p>
         </div>
       </li>
       <li>
@@ -199,7 +198,7 @@
 </section>
 
 <!-- 07 · Cierre -->
-<section class="section tight" data-reveal><div class="wrap"><div class="head" data-reveal><div class="eye">Por municipio</div><div><h2>Cada municipio<br>es un mercado.</h2><p class="muted">Lo que se pide y lo que se firma cambia mucho de un ayuntamiento a otro, y dentro del mismo municipio más todavía. Estas son las cifras de cada uno, zona a zona.</p></div></div><div class="actions" style="justify-content:flex-start;margin-top:20px;flex-wrap:wrap"><a class="btn" href="vender-casa-adeje.html">Adeje</a><a class="btn" href="vender-casa-arona.html">Arona</a><a class="btn" href="vender-casa-granadilla-de-abona.html">Granadilla de Abona</a><a class="btn" href="vender-casa-san-miguel-de-abona.html">San Miguel de Abona</a><a class="btn" href="vender-casa-guia-de-isora.html">Guía de Isora</a><a class="btn" href="vender-casa-santiago-del-teide.html">Santiago del Teide</a></div></div></section>
+<section class="section tight" data-reveal><div class="wrap"><div class="head" data-reveal><div class="eye">Por municipio</div><div><h2>Cada municipio<br>es un mercado.</h2><p class="muted">El precio cambia mucho de un ayuntamiento a otro, y dentro del mismo municipio más todavía. Estas son las cifras de cada uno, zona a zona.</p></div></div><div class="actions" style="justify-content:flex-start;margin-top:20px;flex-wrap:wrap"><a class="btn" href="vender-casa-adeje.html">Adeje</a><a class="btn" href="vender-casa-arona.html">Arona</a><a class="btn" href="vender-casa-granadilla-de-abona.html">Granadilla de Abona</a><a class="btn" href="vender-casa-san-miguel-de-abona.html">San Miguel de Abona</a><a class="btn" href="vender-casa-guia-de-isora.html">Guía de Isora</a><a class="btn" href="vender-casa-santiago-del-teide.html">Santiago del Teide</a></div></div></section>
 <section class="sell-cta" data-header-theme="green">
   <div class="wrap">
     <div class="eye">Valoración gratis · sin compromiso</div>
@@ -216,7 +215,7 @@
 <footer class="footer"></footer>
 <script src="vp-safe.js?v=202610121758" defer></script><script src="vp-lead.js?v=202610121758" defer></script><script src="vp-consent.js?v=202610121758" defer></script><script src="shell.js?v=202610121758" defer></script><script src="app.js?v=202610121758" defer></script><script src="social.js?v=202610121758" defer></script>
 <script src="market-data.js?v=202610121758" defer></script>
-<script src="sell.js?v=202610121758" defer></script>
+<script src="sell.js?v=202610271500" defer></script>
 <script src="motion.js?v=202610121758" defer></script>
 <script src="backoffice-auth.js?v=202610121758" defer></script>
 </body>

@@ -2,9 +2,9 @@
    La página se reescribe según el municipio del propietario: el argumento de
    venta no es un eslogan, son sus propios números. Todo sale de market-data.js.
 
-   Con diferencias extremas entre oferta y escritura (San Miguel, Santiago del
-   Teide, por encima del 35%) no se muestra el importe: ese hueco refleja mezcla
-   de producto y pocas operaciones, no lo que se paga por una vivienda. */
+   Es una página de captación: se enseña lo que juega a favor del que vende
+   (revalorización y demanda), nunca la distancia anuncio/escritura
+   (regla de Jose, 27-oct-2026). */
 (() => {
   'use strict';
 
@@ -13,8 +13,6 @@
   const select = document.getElementById('sellTown');
   if (!select || !Object.keys(TOWNS).length) return;
 
-  const GAP_MAX = 0.35;
-  const REALISTIC = [0.85, 0.9];
 
   const $ = (id) => document.getElementById(id);
   const perM2 = (v) => `${String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} €/m²`;
@@ -34,19 +32,21 @@
     /* El <select> nativo toma el ancho de su opción más larga y descuadraba la
        frase: se pinta el nombre como texto y el control va encima, invisible. */
     if (label) label.textContent = town.name;
-    const ratio = town.notaria && town.eurM2 ? town.notaria / town.eurM2 : null;
-    const gap = ratio ? (1 - ratio) * 100 : null;
-    const extreme = gap !== null && gap / 100 > GAP_MAX;
+      const pct = (v) => `${v > 0 ? '+' : ''}${String(v).replace('.', ',')}%`;
 
-    /* Titular */
-    $('sellGap').textContent = gap === null ? 'por debajo' : `un ${gap.toFixed(1).replace('.', ',')}%`;
+    /* Titular: lo que juega a favor del que vende. Nada de distancia anuncio/escritura
+       (regla de Jose, 27-oct-2026: los datos enganchan, no asustan). */
+    const sube = typeof town.var1a === 'number' && town.var1a > 0;
+    const ventas = town.catastroCV ? `se vendieron <strong>${group(town.catastroCV)}</strong> viviendas en ${market.meta.dates?.catastro || 'el último año'}` : '';
+    $('sellLedeDatos').innerHTML = sube
+      ? `el metro cuadrado ha subido <strong>un ${pct(town.var1a).replace('+', '')}</strong> en el último año${ventas ? ` y ${ventas}` : ''}`
+      : (ventas || `el precio medio publicado es de <strong>${perM2(town.eurM2)}</strong>`);
 
     /* Panel de contexto */
     const rows = [
       ['Oferta publicada', perM2(town.eurM2), `idealista ${market.meta.dates?.idealista || ''}`],
-      ['Escritura real', town.notaria ? perM2(town.notaria) : '—', 'precio escriturado'],
       ['Operaciones al año', town.catastroCV ? group(town.catastroCV) : '—', `Catastro ${market.meta.dates?.catastro || ''}`],
-      ['Doce meses', `${town.var1a >= 0 ? '+' : ''}${String(town.var1a).replace('.', ',')}%`, town.var1a >= 0 ? 'sube' : 'baja'],
+      ...(sube ? [['Doce meses', pct(town.var1a), 'sube']] : []),
     ];
     $('sellTicker').innerHTML = `
       <div class="eye">${town.name} · hoy</div>
@@ -62,12 +62,15 @@
     $('figAnuncio').textContent = zones.length
       ? `${perM2(low)} – ${perM2(top)}`
       : perM2(town.eurM2);
-    $('figSalida').textContent = `${perM2(town.eurM2 * REALISTIC[0])} – ${perM2(town.eurM2 * REALISTIC[1])}`;
-    $('figEscritura').textContent = town.notaria ? perM2(town.notaria) : '—';
+    /* Si el precio no sube este mes, la tarjeta enseña el precio medio: nunca una bajada. */
+    $('figSubeTag').textContent = sube ? 'Revalorización' : 'Precio medio';
+    $('figSube').textContent = sube ? pct(town.var1a) : perM2(town.eurM2);
+    $('figSubeTxt').textContent = sube
+      ? 'Lo que ha subido el metro cuadrado en tu municipio en los últimos doce meses, según idealista.'
+      : 'El precio medio que se publica hoy en tu municipio, según idealista.';
+    $('figDemanda').textContent = town.catastroCV ? `${group(town.catastroCV)} ventas` : '—';
 
-    $('sellFigNote').innerHTML = extreme
-      ? `En ${town.name} la distancia entre oferta y escritura supera el ${Math.round(gap)}%: una diferencia así refleja mezcla de producto y pocas operaciones, no lo que se paga por una vivienda como la tuya. Aquí el número se revisa caso a caso. Datos de ${market.meta.updated || 's/f'}.`
-      : `Precios por metro cuadrado en ${town.name}. El rango de anuncio recorre sus microzonas, de ${zones.length ? zones[zones.length - 1].label : 'la media'} a ${zones.length ? zones[0].label : 'la media'}. Datos de ${market.meta.updated || 's/f'}.`;
+    $('sellFigNote').innerHTML = `En ${town.name}: precio de anuncio por microzona, de ${zones.length ? zones[zones.length - 1].label : 'la media'} a ${zones.length ? zones[0].label : 'la media'}; revalorización de idealista y compraventas del Catastro (${market.meta.dates?.catastro || ''}). Datos de ${market.meta.updated || 's/f'}.`;
 
     /* Microzonas del municipio */
     $('sellZones').innerHTML = zones.length
