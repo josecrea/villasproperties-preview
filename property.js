@@ -53,11 +53,36 @@
   };
   const mk = marketRead();
 
-  const marketVerdict = (gap) => {
-    if (gap <= -12) return ['Por debajo de su zona', 'El €/m² publicado queda claramente por debajo de la referencia de la microzona.'];
-    if (gap <= -4) return ['Ajustado', 'El precio se sitúa algo por debajo de la referencia de la zona.'];
-    if (gap < 6) return ['En línea', 'El precio publicado está en línea con la referencia de la microzona.'];
-    return ['Por encima de su zona', 'El €/m² publicado supera la referencia de la microzona: hay que justificar la prima.'];
+  /* Estas fichas son NUESTRAS viviendas en venta: el bloque de mercado tiene que
+     ayudar a venderlas, no a desmontarlas (regla de Jose, 27-oct-2026). Solo se
+     compara con la zona cuando el precio queda POR DEBAJO; si no, se cuenta lo
+     que juega a favor: que la zona sube y que hay demanda. Nunca la escritura. */
+  const group = (v) => String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const pct = (v) => `${v >= 0 ? '+' : ''}${String(v).replace('.', ',')}%`;
+
+  const marketBlock = () => {
+    if (!mk) return '<p class="muted">Sin referencia de mercado para esta zona.</p>';
+    const { town, zone, reference, gap } = mk;
+    const zoneName = zone ? zone.label : town.name;
+    const rows = [];
+    let head;
+    if (gap <= -4) {
+      head = `<h3>${gap <= -12 ? 'Por debajo de su zona' : 'Precio ajustado'}</h3>
+              <div class="pgap is-under">${gap.toFixed(1).replace('.', ',')}%</div>
+              <p class="muted">El €/m² de esta vivienda queda por debajo de lo que se publica en ${E(zoneName)}.</p>`;
+      rows.push(['Este inmueble', perM2(property.pricePerM2)], [zoneName, perM2(reference)]);
+    } else if (typeof town.var1a === 'number' && town.var1a > 0) {
+      head = `<h3>Zona en alza</h3>
+              <div class="pgap is-under">${pct(town.var1a)}</div>
+              <p class="muted">Es lo que ha subido el metro cuadrado en ${E(town.name)} en los últimos doce meses, según idealista.</p>`;
+    } else {
+      head = `<h3>Mercado con demanda</h3>`;
+    }
+    if (typeof town.var1a === 'number' && town.var1a > 0 && gap <= -4) rows.push([`${town.name} · 12 meses`, pct(town.var1a)]);
+    if (town.catastroCV) rows.push([`${town.name} · ventas al año`, group(town.catastroCV)]);
+    return `${head}
+              ${rows.length ? `<div class="pmini">${rows.map(([k, v]) => `<div><span>${E(k)}</span><b>${v}</b></div>`).join('')}</div>` : ''}
+              <a class="eye plink" href="post-mapa-metro-cuadrado.html">Ver el mapa de precios ↗</a>`;
   };
 
   /* ---------- Galería ---------- */
@@ -274,18 +299,7 @@
         <aside class="pside">
           <div class="pcard-side">
             <div class="eye">Villa’s Intelligence</div>
-            ${mk ? `
-              <h3>${marketVerdict(mk.gap)[0]}</h3>
-              <div class="pgap ${mk.gap < 0 ? 'is-under' : 'is-over'}">${mk.gap >= 0 ? '+' : ''}${mk.gap.toFixed(1)}%</div>
-              <p class="muted">${marketVerdict(mk.gap)[1]}</p>
-              <div class="pmini">
-                <div><span>Este inmueble</span><b>${perM2(property.pricePerM2)}</b></div>
-                <div><span>${mk.zone ? mk.zone.label : mk.town.name}</span><b>${perM2(mk.reference)}</b></div>
-                <div><span>${mk.town.name} · escritura</span><b>${mk.town.notaria ? perM2(mk.town.notaria) : '—'}</b></div>
-                <div><span>${mk.town.name} · 12 meses</span><b>${mk.town.var1a >= 0 ? '+' : ''}${mk.town.var1a}%</b></div>
-              </div>
-              <a class="eye plink" href="post-mapa-metro-cuadrado.html">Ver el mapa de precios ↗</a>
-            ` : '<p class="muted">Sin referencia de mercado para esta zona.</p>'}
+            ${marketBlock()}
           </div>
 
           <div class="pcard-side pcta-side">
