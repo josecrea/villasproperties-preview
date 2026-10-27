@@ -12,6 +12,7 @@ window.VP_POSTS = [
     read: '5 min',
     accent: 'atlantic',
     figure: 'chart',
+    featured: true,
   },
   {
     slug: 'post-vender-casa-tenerife-sur.html',
@@ -130,7 +131,6 @@ window.VP_POSTS = [
     dek: 'De 7.469 €/m² en La Caleta a 2.123 € en el casco de San Miguel: tres veces y media de diferencia dentro de la misma comarca, y a veces del mismo municipio.',
     date: '2026-08-18',
     read: '6 min',
-    featured: true,
     accent: 'sand',
     figure: 'chart',
     bg: 'mapa',
