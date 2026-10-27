@@ -2846,3 +2846,21 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 .header[data-theme="hero"] .nav .advisor:hover,
 .header[data-theme="dark"] .nav .advisor:hover,
 .header[data-theme="green"] .nav .advisor:hover{--adv-fill:#fff;color:var(--ink-deep)}
+
+/* --- i18n language switch (atelier:villas-idiomas, isla nl/fr/it) --- */
+.lang-switch{display:flex;align-items:center;gap:4px;margin-left:12px;padding-left:12px;color:inherit;border-left:1px solid color-mix(in srgb,currentColor 35%,transparent)}
+.lang-switch a{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:inherit;opacity:.88;padding:5px 8px;border:1px solid transparent;border-radius:999px;text-decoration:none;transition:opacity .15s ease,background-color .15s ease}
+.lang-switch a:hover,.lang-switch a:focus-visible{opacity:1;background:color-mix(in srgb,currentColor 16%,transparent)}
+.lang-switch a[aria-current="true"]{opacity:1;color:var(--ink);background:var(--paper);border-color:var(--paper)}
+.header[data-theme="paper"] .lang-switch a[aria-current="true"],.header.solid .lang-switch a[aria-current="true"]{color:var(--paper);background:var(--ink);border-color:var(--ink)}
+.lang-switch a:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+/* movil: el selector ya no se sale de la pantalla; solo NL/FR/IT/ES (EN/DE siguen en el pie y en las URLs) */
+@media(max-width:560px){.headerin{height:auto;min-height:76px;flex-wrap:wrap;row-gap:2px;padding-top:8px}.headerin>.lang-switch{order:9;flex:0 0 100%;margin:0;padding:0 0 6px;border-left:0;justify-content:flex-end;gap:6px}.lang-switch a{padding:5px 9px;font-size:.72rem}.lang-switch a[hreflang="en"],.lang-switch a[hreflang="de"]{display:none}}
+/* franja de idiomas de la portada espanola y de buy.html */
+.langstrip{background:var(--ink-deep);color:var(--paper);font-size:.8rem;letter-spacing:.04em}
+.langstrip .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 18px;padding-block:9px}
+.langstrip a{color:var(--paper);font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--paper) 45%,transparent)}
+.langstrip a:hover,.langstrip a:focus-visible{text-decoration-color:currentColor}
+.langstrip a:focus-visible{outline:2px solid var(--paper);outline-offset:3px}
+.faqlist dt{font-weight:700;margin-top:22px;font-size:1.02rem}
+.faqlist dd{margin:6px 0 0;opacity:.85;line-height:1.6}
