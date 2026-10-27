@@ -8,7 +8,8 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SRC = (ROOT / "contact.html").read_text(encoding="utf-8")
+from comun import leer_fuente, traducir, reescribir_rutas
+SRC = leer_fuente("contact.html")
 
 BASE = "https://villasproperties.es/"
 MEMBERS = {
@@ -254,9 +255,7 @@ def build(lang: str) -> str:
         f'"item":"{BASE}{MEMBERS[lang]}"',
     )
     # title/meta/og/twitter strings + body strings
-    for es, trs in T.items():
-        if lang in trs:
-            html = html.replace(es, trs[lang])
+    html = traducir(html, T, lang)
     # internal links that stay in Spanish (outside the island): mark them.
     foreign_title = FOREIGN_TITLE[lang]
 
@@ -287,17 +286,7 @@ SKIP_PREFIXES = ("http://", "https://", "mailto:", "tel:", "#", "/", "data:")
 
 
 def fix_relative_paths(html: str) -> str:
-    """The generated file lives one directory deeper (nl/, fr/, it/, en/, de/),
-    so every relative href/src/action that still points at the site root
-    needs a '../' prefix. Absolute URLs, mailto:, tel:, '#' and '/'-rooted
-    paths (used by the selector on purpose) are left untouched."""
-    def repl(m):
-        attr, quote, val = m.group(1), m.group(2), m.group(3)
-        if val.startswith(SKIP_PREFIXES):
-            return m.group(0)
-        return f'{attr}={quote}../{val}{quote}'
-
-    return re.sub(r'(href|src|action)=(["\'])([^"\']+)\2', repl, html)
+    return reescribir_rutas(html)
 
 
 def patch_es() -> str:

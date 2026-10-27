@@ -14,7 +14,8 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SRC = (ROOT / "finance.html").read_text(encoding="utf-8")
+from comun import leer_fuente, traducir, reescribir_rutas
+SRC = leer_fuente("finance.html")
 BASE = "https://villasproperties.es/"
 
 MEMBERS = {
@@ -154,12 +155,7 @@ SKIP_PREFIXES = ("http://", "https://", "mailto:", "tel:", "#", "/", "data:")
 
 
 def fix_relative_paths(html: str) -> str:
-    def repl(m):
-        attr, quote, val = m.group(1), m.group(2), m.group(3)
-        if val.startswith(SKIP_PREFIXES):
-            return m.group(0)
-        return f'{attr}={quote}../{val}{quote}'
-    return re.sub(r'(href|src|action)=(["\'])([^"\']+)\2', repl, html)
+    return reescribir_rutas(html)
 
 
 def build(lang: str) -> str:
@@ -178,9 +174,7 @@ def build(lang: str) -> str:
         '"item":"https://villasproperties.es/finance.html"',
         f'"item":"{BASE}{MEMBERS[lang]}"',
     )
-    for es, trs in T.items():
-        if lang in trs:
-            html = html.replace(es, trs[lang])
+    html = traducir(html, T, lang)
 
     # WhatsApp pre-filled message, localized (URL-encoded like the original).
     from urllib.parse import quote
