@@ -393,7 +393,7 @@ fs.writeFileSync(path.join(ROOT, 'site.webmanifest'), JSON.stringify({
   icons: [{ src: 'assets/brand/logo-placeholder.webp', sizes: '512x512', type: 'image/webp', purpose: 'any' }],
 }, null, 2), 'utf8');
 
-console.log(`[seo] ${touched} páginas · robots.txt, sitemap.xml (${urls.split('<url>').length - 1} URL), llms.txt y site.webmanifest`);
+console.log(`[seo] ${touched} páginas · robots.txt, sitemap.xml (${(urls + urlsIdiomas).split("<url>").length - 1} URL), llms.txt y site.webmanifest`);
 console.log(`[seo] indexación: ${PUBLISH
   ? 'ABIERTA (index,follow) — revisa el canonical antes de dejarlo así'
   : 'BLOQUEADA (noindex + robots Disallow) — se abre con --index --si-publicar'}`);
