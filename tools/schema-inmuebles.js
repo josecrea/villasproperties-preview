@@ -57,7 +57,6 @@ const ficha = (p) => {
     floorSize: { '@type': 'QuantitativeValue', value: p.built, unitCode: 'MTK' },
     address: {
       '@type': 'PostalAddress',
-      streetAddress: p.address || undefined,
       addressLocality: p.town,
       addressRegion: 'Santa Cruz de Tenerife',
       addressCountry: 'ES',

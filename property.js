@@ -223,7 +223,7 @@
           <div>
             <div class="eye">${E(property.status)} · ${E(property.type)} · Ref. ${E(property.ref)}</div>
             <h1>${E(property.title)}</h1>
-            <p class="pplace">${E(property.address)} · ${E(property.zone)}, ${E(property.town)}</p>
+            <p class="pplace">${E(property.zone)}, ${E(property.town)}</p>
           </div>
           <div class="pprice">
             <strong>${euro(property.price)}</strong>
