@@ -10,9 +10,9 @@
 */
 window.VP_MARKET = {
   "meta": {
-    "updated": "2026-10-20",
+    "updated": "2026-10-27",
     "dates": {
-      "idealista": "jul 2026",
+      "idealista": "sep 2026",
       "fotocasa": "oct 2026",
       "realadvisor": "oct 2026",
       "catastro": "2025"
@@ -22,13 +22,13 @@ window.VP_MARKET = {
   "municipios": {
     "adeje": {
       "name": "Adeje",
-      "eurM2": 4756,
-      "var1a": 3.4,
+      "eurM2": 4763,
+      "var1a": 2,
       "piso": 5175,
       "casa": 5452,
       "fc": 4869,
       "ra": 5312,
-      "notaria": 4356,
+      "notaria": 4403,
       "catastro": 2545,
       "catastroCV": 1917,
       "zonas": [
@@ -60,7 +60,9 @@ window.VP_MARKET = {
         {
           "id": "costa-adeje",
           "label": "Costa Adeje",
-          "eurM2": 5309
+          "eurM2": 5263,
+          "mes": "sep 2026",
+          "var1a": 0.6
         },
         {
           "id": "fanabe-alto",
@@ -75,7 +77,9 @@ window.VP_MARKET = {
         {
           "id": "callao-salvaje",
           "label": "Playa Paraíso",
-          "eurM2": 4496
+          "eurM2": 4228,
+          "mes": "sep 2026",
+          "var1a": -1.9
         },
         {
           "id": "torviscas-centro-y-alto",
@@ -85,12 +89,16 @@ window.VP_MARKET = {
         {
           "id": "casco-adeje",
           "label": "Casco urbano de Adeje",
-          "eurM2": 3425
+          "eurM2": 3529,
+          "mes": "sep 2026",
+          "var1a": 9.6
         },
         {
           "id": "tijoco",
           "label": "Tijoco - La Quinta - Caucho",
-          "eurM2": 2722
+          "eurM2": 2872,
+          "mes": "sep 2026",
+          "var1a": 1.8
         },
         {
           "id": "armenime",
@@ -101,196 +109,241 @@ window.VP_MARKET = {
     },
     "arona": {
       "name": "Arona",
-      "eurM2": 4038,
-      "var1a": 2,
+      "eurM2": 4071,
+      "var1a": 2.4,
       "piso": 4227,
       "casa": 3404,
       "fc": 4266,
       "ra": 4140,
-      "notaria": 3094,
+      "notaria": 3108,
       "catastro": 2020,
       "catastroCV": 3441,
       "zonas": [
         {
-          "id": "las-americas",
-          "label": "Playa de las Américas",
-          "eurM2": 6085
-        },
-        {
-          "id": "los-cristianos",
-          "label": "Los Cristianos",
-          "eurM2": 4784
-        },
-        {
-          "id": "palm-mar",
-          "label": "Palm Mar",
-          "eurM2": 4057
-        },
-        {
-          "id": "costa-silencio",
-          "label": "Costa del Silencio-Las Galletas",
-          "eurM2": 3404
+          "id": "cabo-blanco",
+          "label": "Cabo Blanco",
+          "eurM2": 2692,
+          "mes": "sep 2026",
+          "var1a": 13.9
         },
         {
           "id": "chayofa",
           "label": "Chayofa",
-          "eurM2": 3109
+          "eurM2": 3197,
+          "mes": "sep 2026",
+          "var1a": -5.2
         },
         {
           "id": "cho-guaza",
           "label": "Cho-Guaza",
-          "eurM2": 2900
+          "eurM2": 2854,
+          "mes": "sep 2026",
+          "var1a": 5.2
+        },
+        {
+          "id": "costa-silencio",
+          "label": "Costa del Silencio-Las Galletas",
+          "eurM2": 3409,
+          "mes": "sep 2026",
+          "var1a": 3.4
+        },
+        {
+          "id": "el-fraile",
+          "label": "El Fraile",
+          "eurM2": 2556,
+          "mes": "sep 2026",
+          "var1a": 5
         },
         {
           "id": "las-rosas",
           "label": "Las Rosas",
-          "eurM2": 2821
+          "eurM2": 2974,
+          "mes": "sep 2026",
+          "var1a": 16.6
         },
         {
-          "id": "cabo-blanco",
-          "label": "Cabo Blanco",
-          "eurM2": 2744
+          "id": "los-cristianos",
+          "label": "Los Cristianos",
+          "eurM2": 4793,
+          "mes": "sep 2026",
+          "var1a": 1.9
+        },
+        {
+          "id": "palm-mar",
+          "label": "Palm Mar",
+          "eurM2": 4056,
+          "mes": "sep 2026",
+          "var1a": 6.2
+        },
+        {
+          "id": "las-americas",
+          "label": "Playa de las Américas",
+          "eurM2": 5905,
+          "mes": "sep 2026",
+          "var1a": -3
+        },
+        {
+          "id": "valle-san-lorenzo",
+          "label": "Valle San Lorenzo",
+          "eurM2": 2552,
+          "mes": "sep 2026",
+          "var1a": 6.6
         },
         {
           "id": "arona-pueblo",
           "label": "Arona Pueblo",
           "eurM2": 2600
-        },
-        {
-          "id": "el-fraile",
-          "label": "El Fraile",
-          "eurM2": 2535
-        },
-        {
-          "id": "valle-san-lorenzo",
-          "label": "Valle San Lorenzo",
-          "eurM2": 2441
         }
       ]
     },
     "granadilla": {
       "name": "Granadilla de Abona",
-      "eurM2": 3037,
-      "var1a": 2.1,
+      "eurM2": 3018,
+      "var1a": 2,
       "piso": 3003,
       "casa": 2572,
       "fc": 3270,
       "ra": 2810,
-      "notaria": 2318,
+      "notaria": 2380,
       "catastro": 1325,
       "catastroCV": 1299,
       "zonas": [
         {
           "id": "el-medano",
           "label": "El Médano",
-          "eurM2": 3858
-        },
-        {
-          "id": "los-abrigos",
-          "label": "Los Abrigos",
-          "eurM2": 3523
-        },
-        {
-          "id": "san-isidro",
-          "label": "San Isidro",
-          "eurM2": 2457
+          "eurM2": 4000,
+          "mes": "sep 2026",
+          "var1a": 3.3
         },
         {
           "id": "granadilla-casco",
           "label": "Granadilla casco",
-          "eurM2": 2099
+          "eurM2": 2152,
+          "mes": "sep 2026",
+          "var1a": 11.2
+        },
+        {
+          "id": "los-abrigos",
+          "label": "Los Abrigos",
+          "eurM2": 3381,
+          "mes": "sep 2026",
+          "var1a": -2.6
+        },
+        {
+          "id": "san-isidro",
+          "label": "San Isidro",
+          "eurM2": 2489,
+          "mes": "sep 2026",
+          "var1a": 11.4
         }
       ]
     },
     "san-miguel": {
       "name": "San Miguel de Abona",
-      "eurM2": 3241,
-      "var1a": 1.9,
+      "eurM2": 3191,
+      "var1a": 0,
       "piso": 3360,
       "casa": 3113,
       "fc": 3363,
       "ra": 3328,
-      "notaria": 1577,
+      "notaria": 1606,
       "catastro": 1400,
       "catastroCV": 796,
       "zonas": [
         {
           "id": "golf-del-sur",
           "label": "Golf del Sur-Amarilla Golf",
-          "eurM2": 3622
-        },
-        {
-          "id": "las-chafiras",
-          "label": "Las Chafiras",
-          "eurM2": 3018
+          "eurM2": 3681,
+          "mes": "sep 2026",
+          "var1a": 7.3
         },
         {
           "id": "guargacho",
           "label": "Guargacho",
-          "eurM2": 2637
+          "eurM2": 2494,
+          "mes": "sep 2026"
+        },
+        {
+          "id": "las-chafiras",
+          "label": "Las Chafiras",
+          "eurM2": 2813,
+          "mes": "sep 2026",
+          "var1a": -4.3
         },
         {
           "id": "san-miguel-casco",
           "label": "San Miguel de Abona pueblo",
-          "eurM2": 2123
+          "eurM2": 2154,
+          "mes": "sep 2026",
+          "var1a": 7.8
         }
       ]
     },
     "guia-isora": {
       "name": "Guía de Isora",
-      "eurM2": 4542,
-      "var1a": 5.3,
+      "eurM2": 4496,
+      "var1a": 0.9,
       "piso": 4510,
       "casa": 4182,
       "fc": 5142,
       "ra": 4319,
-      "notaria": 3821,
+      "notaria": 4006,
       "catastro": 1270,
       "catastroCV": 469,
       "zonas": [
         {
           "id": "abama",
           "label": "Abama",
-          "eurM2": 7101
+          "eurM2": 7106,
+          "mes": "sep 2026",
+          "var1a": -6.2
+        },
+        {
+          "id": "guia-casco",
+          "label": "Guía de Isora pueblo",
+          "eurM2": 3045,
+          "mes": "sep 2026",
+          "var1a": 8.1
         },
         {
           "id": "playa-san-juan",
           "label": "Playa San Juan",
-          "eurM2": 3850
+          "eurM2": 4059,
+          "mes": "sep 2026",
+          "var1a": 6.8
         },
         {
           "id": "alcala",
           "label": "Alcalá",
           "eurM2": 3846
-        },
-        {
-          "id": "guia-casco",
-          "label": "Guía de Isora pueblo",
-          "eurM2": 3158
         }
       ]
     },
     "santiago-teide": {
       "name": "Santiago del Teide",
-      "eurM2": 3774,
-      "var1a": 3.6,
+      "eurM2": 3720,
+      "var1a": -2,
       "piso": 4039,
       "casa": 3644,
       "fc": 4021,
       "ra": 3923,
-      "notaria": 1816,
+      "notaria": 1856,
       "catastro": 1950,
       "catastroCV": 630,
       "zonas": [
         {
           "id": "los-gigantes",
           "label": "Acantilados de Los Gigantes",
-          "eurM2": 4619
+          "eurM2": 4578,
+          "mes": "sep 2026",
+          "var1a": 0.3
         },
         {
           "id": "puerto-santiago",
           "label": "Puerto de Santiago",
-          "eurM2": 3729
+          "eurM2": 3667,
+          "mes": "sep 2026",
+          "var1a": 0.4
         },
         {
           "id": "tamaimo-arguayo",
