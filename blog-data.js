@@ -4,6 +4,17 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-newsletter-sur-de-tenerife-2026-11-01.html',
+    category: 'Mercado',
+    title: "Las Rosas sube un 16,6 % y el sur de Tenerife se mueve",
+    dek: "Arona sube un 2,4 % hasta 4.071 €/m² y Las Rosas lidera con un +16,6 %. Qué significa si vendes o si compras e inviertes en el sur.",
+    date: '2026-11-01',
+    read: '5 min',
+    accent: 'atlantic',
+    figure: 'chart',
+    featured: true,
+  },
+  {
     slug: 'post-newsletter-sur-de-tenerife-2026-10-27.html',
     category: 'Mercado',
     title: "Las Rosas sube un 16,6 %: el sur de Tenerife en cifras",
@@ -12,7 +23,6 @@ window.VP_POSTS = [
     read: '5 min',
     accent: 'atlantic',
     figure: 'chart',
-    featured: true,
   },
   {
     slug: 'post-vender-casa-tenerife-sur.html',
