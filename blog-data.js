@@ -4,6 +4,17 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-newsletter-sur-de-tenerife-2026-11-05.html',
+    category: 'Mercado',
+    title: "San Isidro sube un 11,4 % y la demanda extranjera marca máximos",
+    dek: "San Isidro lidera las subidas del sur de Tenerife (+11,4 %) y la demanda extranjera está en máximos. Qué significa si vendes, compras o inviertes.",
+    date: '2026-11-05',
+    read: '5 min',
+    accent: 'atlantic',
+    figure: 'chart',
+    featured: true,
+  },
+  {
     slug: 'post-newsletter-sur-de-tenerife-2026-10-27.html',
     category: 'Mercado',
     title: "Las Rosas sube un 16,6 %: el sur de Tenerife en cifras",
@@ -12,7 +23,6 @@ window.VP_POSTS = [
     read: '5 min',
     accent: 'atlantic',
     figure: 'chart',
-    featured: true,
   },
   {
     slug: 'post-vender-casa-tenerife-sur.html',
