@@ -212,6 +212,26 @@ const MARK_START = '<!-- seo:start -->';
 const MARK_END = '<!-- seo:end -->';
 
 const files = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
+
+/* ---------- idiomas (tools/i18n) ----------
+   Las traducciones viven en subcarpetas y este script no las reescribe. Pero las páginas
+   españolas que sí regenera (comprar-casa-*, vía build-landings-compra) perdían en cada
+   refresco su grupo hreflang, y Google ignora un grupo que no es recíproco. El grupo se
+   lee de las propias traducciones, que son las que saben a qué página española equivalen. */
+const LANG_DIRS = ['nl', 'fr', 'it', 'en', 'de'];
+const LANG_PRIORITY = '0.6';
+const HREFLANG_RE = /<link rel="alternate" hreflang="[^"]+" href="[^"]+">/g;
+const langFiles = LANG_DIRS
+  .filter((d) => fs.existsSync(path.join(ROOT, d)))
+  .flatMap((d) => fs.readdirSync(path.join(ROOT, d)).filter((f) => f.endsWith('.html')).sort().map((f) => `${d}/${f}`));
+const hreflangPorPagina = {};
+for (const f of langFiles) {
+  const tags = fs.readFileSync(path.join(ROOT, f), 'utf8').match(HREFLANG_RE) || [];
+  const es = tags.find((t) => t.includes('hreflang="es"'));
+  if (!es) continue;
+  const destino = es.match(/href="([^"]+)"/)[1].replace(BASE, '') || 'index.html';
+  if (!hreflangPorPagina[destino]) hreflangPorPagina[destino] = [...new Set(tags)];
+}
 let touched = 0;
 
 files.forEach((file) => {
@@ -254,7 +274,9 @@ files.forEach((file) => {
   html = html.replace(/\s*<link rel="canonical"[^>]*>/g, '');
   if (meta.title) html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`);
 
-  html = html.replace('</head>', `${block}\n</head>`);
+  const hreflangs = hreflangPorPagina[file] || [...new Set(html.match(HREFLANG_RE) || [])];
+  html = html.replace(new RegExp(`${HREFLANG_RE.source}\\n?`, 'g'), '');
+  html = html.replace('</head>', `${block}\n${hreflangs.length ? hreflangs.join('') + '\n' : ''}</head>`);
   fs.writeFileSync(filePath, html, 'utf8');
   touched += 1;
 });
@@ -288,8 +310,17 @@ const urls = files
     <lastmod>${TODAY}</lastmod>
     <priority>${(PAGES[f] || {}).priority || '0.5'}</priority>
   </url>`).join('\n');
+/* Páginas de idioma (tools/i18n). Viven en subcarpetas y este script no las reescribe,
+   pero si no entran aquí cada refresco las saca del sitemap. */
+const langUrls = langFiles
+  .filter((f) => !/<meta[^>]+name="robots"[^>]+noindex/i.test(fs.readFileSync(path.join(ROOT, f), 'utf8')))
+  .map((f) => `  <url>
+    <loc>${BASE}${f}</loc>
+    <lastmod>${TODAY}</lastmod>
+    <priority>${LANG_PRIORITY}</priority>
+  </url>`).join('\n');
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, 'utf8');
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}${langUrls ? '\n' + langUrls : ''}\n</urlset>\n`, 'utf8');
 
 /* ---------- llms.txt (GEO: qué somos y qué puede citarse) ---------- */
 fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Villa's Properties
