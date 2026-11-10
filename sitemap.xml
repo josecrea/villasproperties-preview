@@ -67,8 +67,38 @@
   </url>
   <url>
     <loc>https://villasproperties.es/contact.html</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-10-19</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/nl/contact.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/fr/contact.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/it/contact.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/nl/guia-comprador.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/fr/guia-comprador.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/it/guia-comprador.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://villasproperties.es/decision-lab.html</loc>
