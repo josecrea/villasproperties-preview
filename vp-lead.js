@@ -126,3 +126,167 @@ window.VPLead = (function () {
 
   return { enviar: enviar, repartirContacto: repartirContacto, EQUIPO: EQUIPO_VILLAS };
 })();
+
+/* ---------- el informe PDF, a cambio de un contacto ----------
+ *
+ * Cualquier enlace a `assets/informes/*.pdf` deja de descargar directamente:
+ * abre una ficha que pide un email o un WhatsApp y el permiso para mandar la
+ * newsletter. Con eso entra un lead en Odoo (mismo equipo, asunto «Informe
+ * PDF · …») y el botón de descarga aparece AL MOMENTO, en la misma ficha.
+ *
+ * Se entrega en el acto y no «te lo enviamos» porque desde una web estática
+ * no hay quién lo envíe: prometer un correo que depende de que alguien lo
+ * mande a mano es la forma de quedar mal con el primer contacto.
+ *
+ * Es una puerta blanda, a sabiendas: el PDF sigue en una URL pública y quien
+ * la tenga puede abrirla. Lo que se gana es que quien llega por la web —la
+ * inmensa mayoría— deja su contacto. Nada se guarda en el navegador: la
+ * política de privacidad promete que solo se guarda la decisión de cookies.
+ *
+ * El consentimiento NO va premarcado y se registra en el lead con el texto
+ * literal y la hora: es la prueba que pide el RGPD si alguien lo reclama.
+ */
+(function () {
+  'use strict';
+
+  var PATRON_INFORME = /\/assets\/informes\/[^?#]+\.pdf(?:[?#]|$)/i;
+  var MIN_DIGITOS_TEL = 9;
+  var TEXTO_PERMISO = 'Acepto que Villa\'s Properties (VILLVERG SL) me envíe '
+    + 'este informe y la newsletter quincenal del mercado del sur de Tenerife '
+    + 'por email o WhatsApp. Puedo darme de baja cuando quiera.';
+
+  var yaDejoContacto = false;   // solo en memoria: ver arriba
+
+  var esEmail = function (t) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(t); };
+  var esTelefono = function (t) {
+    return /^[+\d][\d\s().-]*$/.test(t) && t.replace(/\D/g, '').length >= MIN_DIGITOS_TEL;
+  };
+
+  var nombreInforme = function (href) {
+    var m = href.match(/informe-([^/]+?)\.pdf/i);
+    return m ? m[1].replace(/-/g, ' ') : 'informe';
+  };
+
+  var crearFicha = function (href) {
+    var capa = document.createElement('div');
+    capa.className = 'vp-informe';
+    capa.setAttribute('role', 'dialog');
+    capa.setAttribute('aria-modal', 'true');
+    capa.setAttribute('aria-labelledby', 'vpInfTitulo');
+    capa.innerHTML = ''
+      + '<form class="vp-informe__caja" novalidate>'
+      + '  <button type="button" class="vp-informe__cerrar" aria-label="Cerrar">×</button>'
+      + '  <p class="vp-informe__eye">Informe del mercado · PDF</p>'
+      + '  <h2 id="vpInfTitulo" class="vp-informe__titulo">Descárgalo gratis</h2>'
+      + '  <p class="vp-informe__texto">Déjanos tu email o tu WhatsApp y descárgalo ahora. '
+      + 'Cada quince días te llega el siguiente, con los datos nuevos de tu zona.</p>'
+      + '  <label class="vp-informe__campo">Email o WhatsApp'
+      + '    <input name="contacto" type="text" autocomplete="email" inputmode="email" required></label>'
+      + '  <label class="vp-informe__campo">Nombre <span>(opcional)</span>'
+      + '    <input name="nombre" type="text" autocomplete="name"></label>'
+      + '  <input name="vp_hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" class="vp-informe__hp">'
+      + '  <label class="vp-informe__permiso"><input name="permiso" type="checkbox"> '
+      + '    <span></span></label>'
+      + '  <p class="vp-informe__error" role="alert"></p>'
+      + '  <button type="submit" class="vp-informe__si">Quiero el informe</button>'
+      + '  <a class="vp-informe__si vp-informe__descarga" target="_blank" rel="noopener" hidden>Descargar el PDF</a>'
+      + '</form>';
+
+    /* El texto del permiso y el enlace van por DOM, no por innerHTML: el
+       primero se reutiliza tal cual como prueba en el lead. */
+    var span = capa.querySelector('.vp-informe__permiso span');
+    span.appendChild(document.createTextNode(TEXTO_PERMISO + ' '));
+    var priv = document.createElement('a');
+    priv.href = 'privacy.html';
+    priv.target = '_blank';
+    priv.textContent = 'Privacidad';
+    span.appendChild(priv);
+    capa.querySelector('.vp-informe__descarga').href = href;
+    return capa;
+  };
+
+  var abrir = function (href) {
+    var anterior = document.activeElement;
+    var capa = crearFicha(href);
+    var form = capa.querySelector('form');
+    var error = capa.querySelector('.vp-informe__error');
+    var contacto = form.elements.contacto;
+
+    var cerrar = function () {
+      capa.remove();
+      document.removeEventListener('keydown', alTeclear);
+      if (anterior && anterior.focus) anterior.focus();
+    };
+    var alTeclear = function (e) { if (e.key === 'Escape') cerrar(); };
+
+    capa.querySelector('.vp-informe__cerrar').addEventListener('click', cerrar);
+    capa.addEventListener('click', function (e) { if (e.target === capa) cerrar(); });
+    document.addEventListener('keydown', alTeclear);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var valor = contacto.value.trim();
+      if (!esEmail(valor) && !esTelefono(valor)) {
+        error.textContent = 'Escribe un email o un teléfono con prefijo, para poder mandarte el siguiente.';
+        contacto.focus();
+        return;
+      }
+      if (!form.elements.permiso.checked) {
+        error.textContent = 'Marca la casilla para que podamos enviártelo.';
+        form.elements.permiso.focus();
+        return;
+      }
+      error.textContent = '';
+
+      var c = window.VPLead.repartirContacto(valor);
+      var nombre = form.elements.nombre.value.trim();
+      window.VPLead.enviar({
+        asunto: 'Informe PDF · ' + nombreInforme(href),
+        nombre: nombre,
+        email: c.email,
+        telefono: c.telefono,
+        honeypot: form.elements.vp_hp.value,
+        descripcion: [
+          'Ha descargado el informe del mercado desde la web.',
+          '',
+          'Contacto: ' + valor + (c.email ? ' (email)' : ' (WhatsApp/teléfono)'),
+          nombre ? 'Nombre: ' + nombre : null,
+          'Informe: ' + href,
+          'Página: ' + location.href,
+          '',
+          'CONSENTIMIENTO (casilla marcada, no venía premarcada):',
+          '«' + TEXTO_PERMISO + '»',
+          'Fecha: ' + new Date().toISOString(),
+          '',
+          'Alta para la lista de la newsletter quincenal.',
+        ].filter(function (l) { return l !== null; }).join('\n'),
+      });
+
+      /* La descarga no espera a Odoo: la respuesta es opaca (no-cors) y,
+         si Odoo está caído, no vamos a castigar al visitante por ello. */
+      yaDejoContacto = true;
+      form.querySelector('button[type="submit"]').hidden = true;
+      Array.prototype.forEach.call(
+        form.querySelectorAll('.vp-informe__campo, .vp-informe__permiso, .vp-informe__error'),
+        function (el) { el.hidden = true; });
+      capa.querySelector('.vp-informe__titulo').textContent = 'Gracias, ya es tuyo';
+      capa.querySelector('.vp-informe__texto').textContent =
+        'El próximo te llega en quince días. Si quieres hablar de tu caso, contesta a ese mensaje.';
+      var descarga = capa.querySelector('.vp-informe__descarga');
+      descarga.hidden = false;
+      descarga.focus();
+    });
+
+    document.body.appendChild(capa);
+    contacto.focus();
+  };
+
+  document.addEventListener('click', function (e) {
+    if (yaDejoContacto || !window.VPLead) return;
+    var a = e.target && e.target.closest && e.target.closest('a[href]');
+    if (!a || a.classList.contains('vp-informe__descarga')) return;
+    if (!PATRON_INFORME.test(a.href)) return;
+    e.preventDefault();
+    abrir(a.href);
+  }, true);
+})();
