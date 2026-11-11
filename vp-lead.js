@@ -37,6 +37,87 @@ window.VPLead = (function () {
   var ENDPOINT = 'https://odoo.okservice.es/website/form/crm.lead';
   var EQUIPO_VILLAS = 11;
 
+  /* ---------- de dónde viene la visita ----------
+   * Cada enlace que se reparte fuera (grupos, LinkedIn, anuncios) lleva su
+   * marca `utm_source` / `utm_campaign`. Aquí se lee y se añade al lead, junto
+   * con el idioma de la página y la web de la que llega. Así se sabe qué canal
+   * y qué país traen contactos sin que nadie tenga que preguntarlo ni apuntarlo.
+   *
+   * No se guarda nada en el navegador (la política de privacidad lo promete):
+   * la marca viaja solo en la dirección, y se arrastra a los enlaces internos. */
+  var CLAVES_ORIGEN = ['utm_source', 'utm_medium', 'utm_campaign'];
+  var MAX_MARCA = 60;
+
+  var limpiarMarca = function (v) {
+    return String(v || '').slice(0, MAX_MARCA).replace(/[^\w .\-]/g, '').trim();
+  };
+
+  var leerOrigen = function (busqueda, idioma, referente, anfitrion) {
+    var p = new URLSearchParams(busqueda || '');
+    var marcas = {};
+    CLAVES_ORIGEN.forEach(function (k) {
+      var v = limpiarMarca(p.get(k));
+      if (v) marcas[k] = v;
+    });
+    var viene = '';
+    try {
+      var h = referente ? new URL(referente).host : '';
+      if (h && h !== anfitrion) viene = limpiarMarca(h);
+    } catch (e) { viene = ''; }
+    return { marcas: marcas, idioma: limpiarMarca(idioma).slice(0, 5), viene: viene };
+  };
+
+  var origenActual = function () {
+    return leerOrigen(location.search, document.documentElement.lang,
+      document.referrer, location.host);
+  };
+
+  var lineasOrigen = function (o) {
+    var m = o.marcas, lineas = [];
+    if (m.utm_source) lineas.push('Canal: ' + m.utm_source);
+    if (m.utm_campaign) lineas.push('Campaña: ' + m.utm_campaign);
+    if (m.utm_medium) lineas.push('Medio: ' + m.utm_medium);
+    if (o.idioma) lineas.push('Idioma de la página: ' + o.idioma);
+    if (o.viene) lineas.push('Llega desde: ' + o.viene);
+    return lineas.length ? ['', 'ORIGEN'].concat(lineas) : [];
+  };
+
+  var conOrigen = function (descripcion, o) {
+    var extra = lineasOrigen(o);
+    return extra.length ? [descripcion || ''].concat(extra).join('\n') : descripcion;
+  };
+
+  /* La marca en una frase corta, para el mensaje de WhatsApp. */
+  var refCorta = function (o) {
+    var m = o.marcas;
+    if (!m.utm_source) return '';
+    return 'Ref. ' + m.utm_source + (m.utm_campaign ? ' / ' + m.utm_campaign : '');
+  };
+
+  /* Arrastra la marca a un enlace interno; devuelve la dirección nueva o null. */
+  var enlaceConMarca = function (href, o, base) {
+    var m = o.marcas;
+    if (!m.utm_source) return null;
+    var u;
+    try { u = new URL(href, base); } catch (e) { return null; }
+    if (u.origin !== new URL(base).origin) return null;
+    if (/\.pdf$/i.test(u.pathname) || u.searchParams.get('utm_source')) return null;
+    CLAVES_ORIGEN.forEach(function (k) { if (m[k]) u.searchParams.set(k, m[k]); });
+    return u.toString();
+  };
+
+  /* Añade la referencia al texto del WhatsApp; devuelve la dirección o null. */
+  var whatsappConRef = function (href, o) {
+    var ref = refCorta(o);
+    if (!ref) return null;
+    var u;
+    try { u = new URL(href); } catch (e) { return null; }
+    var texto = u.searchParams.get('text') || '';
+    if (texto.indexOf(ref) !== -1) return null;
+    u.searchParams.set('text', (texto ? texto + '\n' : '') + '(' + ref + ')');
+    return u.toString();
+  };
+
   /* Los campos que Odoo acepta en crm.lead por esta vía. El resto de lo que
      recojamos va al cuerpo de la descripción, que es texto libre. */
   var enviar = function (datos) {
@@ -48,7 +129,8 @@ window.VPLead = (function () {
     if (datos.nombre) cuerpo.set('contact_name', datos.nombre);
     if (datos.email) cuerpo.set('email_from', datos.email);
     if (datos.telefono) cuerpo.set('phone', datos.telefono);
-    if (datos.descripcion) cuerpo.set('description', datos.descripcion);
+    var descripcion = conOrigen(datos.descripcion, origenActual());
+    if (descripcion) cuerpo.set('description', descripcion);
 
     return fetch(ENDPOINT, {
       method: 'POST',
@@ -84,7 +166,19 @@ window.VPLead = (function () {
    * vacíos es la forma más rápida de que nadie vuelva a mirarlo. */
   var yaAvisado = {};
 
+  /* Antes de que el clic navegue: la marca de origen pasa al enlace interno,
+     o al texto del WhatsApp, que es por donde llega casi todo el contacto. */
+  var marcarEnlace = function (e) {
+    var a = e.target && e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    var o = origenActual();
+    var esWhatsApp = /wa\.me|api\.whatsapp\.com/.test(a.href);
+    var nuevo = esWhatsApp ? whatsappConRef(a.href, o) : enlaceConMarca(a.href, o, location.href);
+    if (nuevo) a.href = nuevo;
+  };
+
   var vigilarWhatsApp = function () {
+    document.addEventListener('click', marcarEnlace, true);
     document.addEventListener('click', function (e) {
       var a = e.target && e.target.closest && e.target.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
       if (!a) return;
@@ -124,7 +218,11 @@ window.VPLead = (function () {
     document.addEventListener('DOMContentLoaded', vigilarWhatsApp);
   } else { vigilarWhatsApp(); }
 
-  return { enviar: enviar, repartirContacto: repartirContacto, EQUIPO: EQUIPO_VILLAS };
+  return {
+    enviar: enviar, repartirContacto: repartirContacto, EQUIPO: EQUIPO_VILLAS,
+    origen: { leer: leerOrigen, lineas: lineasOrigen, conOrigen: conOrigen,
+      enlaceConMarca: enlaceConMarca, whatsappConRef: whatsappConRef },
+  };
 })();
 
 /* ---------- el informe PDF, a cambio de un contacto ----------
