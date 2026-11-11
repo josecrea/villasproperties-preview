@@ -160,6 +160,14 @@ SKIP = {
 }
 
 
+VIVIENDAS = {
+    "de": ("immobilien.html", "Unsere Immobilien ansehen →"),
+    "nl": ("woningen.html", "Bekijk onze woningen →"),
+    "it": ("immobili.html", "Veda i nostri immobili →"),
+    "fr": ("biens.html", "Voir nos biens →"),
+}
+
+
 def hreflang_block():
     tags = [f'<link rel="alternate" hreflang="{l}" href="{BASE}{p}">' for l, p in MEMBERS.items()]
     return "".join(tags)  # no x-default: no ES equivalent exists for this new page
@@ -191,6 +199,10 @@ def build(lang):
         note=NOTE_NEW_TRANSLATION.get(lang, ""), faq=faq_html(lang),
         disclaimer=DISCLAIMER[lang], cta=WHATSAPP_CTA[lang],
     )
+    if lang in VIVIENDAS:
+        pagina, texto = VIVIENDAS[lang]
+        boton = f'{WHATSAPP_CTA[lang]}</a>'
+        html = html.replace(boton, boton + f' <a class="btn" href="{pagina}">{texto}</a>', 1)
     return html
 
 

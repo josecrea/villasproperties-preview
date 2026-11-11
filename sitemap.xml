@@ -271,6 +271,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://villasproperties.es/nl/woningen.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://villasproperties.es/nl/huis-kopen-adeje.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.6</priority>
@@ -321,6 +326,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://villasproperties.es/fr/biens.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://villasproperties.es/fr/index.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.6</priority>
@@ -354,6 +364,11 @@
     <loc>https://villasproperties.es/it/guia-comprador.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/it/immobili.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://villasproperties.es/it/index.html</loc>
@@ -409,6 +424,11 @@
     <loc>https://villasproperties.es/de/guia-comprador.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/de/immobilien.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://villasproperties.es/de/haus-kaufen-adeje.html</loc>
