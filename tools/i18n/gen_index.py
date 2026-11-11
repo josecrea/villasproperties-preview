@@ -32,6 +32,15 @@ FOREIGN_TITLE = {
 }
 OG_LOCALE = {"nl": "nl_NL", "fr": "fr_FR", "it": "it_IT", "en": "en_GB", "de": "de_DE"}
 
+# Página con las viviendas en el idioma del visitante (tools/i18n/gen_viviendas.py).
+VIVIENDAS = {
+    "de": ("immobilien.html", "Alle Objekte auf Deutsch →"),
+    "nl": ("woningen.html", "Alle woningen in het Nederlands →"),
+    "it": ("immobili.html", "Tutti gli immobili in italiano →"),
+    "fr": ("biens.html", "Tous les biens en français →"),
+}
+
+
 def url_for(lang):
     return BASE + (PATH_ES if lang == "es" else MEMBERS[lang])
 
@@ -467,7 +476,11 @@ def build(lang: str) -> str:
 
     # Mark the untranslated blocks explicitly as Spanish (per instruction: a
     # marked block beats a machine translation).
-    html = html.replace('<div class="propertygrid" id="propertyGrid">', '<div class="propertygrid" id="propertyGrid" lang="es">', 1)
+    aviso = ""
+    if lang in VIVIENDAS:
+        pagina, texto = VIVIENDAS[lang]
+        aviso = f'<p style="margin:0 0 28px"><a class="btn green" href="{pagina}">{texto}</a></p>'
+    html = html.replace('<div class="propertygrid" id="propertyGrid">', aviso + '<div class="propertygrid" id="propertyGrid" lang="es">', 1)
     html = html.replace('<div class="reviewstage">', '<div class="reviewstage" lang="es">', 1)
     html = html.replace('<div class="is-stage" data-stage>', '<div class="is-stage" data-stage lang="es">', 1)
     html = html.replace('<div class="tf-captions" aria-live="polite">', '<div class="tf-captions" aria-live="polite" lang="es">', 1)
