@@ -72,6 +72,12 @@ const pruebas = {
     assert.strictEqual(new URL(uno).searchParams.get('text'), 'Hallo\n(Ref. fb-grupo / de-s1)');
     assert.strictEqual(O.whatsappConRef(uno, o), null);
   },
+  'no confunde con WhatsApp una web ajena que lleve «wa.me» en la dirección': () => {
+    const o = O.leer('?utm_source=fb-grupo&utm_campaign=de-s1', 'de', '', 'h');
+    assert.strictEqual(O.whatsappConRef('https://kiwa.me/pagina', o), null);
+    assert.strictEqual(O.whatsappConRef('https://otra.com/?r=wa.me', o), null);
+    assert.ok(O.whatsappConRef('https://api.whatsapp.com/send?phone=34667384965', o));
+  },
   'WhatsApp sin texto previo y sin marca': () => {
     const o = O.leer('?utm_source=linkedin', 'de', '', 'h');
     assert.strictEqual(new URL(O.whatsappConRef('https://wa.me/34667384965', o)).searchParams.get('text'), '(Ref. linkedin)');

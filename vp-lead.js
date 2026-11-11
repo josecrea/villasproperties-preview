@@ -106,10 +106,17 @@ window.VPLead = (function () {
     return u.toString();
   };
 
+  /* WhatsApp de verdad: se mira el dominio, no si «wa.me» aparece en la dirección. */
+  var DOMINIOS_WHATSAPP = ['wa.me', 'api.whatsapp.com'];
+  var esWhatsApp = function (href) {
+    try { return DOMINIOS_WHATSAPP.indexOf(new URL(href).hostname) !== -1; }
+    catch (e) { return false; }
+  };
+
   /* Añade la referencia al texto del WhatsApp; devuelve la dirección o null. */
   var whatsappConRef = function (href, o) {
     var ref = refCorta(o);
-    if (!ref) return null;
+    if (!ref || !esWhatsApp(href)) return null;
     var u;
     try { u = new URL(href); } catch (e) { return null; }
     var texto = u.searchParams.get('text') || '';
@@ -172,8 +179,7 @@ window.VPLead = (function () {
     var a = e.target && e.target.closest && e.target.closest('a[href]');
     if (!a) return;
     var o = origenActual();
-    var esWhatsApp = /wa\.me|api\.whatsapp\.com/.test(a.href);
-    var nuevo = esWhatsApp ? whatsappConRef(a.href, o) : enlaceConMarca(a.href, o, location.href);
+    var nuevo = esWhatsApp(a.href) ? whatsappConRef(a.href, o) : enlaceConMarca(a.href, o, location.href);
     if (nuevo) a.href = nuevo;
   };
 
