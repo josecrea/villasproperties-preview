@@ -1,0 +1,366 @@
+<?xml version="1.0"	encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:annotation>
+		<xs:documentation>
+			Documento para el esquema de definición	del	formato	XML	de traspaso	de información de cartera de propiedades inmobiliarias.
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:element	name="carteraPropiedades">
+		<xs:annotation>
+			<xs:documentation>
+				Objecto	principal contenedor de	la información a traspasar.	Debe contener la fecha de creación del archivo XML,
+				junto con una lista	(opcional) de las propiedades a	traspasar. 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element	name="fecha" type="xs:dateTime"/>
+				<xs:element	ref="listaPropiedades" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element	name="listaPropiedades">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element	maxOccurs="unbounded" minOccurs="0"	ref="propiedad"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element	name="propiedad">
+		<xs:annotation>
+			<xs:documentation>
+				Objecto	principal para describir una propiedad.
+				La mayoría de los campos son opcionales	excepto: referencia, fecha,	tipoInmueble, tipoOferta, tipoOfertaExt, provincia,	localidad.
+				El último campo	en la definición es	una	lista opcional de imágenes.
+				También	tenemos	campos de tipo 'tipoDescripcion' para implementar campos de	tipo texto en distintos	idiomas.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="referencia" type="xs:string"/>
+				<xs:element name="fecha" type="xs:dateTime"/>
+
+				<xs:element name="tipoInmueble"	type="xs:string"/>
+				<xs:element name="tipoInmuebleExt" type="xs:string" minOccurs="0"/>
+				<xs:element name="tipoOferta" type="xs:string"/>
+				<xs:element name="tipoOfertaExt" type="xs:string" minOccurs="0"/>
+				<xs:element name="inversion" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="viviendaLujo"	type="xs:boolean" minOccurs="0"/>
+				<xs:element name="comentarioPrivado" type="xs:string" minOccurs="0"/>
+				<xs:element name="descripcionPrincipal"	type="tipoDescripcion"/>
+				<xs:element name="antiguedad" type="xs:integer" minOccurs="0"/>
+				<xs:element name="tipoConservacion"	type="xs:integer" minOccurs="0"/>
+				<xs:element name="amueblado" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="discapacitados" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="mascotas" type="xs:boolean" minOccurs="0"/>
+
+				<xs:element name="superficieUtil" type="tipoSuperficies" minOccurs="0"/>
+				<xs:element name="superficieConstruida"	type="tipoSuperficies" minOccurs="0"/>
+				<xs:element name="superficieTotal" type="tipoSuperficies" minOccurs="0"/>
+				<xs:element name="superficieTerrazas" type="tipoSuperficies" minOccurs="0"/>
+				<xs:element name="superficieSolarium" type="tipoSuperficies" minOccurs="0"/>
+				<xs:element name="tipoUnidades"	type="xs:integer" minOccurs="0"/>
+
+				<xs:element name="calificacionEnergetica" type="calificacion" minOccurs="0"/>
+				<xs:element name="consumoEnergetico" type="xs:decimal" minOccurs="0"/>
+
+				<xs:element name="precio" type="xs:positiveInteger"/>
+				<xs:element name="precioPorMes"	type="xs:positiveInteger" minOccurs="0"/>
+				<xs:element name="precioPorQuincena" type="xs:positiveInteger" minOccurs="0"/>
+				<xs:element name="precioPorSemana" type="xs:positiveInteger" minOccurs="0"/>
+				<xs:element name="precioPorFinde" type="xs:positiveInteger"	minOccurs="0"/>
+				<xs:element name="precioPorDia"	type="xs:positiveInteger" minOccurs="0"/>
+				<xs:element name="precioVenta" type="xs:positiveInteger" minOccurs="0"/>
+				<xs:element name="porcentajeCompra" type="xs:decimal" minOccurs="0"/>
+				<xs:element name="duracionContrato" type="xs:positiveInteger" minOccurs="0"/>
+				<xs:element name="subvencionado" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="gastosServiciosIncluidos" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="gastosComunidadIncluidos" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="indiceReferenciaPrecios" type="tipoIndiceReferenciaPrecios" minOccurs="0"/>
+				<xs:element name="ofertaBanco" type="xs:boolean" minOccurs="0"/>
+				
+				
+				
+				<xs:element name="codigoPostal"	type="tipoCodigoPostal"/>
+				<xs:element name="provincia" type="xs:normalizedString"/>
+				<xs:element name="localidad" type="xs:normalizedString"/>
+				<xs:element name="distrito"	type="xs:normalizedString" minOccurs="0"/>
+				<xs:element name="barrio" type="xs:normalizedString" minOccurs="0"/>
+				<xs:element name="zona"	type="tipoDescripcion" minOccurs="0"/>
+				<xs:element name="direccion" type="notEmptyString"/>
+				<xs:element name="mostrarDireccion" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="tipoArea"	type="xs:integer" minOccurs="0"/>
+				<xs:element name="tipoZona"	type="xs:integer" minOccurs="0"/>
+				<xs:element name="inGolf" type="xs:boolean"	minOccurs="0"/>
+				<xs:element name="montaña" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="tipoPlaya" type="xs:integer" minOccurs="0"/>
+				<xs:element name="geoLocalizacion"	type="notEmptyString"/>
+
+				<xs:element name="dormitorios"	type="xs:integer" minOccurs="0"/>
+				<xs:element name="baños" type="xs:integer" minOccurs="0"/>
+				<xs:element name="aseos" type="xs:integer" minOccurs="0"/>
+				<xs:element name="maxPersonas" type="xs:integer" minOccurs="0"/>
+				<xs:element name="plantas" type="xs:integer" minOccurs="0"/>
+				<xs:element name="trastero" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="armariosEmpotrados" type="xs:integer"	minOccurs="0"/>
+				<xs:element name="placasSolares" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="jardines" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="piscina" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="plazasGaraje"	type="xs:integer" minOccurs="0"/>
+				<xs:element name="tipoGaraje" type="xs:integer"	minOccurs="0"/>
+				<xs:element name="exterior" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="terrazas"	type="xs:boolean" minOccurs="0"/>
+				<xs:element name="chimenea" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="despachos" type="xs:integer" minOccurs="0"/>
+				<xs:element name="escaparates"	type="xs:integer" minOccurs="0"/>
+				<xs:element name="edificioOficinas"	type="xs:boolean" minOccurs="0"/>
+				<xs:element name="diafano"	type="xs:boolean" minOccurs="0"/>
+				<xs:element name="tipoOrientacion" type="xs:integer" minOccurs="0"/>
+				<xs:element name="areasComunes"	type="tipoDescripcion" minOccurs="0"/>
+				<xs:element name="vistas" type="tipoDescripcion" minOccurs="0"/>
+				<xs:element name="registroTurismo" type="xs:string" minOccurs="0"/>
+				
+				<xs:element name="tipoCalefaccion"	type="xs:integer" minOccurs="0"/>
+				<xs:element name="tipoAireAcondicionado" type="xs:integer" minOccurs="0"/>
+				<xs:element name="tipoAguaCaliente" type="xs:integer" minOccurs="0"/>
+				<xs:element name="cocinaAmueblada" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="electrodomesticos" type="xs:boolean"	minOccurs="0"/>
+				<xs:element name="antenaParabolica"	type="xs:boolean" minOccurs="0"/>
+				<xs:element name="tipoPorteria" type="xs:integer" minOccurs="0"/>
+				<xs:element name="comunidad" type="xs:integer" minOccurs="0"/>
+				<xs:element name="ascensor"	type="xs:boolean" minOccurs="0"/>
+				<xs:element name="instalacionesDeportivas" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="cierres"	type="xs:boolean" minOccurs="0"/>
+				<xs:element name="alarma" type="xs:boolean"	minOccurs="0"/>
+				<xs:element name="servicioVigilancia" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="zonaAparcamiento"	type="xs:boolean" minOccurs="0"/>
+				<xs:element name="zonaExposicion" type="xs:boolean"	minOccurs="0"/>
+				<xs:element name="agua" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="luz" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="telefono" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="internet" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="ultimoUso" type="tipoDescripcion"	minOccurs="0"/>
+				<xs:element name="posibleUso" type="tipoDescripcion" minOccurs="0"/>
+				<xs:element name="observacionesCaracteristicas"	type="tipoDescripcion" minOccurs="0"/>
+
+				<xs:element name="tipoSoleria" type="xs:integer" minOccurs="0"/>
+				<xs:element name="tipoCarpinteria" type="xs:integer" minOccurs="0"/>
+				<xs:element name="puertaBlindada" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="cerraduraSeguridad" type="xs:boolean"	minOccurs="0"/>
+				<xs:element name="tipoAcristalamiento"	type="xs:integer" minOccurs="0"/>
+				<xs:element name="tipoGas" type="xs:integer" minOccurs="0"/>
+				<xs:element name="observacionesCalidades" type="tipoDescripcion" minOccurs="0"/>
+
+				<xs:element name="viaPrincipal"	minOccurs="0" type="xs:string"/>
+				<xs:element name="distanciaViaPrincipal" type="xs:integer" minOccurs="0"/>
+				<xs:element name="minutosViaPrincipal" type="xs:integer" minOccurs="0"/>
+
+				<xs:element name="localidadCercana"	minOccurs="0" type="xs:string"/>
+				<xs:element name="distanciaLocalidadCercana" type="xs:integer" minOccurs="0"/>
+				<xs:element name="minutosLocalidadCercana" type="xs:integer" minOccurs="0"/>
+
+				<xs:element name="aeropuerto" minOccurs="0"	type="xs:string"/>
+				<xs:element name="distanciaAeropuerto" type="xs:integer" minOccurs="0"/>
+				<xs:element name="minutosAeropuerto" type="xs:integer" minOccurs="0"/>
+
+				<xs:element name="autobuses" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="metro" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="renfe" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="centrosComerciales" type="xs:boolean"	minOccurs="0"/>
+				<xs:element name="centrosEscolares"	type="xs:boolean" minOccurs="0"/>
+				<xs:element name="espaciosVerdes" type="xs:boolean"	minOccurs="0"/>
+				<xs:element name="centrosDeportivos" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="centrosCulturales" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="camposGolf" type="xs:boolean"	minOccurs="0"/>
+				<xs:element name="observacionesEntorno"	type="tipoDescripcion" minOccurs="0"/>
+
+				<xs:element ref="listaImagenes"	minOccurs="0"/>
+				<xs:element ref="listaVideos" minOccurs="0"/>
+				<xs:element ref="listaToursVirtuales" minOccurs="0"/>
+				
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element	name="listaImagenes">
+		<xs:annotation>
+			<xs:documentation>
+				Objecto	para implementar la	lista opcional de imágenes.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element	ref="imagen" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element	name="imagen">
+		<xs:annotation>
+			<xs:documentation>
+				Objecto	para implementar la	información	de una imagen. Para	nuestro	sistema, una imagen	no es ni más ni	menos que una URL de donde está	alojada	dicha imagen. Si el	sistema	puede proporcionar la misma	imagen en menor	tamaño y resolución	lo puede hacer con el campo	'miniatura'. Nuestro sistema elegirá una de	las	miniaturas proporcionadas entre	las	distintas imágenes de la lista de un propiedad.	Las	imágenes pueden	opcionalmente ir acompañadas de	un pequeño texto a modo	de comentario con el campo 'listaComentarios', estructura contenedora de elementos 'comentario'	que	engloban al	texto en sí, acompañador de	un campo que indica	el idioma de dicho texto (dentro de	la lista posible de	idiomas	de nuestros	sistemas).
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element	name="url" type="xs:anyURI"/>
+				<xs:element	name="comentarios"	type="tipoComentario" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element	name="listaVideos">
+		<xs:annotation>
+			<xs:documentation>
+				Objecto	para implementar la	lista opcional de vídeos.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element	ref="video"	minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element	name="video">
+		<xs:annotation>
+			<xs:documentation>
+				Objecto	para implementar la	información	de un vídeo. Para nuestro sistema, un vídeo	no es ni más ni	menos que una URL. Necesitamos también la imagen a mostraren los visores en	el lugar del vídeo.	Los	vídeos pueden opcionalmente	ir acompañadas de un pequeño texto a modo de comentario	con	el campo 'listaComentarios', estructura	contenedora	de elementos 'comentario' que engloban al texto	en sí, acompañador de un campo que indica el idioma	de dicho texto (dentro de la lista posible de idiomas de nuestros sistemas).
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element	name="url" type="xs:anyURI"/>
+				<xs:element	name="imagenPreview" type="xs:anyURI"/>
+				<xs:element	name="listaComentarios"	type="tipoComentario" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="listaToursVirtuales">
+		<xs:annotation>
+			<xs:documentation>
+				Objecto para implementar un conjunto de tours virtuales.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="tourVirtual" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType	name="tipoComentario" mixed="true">
+		<xs:annotation>
+			<xs:documentation>
+				El tipo	'tipoComentario' en	las	listas de comentarios de las estructuras para las imágenes y los vídeos. Es	un contenedor de varios	objectos 'comentario' compuestos por pares de campos para el texto en sí y para	el idioma en el	que	está expresado,	dentro de la lista posible de idiomas del sistema
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element	name="comentario" minOccurs="0"	maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element	name="idioma" type="tipoIdioma"/>
+						<xs:element	name="texto" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType	name="tipoDescripcion" mixed="true">
+		<xs:annotation>
+			<xs:documentation>
+				El tipo	'tipoDescripcion' es utilizado en diversos campos de la	estructura 'propiedad' que describe	a cada uno de los inmuebles	a traspasar. Los campos	que	contienen textos en	distintas versiones	o contenidos según el idioma (susceptibles de estar	traducidos)	llevan este	tipo. No es	ni más ni menos	que	un contenedor de varios	objectos 'descripcion' compuestos por pares	de campos para el texto	en sí y	para el	idioma en el que está expresado, dentro	de la lista	posible	de idiomas del sistema
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element	name="descripcion" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element	name="idioma" type="tipoIdioma"/>
+						<xs:element	name="texto" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="tipoIdioma">
+		<xs:annotation>
+			<xs:documentation>
+				Tipo para las cadenas de idiomas, compuestas por 2 caracteres.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction	base="xs:string">
+			<xs:enumeration	value="es"/>
+			<xs:enumeration	value="en"/>
+			<xs:enumeration	value="de"/>
+			<xs:enumeration	value="fr"/>
+			<xs:enumeration	value="it"/>
+			<xs:enumeration	value="fi"/>
+			<xs:enumeration	value="ru"/>
+			<xs:enumeration	value="nl"/>
+			<xs:enumeration	value="sv"/>
+			<xs:enumeration	value="da"/>
+			<xs:enumeration	value="ar"/>
+			<xs:enumeration	value="zh"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="tipoSuperficies">
+		<xs:annotation>
+			<xs:documentation>
+				Tipo para las cantidades de	superficies, admitimos 2 decimales.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction	base="xs:decimal">
+			<xs:fractionDigits value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="tipoIndiceReferenciaPrecios">
+		<xs:annotation>
+			<xs:documentation>
+				Tipo para implementar los índices de referencia de precios.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction	base="xs:decimal">
+			<xs:fractionDigits value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="tipoCodigoPostal">
+		<xs:restriction base="xs:positiveInteger">
+			<xs:pattern value="[0-9]{1,5}"></xs:pattern>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="notEmptyString">
+		<xs:annotation>
+			<xs:documentation>
+				Campos obligatorios obligatorios de tipo string y que no se deben dejar vacíos.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:minLength value="1"></xs:minLength>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="calificacion">
+		<xs:annotation>
+			<xs:documentation>
+				Tipo para la calificación energética, una letra de la A a la G
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-gA-G]" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	
+</xs:schema>
