@@ -157,7 +157,7 @@ function construir({ fichas, traducciones, estadoPrevio = {}, ahora = sello(new 
   const ultima = Object.values(estado).map((x) => x.fecha).sort().pop() || ahora;
   const bloques = elegidas.map((f) => cuerpos[f.ref].replace(SIN_FECHA, estado[f.ref].fecha));
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<carteraPropiedades xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="${ESQUEMA}">\n<fecha>${ultima}</fecha>\n<listaPropiedades>\n${bloques.join('\n')}\n</listaPropiedades>\n</carteraPropiedades>\n`;
-  return { xml, estado, referencias: elegidas.map((f) => f.ref) };
+  return { xml, estado, referencias: Array.from(elegidas, (f) => f.ref) };
 }
 
 function main() {

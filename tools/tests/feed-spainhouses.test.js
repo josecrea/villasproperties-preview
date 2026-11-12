@@ -14,7 +14,8 @@ const base = () => g.construir({ fichas, traducciones, ahora: AHORA });
 
 const pruebas = {
   'entran las viviendas con textos y fotos, y ninguna más': () => {
-    assert.deepStrictEqual(base().referencias.slice().sort(), Object.keys(traducciones).sort());
+    // Array.from: las fichas vienen de otro contexto de ejecución y su Array no es el de aquí.
+    assert.deepStrictEqual(Array.from(base().referencias).sort(), Object.keys(traducciones).sort());
   },
   'el fichero valida contra el esquema oficial del portal': () => {
     const tmp = path.join(require('os').tmpdir(), `feed-sh-${process.pid}.xml`);
