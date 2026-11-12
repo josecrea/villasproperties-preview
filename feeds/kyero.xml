@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <kyero>
+    <feed_version>3</feed_version>
+  </kyero>
+  <property>
+    <id>14541</id>
+    <date>2026-11-12 01:08:30</date>
+    <ref>14541</ref>
+    <price>299000</price>
+    <currency>EUR</currency>
+    <price_freq>sale</price_freq>
+    <type>penthouse</type>
+    <town>San Miguel de Abona</town>
+    <province>Santa Cruz de Tenerife</province>
+    <country>Spain</country>
+    <location>
+      <latitude>28.058</latitude>
+      <longitude>-16.6168</longitude>
+    </location>
+    <location_detail>Las Chafiras</location_detail>
+    <beds>3</beds>
+    <baths>2</baths>
+    <pool>1</pool>
+    <surface_area>
+      <built>93</built>
+    </surface_area>
+    <url>
+      <es>https://villasproperties.es/property.html?ref=14541</es>
+    </url>
+    <desc>
+      <es>Ático de 3 dormitorios y 2 baños en el residencial Biltmore Jardín de San Miguel, en Las Chafiras. Son 93 m² construidos —83 m² de vivienda según escritura más 10 m² de terraza privada— abiertos sobre la zona ajardinada y la piscina de la comunidad.&#13;&#13;La distribución es clara: salón-comedor con la cocina en línea y salida directa a la terraza, lavadero con ventana a fachada, dormitorio principal con armarios empotrados, un segundo dormitorio con dos camas y un tercero que hoy funciona como habitación de invitados. Los dos baños son completos, uno con bañera y otro con ducha. Las tres habitaciones son exteriores, con ventana.&#13;&#13;La vivienda está en segunda planta, es exterior y cuenta con aire acondicionado. Se entrega amueblada y lista para entrar a vivir, con la comunidad al corriente de pago.&#13;&#13;Las Chafiras es el nudo de servicios del sur de la isla: comercios, colegios, polígono y la autopista TF-1 a mano, con el aeropuerto de Tenerife Sur, Golf del Sur y las playas de El Médano a pocos minutos en coche.&#13;&#13;Y desde julio de 2026 cuenta con La Gran Manzana, el nuevo centro comercial de Las Chafiras junto a la TF-1, a unos 200 metros: 18.000 m² con supermercado, tiendas, restauración y cines, el primero de España diseñado para autoabastecerse de energía y agua. Y el golf, a unos 4 kilómetros.&#13;&#13;Las plazas de garaje se ofrecen aparte. Acompañamos la compra con estudio de financiación y con el estado real del inmueble, la comunidad y la documentación.</es>
+    </desc>
+    <features>
+      <feature>Aire acondicionado</feature>
+      <feature>Piscina comunitaria</feature>
+      <feature>Jardín comunitario</feature>
+      <feature>Armarios empotrados</feature>
+      <feature>Cocina equipada</feature>
+      <feature>Plazas de garaje disponibles aparte</feature>
+    </features>
+    <images>
+      <image id="1">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/01.jpg</url>
+      </image>
+      <image id="2">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/02.jpg</url>
+      </image>
+      <image id="3">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/03.jpg</url>
+      </image>
+      <image id="4">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/04.jpg</url>
+      </image>
+      <image id="5">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/05.jpg</url>
+      </image>
+      <image id="6">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/06.jpg</url>
+      </image>
+      <image id="7">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/07.jpg</url>
+      </image>
+      <image id="8">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/08.jpg</url>
+      </image>
+      <image id="9">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/09.jpg</url>
+      </image>
+      <image id="10">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/10.jpg</url>
+      </image>
+      <image id="11">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/11.jpg</url>
+      </image>
+      <image id="12">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/12.jpg</url>
+      </image>
+      <image id="13">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/13.jpg</url>
+      </image>
+      <image id="14">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/14.jpg</url>
+      </image>
+      <image id="15">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/15.jpg</url>
+      </image>
+      <image id="16">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/16.jpg</url>
+      </image>
+      <image id="17">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/17.jpg</url>
+      </image>
+      <image id="18">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/18.jpg</url>
+      </image>
+      <image id="19">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/19.jpg</url>
+      </image>
+      <image id="20">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/20.jpg</url>
+      </image>
+      <image id="21">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/21.jpg</url>
+      </image>
+      <image id="22">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/22.jpg</url>
+      </image>
+      <image id="23">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/23.jpg</url>
+      </image>
+      <image id="24">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/24.jpg</url>
+      </image>
+      <image id="25">
+        <url>https://villasproperties.es/feeds/img/las-chafiras-biltmore/25.jpg</url>
+      </image>
+    </images>
+    <email>info@villasproperties.es</email>
+    <whatsapp_number>0034667384965</whatsapp_number>
+    <contact_number>0034667384965</contact_number>
+  </property>
+</root>
