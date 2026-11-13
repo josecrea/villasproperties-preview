@@ -19,6 +19,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { TEXTOS, recortaDesc, esLanding, tituloLanding } = require('./seo-textos');
 
 const ROOT = path.join(__dirname, '..');
 /* 🔴 El dominio comercial, NO el de Pages: cada build reescribe canonical, og:url y
@@ -242,18 +243,28 @@ const esFicha = (f) => f.startsWith('vivienda-');
 files.filter((f) => !esFicha(f)).forEach((file) => {
   const filePath = path.join(ROOT, file);
   let html = fs.readFileSync(filePath, 'utf8');
-  const meta = PAGES[file] || {};
-  const title = meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`;
-  /* Una página que trae su propia descripción (informes, boletines: la escribe su
-     generador FUERA del bloque seo) la conserva. Sin esto, la primera pasada por
-     aquí se la cambiaba por la genérica y las 53 páginas decían lo mismo. */
+  /* TEXTOS (seo-textos.js) manda sobre PAGES. Si no hay descripción propia se conserva la que
+     escribió el generador de la página (og:description fuera del bloque seo) antes de caer en
+     la genérica: así las landings dejan de heredar la misma descripción las 15. */
+  const meta = { ...(PAGES[file] || {}), ...(TEXTOS[file] || {}) };
   const htmlSinBloque = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), '');
+  /* IDIOMAS (PR #5): los <link rel="alternate" hreflang> los escribe tools/i18n, no este script.
+     Se CONSERVAN: los que viven dentro del bloque se copian al nuevo bloque (si no, se borran
+     al reescribirlo) y los que viven fuera no se tocan. Sin #5 no hay ninguno y no cambia nada. */
+  const bloquePrevio = (html.match(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}`)) || [''])[0];
+  const hreflangPrevio = (bloquePrevio.match(/<link rel="alternate" hreflang="[^"]*"[^>]*>/g) || [])
+    .filter((t) => !htmlSinBloque.includes(t));
+  const ogPrevio = (htmlSinBloque.match(/<meta property="og:description" content="([^"]*)"/) || [, ''])[1]
+    .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  if (esLanding(file) && !meta.title) meta.title = tituloLanding(titleOf(html));
+  const title = meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`;
+  /* Orden: el texto escrito a mano en seo-textos.js manda; si no lo hay, la descripción
+     que la página ya traía FUERA del bloque (la escribe su propio generador: informes,
+     boletines); y solo al final la genérica. */
   const descPropia = (
-    htmlSinBloque.match(/<meta name="description" content="([^"]*)"/) ||
-    htmlSinBloque.match(/<meta property="og:description" content="([^"]*)"/) ||
-    [, '']
+    htmlSinBloque.match(/<meta name="description" content="([^"]*)"/) || [, ogPrevio]
   )[1].replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-  const desc = meta.desc || descPropia || GENERIC;
+  const desc = recortaDesc(meta.desc || descPropia || ogPrevio || GENERIC);
   const canonical = `${BASE}${file === 'index.html' ? '' : file}`;
   const image = `${BASE}assets/brand/venta-notaria.webp`;
   const noindex = !PUBLISH || meta.noindex;
@@ -281,16 +292,27 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
   ].join('\n');
 
   /* Fuera lo anterior: el bloque generado sustituye a las metas sueltas. */
-  html = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), '');
+  /* El bloque nuevo ocupa el sitio del viejo (no se recoloca al final del <head>). */
+  const HUECO = '<!--SEO-HUECO-->';
+  const tieneBloque = html.includes(MARK_START);
+  html = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), () => (tieneBloque ? `${HUECO}\n` : ''));
   html = html.replace(/\s*<meta name="description"[^>]*>/g, '');
   html = html.replace(/\s*<meta name="robots"[^>]*>/g, '');
   html = html.replace(/\s*<meta name="theme-color"[^>]*>/g, '');
   html = html.replace(/\s*<link rel="canonical"[^>]*>/g, '');
   if (meta.title) html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`);
+  /* og:title y twitter:title que escribió el generador (fuera del bloque) siguen al <title>. */
+  if (meta.title) html = html.replace(/(<meta (?:property="og:title"|name="twitter:title") content=")[^"]*(">)/g, `$1${esc(meta.title)}$2`);
 
-  const hreflangs = hreflangPorPagina[file] || [...new Set(html.match(HREFLANG_RE) || [])];
+  /* hreflang: manda la lista que calcula tools/i18n (hreflangPorPagina). Se recogen los que
+     hubiera sueltos, se borran todos y se reescriben junto al bloque. Esta es la versión que
+     corrige el refresco de precios rompiendo los idiomas (main), no la de esta rama. */
+  const hreflangs = hreflangPorPagina[file]
+    || [...new Set([...(html.match(HREFLANG_RE) || []), ...hreflangPrevio])];
   html = html.replace(new RegExp(`${HREFLANG_RE.source}\\n?`, 'g'), '');
-  html = html.replace('</head>', `${block}\n${hreflangs.length ? hreflangs.join('') + '\n' : ''}</head>`);
+  html = tieneBloque
+    ? html.replace(HUECO, () => `${block}\n${hreflangs.length ? hreflangs.join('') + '\n' : ''}`)
+    : html.replace('</head>', () => `${block}\n${hreflangs.length ? hreflangs.join('') + '\n' : ''}</head>`);
   fs.writeFileSync(filePath, html, 'utf8');
   touched += 1;
 });
@@ -318,7 +340,7 @@ ${PUBLISH ? `Sitemap: ${BASE}sitemap.xml` : '# Sitemap: se publicará al abrir l
 
 /* ---------- sitemap.xml ---------- */
 const urls = files
-  .filter((f) => !(PAGES[f] || {}).noindex && f !== '404.html'
+  .filter((f) => !(PAGES[f] || {}).noindex && !(TEXTOS[f] || {}).noindex && f !== '404.html'
     && !(esFicha(f) && /<meta name="robots" content="noindex/.test(fs.readFileSync(path.join(ROOT, f), 'utf8'))))
   .map((f) => `  <url>
     <loc>${BASE}${f === 'index.html' ? '' : f}</loc>
@@ -402,7 +424,7 @@ fs.writeFileSync(path.join(ROOT, 'site.webmanifest'), JSON.stringify({
   icons: [{ src: 'assets/brand/logo-placeholder.webp', sizes: '512x512', type: 'image/webp', purpose: 'any' }],
 }, null, 2), 'utf8');
 
-console.log(`[seo] ${touched} páginas · robots.txt, sitemap.xml (${urls.split('<url>').length - 1} URL), llms.txt y site.webmanifest`);
+console.log(`[seo] ${touched} páginas · robots.txt, sitemap.xml (${(urls + langUrls).split("<url>").length - 1} URL), llms.txt y site.webmanifest`);
 console.log(`[seo] indexación: ${PUBLISH
   ? 'ABIERTA (index,follow) — revisa el canonical antes de dejarlo así'
   : 'BLOQUEADA (noindex + robots Disallow) — se abre con --index --si-publicar'}`);
