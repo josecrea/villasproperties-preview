@@ -49,6 +49,7 @@
  *   node tools/creativos.js story wa           solo esos formatos
  *   node tools/creativos.js 111258127          solo esa referencia
  *   node tools/creativos.js --html             deja también el HTML (para retocar a mano)
+ *   node tools/creativos.js --lang=de          en alemán (también it, fr, nl) → creativos/de/
  */
 'use strict';
 
@@ -57,7 +58,7 @@ const path = require('path');
 const { chromium } = require('playwright');
 
 const RAIZ = path.join(__dirname, '..');
-const OUT = path.join(RAIZ, 'creativos');
+const OUT_BASE = path.join(RAIZ, 'creativos');
 const WEB = 'villasproperties.es';
 const TEL = '+34 667 384 965';
 const FORMATOS = { feed: [1080, 1080], story: [1080, 1920], wa: [1080, 1920] };
@@ -75,18 +76,34 @@ const soloRef = args.find((a) => !FORMATOS[a] && !a.startsWith('--'));
 const dejarHtml = args.includes('--html');
 const pedidos = args.filter((a) => FORMATOS[a]);
 const formatos = pedidos.length ? pedidos : Object.keys(FORMATOS);
-const props = todas.filter((p) => p.status === 'En venta' && (!soloRef || String(p.ref) === soloRef));
+/* Idioma (11-nov-2026): `--lang=de|it|fr|nl` pinta la misma plantilla con los rótulos y el
+ * copy de creativos-i18n.js y lo deja en creativos/<idioma>/. Sin la opción, español como siempre.
+ * En otro idioma solo salen las viviendas que tienen copy en ese idioma. */
+const LANG = ((args.find((a) => /^--lang=/.test(a)) || '').split('=')[1] || 'es').toLowerCase();
+const I18N = require('./creativos-i18n.js');
+if (!I18N.L[LANG]) { console.error(`  Idioma no soportado: ${LANG}. Hay: ${Object.keys(I18N.L).join(', ')}`); process.exit(1); }
+const L = I18N.L[LANG];
+const ES = LANG === 'es';
+const OUT = ES ? OUT_BASE : path.join(OUT_BASE, LANG);
+const WEB_L = ES ? WEB : `${WEB}/${LANG}`;
+/* Fuera de España el teléfono va con prefijo: quien lo ve está en otro país. */
+const TEL_L = ES ? TEL.replace('+34 ', '') : TEL;
+const COPY_ES = require('./creativos-copy.js');
+const COPY = ES ? COPY_ES : Object.fromEntries(Object.entries(I18N.COPY[LANG] || {})
+  .map(([ref, c]) => [ref, { ...((COPY_ES[ref] || {}).foto ? { foto: COPY_ES[ref].foto } : {}), ...c }]));
+const estado = (p) => (ES ? p.status : L.enVenta);
+const props = todas.filter((p) => p.status === 'En venta' && (!soloRef || String(p.ref) === soloRef) && (ES || COPY[p.ref]));
 if (!props.length) { console.error('  No hay propiedades que encajen.'); process.exit(1); }
 
 /* ---------- helpers ---------- */
-const num = (n) => new Intl.NumberFormat('es-ES', { useGrouping: 'always' }).format(n);
-const precio = (n) => (Number.isFinite(n) && n > 0 ? num(n) + ' €' : 'Precio a consultar');
+const num = (n) => new Intl.NumberFormat(L.locale, { useGrouping: 'always' }).format(n);
 /* Una vivienda recién captada puede no tener precio cerrado, municipio ni coordenadas.
  * Pintar «0 €» o un hueco entre separadores no es neutral: parece un error de la
- * agencia. El hueco se dice con palabras y el resto de la pieza sale igual. */
+ * agencia. El hueco se dice con palabras —en el idioma de la pieza— y el resto sale igual. */
+const precio = (n) => (Number.isFinite(n) && n > 0 ? num(n) + ' €' : L.precioConsultar);
 const hayPrecio = (p) => Number.isFinite(p.price) && p.price > 0;
 // un estudio no tiene «0 dormitorios»: lo que tiene es ser un estudio
-const camas = (p) => (p.beds > 0 ? plural(p.beds, 'dormitorio', 'dormitorios') : (p.type || 'Estudio'));
+const camas = (p) => (p.beds > 0 ? plural(p.beds, L.dorm[0], L.dorm[1]) : (p.type || L.estudio));
 const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const b64 = (f) => `data:${f.endsWith('.png') ? 'image/png' : f.endsWith('.webp') ? 'image/webp' : 'font/woff2'};base64,${fs.readFileSync(f).toString('base64')}`;
 
@@ -115,7 +132,6 @@ const plural = (n, s, pl) => `${n} ${n === 1 ? s : pl}`;
 const foto = (p, i = 1) => path.join(RAIZ, 'assets/img', p.slug, String(i).padStart(2, '0') + '.webp');
 
 /* Copy por vivienda. Los límites son los de la plantilla (ver creativos-copy.js). */
-const COPY = require('./creativos-copy.js');
 const avisos = []; // lo que no cuadra; se vuelca al final para que no pase desapercibido
 /* Qué foto abre el creativo. La 01 del catálogo no siempre es la que vende:
  * en el casco de Adeje es un muro en sombra y la terraza con el mar es la 02. */
@@ -139,7 +155,7 @@ const textos = (p) => {
   c.pruebas.filter((x) => x.length > LIMITES.prueba).forEach((x) => avisos.push(`${p.ref} prueba larga (${x.length}): «${x}»`));
   return { ...c, pruebas: c.pruebas.slice(0, 4) };
 };
-const CTA_WA = 'Pide visita por WhatsApp';
+const CTA_WA = L.ctaWa;
 /* Tamaño del titular según la línea MÁS LARGA. Un cuerpo fijo obliga a elegir
  * entre titulares pequeños o ganchos que se parten en tres líneas y se comen la
  * composición: esto lo resuelve por pieza. 0.44 es el ancho medio de carácter de
@@ -211,7 +227,7 @@ function htmlFeed(p) {
   const [W, H] = FORMATOS.feed;
   const e = energia(p);
   const t = textos(p);
-  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
+  return `<!doctype html><html lang="${LANG}"><head><meta charset="utf-8"><style>
 ${BASE(W, H)}
 body{color:var(--crema)}
 .foto{position:absolute;inset:0;background:url('${b64(fotoDe(p))}') center 45% / cover no-repeat;transform:scale(1.02)}
@@ -241,7 +257,7 @@ body{color:var(--crema)}
 .cta{margin-top:24px;padding-top:22px;border-top:1px solid rgba(230,189,106,.3);display:flex;justify-content:space-between;align-items:baseline;gap:30px;font-size:26px;letter-spacing:.1em;color:var(--crema);white-space:nowrap}.cta b{color:var(--oro);font-weight:600}.cta .ref{font-size:22px;letter-spacing:.1em;color:var(--crema-2)}.cta .ref i{font-style:normal;font-size:.72em;color:rgba(243,234,215,.5)}
 </style></head><body><div class="lienzo">
 <div class="foto"></div><div class="velo"></div><div class="grano"></div>
-<header class="cab"><div class="marca"><img src="${LOGO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div></div><div class="estado">${esc(p.status)}</div></header>
+<header class="cab"><div class="marca"><img src="${LOGO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">${L.sur}</div></div></div><div class="estado">${esc(estado(p))}</div></header>
 <div class="gancho"><div class="k">${esc(t.kicker)}</div><h1 class="g">${gancho(t.gancho)}</h1></div>
 <div class="sello">${mapa(p, { ancho: 172 })}</div>
 <section class="pie">
@@ -250,13 +266,13 @@ body{color:var(--crema)}
   <div class="precio"><b class="serif oro-texto">${esc(precio(p.price))}</b>${p.pricePerM2 ? `<span>${esc(num(p.pricePerM2))} €/m²</span>` : ''}</div>
   <div class="olas"></div>
   <div class="datos">
-    <div class="dato"><b class="serif">${p.built}<i>m²</i></b><span>construidos</span></div>
-    ${p.beds > 0 ? `<div class="dato"><b class="serif">${p.beds}</b><span>${p.beds === 1 ? 'dormitorio' : 'dormitorios'}</span></div>` : `<div class="dato"><b class="serif">${esc(p.type || 'Estudio')}</b><span>vivienda</span></div>`}
-    <div class="dato"><b class="serif">${p.baths}</b><span>${p.baths === 1 ? 'baño' : 'baños'}</span></div>
-    ${e ? `<div class="dato"><b class="serif">${e}</b><span>energía</span></div>` : ''}
+    <div class="dato"><b class="serif">${p.built}<i>m²</i></b><span>${L.construidos}</span></div>
+    ${p.beds > 0 ? `<div class="dato"><b class="serif">${p.beds}</b><span>${L.dorm[p.beds === 1 ? 0 : 1]}</span></div>` : `<div class="dato"><b class="serif">${esc(p.type || L.estudio)}</b><span>${L.vivienda}</span></div>`}
+    <div class="dato"><b class="serif">${p.baths}</b><span>${L.bano[p.baths === 1 ? 0 : 1]}</span></div>
+    ${e ? `<div class="dato"><b class="serif">${e}</b><span>${L.energia}</span></div>` : ''}
   </div>
   <ul class="rasgos">${t.pruebas.slice(0, 2).map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
-  <footer class="cta"><div>WhatsApp &nbsp;<b>${TEL.replace('+34 ', '')}</b></div><div class="ref">${WEB} &nbsp; <i>Ref. ${esc(p.ref)}</i></div></footer>
+  <footer class="cta"><div>WhatsApp &nbsp;<b>${TEL_L}</b></div><div class="ref">${WEB_L} &nbsp; <i>Ref. ${esc(p.ref)}</i></div></footer>
 </section>
 </div></body></html>`;
 }
@@ -269,8 +285,8 @@ body{color:var(--crema)}
 function htmlStory(p) {
   const [W, H] = FORMATOS.story;
   const t = textos(p);
-  const datos = [`${p.built} m²`, camas(p), plural(p.baths, 'baño', 'baños')].join('   ·   ');
-  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
+  const datos = [`${p.built} m²`, camas(p), plural(p.baths, L.bano[0], L.bano[1])].join('   ·   ');
+  return `<!doctype html><html lang="${LANG}"><head><meta charset="utf-8"><style>
 ${BASE(W, H)}
 body{color:var(--crema)}
 /* la foto ocupa todo; recorte alto para que respire con el precio abajo */
@@ -320,18 +336,18 @@ body{color:var(--crema)}
 .contacto .web span{font-size:21px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,234,215,.55);white-space:nowrap}
 </style></head><body><div class="lienzo">
 <div class="foto"></div><div class="velo"></div><div class="grano"></div>
-<div class="marca"><img src="${LOGO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div></div>
+<div class="marca"><img src="${LOGO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">${L.sur}</div></div></div>
 <section class="pie">
   <div class="cinta"><span>${Array(3).fill([zonaCorta(p), String(p.town || '').trim()].filter(Boolean).map(esc).join(' &nbsp;·&nbsp; ')).join(' &nbsp;·&nbsp; ')}</span></div>
-  <div class="fila"><span class="estado">${esc(p.status)}</span><span class="kicker">${esc(t.kicker)}</span></div>
+  <div class="fila"><span class="estado">${esc(estado(p))}</span><span class="kicker">${esc(t.kicker)}</span></div>
   <h1 class="gancho">${gancho(t.gancho)}</h1>
-  ${hayPrecio(p) ? `<div class="precio serif oro-texto">${esc(num(p.price))}<i>€</i></div>` : '<div class="precio serif precio-pendiente">Precio a consultar</div>'}
+  ${hayPrecio(p) ? `<div class="precio serif oro-texto">${esc(num(p.price))}<i>€</i></div>` : `<div class="precio serif precio-pendiente">${esc(L.precioConsultar)}</div>`}
   <div class="datos"><b>${esc(datos)}</b></div>
   <footer class="contacto">
     <div>
       <div class="q">${CTA_WA}</div>
-      <div class="tel serif oro-texto">${TEL.replace('+34 ', '')}</div>
-      <div class="web"><b>${WEB}</b><span>Ref. ${esc(p.ref)}</span></div>
+      <div class="tel serif oro-texto">${TEL_L}</div>
+      <div class="web"><b>${WEB_L}</b><span>Ref. ${esc(p.ref)}</span></div>
     </div>
     <div class="sello">${mapa(p, { ancho: 210 })}</div>
   </footer>
@@ -349,7 +365,7 @@ function htmlWa(p) {
   const [W, H] = FORMATOS.wa;
   const e = energia(p);
   const t = textos(p);
-  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
+  return `<!doctype html><html lang="${LANG}"><head><meta charset="utf-8"><style>
 ${BASE(W, H)}
 /* Pieza CLARA de extremo a extremo. Un estado de WhatsApp se ve sobre el fondo
  * oscuro de la aplicacion: una hoja de papel entera destaca mas que una pieza
@@ -404,8 +420,8 @@ html,body{background:var(--papel)}
 <div class="filete arr"></div><div class="filete aba"></div>
 <div class="hoja">
   <header class="cab">
-    <div class="marca"><img src="${LOGO_DISCO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div></div>
-    <div class="estado">${esc(p.status)}</div>
+    <div class="marca"><img src="${LOGO_DISCO}" alt=""><div><div class="n">Villa’s Properties</div><div class="s">${L.sur}</div></div></div>
+    <div class="estado">${esc(estado(p))}</div>
   </header>
   <figure class="foto"><div class="sello">${mapa(p, { ancho: 176, claro: true })}</div></figure>
   <section class="texto">
@@ -415,15 +431,15 @@ html,body{background:var(--papel)}
     <div class="precio"><b class="serif">${esc(precio(p.price))}</b>${p.pricePerM2 ? `<span>${esc(num(p.pricePerM2))} €/m²</span>` : ''}</div>
     <div class="olas"></div>
     <div class="datos">
-      <div class="dato"><b class="serif">${p.built}<i>m²</i></b><span>construidos</span></div>
-      ${p.beds > 0 ? `<div class="dato"><b class="serif">${p.beds}</b><span>${p.beds === 1 ? 'dormitorio' : 'dormitorios'}</span></div>` : `<div class="dato"><b class="serif">${esc(p.type || 'Estudio')}</b><span>vivienda</span></div>`}
-      <div class="dato"><b class="serif">${p.baths}</b><span>${p.baths === 1 ? 'baño' : 'baños'}</span></div>
-      ${e ? `<div class="dato"><b class="serif">${e}</b><span>energía</span></div>` : ''}
+      <div class="dato"><b class="serif">${p.built}<i>m²</i></b><span>${L.construidos}</span></div>
+      ${p.beds > 0 ? `<div class="dato"><b class="serif">${p.beds}</b><span>${L.dorm[p.beds === 1 ? 0 : 1]}</span></div>` : `<div class="dato"><b class="serif">${esc(p.type || L.estudio)}</b><span>${L.vivienda}</span></div>`}
+      <div class="dato"><b class="serif">${p.baths}</b><span>${L.bano[p.baths === 1 ? 0 : 1]}</span></div>
+      ${e ? `<div class="dato"><b class="serif">${e}</b><span>${L.energia}</span></div>` : ''}
     </div>
     <ul class="rasgos">${t.pruebas.slice(0, 3).map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
     <footer class="contacto">
-      <div class="q">¿Te la enseño?<small>Responde <b>VISITA</b> a este estado y te mando la ficha completa.</small></div>
-      <div class="via"><b>${WEB}<i>·</i>${TEL.replace('+34 ', '')}</b><span>Ref. ${esc(p.ref)}</span></div>
+      <div class="q">${L.waQ}<small>${L.waSmall}</small></div>
+      <div class="via"><b>${ES ? `${WEB}<i>·</i>` : ''}${TEL_L}</b><span>Ref. ${esc(p.ref)}</span></div>
     </footer>
   </section>
 </div>
@@ -446,8 +462,8 @@ function htmlMarca(cierre) {
   const desde = Math.min(...props.filter(hayPrecio).map((p) => p.price));
   const municipios = [...new Set(props.map((p) => p.town))].sort();
   const ultimo = municipios.pop();
-  const lista = municipios.length ? `${municipios.join(', ')} y ${ultimo}` : ultimo;
-  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
+  const lista = municipios.length ? `${municipios.join(', ')} ${L.y} ${ultimo}` : ultimo;
+  return `<!doctype html><html lang="${LANG}"><head><meta charset="utf-8"><style>
 ${BASE(W, H)}
 body{color:var(--crema)}
 .foto{position:absolute;inset:0;background:url('${b64(FONDO_MARCA)}') center 42% / cover no-repeat}
@@ -466,42 +482,42 @@ body{color:var(--crema)}
 .web{position:absolute;left:0;right:0;bottom:196px;text-align:center;font-size:36px;letter-spacing:.14em;color:var(--crema);font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--crema-2)}
 </style></head><body><div class="lienzo">
 <div class="foto"></div><div class="velo"></div><div class="grano"></div>
-<div class="marca"><img src="${LOGO}" alt=""><div class="n">Villa’s Properties</div><div class="s">Tenerife Sur</div></div>
+<div class="marca"><img src="${LOGO}" alt=""><div class="n">Villa’s Properties</div><div class="s">${L.sur}</div></div>
 <section class="pie">
 ${cierre
-    ? `<h1 class="titular">¿Cuál te enseño<br>primero?</h1>
-  <p class="sub">Dime la referencia o el pueblo y te mando la ficha completa.</p>
+    ? `<h1 class="titular">${L.cierreTit}</h1>
+  <p class="sub">${L.cierreSub}</p>
   <div class="olas"></div>
-  <div class="accion">Escríbeme<b>${TEL.replace('+34 ', '')}</b></div>`
-    : `<h1 class="titular">${props.length === 1 ? 'Una vivienda' : `${props.length} viviendas`}<br>en venta en el sur</h1>
-  <p class="sub">${lista}. Desde <b>${precio(desde)}</b>.</p>
+  <div class="accion">${L.escribeme}<b>${TEL_L}</b></div>`
+    : `<h1 class="titular">${L.nViviendas(props.length)}<br>${L.enVentaSur}</h1>
+  <p class="sub">${lista}. ${L.desde} <b>${precio(desde)}</b>.</p>
   <div class="olas"></div>
-  <div class="accion">Desliza para verlas</div>`}
+  <div class="accion">${L.desliza}</div>`}
 </section>
-<div class="web">${WEB}</div>
+<div class="web">${WEB_L}</div>
 </div></body></html>`;
 }
 
 /* ---------- copy de cada post ---------- */
 function copy(p) {
   const t = textos(p);
-  const datos = `${p.built} m² · ${camas(p)} · ${plural(p.baths, 'baño', 'baños')}`;
+  const datos = `${p.built} m² · ${camas(p)} · ${plural(p.baths, L.bano[0], L.bano[1])}`;
   return [
     `## ${llano(t.gancho)}`,
     `_${t.kicker} · ${precio(p.price)}_`, ``,
-    `**Post (Instagram / Facebook)**`, ``,
+    `**${L.copy.post}**`, ``,
     `${llano(t.gancho)}`, ``,
     `${t.cita}`, ``,
     ...(t.post ? [`${t.post}`, ``] : []),
     ...t.pruebas.map((x) => `— ${x}`), ``,
     `${datos} · ${precio(p.price)}${p.pricePerM2 ? ` (${num(p.pricePerM2)} €/m²)` : ''}`,
     `${lugar(p)} · Ref. ${p.ref}`, ``,
-    `Ficha completa y fotos → https://${WEB}/property.html?ref=${p.ref}`,
+    `${L.copy.ficha} → ${ES ? `https://${WEB}/property.html?ref=${p.ref}` : `https://${WEB}/${LANG}/`}`,
     `${CTA_WA} → ${TEL}`, ``,
-    `**Estado de WhatsApp (texto que acompaña a la imagen)**`, ``,
-    `${llano(t.gancho)} ${precio(p.price)}, ${lugar(p)}. Responde VISITA y te mando la ficha completa.`, ``,
+    `**${L.copy.wa}**`, ``,
+    `${llano(t.gancho)} ${precio(p.price)}, ${lugar(p)}. ${L.copy.waTexto}`, ``,
     `**Hashtags**`, ``,
-    [`#TenerifeSur`, p.town && `#${String(p.town).replace(/\s+/g, '')}`, p.zone && `#${String(p.zone).split('(')[0].replace(/[^\wáéíóúñ]/gi, '')}`, `#Inmobiliaria`, `#VillasProperties`, `#CompraVivienda`].filter(Boolean).join(' '), ``,
+    L.copy.hashtags(p), ``,
   ].join('\n');
 }
 
