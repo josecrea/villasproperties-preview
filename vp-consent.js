@@ -205,7 +205,9 @@
 
     var mas = document.createElement('a');
     mas.className = 'vp-consent__mas';
-    mas.href = 'privacy.html';
+    /* atelier:villas-idiomas: en nl/ fr/ it/ (en/ de/) la política de privacidad
+       vive en la raíz, un nivel más arriba. En español, idéntico a siempre. */
+    mas.href = (((document.documentElement.getAttribute('lang') || 'es').toLowerCase() !== 'es') ? '../' : '') + 'privacy.html';
     mas.textContent = 'Política de privacidad';
 
     acciones.appendChild(btnSi);
