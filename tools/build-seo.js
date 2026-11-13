@@ -310,8 +310,10 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
   const hreflangs = hreflangPorPagina[file]
     || [...new Set([...(html.match(HREFLANG_RE) || []), ...hreflangPrevio])];
   html = html.replace(new RegExp(`${HREFLANG_RE.source}\\n?`, 'g'), '');
+  /* El HUECO ya se quedó con el salto de línea que seguía al bloque viejo: si aquí se
+     añade otro, cada pasada deja una línea en blanco más. Debe ser idempotente. */
   html = tieneBloque
-    ? html.replace(HUECO, () => `${block}\n${hreflangs.length ? hreflangs.join('') + '\n' : ''}`)
+    ? html.replace(HUECO, () => `${block}${hreflangs.length ? '\n' + hreflangs.join('') : ''}`)
     : html.replace('</head>', () => `${block}\n${hreflangs.length ? hreflangs.join('') + '\n' : ''}</head>`);
   fs.writeFileSync(filePath, html, 'utf8');
   touched += 1;
