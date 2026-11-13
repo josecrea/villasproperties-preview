@@ -4,6 +4,27 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-newsletter-sur-de-tenerife-2026-11-05.html',
+    category: 'Mercado',
+    title: "San Isidro sube un 11,4 % y la demanda extranjera marca máximos",
+    dek: "San Isidro lidera las subidas del sur de Tenerife (+11,4 %) y la demanda extranjera está en máximos. Qué significa si vendes, compras o inviertes.",
+    date: '2026-11-05',
+    read: '5 min',
+    accent: 'atlantic',
+    figure: 'chart',
+    featured: true,
+  },
+  {
+    slug: 'post-newsletter-sur-de-tenerife-2026-10-27.html',
+    category: 'Mercado',
+    title: "Las Rosas sube un 16,6 %: el sur de Tenerife en cifras",
+    dek: "Las Rosas (Arona) lidera las subidas con un +16,6 % anual. Qué significa si vendes y si compras o inviertes en el sur de Tenerife.",
+    date: '2026-10-27',
+    read: '5 min',
+    accent: 'atlantic',
+    figure: 'chart',
+  },
+  {
     slug: 'post-segunda-residencia-costa-adeje.html',
     category: 'Guía',
     title: "Segunda residencia en Costa Adeje para compradores belgas, neerlandeses y alemanes: zonas, costes y trámites",
@@ -153,7 +174,6 @@ window.VP_POSTS = [
     dek: 'De 7.469 €/m² en La Caleta a 2.123 € en el casco de San Miguel: tres veces y media de diferencia dentro de la misma comarca, y a veces del mismo municipio.',
     date: '2026-08-18',
     read: '6 min',
-    featured: true,
     accent: 'sand',
     figure: 'chart',
     bg: 'mapa',
