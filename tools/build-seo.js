@@ -215,6 +215,26 @@ const MARK_START = '<!-- seo:start -->';
 const MARK_END = '<!-- seo:end -->';
 
 const files = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
+
+/* ---------- idiomas (tools/i18n) ----------
+   Las traducciones viven en subcarpetas y este script no las reescribe. Pero las páginas
+   españolas que sí regenera (comprar-casa-*, vía build-landings-compra) perdían en cada
+   refresco su grupo hreflang, y Google ignora un grupo que no es recíproco. El grupo se
+   lee de las propias traducciones, que son las que saben a qué página española equivalen. */
+const LANG_DIRS = ['nl', 'fr', 'it', 'en', 'de'];
+const LANG_PRIORITY = '0.6';
+const HREFLANG_RE = /<link rel="alternate" hreflang="[^"]+" href="[^"]+">/g;
+const langFiles = LANG_DIRS
+  .filter((d) => fs.existsSync(path.join(ROOT, d)))
+  .flatMap((d) => fs.readdirSync(path.join(ROOT, d)).filter((f) => f.endsWith('.html')).sort().map((f) => `${d}/${f}`));
+const hreflangPorPagina = {};
+for (const f of langFiles) {
+  const tags = fs.readFileSync(path.join(ROOT, f), 'utf8').match(HREFLANG_RE) || [];
+  const es = tags.find((t) => t.includes('hreflang="es"'));
+  if (!es) continue;
+  const destino = es.match(/href="([^"]+)"/)[1].replace(BASE, '') || 'index.html';
+  if (!hreflangPorPagina[destino]) hreflangPorPagina[destino] = [...new Set(tags)];
+}
 let touched = 0;
 
 /* vivienda-*.html las escribe tools/build-fichas.js con su propio <head> (title, canonical,
@@ -238,7 +258,13 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   if (esLanding(file) && !meta.title) meta.title = tituloLanding(titleOf(html));
   const title = meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`;
-  const desc = recortaDesc(meta.desc || ogPrevio || GENERIC);
+  /* Orden: el texto escrito a mano en seo-textos.js manda; si no lo hay, la descripción
+     que la página ya traía FUERA del bloque (la escribe su propio generador: informes,
+     boletines); y solo al final la genérica. */
+  const descPropia = (
+    htmlSinBloque.match(/<meta name="description" content="([^"]*)"/) || [, ogPrevio]
+  )[1].replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  const desc = recortaDesc(meta.desc || descPropia || ogPrevio || GENERIC);
   const canonical = `${BASE}${file === 'index.html' ? '' : file}`;
   const image = `${BASE}assets/brand/venta-notaria.webp`;
   const noindex = !PUBLISH || meta.noindex;
@@ -262,7 +288,6 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
     `<meta name="twitter:image" content="${image}">`,
     '<link rel="manifest" href="site.webmanifest">',
     `<script type="application/ld+json">${JSON.stringify(buildLd(file, meta, title))}</script>`,
-    ...(hreflangPrevio.length ? [hreflangPrevio.join('')] : []),
     MARK_END,
   ].join('\n');
 
@@ -279,7 +304,15 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
   /* og:title y twitter:title que escribió el generador (fuera del bloque) siguen al <title>. */
   if (meta.title) html = html.replace(/(<meta (?:property="og:title"|name="twitter:title") content=")[^"]*(">)/g, `$1${esc(meta.title)}$2`);
 
-  html = tieneBloque ? html.replace(HUECO, () => block) : html.replace('</head>', () => `${block}\n</head>`);
+  /* hreflang: manda la lista que calcula tools/i18n (hreflangPorPagina). Se recogen los que
+     hubiera sueltos, se borran todos y se reescriben junto al bloque. Esta es la versión que
+     corrige el refresco de precios rompiendo los idiomas (main), no la de esta rama. */
+  const hreflangs = hreflangPorPagina[file]
+    || [...new Set([...(html.match(HREFLANG_RE) || []), ...hreflangPrevio])];
+  html = html.replace(new RegExp(`${HREFLANG_RE.source}\\n?`, 'g'), '');
+  html = tieneBloque
+    ? html.replace(HUECO, () => `${block}\n${hreflangs.length ? hreflangs.join('') + '\n' : ''}`)
+    : html.replace('</head>', () => `${block}\n${hreflangs.length ? hreflangs.join('') + '\n' : ''}</head>`);
   fs.writeFileSync(filePath, html, 'utf8');
   touched += 1;
 });
@@ -314,19 +347,17 @@ const urls = files
     <lastmod>${TODAY}</lastmod>
     <priority>${esFicha(f) ? '0.8' : (PAGES[f] || {}).priority || '0.5'}</priority>
   </url>`).join('\n');
-/* IDIOMAS (PR #5): las páginas nl/ fr/ it/ las lista tools/i18n, no este script. Las entradas que ya
-   están en el sitemap se CONSERVAN tal cual (con su lastmod) mientras el fichero siga existiendo;
-   si no hay ninguna (sin #5) no cambia nada. */
-const sitemapPrevio = (() => {
-  try { return fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8'); } catch (e) { return ''; }
-})();
-const urlsIdiomas = (sitemapPrevio.match(/ {2}<url>[\s\S]*?<\/url>/g) || []).filter((u) => {
-  const loc = (u.match(/<loc>([^<]*)<\/loc>/) || [, ''])[1];
-  const rel = loc.startsWith(BASE) ? loc.slice(BASE.length) : '';
-  return /^(nl|fr|it)\/[^/]+\.html$/.test(rel) && fs.existsSync(path.join(ROOT, rel));
-}).join('\n');
+/* Páginas de idioma (tools/i18n). Viven en subcarpetas y este script no las reescribe,
+   pero si no entran aquí cada refresco las saca del sitemap. */
+const langUrls = langFiles
+  .filter((f) => !/<meta[^>]+name="robots"[^>]+noindex/i.test(fs.readFileSync(path.join(ROOT, f), 'utf8')))
+  .map((f) => `  <url>
+    <loc>${BASE}${f}</loc>
+    <lastmod>${TODAY}</lastmod>
+    <priority>${LANG_PRIORITY}</priority>
+  </url>`).join('\n');
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}${urlsIdiomas ? `\n${urlsIdiomas}` : ''}\n</urlset>\n`, 'utf8');
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}${langUrls ? '\n' + langUrls : ''}\n</urlset>\n`, 'utf8');
 
 /* Viviendas en venta (properties-data.js = fuente única) para llms.txt. */
 global.window = {};
@@ -393,7 +424,7 @@ fs.writeFileSync(path.join(ROOT, 'site.webmanifest'), JSON.stringify({
   icons: [{ src: 'assets/brand/logo-placeholder.webp', sizes: '512x512', type: 'image/webp', purpose: 'any' }],
 }, null, 2), 'utf8');
 
-console.log(`[seo] ${touched} páginas · robots.txt, sitemap.xml (${(urls + urlsIdiomas).split("<url>").length - 1} URL), llms.txt y site.webmanifest`);
+console.log(`[seo] ${touched} páginas · robots.txt, sitemap.xml (${(urls + langUrls).split("<url>").length - 1} URL), llms.txt y site.webmanifest`);
 console.log(`[seo] indexación: ${PUBLISH
   ? 'ABIERTA (index,follow) — revisa el canonical antes de dejarlo así'
   : 'BLOQUEADA (noindex + robots Disallow) — se abre con --index --si-publicar'}`);

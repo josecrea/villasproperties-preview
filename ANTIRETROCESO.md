@@ -378,10 +378,28 @@ salen en verde.
 |---|---|
 | `market-data.js` | el scraper del repo privado de precios |
 | `nearby-data.js` | `tools/build-nearby.cjs` (OpenStreetMap) |
+| `feeds/kyero.xml`, `feeds/tuad.xml`, `feeds/img/` | `tools/feed-portales.js` (lo leen los portales inmobiliarios) |
 
 Al regenerar `market-data.js` hay que **revisar a mano las cifras citadas en
 los `post-*.html`**: el texto de los artículos no se actualiza solo y puede
 quedar contradiciendo al dato.
+
+### 5.1 El fichero de los portales (`feeds/`)
+
+Los portales (Tuad, M-SQ…) leen `https://villasproperties.es/feeds/kyero.xml` o
+`feeds/tuad.xml` por su cuenta. **Si cambia un precio o se retira una vivienda
+en `properties-data.js` hay que ejecutar `node tools/feed-portales.js`**, o los
+portales seguirán anunciando lo viejo. `node tools/tests/feed-portales.test.js`
+falla si lo publicado no coincide con los datos.
+
+- **No cambiar la dirección de esos ficheros ni de `feeds/img/`**: cada portal
+  la tiene guardada; moverla los deja sin anuncios en silencio.
+- **Una vivienda solo entra si su slug está en `fotosLimpias`**
+  (`tools/feed-portales.config.json`). Las fotos bajadas de idealista llevan su
+  marca de agua en el centro y no pueden salir a otro portal: primero se
+  sustituyen por los originales en `assets/img/<slug>/`, luego se añade el slug.
+- La fecha de cada vivienda solo avanza cuando cambian sus datos
+  (`tools/feed-portales.estado.json`); no tocar ese fichero a mano.
 
 ---
 

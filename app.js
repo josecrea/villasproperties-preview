@@ -18,9 +18,16 @@
   const duplicateHeroLockup=$('.hero .hero-content > .lockup');
   if(duplicateHeroLockup) duplicateHeroLockup.remove();
 
+  /* atelier:villas-idiomas: las páginas nl/ fr/ it/ (en/ de/) viven un nivel
+     más abajo que el sitio español. Toda URL relativa que este script EMITE
+     (fichas, financiación, fotos, rutas locales) necesita '../' ahí. En español
+     (o sin lang) RAIZ es '' y el comportamiento es idéntico al de siempre. */
+  const RAIZ=((document.documentElement.getAttribute('lang')||'es').toLowerCase()!=='es')?'../':'';
+  const alRaiz=v=>(!RAIZ||!v||/^([a-z][a-z0-9+.-]*:|\/|#|\.\.\/)/i.test(v))?v:RAIZ+v;
+  /* contact.html sí existe dentro de cada carpeta de idioma: no lleva '../'. */
   const localRoutes=[
-    ['https://villasproperties.es/valoracion-gratis-tenerife','valuation.html'],
-    ['https://villasproperties.es/market-impact','market-impact.html'],
+    ['https://villasproperties.es/valoracion-gratis-tenerife',alRaiz('valuation.html')],
+    ['https://villasproperties.es/market-impact',alRaiz('market-impact.html')],
     ['https://villasproperties.es/contactus','contact.html']
   ];
   $$('a[href]').forEach(a=>{
@@ -98,7 +105,7 @@
   const renderProps=()=>{
     $$('#propertyGrid, #catalogueGrid').forEach(grid=>{
       const lista = grid.id==='propertyGrid' ? demoProps.slice(0,TOPE_PORTADA) : demoProps;
-      grid.innerHTML=lista.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${U(p.url)}" aria-label="Ver ficha de ${E(p.name)}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${U(window.VPStore?VPStore.mediaSrc(p.images[0]):p.images[0])})"${window.VPStore?VPStore.mediaAttr(p.images[0]):''}`:''}></div><span class="tag">${E(p.status)} · ${E(p.strategy)}</span></a><div class="pinfo"><div><h3><a href="${U(p.url)}">${E(p.name)}</a></h3><div class="meta">${E(p.zone)} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${E(p.name)}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${E(p.ref||'—')}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${U(p.url)}">Ver ficha ↗</a><a class="btn" href="finance.html">Financiar</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
+      grid.innerHTML=lista.map(p=>`<article class="property${p.status==='Sold'?' sold':''}" data-stagger data-town="${p.town||''}" data-price="${p.price}" data-psm="${p.psmRaw||0}" data-beds="${p.beds}"><a class="media" href="${alRaiz(U(p.url))}" aria-label="Ver ficha de ${E(p.name)}"><div class="media-img"${p.images&&p.images[0]?` style="background-image:url(${alRaiz(U(window.VPStore?VPStore.mediaSrc(p.images[0]):p.images[0]))})"${window.VPStore?VPStore.mediaAttr(p.images[0]):''}`:''}></div><span class="tag">${E(p.status)} · ${E(p.strategy)}</span></a><div class="pinfo"><div><h3><a href="${alRaiz(U(p.url))}">${E(p.name)}</a></h3><div class="meta">${E(p.zone)} · Tenerife</div></div><div class="price">${fmt(p.price)}</div></div><div class="specrow" aria-label="Características de ${E(p.name)}">${propertySpecs(p)}</div><div class="intelrow"><div><small>Ref.</small><strong>${E(p.ref||'—')}</strong></div><div><small>€/m²</small><strong>${p.psm}</strong></div><div><small>Fotos</small><strong>${(p.images||[]).length}</strong></div><div><small>Ficha</small><strong>Completa</strong></div></div><div class="propcta"><a class="btn green" href="${alRaiz(U(p.url))}">Ver ficha ↗</a><a class="btn" href="${alRaiz('finance.html')}">Financiar</a><a class="btn" target="_blank" rel="noopener" href="${waMoreInfo(p)}">WhatsApp</a></div></article>`).join('');
     });
   };
   renderProps();
@@ -114,7 +121,22 @@
   if(headerIn && !$('#menuToggle')){
     const menu=document.createElement('button'); menu.id='menuToggle'; menu.type='button'; menu.className='menu-toggle'; menu.textContent='Menu';
     const config=$('#mobileAdmin'); headerIn.insertBefore(menu,config||null);
-    const drawer=document.createElement('div'); drawer.id='mobileDrawer'; drawer.innerHTML='<nav><a href="properties.html">Properties</a><a href="sell.html">Sell</a><a href="buy.html">Buy</a><a href="finance.html">Finance</a><a href="insights.html">News</a><a href="valuation.html">Valoración gratis</a><a href="contact.html">Talk to an advisor</a></nav>';
+    /* atelier:villas-idiomas: igual que shell.js, el menú móvil pisaba todo
+       con rutas/textos fijos en es. Mismo criterio: por defecto (es) idéntico
+       a antes; en la isla nl/fr/it, rutas con '../' y textos localizados. */
+    const mdLang=(document.documentElement.getAttribute('lang')||'es').toLowerCase();
+    const mdBase=mdLang!=='es'?'../':'';
+    const mdOut=mdLang!=='es'?` hreflang="es"`:'';
+    const MD_T={
+      es:{properties:'Properties',sell:'Sell',buy:'Buy',finance:'Finance',news:'News',advisor:'Valoración gratis',talk:'Talk to an advisor'},
+      nl:{properties:'Properties',sell:'Verkopen',buy:'Kopen',finance:'Financiering',news:'Nieuws',advisor:'Gratis waardebepaling',talk:'Praat met een adviseur'},
+      fr:{properties:'Properties',sell:'Vendre',buy:'Acheter',finance:'Financement',news:'Actualités',advisor:'Estimation gratuite',talk:'Parler à un conseiller'},
+      it:{properties:'Properties',sell:'Vendere',buy:'Comprare',finance:'Finanziamento',news:'Notizie',advisor:'Valutazione gratuita',talk:'Parla con un consulente'},
+      en:{properties:'Properties',sell:'Sell',buy:'Buy',finance:'Finance',news:'News',advisor:'Free valuation',talk:'Talk to an advisor'},
+      de:{properties:'Properties',sell:'Verkaufen',buy:'Kaufen',finance:'Finanzierung',news:'Neuigkeiten',advisor:'Kostenlose Bewertung',talk:'Mit einem Berater sprechen'},
+    };
+    const mdT=MD_T[mdLang]||MD_T.es;
+    const drawer=document.createElement('div'); drawer.id='mobileDrawer'; drawer.innerHTML=`<nav><a href="${mdBase}properties.html"${mdOut}>${mdT.properties}</a><a href="${mdBase}sell.html"${mdOut}>${mdT.sell}</a><a href="${mdBase}buy.html"${mdOut}>${mdT.buy}</a><a href="${mdBase}finance.html"${mdOut}>${mdT.finance}</a><a href="${mdBase}insights.html"${mdOut}>${mdT.news}</a><a href="${mdBase}valuation.html"${mdOut}>${mdT.advisor}</a><a href="contact.html">${mdT.talk}</a></nav>`;
     drawer.style.cssText='position:fixed;z-index:70;inset:76px 0 auto 0;background:#fbfaf7;color:#20242a;border-bottom:1px solid rgba(32,36,42,.16);padding:20px;transform:translateY(-140%);transition:transform .3s ease';
     const nav=drawer.querySelector('nav'); nav.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:0';
     [...nav.children].forEach(a=>a.style.cssText='padding:15px 8px;border-bottom:1px solid rgba(32,36,42,.12);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase');
