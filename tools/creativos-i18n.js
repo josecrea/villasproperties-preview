@@ -111,6 +111,12 @@ const L = {
 /* Copy por idioma y referencia. La foto de portada se hereda de creativos-copy.js. */
 const COPY = {
   de: {
+    111258127: {
+      kicker: 'Erdgeschoss · Costa Adeje', gancho: 'Überwintern|ohne Treppen.',
+      cita: 'Erdgeschoss mit 15 m² Terrasse zum Pool. Zugang und Wohnung sind für eingeschränkte Mobilität angepasst.',
+      pruebas: ['Erdgeschoss mit Aufzug', 'Zugang angepasst', '15 m² Terrasse zum Pool', 'Komplett renoviert'],
+      post: 'Wohnanlage La Pineda in Torviscas, Costa Adeje: Zugang und Wohnung für Menschen mit eingeschränkter Mobilität angepasst, Aufzug im Haus, Hausgeld 86 €/Monat. Wohnsitz oder Zweitwohnsitz.',
+    },
     14541: {
       kicker: 'Dachgeschoss · Chafiras', gancho: 'Drei Schlafzimmer.|Und unten der Pool.',
       cita: 'Drei Schlafzimmer, zwei Bäder und 10 m² Terrasse über dem Pool. 93 m², die keine Renovierung brauchen.',
@@ -143,6 +149,12 @@ const COPY = {
     },
   },
   it: {
+    111258127: {
+      kicker: 'Piano terra · Costa Adeje', gancho: 'Svernare|senza scale.',
+      cita: 'Piano terra con terrazza di 15 m² sulla piscina. Accesso e abitazione sono adattati alla mobilità ridotta.',
+      pruebas: ['Piano terra con ascensore', 'Accesso adattato', 'Terrazza di 15 m² sulla piscina', 'Ristrutturato completamente'],
+      post: 'Residence La Pineda a Torviscas, Costa Adeje: accesso e abitazione adattati a persone con mobilità ridotta, ascensore nel palazzo, condominio 86 €/mese. Prima o seconda casa.',
+    },
     14541: {
       kicker: 'Attico · Las Chafiras', gancho: 'Tre camere.|E la piscina sotto.',
       cita: 'Tre camere, due bagni completi e una terrazza di 10 m² sulla piscina. 93 m² che non chiedono lavori.',
@@ -175,6 +187,12 @@ const COPY = {
     },
   },
   fr: {
+    111258127: {
+      kicker: 'Plain-pied · Costa Adeje', gancho: 'Hiverner|sans escaliers.',
+      cita: 'Plain-pied avec terrasse de 15 m² sur la piscine. Accès et logement sont adaptés à la mobilité réduite.',
+      pruebas: ['Plain-pied avec ascenseur', 'Accès adapté', 'Terrasse de 15 m² sur piscine', 'Entièrement rénové'],
+      post: 'Résidence La Pineda à Torviscas, Costa Adeje : accès et logement adaptés aux personnes à mobilité réduite, ascenseur dans l’immeuble, charges de 86 €/mois. Résidence principale ou secondaire.',
+    },
     14541: {
       kicker: 'Dernier étage · Las Chafiras', gancho: 'Trois chambres.|Et la piscine en bas.',
       cita: 'Trois chambres, deux salles de bain et une terrasse de 10 m² sur la piscine. 93 m² sans travaux à prévoir.',
@@ -207,6 +225,12 @@ const COPY = {
     },
   },
   nl: {
+    111258127: {
+      kicker: 'Gelijkvloers · Costa Adeje', gancho: 'Overwinteren|zonder trappen.',
+      cita: 'Gelijkvloers met terras van 15 m² aan het zwembad. Toegang en woning zijn aangepast aan beperkte mobiliteit.',
+      pruebas: ['Gelijkvloers met lift', 'Aangepaste toegang', '15 m² terras aan het zwembad', 'Volledig gerenoveerd'],
+      post: 'Residentie La Pineda in Torviscas, Costa Adeje: toegang en woning aangepast voor mensen met beperkte mobiliteit, lift in het gebouw, servicekosten 86 €/maand. Eigen of tweede woning.',
+    },
     14541: {
       kicker: 'Penthouse · Las Chafiras', gancho: 'Drie slaapkamers.|Zwembad beneden.',
       cita: 'Drie slaapkamers, twee badkamers en een terras van 10 m² boven het zwembad. 93 m² zonder renovatie.',
