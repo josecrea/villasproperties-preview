@@ -7,7 +7,7 @@
 const fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..');
 const BASE = 'https://villasproperties.es/';
-const strip = (s) => s.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/\s+/g, ' ').trim();
+const strip = (s) => s.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;|&#x27;|&apos;/g, "'").replace(/\s+/g, ' ').trim();
 const STOP = new Set('de la el los las en y a un una con por para del al que su tu the in of and to for at your a an das die der und le les et en du des il di e la un una per con'.split(' '));
 const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const words = (s) => new Set(norm(s).split(/[^a-z0-9]+/).filter((w) => w.length > 2 && !STOP.has(w)));
@@ -34,7 +34,7 @@ function read(u) {
   const lang = ((h.match(/<html[^>]*\slang="([a-z]{2})/i) || [])[1] || (u.includes('/') ? u.split('/')[0] : 'es')).toLowerCase();
   const title = strip((h.match(/<title>([\s\S]*?)<\/title>/i) || [, ''])[1]);
   const h1s = [...h.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/gi)].map((m) => strip(m[1]));
-  const desc = ((h.match(/<meta name="description" content="([^"]*)"/i) || [, ''])[1]).replace(/&amp;/g, '&').replace(/&quot;/g, '"');
+  const desc = ((h.match(/<meta name="description" content="([^"]*)"/i) || [, ''])[1]).replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'");
   return { u, f, lang: LANG_HINT[lang] ? lang : 'es', title, h1: h1s[0] || '', nh1: h1s.length, desc };
 }
 function analyze() {

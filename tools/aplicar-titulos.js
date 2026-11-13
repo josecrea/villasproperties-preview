@@ -121,10 +121,11 @@ for (const r of fails) {
   if (desc.length > 155) ERR.push('desc>155 ' + r.u + ' ' + desc.length);
   if (title.length > 60) ERR.push('title>60 ' + r.u);
 
+  const Et = /<title>[^<]*&#x27;/.test(file) ? (x) => E(x).replace(/'/g, '&#x27;') : E; /* respeta la convención del generador de la página */
   if (title !== r.title) {
-    file = file.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${E(title)}</title>`);
-    file = file.replace(/(<meta property="og:title" content=")[^"]*(")/, (_, a, b) => a + E(title) + b);
-    file = file.replace(/(<meta name="twitter:title" content=")[^"]*(")/, (_, a, b) => a + E(title) + b);
+    file = file.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${Et(title)}</title>`);
+    file = file.replace(/(<meta property="og:title" content=")[^"]*(")/, (_, a, b) => a + Et(title) + b);
+    file = file.replace(/(<meta name="twitter:title" content=")[^"]*(")/, (_, a, b) => a + Et(title) + b);
   }
   if (desc !== r.desc) {
     for (const re of [/(<meta name="description" content=")[^"]*(")/, /(<meta property="og:description" content=")[^"]*(")/, /(<meta name="twitter:description" content=")[^"]*(")/])

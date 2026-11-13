@@ -56,7 +56,7 @@ T = {
     "it": {
         "title": "Case in vendita nel sud di Tenerife | Villa's Properties",
         "desc": "Appartamenti e loft in vendita nel sud di Tenerife, con tutti i dati in italiano: superfici, classe energetica, spese e posizione.",
-        "eye": "IN VENDITA · TENERIFE SUD", "h1": "I nostri immobili.",
+        "eye": "IN VENDITA · TENERIFE SUD", "h1": "Case in vendita nel sud di Tenerife",
         "lede": "Tutti i dati in italiano. Visita sul posto o in video; rispondiamo alle sue domande per iscritto in italiano, via WhatsApp o e-mail.",
         "lista": "Immobili", "tag": "In vendita", "hab": "camere", "ban": ("bagno", "bagni"), "sup": "costruiti",
         "wa": "Chieda via WhatsApp", "idealista": "Veda su Idealista ↗", "fotos": "Tutte le foto (pagina in spagnolo) ↗",
