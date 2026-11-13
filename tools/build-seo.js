@@ -214,6 +214,26 @@ const MARK_START = '<!-- seo:start -->';
 const MARK_END = '<!-- seo:end -->';
 
 const files = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
+
+/* ---------- idiomas (tools/i18n) ----------
+   Las traducciones viven en subcarpetas y este script no las reescribe. Pero las páginas
+   españolas que sí regenera (comprar-casa-*, vía build-landings-compra) perdían en cada
+   refresco su grupo hreflang, y Google ignora un grupo que no es recíproco. El grupo se
+   lee de las propias traducciones, que son las que saben a qué página española equivalen. */
+const LANG_DIRS = ['nl', 'fr', 'it', 'en', 'de'];
+const LANG_PRIORITY = '0.6';
+const HREFLANG_RE = /<link rel="alternate" hreflang="[^"]+" href="[^"]+">/g;
+const langFiles = LANG_DIRS
+  .filter((d) => fs.existsSync(path.join(ROOT, d)))
+  .flatMap((d) => fs.readdirSync(path.join(ROOT, d)).filter((f) => f.endsWith('.html')).sort().map((f) => `${d}/${f}`));
+const hreflangPorPagina = {};
+for (const f of langFiles) {
+  const tags = fs.readFileSync(path.join(ROOT, f), 'utf8').match(HREFLANG_RE) || [];
+  const es = tags.find((t) => t.includes('hreflang="es"'));
+  if (!es) continue;
+  const destino = es.match(/href="([^"]+)"/)[1].replace(BASE, '') || 'index.html';
+  if (!hreflangPorPagina[destino]) hreflangPorPagina[destino] = [...new Set(tags)];
+}
 let touched = 0;
 
 /* vivienda-*.html las escribe tools/build-fichas.js con su propio <head> (title, canonical,
@@ -224,7 +244,16 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
   let html = fs.readFileSync(filePath, 'utf8');
   const meta = PAGES[file] || {};
   const title = meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`;
-  const desc = meta.desc || GENERIC;
+  /* Una página que trae su propia descripción (informes, boletines: la escribe su
+     generador FUERA del bloque seo) la conserva. Sin esto, la primera pasada por
+     aquí se la cambiaba por la genérica y las 53 páginas decían lo mismo. */
+  const htmlSinBloque = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), '');
+  const descPropia = (
+    htmlSinBloque.match(/<meta name="description" content="([^"]*)"/) ||
+    htmlSinBloque.match(/<meta property="og:description" content="([^"]*)"/) ||
+    [, '']
+  )[1].replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  const desc = meta.desc || descPropia || GENERIC;
   const canonical = `${BASE}${file === 'index.html' ? '' : file}`;
   const image = `${BASE}assets/brand/venta-notaria.webp`;
   const noindex = !PUBLISH || meta.noindex;
@@ -259,7 +288,9 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
   html = html.replace(/\s*<link rel="canonical"[^>]*>/g, '');
   if (meta.title) html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`);
 
-  html = html.replace('</head>', `${block}\n</head>`);
+  const hreflangs = hreflangPorPagina[file] || [...new Set(html.match(HREFLANG_RE) || [])];
+  html = html.replace(new RegExp(`${HREFLANG_RE.source}\\n?`, 'g'), '');
+  html = html.replace('</head>', `${block}\n${hreflangs.length ? hreflangs.join('') + '\n' : ''}</head>`);
   fs.writeFileSync(filePath, html, 'utf8');
   touched += 1;
 });
@@ -294,8 +325,17 @@ const urls = files
     <lastmod>${TODAY}</lastmod>
     <priority>${esFicha(f) ? '0.8' : (PAGES[f] || {}).priority || '0.5'}</priority>
   </url>`).join('\n');
+/* Páginas de idioma (tools/i18n). Viven en subcarpetas y este script no las reescribe,
+   pero si no entran aquí cada refresco las saca del sitemap. */
+const langUrls = langFiles
+  .filter((f) => !/<meta[^>]+name="robots"[^>]+noindex/i.test(fs.readFileSync(path.join(ROOT, f), 'utf8')))
+  .map((f) => `  <url>
+    <loc>${BASE}${f}</loc>
+    <lastmod>${TODAY}</lastmod>
+    <priority>${LANG_PRIORITY}</priority>
+  </url>`).join('\n');
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, 'utf8');
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}${langUrls ? '\n' + langUrls : ''}\n</urlset>\n`, 'utf8');
 
 /* Viviendas en venta (properties-data.js = fuente única) para llms.txt. */
 global.window = {};
