@@ -79,9 +79,11 @@ const PAGES = {
     desc: 'Propiedades seleccionadas en Tenerife Sur con superficie, distribución, equipamiento y lectura de mercado de su microzona.',
     type: 'list', priority: '0.9',
   },
+  /* Desde 28-oct-2026 cada vivienda tiene su URL (vivienda-<slug>.html, tools/build-fichas.js).
+     property.html queda como visor de respaldo (property.html?ref=…): noindex,follow y fuera del sitemap. */
   'property.html': {
     desc: 'Ficha completa del inmueble: fotos, superficie, distribución, equipamiento, ubicación y contraste con el precio real de su microzona.',
-    type: 'property', priority: '0.8',
+    type: 'property', priority: '0.8', noindex: true, robots: 'noindex,follow',
   },
   'valuation.html': {
     title: 'Valoración gratis de tu casa en Tenerife Sur — Villa’s Properties',
@@ -234,12 +236,24 @@ for (const f of langFiles) {
 }
 let touched = 0;
 
-files.forEach((file) => {
+/* vivienda-*.html las escribe tools/build-fichas.js con su propio <head> (title, canonical,
+   RealEstateListing): aquí no se reescriben, solo entran en sitemap y llms.txt. */
+const esFicha = (f) => f.startsWith('vivienda-');
+files.filter((f) => !esFicha(f)).forEach((file) => {
   const filePath = path.join(ROOT, file);
   let html = fs.readFileSync(filePath, 'utf8');
   const meta = PAGES[file] || {};
   const title = meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`;
-  const desc = meta.desc || GENERIC;
+  /* Una página que trae su propia descripción (informes, boletines: la escribe su
+     generador FUERA del bloque seo) la conserva. Sin esto, la primera pasada por
+     aquí se la cambiaba por la genérica y las 53 páginas decían lo mismo. */
+  const htmlSinBloque = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), '');
+  const descPropia = (
+    htmlSinBloque.match(/<meta name="description" content="([^"]*)"/) ||
+    htmlSinBloque.match(/<meta property="og:description" content="([^"]*)"/) ||
+    [, '']
+  )[1].replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  const desc = meta.desc || descPropia || GENERIC;
   const canonical = `${BASE}${file === 'index.html' ? '' : file}`;
   const image = `${BASE}assets/brand/venta-notaria.webp`;
   const noindex = !PUBLISH || meta.noindex;
@@ -248,7 +262,7 @@ files.forEach((file) => {
     MARK_START,
     `<meta name="description" content="${esc(desc)}">`,
     `<link rel="canonical" href="${canonical}">`,
-    `<meta name="robots" content="${noindex ? 'noindex,nofollow' : 'index,follow,max-image-preview:large,max-snippet:-1'}">`,
+    `<meta name="robots" content="${noindex ? (meta.robots || 'noindex,nofollow') : 'index,follow,max-image-preview:large,max-snippet:-1'}">`,
     '<meta name="theme-color" content="#5f8075">',
     '<meta property="og:type" content="website">',
     `<meta property="og:site_name" content="${esc(ORG.name)}">`,
@@ -304,11 +318,12 @@ ${PUBLISH ? `Sitemap: ${BASE}sitemap.xml` : '# Sitemap: se publicará al abrir l
 
 /* ---------- sitemap.xml ---------- */
 const urls = files
-  .filter((f) => !(PAGES[f] || {}).noindex && f !== '404.html')
+  .filter((f) => !(PAGES[f] || {}).noindex && f !== '404.html'
+    && !(esFicha(f) && /<meta name="robots" content="noindex/.test(fs.readFileSync(path.join(ROOT, f), 'utf8'))))
   .map((f) => `  <url>
     <loc>${BASE}${f === 'index.html' ? '' : f}</loc>
     <lastmod>${TODAY}</lastmod>
-    <priority>${(PAGES[f] || {}).priority || '0.5'}</priority>
+    <priority>${esFicha(f) ? '0.8' : (PAGES[f] || {}).priority || '0.5'}</priority>
   </url>`).join('\n');
 /* Páginas de idioma (tools/i18n). Viven en subcarpetas y este script no las reescribe,
    pero si no entran aquí cada refresco las saca del sitemap. */
@@ -321,6 +336,13 @@ const langUrls = langFiles
   </url>`).join('\n');
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}${langUrls ? '\n' + langUrls : ''}\n</urlset>\n`, 'utf8');
+
+/* Viviendas en venta (properties-data.js = fuente única) para llms.txt. */
+global.window = {};
+require(path.join(ROOT, 'properties-data.js'));
+const miles = (v) => String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const viviendasLlms = (global.window.VP_PROPERTIES || []).filter((p) => p.status === 'En venta')
+  .map((p) => `- [${p.titleShort}](${BASE}vivienda-${p.slug}.html): ${p.zone}, ${p.town} · ${p.built} m² · ${p.beds} dormitorio${p.beds === 1 ? '' : 's'} · ${miles(p.price)} €`).join('\n');
 
 /* ---------- llms.txt (GEO: qué somos y qué puede citarse) ---------- */
 fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Villa's Properties
@@ -358,6 +380,9 @@ fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Villa's Properties
 - [Dónde se vende de verdad](${BASE}post-donde-se-vende-de-verdad.html): liquidez por municipio.
 - [Cómo valorar tu vivienda](${BASE}post-como-valorar-tu-vivienda.html): método y errores frecuentes.
 - [Propiedades](${BASE}properties.html): catálogo con ficha completa.
+
+## Viviendas en venta (una página por vivienda)
+${viviendasLlms}
 
 ## Criterio editorial
 No publicamos cifras sin fuente ni damos una valoración automática cuando el dato
