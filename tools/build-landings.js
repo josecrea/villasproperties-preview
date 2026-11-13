@@ -84,6 +84,11 @@ const FAQ_COMUN = (n, d) => [
    'Sí. La estimación es inmediata y la revisión de un asesor local no tiene coste ni obliga a firmar ningún encargo de venta.'],
 ];
 
+/* Título ≤60 con la palabra clave delante (auditoría 13-nov-2026: Google corta a ~60). */
+const tituloCorto = (bases) => {
+  for (const b of bases) for (const suf of [' | Villa’s Properties', ' | Villa’s']) if ((b + suf).length <= 60) return b + suf;
+  return bases[bases.length - 1];
+};
 const fmt = (n) => (n == null ? '—' : String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
 const pct = (v) => (v == null ? '—' : `${v > 0 ? '+' : ''}${String(v).replace('.', ',')} %`);
 const E = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -153,11 +158,10 @@ for (const [k, m] of Object.entries(MERCADO.municipios)) {
     ],
   };
 
-  const titulo = `Vender casa en ${n}: precio real por zonas | Villa’s Properties`;
-  const desc = `Cuánto vale tu vivienda en ${n}: ${fmt(m.eurM2)} €/m² de media`
-    + (m.var1a > 0 ? `, ${pct(m.var1a)} en un año` : '')
-    + (m.catastroCV ? ` y ${fmt(m.catastroCV)} compraventas al año` : '')
-    + '. Valoración gratuita y sin compromiso.';
+  const titulo = tituloCorto([`Vender casa en ${n}: precio real`, `Vender casa en ${n}`]);
+  const desc = `Vender casa en ${n}: se piden ${fmt(m.eurM2)} €/m² de media`
+    + (m.catastroCV ? ` y se venden ${fmt(m.catastroCV)} viviendas al año` : '')
+    + '. Valoración gratis y sin compromiso.';
 
   const html = `<!DOCTYPE html>
 <html lang="es">

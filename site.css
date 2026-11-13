@@ -2980,3 +2980,6 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 }
 .vp-informe__si:hover { opacity: .85; }
 .vp-informe [hidden] { display: none; }
+
+/* Eslogan que antes era el H1: el H1 ahora lleva la palabra clave y el eslogan pasa a subtítulo. */
+.h1-sub{margin:.5rem 0 1.25rem;max-width:34ch;font-size:clamp(1.05rem,1.7vw,1.5rem);line-height:1.25;font-style:italic;opacity:.8}

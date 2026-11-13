@@ -37,6 +37,11 @@ const RAIZ = path.join(__dirname, '..');
 /* El dominio comercial, NO el de Pages: canonical, og:url y breadcrumbs. */
 const DOMINIO = 'https://villasproperties.es';
 
+/* Título ≤60 con la palabra clave delante (auditoría 13-nov-2026: Google corta a ~60). */
+const tituloCorto = (bases) => {
+  for (const b of bases) for (const suf of [' | Villa’s Properties', ' | Villa’s']) if ((b + suf).length <= 60) return b + suf;
+  return bases[bases.length - 1];
+};
 const fmt = (n) => (n == null ? '—' : String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
 const dec = (n) => String(n).replace('.', ',');
 const E = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -295,10 +300,10 @@ for (const [k, cfg] of Object.entries(MUNI)) {
     cara: zonas[0], barata: zonas[zonas.length - 1] };
 
   const otras = enlacesMuni.filter((_, i) => Object.keys(MUNI)[i] !== k).concat(enlacesNucleo).join('');
-  const titulo = `Comprar casa en ${n}: precios por zona y margen real | Villa’s Properties`;
-  const desc = `Qué cuesta comprar en ${n}: ${fmt(m.eurM2)} €/m² de anuncio`
-    + (m.notaria ? ` frente a ${fmt(m.notaria)} €/m² de escritura` : '')
-    + `. Precio zona a zona, cuánta superficie entra en tu presupuesto y qué comprobar antes de firmar.`;
+  const titulo = tituloCorto([`Comprar casa en ${n}: precios reales`, `Comprar casa en ${n}`]);
+  const desc = `Comprar casa en ${n}: se piden ${fmt(m.eurM2)} €/m²`
+    + (m.notaria ? ` y se firman ${fmt(m.notaria)} €/m²` : '')
+    + `. Precio por zona y qué comprobar antes de firmar.`;
 
   const html = pagina({
     slug: cfg.slug, titulo, desc,
@@ -354,10 +359,10 @@ for (const nu of NUCLEOS) {
   ];
 
   const otras = enlacesMuni.concat(enlacesNucleo.filter((h) => !h.includes(nu.slug))).join('');
-  const titulo = `Comprar casa en ${n}: precios reales y qué comprobar | Villa’s Properties`;
-  const desc = `Qué cuesta comprar en ${n}: ${fmt(z.eurM2)} €/m² de anuncio`
-    + (m.notaria ? ` y ${fmt(m.notaria)} €/m² de escritura en ${m.name}` : '')
-    + `. Comparativa con el resto de zonas, superficie por presupuesto y checklist antes de las arras.`;
+  const titulo = tituloCorto([`Comprar casa en ${n}: precios reales`, `Comprar casa en ${n}`]);
+  const desc = `Comprar casa en ${n}: se piden ${fmt(z.eurM2)} €/m²`
+    + (m.notaria ? ` y se firman ${fmt(m.notaria)} €/m²` : '')
+    + `. Precio por zona y qué comprobar antes de firmar.`;
 
   const html = pagina({
     slug: nu.slug, titulo, desc,

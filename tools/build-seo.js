@@ -84,7 +84,7 @@ const PAGES = {
     type: 'property', priority: '0.8',
   },
   'valuation.html': {
-    title: 'Valoración gratis de tu casa en Tenerife Sur — Villa’s Properties',
+    title: 'Valoración gratis de tu casa en Tenerife Sur | Villa’s',
     desc: 'Calcula gratis lo que vale tu vivienda en Tenerife Sur con datos reales: precio de anuncio, salida realista y valor escriturado.',
     type: 'faq', priority: '0.9',
   },
@@ -239,7 +239,11 @@ files.forEach((file) => {
   let html = fs.readFileSync(filePath, 'utf8');
   const meta = PAGES[file] || {};
   const title = meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`;
-  const desc = meta.desc || GENERIC;
+  /* 🔴 13-nov-2026: sin desc propia se pisaba con GENERIC → 26 páginas con la MISMA descripción
+     (comprar-casa-*, vender-casa-*, post-*). Ahora se conserva la que ya tiene la página
+     (la escriben sus generadores o tools/aplicar-titulos.js); GENERIC solo si no hay ninguna. */
+  const prevDesc = ((html.match(/<meta name="description" content="([^"]*)"/) || [, ''])[1]).replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  const desc = meta.desc || (prevDesc && prevDesc !== GENERIC ? prevDesc : GENERIC);
   const canonical = `${BASE}${file === 'index.html' ? '' : file}`;
   const image = `${BASE}assets/brand/venta-notaria.webp`;
   const noindex = !PUBLISH || meta.noindex;
