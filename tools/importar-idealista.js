@@ -97,7 +97,7 @@ for (const ref of nuevas) {
     ref, slug,
     titleShort: d.titulo.slice(0, 60) || `Inmueble ${ref}`,
     title: d.titulo || 'Completar',
-    town: d.town || '', zone: d.zona || '', address: '',
+    town: d.town || '', zone: d.zona || '',
     type: /piso|apartament|ático/i.test(d.titulo) ? 'Apartamento' : 'Casa',
     status: 'En venta', strategy: 'Vivienda / segunda residencia',
     price: d.precio, pricePerM2: d.precio && d.m2 ? Math.round(d.precio / d.m2) : 0,

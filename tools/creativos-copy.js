@@ -43,9 +43,9 @@
 module.exports = {
   /* 395.000 € · 88 m² · 2/1 · Torviscas, Costa Adeje · reforma integral, terraza 15 m² a la piscina, oeste */
   14541: {
-    kicker: 'Apartamento · Las Chafiras',
+    kicker: 'Ático · Las Chafiras',
     gancho: 'Tres dormitorios.|Y la piscina abajo.',
-    cita: 'Terraza de 10 m² sobre la piscina, dos baños completos y La Gran Manzana a un paso. 83 m² que no piden reforma.',
+    cita: 'Tres dormitorios, dos baños completos y una terraza de 10 m² sobre la piscina. 93 m² que no piden reforma.',
     pruebas: ['Terraza de 10 m² a la piscina', 'Dos baños: bañera y ducha', 'Aire acondicionado · amueblado', 'La Gran Manzana, a un paso'],
     post: 'Residencial Biltmore Jardín, en Las Chafiras: piscina, jardines y el nuevo centro comercial La Gran Manzana al lado, con el aeropuerto del sur a pocos minutos. Las plazas de garaje se ofrecen aparte.',
     foto: 1,

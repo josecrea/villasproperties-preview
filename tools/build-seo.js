@@ -19,6 +19,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { TEXTOS, recortaDesc, esLanding, tituloLanding } = require('./seo-textos');
 
 const ROOT = path.join(__dirname, '..');
 /* 🔴 El dominio comercial, NO el de Pages: cada build reescribe canonical, og:url y
@@ -79,9 +80,11 @@ const PAGES = {
     desc: 'Propiedades seleccionadas en Tenerife Sur con superficie, distribución, equipamiento y lectura de mercado de su microzona.',
     type: 'list', priority: '0.9',
   },
+  /* Desde 28-oct-2026 cada vivienda tiene su URL (vivienda-<slug>.html, tools/build-fichas.js).
+     property.html queda como visor de respaldo (property.html?ref=…): noindex,follow y fuera del sitemap. */
   'property.html': {
     desc: 'Ficha completa del inmueble: fotos, superficie, distribución, equipamiento, ubicación y contraste con el precio real de su microzona.',
-    type: 'property', priority: '0.8',
+    type: 'property', priority: '0.8', noindex: true, robots: 'noindex,follow',
   },
   'valuation.html': {
     title: 'Valoración gratis de tu casa en Tenerife Sur — Villa’s Properties',
@@ -212,14 +215,56 @@ const MARK_START = '<!-- seo:start -->';
 const MARK_END = '<!-- seo:end -->';
 
 const files = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
+
+/* ---------- idiomas (tools/i18n) ----------
+   Las traducciones viven en subcarpetas y este script no las reescribe. Pero las páginas
+   españolas que sí regenera (comprar-casa-*, vía build-landings-compra) perdían en cada
+   refresco su grupo hreflang, y Google ignora un grupo que no es recíproco. El grupo se
+   lee de las propias traducciones, que son las que saben a qué página española equivalen. */
+const LANG_DIRS = ['nl', 'fr', 'it', 'en', 'de'];
+const LANG_PRIORITY = '0.6';
+const HREFLANG_RE = /<link rel="alternate" hreflang="[^"]+" href="[^"]+">/g;
+const langFiles = LANG_DIRS
+  .filter((d) => fs.existsSync(path.join(ROOT, d)))
+  .flatMap((d) => fs.readdirSync(path.join(ROOT, d)).filter((f) => f.endsWith('.html')).sort().map((f) => `${d}/${f}`));
+const hreflangPorPagina = {};
+for (const f of langFiles) {
+  const tags = fs.readFileSync(path.join(ROOT, f), 'utf8').match(HREFLANG_RE) || [];
+  const es = tags.find((t) => t.includes('hreflang="es"'));
+  if (!es) continue;
+  const destino = es.match(/href="([^"]+)"/)[1].replace(BASE, '') || 'index.html';
+  if (!hreflangPorPagina[destino]) hreflangPorPagina[destino] = [...new Set(tags)];
+}
 let touched = 0;
 
-files.forEach((file) => {
+/* vivienda-*.html las escribe tools/build-fichas.js con su propio <head> (title, canonical,
+   RealEstateListing): aquí no se reescriben, solo entran en sitemap y llms.txt. */
+const esFicha = (f) => f.startsWith('vivienda-');
+files.filter((f) => !esFicha(f)).forEach((file) => {
   const filePath = path.join(ROOT, file);
   let html = fs.readFileSync(filePath, 'utf8');
-  const meta = PAGES[file] || {};
+  /* TEXTOS (seo-textos.js) manda sobre PAGES. Si no hay descripción propia se conserva la que
+     escribió el generador de la página (og:description fuera del bloque seo) antes de caer en
+     la genérica: así las landings dejan de heredar la misma descripción las 15. */
+  const meta = { ...(PAGES[file] || {}), ...(TEXTOS[file] || {}) };
+  const htmlSinBloque = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), '');
+  /* IDIOMAS (PR #5): los <link rel="alternate" hreflang> los escribe tools/i18n, no este script.
+     Se CONSERVAN: los que viven dentro del bloque se copian al nuevo bloque (si no, se borran
+     al reescribirlo) y los que viven fuera no se tocan. Sin #5 no hay ninguno y no cambia nada. */
+  const bloquePrevio = (html.match(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}`)) || [''])[0];
+  const hreflangPrevio = (bloquePrevio.match(/<link rel="alternate" hreflang="[^"]*"[^>]*>/g) || [])
+    .filter((t) => !htmlSinBloque.includes(t));
+  const ogPrevio = (htmlSinBloque.match(/<meta property="og:description" content="([^"]*)"/) || [, ''])[1]
+    .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  if (esLanding(file) && !meta.title) meta.title = tituloLanding(titleOf(html));
   const title = meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`;
-  const desc = meta.desc || GENERIC;
+  /* Orden: el texto escrito a mano en seo-textos.js manda; si no lo hay, la descripción
+     que la página ya traía FUERA del bloque (la escribe su propio generador: informes,
+     boletines); y solo al final la genérica. */
+  const descPropia = (
+    htmlSinBloque.match(/<meta name="description" content="([^"]*)"/) || [, ogPrevio]
+  )[1].replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  const desc = recortaDesc(meta.desc || descPropia || ogPrevio || GENERIC);
   const canonical = `${BASE}${file === 'index.html' ? '' : file}`;
   const image = `${BASE}assets/brand/venta-notaria.webp`;
   const noindex = !PUBLISH || meta.noindex;
@@ -228,7 +273,7 @@ files.forEach((file) => {
     MARK_START,
     `<meta name="description" content="${esc(desc)}">`,
     `<link rel="canonical" href="${canonical}">`,
-    `<meta name="robots" content="${noindex ? 'noindex,nofollow' : 'index,follow,max-image-preview:large,max-snippet:-1'}">`,
+    `<meta name="robots" content="${noindex ? (meta.robots || 'noindex,nofollow') : 'index,follow,max-image-preview:large,max-snippet:-1'}">`,
     '<meta name="theme-color" content="#5f8075">',
     '<meta property="og:type" content="website">',
     `<meta property="og:site_name" content="${esc(ORG.name)}">`,
@@ -247,14 +292,29 @@ files.forEach((file) => {
   ].join('\n');
 
   /* Fuera lo anterior: el bloque generado sustituye a las metas sueltas. */
-  html = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), '');
+  /* El bloque nuevo ocupa el sitio del viejo (no se recoloca al final del <head>). */
+  const HUECO = '<!--SEO-HUECO-->';
+  const tieneBloque = html.includes(MARK_START);
+  html = html.replace(new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}\\n?`), () => (tieneBloque ? `${HUECO}\n` : ''));
   html = html.replace(/\s*<meta name="description"[^>]*>/g, '');
   html = html.replace(/\s*<meta name="robots"[^>]*>/g, '');
   html = html.replace(/\s*<meta name="theme-color"[^>]*>/g, '');
   html = html.replace(/\s*<link rel="canonical"[^>]*>/g, '');
   if (meta.title) html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`);
+  /* og:title y twitter:title que escribió el generador (fuera del bloque) siguen al <title>. */
+  if (meta.title) html = html.replace(/(<meta (?:property="og:title"|name="twitter:title") content=")[^"]*(">)/g, `$1${esc(meta.title)}$2`);
 
-  html = html.replace('</head>', `${block}\n</head>`);
+  /* hreflang: manda la lista que calcula tools/i18n (hreflangPorPagina). Se recogen los que
+     hubiera sueltos, se borran todos y se reescriben junto al bloque. Esta es la versión que
+     corrige el refresco de precios rompiendo los idiomas (main), no la de esta rama. */
+  const hreflangs = hreflangPorPagina[file]
+    || [...new Set([...(html.match(HREFLANG_RE) || []), ...hreflangPrevio])];
+  html = html.replace(new RegExp(`${HREFLANG_RE.source}\\n?`, 'g'), '');
+  /* El HUECO ya se quedó con el salto de línea que seguía al bloque viejo: si aquí se
+     añade otro, cada pasada deja una línea en blanco más. Debe ser idempotente. */
+  html = tieneBloque
+    ? html.replace(HUECO, () => `${block}${hreflangs.length ? '\n' + hreflangs.join('') : ''}`)
+    : html.replace('</head>', () => `${block}\n${hreflangs.length ? hreflangs.join('') + '\n' : ''}</head>`);
   fs.writeFileSync(filePath, html, 'utf8');
   touched += 1;
 });
@@ -282,14 +342,31 @@ ${PUBLISH ? `Sitemap: ${BASE}sitemap.xml` : '# Sitemap: se publicará al abrir l
 
 /* ---------- sitemap.xml ---------- */
 const urls = files
-  .filter((f) => !(PAGES[f] || {}).noindex && f !== '404.html')
+  .filter((f) => !(PAGES[f] || {}).noindex && !(TEXTOS[f] || {}).noindex && f !== '404.html'
+    && !(esFicha(f) && /<meta name="robots" content="noindex/.test(fs.readFileSync(path.join(ROOT, f), 'utf8'))))
   .map((f) => `  <url>
     <loc>${BASE}${f === 'index.html' ? '' : f}</loc>
     <lastmod>${TODAY}</lastmod>
-    <priority>${(PAGES[f] || {}).priority || '0.5'}</priority>
+    <priority>${esFicha(f) ? '0.8' : (PAGES[f] || {}).priority || '0.5'}</priority>
+  </url>`).join('\n');
+/* Páginas de idioma (tools/i18n). Viven en subcarpetas y este script no las reescribe,
+   pero si no entran aquí cada refresco las saca del sitemap. */
+const langUrls = langFiles
+  .filter((f) => !/<meta[^>]+name="robots"[^>]+noindex/i.test(fs.readFileSync(path.join(ROOT, f), 'utf8')))
+  .map((f) => `  <url>
+    <loc>${BASE}${f}</loc>
+    <lastmod>${TODAY}</lastmod>
+    <priority>${LANG_PRIORITY}</priority>
   </url>`).join('\n');
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, 'utf8');
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}${langUrls ? '\n' + langUrls : ''}\n</urlset>\n`, 'utf8');
+
+/* Viviendas en venta (properties-data.js = fuente única) para llms.txt. */
+global.window = {};
+require(path.join(ROOT, 'properties-data.js'));
+const miles = (v) => String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const viviendasLlms = (global.window.VP_PROPERTIES || []).filter((p) => p.status === 'En venta')
+  .map((p) => `- [${p.titleShort}](${BASE}vivienda-${p.slug}.html): ${p.zone}, ${p.town} · ${p.built} m² · ${p.beds} dormitorio${p.beds === 1 ? '' : 's'} · ${miles(p.price)} €`).join('\n');
 
 /* ---------- llms.txt (GEO: qué somos y qué puede citarse) ---------- */
 fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Villa's Properties
@@ -328,6 +405,9 @@ fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# Villa's Properties
 - [Cómo valorar tu vivienda](${BASE}post-como-valorar-tu-vivienda.html): método y errores frecuentes.
 - [Propiedades](${BASE}properties.html): catálogo con ficha completa.
 
+## Viviendas en venta (una página por vivienda)
+${viviendasLlms}
+
 ## Criterio editorial
 No publicamos cifras sin fuente ni damos una valoración automática cuando el dato
 no es fiable (terrenos, inmuebles singulares o municipios sin serie estadística).
@@ -346,7 +426,7 @@ fs.writeFileSync(path.join(ROOT, 'site.webmanifest'), JSON.stringify({
   icons: [{ src: 'assets/brand/logo-placeholder.webp', sizes: '512x512', type: 'image/webp', purpose: 'any' }],
 }, null, 2), 'utf8');
 
-console.log(`[seo] ${touched} páginas · robots.txt, sitemap.xml (${urls.split('<url>').length - 1} URL), llms.txt y site.webmanifest`);
+console.log(`[seo] ${touched} páginas · robots.txt, sitemap.xml (${(urls + langUrls).split("<url>").length - 1} URL), llms.txt y site.webmanifest`);
 console.log(`[seo] indexación: ${PUBLISH
   ? 'ABIERTA (index,follow) — revisa el canonical antes de dejarlo así'
   : 'BLOQUEADA (noindex + robots Disallow) — se abre con --index --si-publicar'}`);
