@@ -21,13 +21,21 @@
  */
 'use strict';
 
-const HASH_ES = (p) => `#TenerifeSur #${String(p.town).replace(/\s+/g, '')} #${String(p.zone || '').split('(')[0].replace(/[^\wáéíóúñ]/gi, '')} #Inmobiliaria #VillasProperties #CompraVivienda`;
-const pueblo = (p) => `#${String(p.town).replace(/\s+/g, '')}`;
+/* Una vivienda recién captada puede no tener municipio ni zona: una etiqueta vacía
+ * («#») canta más que no ponerla. Se cae sola y el resto del copy sale igual. */
+const etiqueta = (v) => {
+  const limpio = String(v || '').split('(')[0].replace(/[^\wáéíóúñÁÉÍÓÚÑ\s]/gi, '').trim().replace(/\s+/g, '');
+  return limpio ? `#${limpio}` : '';
+};
+const pueblo = (p) => etiqueta(p.town);
+const HASH_ES = (p) => ['#TenerifeSur', pueblo(p), etiqueta(p.zone), '#Inmobiliaria', '#VillasProperties', '#CompraVivienda']
+  .filter(Boolean).join(' ');
 
 const L = {
   es: {
     locale: 'es-ES', sur: 'Tenerife Sur', enVenta: 'En venta', construidos: 'construidos',
     dorm: ['dormitorio', 'dormitorios'], bano: ['baño', 'baños'], energia: 'energía', y: 'y',
+    precioConsultar: 'Precio a consultar', vivienda: 'vivienda', estudio: 'Estudio',
     ctaWa: 'Pide visita por WhatsApp',
     waQ: '¿Te la enseño?', waSmall: 'Responde <b>VISITA</b> a este estado y te mando la ficha completa.',
     cierreTit: '¿Cuál te enseño<br>primero?', cierreSub: 'Dime la referencia o el pueblo y te mando la ficha completa.',
@@ -41,6 +49,7 @@ const L = {
   de: {
     locale: 'de-DE', sur: 'Teneriffa Süd', enVenta: 'Zu verkaufen', construidos: 'Fläche',
     dorm: ['Schlafzimmer', 'Schlafzimmer'], bano: ['Bad', 'Bäder'], energia: 'Energie', y: 'und',
+    precioConsultar: 'Preis auf Anfrage', vivienda: 'Immobilie', estudio: 'Studio',
     ctaWa: 'Besichtigung per WhatsApp',
     waQ: 'Soll ich sie dir zeigen?', waSmall: 'Antworte <b>BESICHTIGUNG</b> und ich schicke dir das Exposé.',
     cierreTit: 'Welche zeige ich dir<br>zuerst?', cierreSub: 'Nenn mir die Referenz oder den Ort und ich schicke dir das vollständige Exposé.',
@@ -49,12 +58,13 @@ const L = {
     copy: {
       post: 'Post (Instagram / Facebook)', ficha: 'Mehr Infos auf Deutsch', wa: 'WhatsApp-Status (Text zum Bild)',
       waTexto: 'Antworte mit BESICHTIGUNG und ich schicke dir das vollständige Exposé.',
-      hashtags: (p) => `#Teneriffa #TeneriffaSüd ${pueblo(p)} #ImmobilienTeneriffa #Zweitwohnsitz #VillasProperties`,
+      hashtags: (p) => ['#Teneriffa', '#TeneriffaSüd', pueblo(p), '#ImmobilienTeneriffa', '#Zweitwohnsitz', '#VillasProperties'].filter(Boolean).join(' '),
     },
   },
   it: {
     locale: 'it-IT', sur: 'Tenerife Sud', enVenta: 'In vendita', construidos: 'superficie',
     dorm: ['camera', 'camere'], bano: ['bagno', 'bagni'], energia: 'energia', y: 'e',
+    precioConsultar: 'Prezzo su richiesta', vivienda: 'immobile', estudio: 'Monolocale',
     ctaWa: 'Chiedi una visita su WhatsApp',
     waQ: 'Te la mostro?', waSmall: 'Rispondi <b>VISITA</b> a questo stato e ti mando la scheda completa.',
     cierreTit: 'Quale ti mostro<br>per prima?', cierreSub: 'Dimmi il riferimento o la zona e ti mando la scheda completa.',
@@ -63,12 +73,13 @@ const L = {
     copy: {
       post: 'Post (Instagram / Facebook)', ficha: 'Più informazioni in italiano', wa: 'Stato di WhatsApp (testo che accompagna l’immagine)',
       waTexto: 'Rispondi VISITA e ti mando la scheda completa.',
-      hashtags: (p) => `#Tenerife #TenerifeSud ${pueblo(p)} #CasaATenerife #SecondaCasa #VillasProperties`,
+      hashtags: (p) => ['#Tenerife', '#TenerifeSud', pueblo(p), '#CasaATenerife', '#SecondaCasa', '#VillasProperties'].filter(Boolean).join(' '),
     },
   },
   fr: {
     locale: 'fr-FR', sur: 'Tenerife Sud', enVenta: 'À vendre', construidos: 'surface',
     dorm: ['chambre', 'chambres'], bano: ['bain', 'bains'], energia: 'énergie', y: 'et',
+    precioConsultar: 'Prix sur demande', vivienda: 'logement', estudio: 'Studio',
     ctaWa: 'Demandez une visite sur WhatsApp',
     waQ: 'Je vous la montre ?', waSmall: 'Répondez <b>VISITE</b> à ce statut et je vous envoie la fiche complète.',
     cierreTit: 'Laquelle voulez-vous<br>voir en premier ?', cierreSub: 'Indiquez la référence ou le village et je vous envoie la fiche complète.',
@@ -77,12 +88,13 @@ const L = {
     copy: {
       post: 'Post (Instagram / Facebook)', ficha: 'Plus d’informations en français', wa: 'Statut WhatsApp (texte qui accompagne l’image)',
       waTexto: 'Répondez VISITE et je vous envoie la fiche complète.',
-      hashtags: (p) => `#Tenerife #TenerifeSud ${pueblo(p)} #ImmobilierTenerife #ResidenceSecondaire #VillasProperties`,
+      hashtags: (p) => ['#Tenerife', '#TenerifeSud', pueblo(p), '#ImmobilierTenerife', '#ResidenceSecondaire', '#VillasProperties'].filter(Boolean).join(' '),
     },
   },
   nl: {
     locale: 'nl-BE', sur: 'Tenerife-Zuid', enVenta: 'Te koop', construidos: 'oppervlakte',
     dorm: ['slaapkamer', 'slaapkamers'], bano: ['badkamer', 'badkamers'], energia: 'energie', y: 'en',
+    precioConsultar: 'Prijs op aanvraag', vivienda: 'woning', estudio: 'Studio',
     ctaWa: 'Vraag een bezichtiging via WhatsApp',
     waQ: 'Zal ik ze je tonen?', waSmall: 'Antwoord <b>BEZOEK</b> en ik stuur je de volledige fiche.',
     cierreTit: 'Welke toon ik je<br>eerst?', cierreSub: 'Geef me de referentie of het dorp en ik stuur je de volledige fiche.',
@@ -91,7 +103,7 @@ const L = {
     copy: {
       post: 'Post (Instagram / Facebook)', ficha: 'Meer info in het Nederlands', wa: 'WhatsApp-status (tekst bij de afbeelding)',
       waTexto: 'Antwoord BEZOEK en ik stuur je de volledige fiche.',
-      hashtags: (p) => `#Tenerife #TenerifeZuid ${pueblo(p)} #HuisInSpanje #TweedeVerblijf #VillasProperties`,
+      hashtags: (p) => ['#Tenerife', '#TenerifeZuid', pueblo(p), '#HuisInSpanje', '#TweedeVerblijf', '#VillasProperties'].filter(Boolean).join(' '),
     },
   },
 };

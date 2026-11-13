@@ -6,11 +6,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://villasproperties.es/aviso-legal.html</loc>
-    <lastmod>2026-08-18</lastmod>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://villasproperties.es/buy.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.8</priority>
@@ -96,6 +91,11 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://villasproperties.es/informe-sur-de-tenerife-2026-11-05.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://villasproperties.es/insights.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.8</priority>
@@ -176,6 +176,11 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://villasproperties.es/post-newsletter-sur-de-tenerife-2026-11-05.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://villasproperties.es/post-por-que-tu-casa-no-se-vende-en-tenerife-8.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.5</priority>
@@ -204,11 +209,6 @@
     <loc>https://villasproperties.es/property-compare.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://villasproperties.es/property.html</loc>
-    <lastmod>2026-08-18</lastmod>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://villasproperties.es/sell.html</loc>
@@ -256,6 +256,41 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://villasproperties.es/vivienda-cabo-blanco-arona.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/vivienda-casco-adeje-la-paz.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/vivienda-costa-adeje-torviscas.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/vivienda-el-fraile-2hab.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/vivienda-el-fraile-loft.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/vivienda-las-chafiras-biltmore.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/vivienda-los-abrigos-granadilla.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://villasproperties.es/nl/contact.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.6</priority>
@@ -286,6 +321,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://villasproperties.es/nl/woningen.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://villasproperties.es/nl/zoekprofiel.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.6</priority>
@@ -297,6 +337,11 @@
   </url>
   <url>
     <loc>https://villasproperties.es/fr/acheter-maison-arona.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/fr/biens.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.6</priority>
   </url>
@@ -352,6 +397,11 @@
   </url>
   <url>
     <loc>https://villasproperties.es/it/guia-comprador.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/it/immobili.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.6</priority>
   </url>
@@ -417,6 +467,11 @@
   </url>
   <url>
     <loc>https://villasproperties.es/de/haus-kaufen-arona.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://villasproperties.es/de/immobilien.html</loc>
     <lastmod>2026-08-18</lastmod>
     <priority>0.6</priority>
   </url>
