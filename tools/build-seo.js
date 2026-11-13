@@ -123,6 +123,26 @@ const PAGES = {
     desc: '8.552 compraventas al año en el sur de Tenerife: Arona firma 4 de cada 10 y Guía de Isora una de cada dieciocho.',
     type: 'article', priority: '0.8', published: TODAY, category: 'Inversión',
   },
+
+  'post-segunda-residencia-costa-adeje.html': {
+    title: 'Segunda residencia en Costa Adeje (2026): zonas, costes y trámites para belgas, neerlandeses y alemanes',
+    desc: 'Para belgas, neerlandeses y alemanes que buscan una casa propia en Costa Adeje para pasar temporadas, no para invertir: qué zona de Adeje según el presupuesto, qué mirar antes de ofertar, cuánto cuesta comprarla y mantenerla, y el trámite de NIE, apostilla y fiscalidad en su país. Con un ejemplo real sobre un apartamento de 395.000 €.',
+    priority: '0.8', published: '2026-10-09', category: 'Guía',
+    /* Sin type:'article': el Article (firmado por Valeria) y el FAQPage ya van en el post. */
+  },
+  'post-comprar-vivienda-tenerife-desde-la-ue.html': {
+    title: 'Comprar vivienda en Tenerife desde otro país de la UE (2026): NIE, poder, cuenta, hipoteca y plazos',
+    desc: 'Qué hace falta de verdad para comprar en Tenerife viviendo en Bélgica, Países Bajos, Francia o Alemania: el NIE, firmar sin viajar, si hace falta cuenta en España, cuánto financia el banco y cuánto tarda cada paso. Con la norma detrás y un ejemplo sobre 300.000 €.',
+    priority: '0.8', published: '2026-10-09', category: 'Guía',
+    /* Sin type:'article': el Article (firmado por Valeria) y el FAQPage ya van en el post. */
+  },
+  'post-impuestos-comprar-vivienda-canarias.html': {
+    title: 'Impuestos al comprar vivienda en Canarias (2026): ITP, IGIC, AJD, IRNR y plusvalía',
+    desc: 'Cuánto cuesta comprar en Canarias además del precio, qué se paga cada año, qué pasa al alquilar o vender, y qué cambia si no eres residente. Con el artículo de ley detrás de cada cifra y un ejemplo sobre 300.000 €.',
+    priority: '0.8', published: '2026-10-09', category: 'Guía',
+    /* Sin type:'article' a propósito: el Article (firmado por Valeria) y el FAQPage
+       ya van escritos en el propio post, fuera del bloque seo. */
+  },
   'post-como-valorar-tu-vivienda.html': {
     desc: 'Las tres cifras que necesitas para poner precio a tu casa en Tenerife y los cinco errores que cuestan meses de exposición.',
     type: 'article', priority: '0.8', published: TODAY, category: 'Guía',
@@ -259,12 +279,20 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
   if (esLanding(file) && !meta.title) meta.title = tituloLanding(titleOf(html));
   const title = meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`;
   /* Orden: el texto escrito a mano en seo-textos.js manda; si no lo hay, la descripción
-     que la página ya traía FUERA del bloque (la escribe su propio generador: informes,
-     boletines); y solo al final la genérica. */
+     que la página ya traía —fuera del bloque (informes, boletines) o DENTRO de él (las
+     landings en otro idioma la traen ahí)—; y solo al final la genérica.
+     🔴 Sin mirar dentro del bloque, cada pasada dejaba la landing alemana con la
+     descripción genérica EN ESPAÑOL. */
+  const desDeDentro = (bloquePrevio.match(/<meta name="description" content="([^"]*)"/) || [, ''])[1];
   const descPropia = (
-    htmlSinBloque.match(/<meta name="description" content="([^"]*)"/) || [, ogPrevio]
+    htmlSinBloque.match(/<meta name="description" content="([^"]*)"/) || [, ogPrevio || desDeDentro]
   )[1].replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   const desc = recortaDesc(meta.desc || descPropia || ogPrevio || GENERIC);
+  /* El idioma lo declara la propia página: una landing con <html lang="de"> no puede
+     salir anunciándose como es_ES en Facebook ni en WhatsApp. */
+  const lang = (html.match(/<html[^>]*\blang="([a-z-]+)"/i) || [, 'es'])[1].toLowerCase().slice(0, 2);
+  const LOCALES = { es: 'es_ES', de: 'de_DE', nl: 'nl_NL', fr: 'fr_FR', it: 'it_IT', en: 'en_GB' };
+  const locale = LOCALES[lang] || 'es_ES';
   const canonical = `${BASE}${file === 'index.html' ? '' : file}`;
   const image = `${BASE}assets/brand/venta-notaria.webp`;
   const noindex = !PUBLISH || meta.noindex;
@@ -277,7 +305,7 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
     '<meta name="theme-color" content="#5f8075">',
     '<meta property="og:type" content="website">',
     `<meta property="og:site_name" content="${esc(ORG.name)}">`,
-    `<meta property="og:locale" content="es_ES">`,
+    `<meta property="og:locale" content="${locale}">`,
     `<meta property="og:title" content="${esc(title)}">`,
     `<meta property="og:description" content="${esc(desc)}">`,
     `<meta property="og:url" content="${canonical}">`,
