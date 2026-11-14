@@ -125,6 +125,15 @@
   const perM2 = (value) => `${groupThousands(value)} €/m²`;
   const delta = (pct) => `${pct > 0 ? '+' : ''}${pct.toLocaleString(S.locale)}%`;
 
+  /* «Última actualización del dato» de la cabecera de la página. Lo rellenaba un
+     <script> en línea que se ejecutaba ANTES que market-data.js (que va con
+     defer), así que nunca encontraba el dato y dejaba «—». Aquí market ya existe. */
+  const dataDate = $('#vDataDate');
+  const updated = market.meta.updated ? new Date(market.meta.updated) : null;
+  if (dataDate && updated && !Number.isNaN(updated.getTime())) {
+    dataDate.textContent = new Intl.DateTimeFormat(S.locale, { month: 'short', year: 'numeric' }).format(updated);
+  }
+
   /* ---------- Estado y navegación del wizard ---------- */
   let estimate = null;
 
