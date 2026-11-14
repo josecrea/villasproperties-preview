@@ -45,6 +45,25 @@
      en su propio idioma) van al español, marcados: hreflang + title localizado. */
   const FOREIGN_TITLE = { nl: 'deze pagina is in het Spaans', fr: 'cette page est en espagnol', it: 'questa pagina è in spagnolo', en: 'this page is in Spanish', de: 'diese Seite ist auf Spanisch' };
   const outMark = LANG !== 'es' ? ` hreflang="es" title="${FOREIGN_TITLE[LANG]}"` : '';
+  /* Páginas que SÍ existen traducidas dentro de cada carpeta de idioma. Antes
+     todo enlace de la cabecera salía al español aunque hubiera traducción: en
+     italiano, «Valutazione gratuita», «Finanziamento», «Properties» y el logo
+     abrían la página española. Un destino que esté aquí se queda en el idioma;
+     el resto sigue saliendo al español, marcado con hreflang + title. */
+  const EN_TODAS = { 'index.html': 'index.html', 'finance.html': 'finance.html', 'valuation.html': 'valuation.html' };
+  const PROPIAS = {
+    it: { ...EN_TODAS, 'properties.html': 'immobili.html' },
+    nl: { ...EN_TODAS, 'properties.html': 'woningen.html' },
+    fr: { ...EN_TODAS, 'properties.html': 'biens.html' },
+    de: { ...EN_TODAS, 'properties.html': 'immobilien.html' },
+    en: { ...EN_TODAS },
+  }[LANG] || {};
+  /* Devuelve ` href="…"` (+ la marca de «está en español» si sale de la isla). */
+  const enlace = (href) => (PROPIAS[href]
+    ? ` href="${PROPIAS[href]}"`
+    : ` href="${ISLAND_BASE}${href}"${outMark}`);
+  /* app.js monta el menú móvil con los mismos destinos: una sola tabla. */
+  window.VP_ENLACE = enlace;
 
   const NAV = [
     ['properties.html', T.properties],
@@ -59,7 +78,7 @@
   const active = page.startsWith('post-') ? 'insights.html' : page;
 
   const brand = `
-    <a class="brand" href="${ISLAND_BASE}index.html" aria-label="Villa’s Properties"${outMark}>
+    <a class="brand"${enlace('index.html')} aria-label="Villa’s Properties">
       <img class="brand-logo" src="${ISLAND_BASE}assets/brand/logo-placeholder.webp" alt="" width="44" height="44">
       <div class="lockup">
         <div class="wordmark"><span>VILL</span><span class="a">A</span><span>’S&nbsp;PROPERTIES</span></div>
@@ -74,7 +93,6 @@
        no. Y la valoración es el mayor gancho de captación de vendedores, que
        al salir Valuation del menú se había quedado sin sitio visible.
        Contacto no pierde nada: ya se enlaza desde 15 páginas y desde el pie. */
-    const advisor = `${ISLAND_BASE}valuation.html`;
     /* El selector de idioma vivía en el <nav> estático de la página; shell.js
        va a reemplazar ese <nav>, así que se rescata ANTES de pisarlo y se
        reinserta después (en vez de hacer que cada página lo regenere). */
@@ -93,8 +111,8 @@
       <div class="wrap headerin">
         ${brand}
         <nav class="nav">
-          ${NAV.map(([href, label]) => `<a href="${ISLAND_BASE}${href}"${href === active ? ' class="is-current" aria-current="page"' : ''}${outMark}>${label}</a>`).join('')}
-          <a class="advisor" href="${advisor}"${outMark}>${T.advisor}</a>
+          ${NAV.map(([href, label]) => `<a${enlace(href)}${(PROPIAS[href] || href) === active ? ' class="is-current" aria-current="page"' : ''}>${label}</a>`).join('')}
+          <a class="advisor"${enlace('valuation.html')}>${T.advisor}</a>
         </nav>${switchHtml}
         <button class="menu-toggle" id="mobileAdmin" type="button">⚙ Config</button>
       </div>`;
@@ -109,12 +127,12 @@
             <div class="wordmark"><span>VILLA’S&nbsp;PROPERTIES</span></div>
             <div class="brand-sub">${T.claim}</div>
           </div>
-          <div><div class="eye">${T.explore}</div><p><a href="${ISLAND_BASE}properties.html"${outMark}>${T.properties}</a><br><a href="${ISLAND_BASE}sell.html"${outMark}>${T.sell}</a><br><a href="${ISLAND_BASE}buy.html"${outMark}>${T.buy}</a><br><a href="${ISLAND_BASE}finance.html"${outMark}>${T.finance}</a><br><a href="${ISLAND_BASE}invest.html"${outMark}>Invest</a><br><a href="${ISLAND_BASE}valuation.html"${outMark}>${T.advisor}</a></p></div>
-          <div><div class="eye">${T.intelligenceEye}</div><p><a href="${ISLAND_BASE}intelligence.html"${outMark}>ACM &amp; Market Impact</a><br><a href="${ISLAND_BASE}insights.html"${outMark}>Insights / Blog</a><br><a href="${ISLAND_BASE}advisory.html"${outMark}>Advisory</a><br><a href="${ISLAND_BASE}case-studies.html"${outMark}>Case Studies</a></p></div>
+          <div><div class="eye">${T.explore}</div><p><a${enlace('properties.html')}>${T.properties}</a><br><a${enlace('sell.html')}>${T.sell}</a><br><a${enlace('buy.html')}>${T.buy}</a><br><a${enlace('finance.html')}>${T.finance}</a><br><a${enlace('invest.html')}>Invest</a><br><a${enlace('valuation.html')}>${T.advisor}</a></p></div>
+          <div><div class="eye">${T.intelligenceEye}</div><p><a${enlace('intelligence.html')}>ACM &amp; Market Impact</a><br><a${enlace('insights.html')}>Insights / Blog</a><br><a${enlace('advisory.html')}>Advisory</a><br><a${enlace('case-studies.html')}>Case Studies</a></p></div>
           <div><div class="eye">${T.follow}</div><p><a href="https://villasproperties.es/website/social/instagram" target="_blank" rel="noopener">Instagram</a><br><a href="https://villasproperties.es/website/social/facebook" target="_blank" rel="noopener">Facebook</a><br><a href="https://villasproperties.es/website/social/tiktok" target="_blank" rel="noopener">TikTok</a><br><a href="https://villasproperties.es/website/social/youtube" target="_blank" rel="noopener">YouTube</a></p></div>
         </div>
         <div class="footer-bottom">
-          <span>© <span id="year">2026</span> Villa's Properties hecho con Amor · <a href="${ISLAND_BASE}privacy.html" style="text-decoration:underline"${outMark}>${T.privacy}</a> · <a href="${ISLAND_BASE}aviso-legal.html" style="text-decoration:underline"${outMark}>${T.legal}</a></span>
+          <span>© <span id="year">2026</span> Villa's Properties hecho con Amor · <a${enlace('privacy.html')} style="text-decoration:underline">${T.privacy}</a> · <a${enlace('aviso-legal.html')} style="text-decoration:underline">${T.legal}</a></span>
           <span><strong>🕒 Tenerife:</strong> <span id="tenerifeClock">--:--:--</span></span>
             <button class="admin footer-admin" id="openAdmin" type="button">
               <span class="footer-admin__t">${T.backoffice}</span>
