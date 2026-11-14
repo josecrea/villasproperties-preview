@@ -136,7 +136,10 @@
       de:{properties:'Properties',sell:'Verkaufen',buy:'Kaufen',finance:'Finanzierung',news:'Neuigkeiten',advisor:'Kostenlose Bewertung',talk:'Mit einem Berater sprechen'},
     };
     const mdT=MD_T[mdLang]||MD_T.es;
-    const drawer=document.createElement('div'); drawer.id='mobileDrawer'; drawer.innerHTML=`<nav><a href="${mdBase}properties.html"${mdOut}>${mdT.properties}</a><a href="${mdBase}sell.html"${mdOut}>${mdT.sell}</a><a href="${mdBase}buy.html"${mdOut}>${mdT.buy}</a><a href="${mdBase}finance.html"${mdOut}>${mdT.finance}</a><a href="${mdBase}insights.html"${mdOut}>${mdT.news}</a><a href="${mdBase}valuation.html"${mdOut}>${mdT.advisor}</a><a href="contact.html">${mdT.talk}</a></nav>`;
+    const drawer=document.createElement('div'); drawer.id='mobileDrawer'; /* Destinos: los decide shell.js (window.VP_ENLACE), que sabe qué páginas existen
+       traducidas; así el menú móvil no manda al español lo que la cabecera ya no manda. */
+    const mdA=(h)=>window.VP_ENLACE?window.VP_ENLACE(h):` href="${mdBase}${h}"${mdOut}`;
+    drawer.innerHTML=`<nav><a${mdA('properties.html')}>${mdT.properties}</a><a${mdA('sell.html')}>${mdT.sell}</a><a${mdA('buy.html')}>${mdT.buy}</a><a${mdA('finance.html')}>${mdT.finance}</a><a${mdA('insights.html')}>${mdT.news}</a><a${mdA('valuation.html')}>${mdT.advisor}</a><a href="contact.html">${mdT.talk}</a></nav>`;
     drawer.style.cssText='position:fixed;z-index:70;inset:76px 0 auto 0;background:#fbfaf7;color:#20242a;border-bottom:1px solid rgba(32,36,42,.16);padding:20px;transform:translateY(-140%);transition:transform .3s ease';
     const nav=drawer.querySelector('nav'); nav.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:0';
     [...nav.children].forEach(a=>a.style.cssText='padding:15px 8px;border-bottom:1px solid rgba(32,36,42,.12);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase');
