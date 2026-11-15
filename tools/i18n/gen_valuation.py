@@ -33,13 +33,15 @@ INTL = {"nl": "nl-NL", "fr": "fr-FR", "it": "it-IT", "en": "en-GB", "de": "de-DE
 HOME = {"it": "Home", "nl": "Home", "fr": "Accueil", "en": "Home", "de": "Startseite"}
 
 # (español, it, nl, fr, en, de). El orden importa: primero las cadenas largas.
+# Los <title> traducidos van a 60 caracteres como mucho (Google corta lo que pasa) y con la
+# búsqueda delante: «valutazione casa», «waardebepaling woning», «home valuation»…
 FILAS = [
     ("Valoración gratis de tu casa en Tenerife Sur — Villa’s Properties",
-     "Valutazione gratuita della sua casa a Tenerife Sud — Villa’s Properties",
-     "Gratis waardebepaling van uw woning in Zuid-Tenerife — Villa’s Properties",
-     "Estimation gratuite de votre bien dans le sud de Tenerife — Villa’s Properties",
-     "Free valuation of your home in South Tenerife — Villa’s Properties",
-     "Kostenlose Bewertung Ihrer Immobilie im Süden Teneriffas — Villa’s Properties"),
+     "Valutazione casa gratis a Tenerife Sud — Villa’s Properties",
+     "Gratis waardebepaling woning Tenerife — Villa’s Properties",
+     "Estimation gratuite maison à Tenerife — Villa’s Properties",
+     "Free home valuation in South Tenerife — Villa’s Properties",
+     "Immobilie kostenlos bewerten Teneriffa — Villa’s Properties"),
     ("Calcula gratis lo que vale tu vivienda en Tenerife Sur con datos reales: precio de anuncio, salida realista y valor escriturado.",
      "Calcoli gratis quanto vale la sua casa a Tenerife Sud con dati reali: prezzo di annuncio, andamento della zona e prezzo a rogito.",
      "Bereken gratis wat uw woning in Zuid-Tenerife waard is met echte gegevens: vraagprijs, ontwikkeling van de zone en prijs in de akte.",
