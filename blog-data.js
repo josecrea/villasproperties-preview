@@ -4,6 +4,17 @@
    producción; el resto son artículos propios de la V2 con datos de mercado. */
 window.VP_POSTS = [
   {
+    slug: 'post-newsletter-sur-de-tenerife-2026-11-15.html',
+    category: 'Mercado',
+    title: "Valle San Lorenzo sube un 11 %: el sur de Tenerife en cifras",
+    dek: "Valle San Lorenzo (Arona) lidera las subidas con un +11,0 % anual. Repasamos el mercado del sur y qué hacer si vendes o inviertes.",
+    date: '2026-11-15',
+    read: '5 min',
+    accent: 'atlantic',
+    figure: 'chart',
+    featured: true,
+  },
+  {
     slug: 'post-newsletter-sur-de-tenerife-2026-11-05.html',
     category: 'Mercado',
     title: "San Isidro sube un 11,4 % y la demanda extranjera marca máximos",
@@ -12,7 +23,6 @@ window.VP_POSTS = [
     read: '5 min',
     accent: 'atlantic',
     figure: 'chart',
-    featured: true,
   },
   {
     slug: 'post-newsletter-sur-de-tenerife-2026-10-27.html',
