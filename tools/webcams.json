@@ -1,0 +1,184 @@
+[
+  {
+    "id": 1064,
+    "slug": "playa-la-pinta",
+    "nombre": "La Pinta",
+    "zona": "Costa Adeje",
+    "titulos": {
+      "es": "Costa Adeje - Playa La Pinta Cámara web en vivo - SkylineWebcams",
+      "en": "【LIVE】 Webcam Costa Adeje - Playa La Pinta | SkylineWebcams",
+      "de": "【LIVE】 Costa Adeje - Playa La Pinta Webcam | SkylineWebcams",
+      "fr": "【LIVE】 Webcam Costa Adeje - Playa La Pinta - Tenerife | SkylineWebcams",
+      "it": "【LIVE】 Webcam Playa La Pinta Costa Adeje - Tenerife | SkylineWebcams"
+    }
+  },
+  {
+    "id": 383,
+    "slug": "playa-de-fanabe",
+    "nombre": "Fañabé",
+    "zona": "Costa Adeje",
+    "titulos": {
+      "es": "【EN VIVO】 Cámara web en Playa de Fañabé - Tenerife | SkylineWebcams",
+      "en": "【LIVE】 Webcam Tenerife - Playa de Fañabé | SkylineWebcams",
+      "de": "【LIVE】 Playa de Fañabé - Teneriffa Webcam | SkylineWebcams",
+      "fr": "【LIVE】 Webcam Playa de Fañabé - Tenerife | SkylineWebcams",
+      "it": "【LIVE】 Webcam su Playa de Fañabé - Tenerife | SkylineWebcams"
+    }
+  },
+  {
+    "id": 4744,
+    "slug": "costa-adeje-playa-torviscas",
+    "nombre": "Torviscas",
+    "zona": "Costa Adeje",
+    "titulos": {
+      "es": "【LIVE】 Cámara web en directo Costa Adeje - Playa de Torviscas | SkylineWebcams",
+      "en": "【LIVE】 Webcam Costa Adeje - Playa de Torviscas | SkylineWebcams",
+      "de": "【LIVE】 Webcam Costa Adeje - Playa de Torviscas | SkylineWebcams",
+      "fr": "【LIVE】 Webcam en direct Costa Adeje - Plage de Torviscas | SkylineWebcams",
+      "it": "【LIVE】 Webcam Costa Adeje - Playa de Torviscas | SkylineWebcams"
+    }
+  },
+  {
+    "id": 1073,
+    "slug": "playa-del-duque",
+    "nombre": "El Duque",
+    "zona": "Costa Adeje",
+    "titulos": {
+      "es": "【EN VIVO】 Cámara web en Playa del Duque - Tenerife | SkylineWebcams",
+      "en": "【LIVE】 Webcam Tenerife - Playa del Duque | SkylineWebcams",
+      "de": "【LIVE】 Playa del Duque - Teneriffa Webcam | SkylineWebcams",
+      "fr": "【LIVE】 Webcam Playa del Duque - Tenerife | SkylineWebcams",
+      "it": "【LIVE】 Webcam su Playa del Duque - Tenerife | SkylineWebcams"
+    }
+  },
+  {
+    "id": 2961,
+    "slug": "la-caleta-costa-adeje",
+    "nombre": "La Caleta",
+    "zona": "Costa Adeje",
+    "titulos": {
+      "es": "【LIVE】 Cámara web en directo La Caleta - Costa Adeje | SkylineWebcams",
+      "en": "【LIVE】 Live Cam La Caleta - Costa Adeje | SkylineWebcams",
+      "de": "【LIVE】 Webcam La Caleta - Costa Adeje | SkylineWebcams",
+      "fr": "【LIVE】 Webcam en direct La Caleta - Costa Adeje | SkylineWebcams",
+      "it": "【LIVE】 Webcam La Caleta - Costa Adeje | SkylineWebcams"
+    }
+  },
+  {
+    "id": 382,
+    "slug": "playa-troya",
+    "nombre": "Troya · Las Américas",
+    "zona": "Arona",
+    "titulos": {
+      "es": "【EN VIVO】 Cámara web en Playa de Troya - Las Américas - Tenerife",
+      "en": "【LIVE】 Webcam Tenerife - Playa de Troya, Las Americas | SkylineWebcams",
+      "de": "【LIVE】 Playa de Troya Las Americas (Teneriffa) Webcam | SkylineWebcams",
+      "fr": "【LIVE】 Webcam Plage de Troya - Tenerife | SkylineWebcams",
+      "it": "【LIVE】 Webcam Playa de Troya - Las Americas - Tenerife | SkylineWebcam"
+    }
+  },
+  {
+    "id": 339,
+    "slug": "playa-las-vistas",
+    "nombre": "Las Vistas",
+    "zona": "Arona",
+    "titulos": {
+      "es": "【EN VIVO】 Cámara web en Playa Las Vistas - Tenerife | SkylineWebcams",
+      "en": "【LIVE】 Webcam Tenerife - Playa Las Vistas | SkylineWebcams",
+      "de": "【LIVE】 Playa Las Vistas - Teneriffa Webcam | SkylineWebcams",
+      "fr": "【LIVE】 Webcam La plage de Las Vistas - Tenerife | SkylineWebcams",
+      "it": "【LIVE】 Webcam sulla Spiaggia di Las Vistas - Tenerife | SkylineWebcams"
+    }
+  },
+  {
+    "id": 340,
+    "slug": "playa-los-cristianos",
+    "nombre": "Los Cristianos",
+    "zona": "Arona",
+    "titulos": {
+      "es": "【EN VIVO】 Cámara web en Playa de Los Cristianos - Tenerife",
+      "en": "【LIVE】 Webcam Tenerife - Playa de Los Cristianos | SkylineWebcams",
+      "de": "【LIVE】 Playa de Los Cristianos - Teneriffa Webcam | SkylineWebcams",
+      "fr": "【LIVE】 Webcam La plage de Los Cristianos - Tenerife | SkylineWebcams",
+      "it": "【LIVE】 Webcam Spiaggia di Los Cristianos - Tenerife | SkylineWebcams"
+    }
+  },
+  {
+    "id": 507,
+    "slug": "las-galletas",
+    "nombre": "Las Galletas",
+    "zona": "Arona",
+    "titulos": {
+      "es": "【EN VIVO】 Cámara web en Las Galletas - Marina del Sur | SkylineWebcams",
+      "en": "【LIVE】 Live Cam Marina del Sur - Las Galletas | SkylineWebcams",
+      "de": "【LIVE】 Webcam Marina del Sur - Las Galletas | SkylineWebcams",
+      "fr": "【LIVE】 Webcam en direct Marina del Sur - Las Galletas | SkylineWebcams",
+      "it": "【LIVE】 Webcam Marina del Sur - Las Galletas | SkylineWebcams"
+    }
+  },
+  {
+    "id": 376,
+    "slug": "playa-de-el-medano",
+    "nombre": "El Médano",
+    "zona": "Granadilla de Abona",
+    "titulos": {
+      "es": "【EN VIVO】 Cámara web en Playa de El Médano - Canarias | SkylineWebcams",
+      "en": "【LIVE】 Webcam El Médano Beach - Canary Islands | SkylineWebcams",
+      "de": "【LIVE】 Strand von El Médano -Kanarische Inseln Webcam | SkylineWebcams",
+      "fr": "【LIVE】 Webcam Plage de El Médano - Les îles Canaries | SkylineWebcams",
+      "it": "【LIVE】 Webcam Spiaggia di El Médano - Isole Canarie | SkylineWebcams"
+    }
+  },
+  {
+    "id": 427,
+    "slug": "surf-kitesurf-medano",
+    "nombre": "El Médano · kitesurf",
+    "zona": "Granadilla de Abona",
+    "titulos": {
+      "es": "【EN VIVO】 Cámara web en El Médano - Tenerife | SkylineWebcams",
+      "en": "【LIVE】 Webcam El Médano surf and kitesurf - Tenerife | SkylineWebcams",
+      "de": "【LIVE】 Surf und Kite in El Médano - Teneriffa Webcam | SkylineWebcams",
+      "fr": "【LIVE】 Webcam El Médano surf et kitesurf - Tenerife | SkylineWebcams",
+      "it": "【LIVE】 Webcam a El Médano surf e kitesurf - Tenerife | SkylineWebcams"
+    }
+  },
+  {
+    "id": 2896,
+    "slug": "el-medano-playa-la-tejita",
+    "nombre": "La Tejita",
+    "zona": "Granadilla de Abona",
+    "titulos": {
+      "es": "【LIVE】 Cámara web en directo El Médano - Playa La Tejita | SkylineWebcams",
+      "en": "【LIVE】 Live Cam El Médano - Playa La Tejita | SkylineWebcams",
+      "de": "【LIVE】 Webcam El Medano - Playa La Tejita | SkylineWebcams",
+      "fr": "【LIVE】 Webcam en direct El Médano - Playa La Tejita | SkylineWebcams",
+      "it": "【LIVE】 Webcam El Médano - Playa La Tejita | SkylineWebcams"
+    }
+  },
+  {
+    "id": 3033,
+    "slug": "guia-de-isora",
+    "nombre": "Playa San Juan",
+    "zona": "Guía de Isora · Santiago del Teide",
+    "titulos": {
+      "es": "【EN VIVO】 Cámara web en Guía de Isora | SkylineWebcams",
+      "en": "【LIVE】 Live Cam Guia de Isora - Playa San Juan | SkylineWebcams",
+      "de": "【LIVE】 Webcam Guía de Isora | SkylineWebcams",
+      "fr": "【LIVE】 Webcam en direct Guia de Isora - Playa San Juan | SkylineWebcams",
+      "it": "【LIVE】 Webcam Guia de Isora - Playa San Juan | SkylineWebcams"
+    }
+  },
+  {
+    "id": 715,
+    "slug": "los-gigantes",
+    "nombre": "Los Gigantes",
+    "zona": "Guía de Isora · Santiago del Teide",
+    "titulos": {
+      "es": "【EN VIVO】 Cámara web en Acantilados de Los Gigantes - Tenerife",
+      "en": "【LIVE】 Webcam Los Gigantes - Tenerife | SkylineWebcams",
+      "de": "【LIVE Webcam Los Gigantes - Teneriffa | SkylineWebcams",
+      "fr": "【LIVE】 Webcam Los Gigantes - Tenerife | SkylineWebcams",
+      "it": "【LIVE】 Webcam Los Gigantes - Tenerife | SkylineWebcams"
+    }
+  }
+]
