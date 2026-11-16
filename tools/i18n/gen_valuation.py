@@ -36,7 +36,7 @@ HOME = {"it": "Home", "nl": "Home", "fr": "Accueil", "en": "Home", "de": "Starts
 # Los <title> traducidos van a 60 caracteres como mucho (Google corta lo que pasa) y con la
 # búsqueda delante: «valutazione casa», «waardebepaling woning», «home valuation»…
 FILAS = [
-    ("Valoración gratis de tu casa en Tenerife Sur — Villa’s Properties",
+    ("Valoración gratis de tu casa en Tenerife Sur — Villa’s",
      "Valutazione casa gratis a Tenerife Sud — Villa’s Properties",
      "Gratis waardebepaling woning Tenerife — Villa’s Properties",
      "Estimation gratuite maison à Tenerife — Villa’s Properties",
@@ -51,8 +51,13 @@ FILAS = [
     ("Saltar al contenido", "Vai al contenuto", "Naar de inhoud", "Aller au contenu", "Skip to content", "Zum Inhalt springen"),
     ("SELL · VALORACIÓN GRATIS", "VENDERE · VALUTAZIONE GRATUITA", "VERKOPEN · GRATIS WAARDEBEPALING",
      "VENDRE · ESTIMATION GRATUITE", "SELL · FREE VALUATION", "VERKAUFEN · KOSTENLOSE BEWERTUNG"),
-    ("<h1>Cuánto<br>vale.</h1>", "<h1>Quanto<br>vale.</h1>", "<h1>Wat is het<br>waard.</h1>",
-     "<h1>Combien<br>ça vaut.</h1>", "<h1>What it’s<br>worth.</h1>", "<h1>Was sie<br>wert ist.</h1>"),
+    # El H1 dice lo mismo que el <title>; el eslogan va debajo como subtítulo.
+    ('<h1>Valoración gratis de tu casa en Tenerife Sur</h1><p class="h1-sub">Cuánto<br>vale.</p>',
+     '<h1>Valutazione casa gratis a Tenerife Sud</h1><p class="h1-sub">Quanto<br>vale.</p>',
+     '<h1>Gratis waardebepaling woning Tenerife</h1><p class="h1-sub">Wat is het<br>waard.</p>',
+     '<h1>Estimation gratuite maison à Tenerife</h1><p class="h1-sub">Combien<br>ça vaut.</p>',
+     '<h1>Free home valuation in South Tenerife</h1><p class="h1-sub">What it’s<br>worth.</p>',
+     '<h1>Immobilie kostenlos bewerten Teneriffa</h1><p class="h1-sub">Was sie<br>wert ist.</p>'),
     ("Estimación gratuita en dos minutos con los datos reales del mercado de Tenerife Sur. Con la cifra de anuncio, la salida realista y lo que de verdad se firma en notaría.",
      "Stima gratuita in due minuti con i dati reali del mercato di Tenerife Sud. Con il prezzo di annuncio, l’andamento della sua zona e ciò che si firma davvero dal notaio.",
      "Gratis schatting in twee minuten met de echte marktgegevens van Zuid-Tenerife. Met de vraagprijs, de ontwikkeling van uw zone en wat er werkelijk bij de notaris wordt getekend.",
@@ -288,7 +293,7 @@ def ld_json(html: str, lang: str) -> str:
     ]
     if len(faq) < 5:
         sys.exit(f"[{lang}] solo {len(faq)} preguntas en el FAQ visible; se esperaban 5")
-    titulo = T["Valoración gratis de tu casa en Tenerife Sur — Villa’s Properties"][lang].split(" — ")[0]
+    titulo = T["Valoración gratis de tu casa en Tenerife Sur — Villa’s"][lang].split(" — ")[0]
     grafo = {
         "@context": "https://schema.org",
         "@graph": [

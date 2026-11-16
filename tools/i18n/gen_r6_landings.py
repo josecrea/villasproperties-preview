@@ -72,12 +72,21 @@ CITY = {
 }
 
 # --- textos por idioma: plantillas con {City} y números ya resueltos por ciudad ---
+def titulo_corto(*bases):
+    """Título ≤60 con la palabra clave delante (auditoría 13-nov-2026)."""
+    for b in bases:
+        for suf in (" | Villa's Properties", " | Villa's"):
+            if len(b + suf) <= 60:
+                return b + suf
+    return bases[-1]
+
+
 T = {
 'nl': {
     'eyeZone': lambda c: f"{c['EsName'].upper()} · Zuidkust" if c['EsName']=='Arona' else f"{c['EsName'].upper()} · Zuidwestkust",
-    'titleTag': lambda name: f"Huis kopen in {name}: prijzen per zone en reëel verschil | Villa's Properties",
+    'titleTag': lambda name: titulo_corto(f"Huis kopen in {name}: prijzen", f"Huis kopen in {name}"),
     'ogDesc': lambda c: f"Wat kost kopen in {c['EsName']}: {c['pedido']} vraagprijs tegenover {c['firmado']} notarieel. Prijs per zone, hoeveel oppervlakte in uw budget past en wat te checken voor u tekent.",
-    'metaDesc': "Villa's Properties: makelaar in Zuid-Tenerife met eigen marktanalyse voor kopen, verkopen, financieren en investeren met echte data.",
+    'metaDesc': lambda c: f"Huis kopen in {c['EsName']}: {c['pedido']} gevraagd, {c['firmado']} getekend. Prijs per zone en wat u controleert voordat u tekent.",
     'serviceType': lambda name: f"Advies bij het kopen van een woning in {name}",
     'offerDesc': 'Eerste gesprek en inzicht in de zoneprijs zonder kosten',
     'faqName': lambda name: f'Veelgestelde vragen over kopen in {name}',
@@ -105,9 +114,9 @@ T = {
 },
 'fr': {
     'eyeZone': lambda c: f"{c['EsName'].upper()} · Côte sud" if c['EsName']=='Arona' else f"{c['EsName'].upper()} · Côte sud-ouest",
-    'titleTag': lambda name: f"Acheter une maison à {name} : prix par zone et marge réelle | Villa's Properties",
+    'titleTag': lambda name: titulo_corto(f"Acheter une maison à {name} : prix", f"Acheter une maison à {name}"),
     'ogDesc': lambda c: f"Ce que coûte l'achat à {c['EsName']} : {c['pedido']} affiché contre {c['firmado']} notarié. Prix zone par zone, surface accessible selon votre budget et ce qu'il faut vérifier avant de signer.",
-    'metaDesc': "Villa's Properties : agence immobilière dans le sud de Tenerife avec analyse de marché propre pour acheter, vendre, financer et investir avec des données réelles.",
+    'metaDesc': lambda c: f"Acheter une maison à {c['EsName']} : {c['pedido']} demandés, {c['firmado']} signés. Prix par zone et points à vérifier avant de signer.",
     'serviceType': lambda name: f"Conseil pour l'achat d'un bien à {name}",
     'offerDesc': 'Premier échange et lecture du prix de la zone sans frais',
     'faqName': lambda name: f"Questions fréquentes sur l'achat à {name}",
@@ -135,9 +144,9 @@ T = {
 },
 'it': {
     'eyeZone': lambda c: f"{c['EsName'].upper()} · Costa sud" if c['EsName']=='Arona' else f"{c['EsName'].upper()} · Costa sud-ovest",
-    'titleTag': lambda name: f"Comprare casa a {name}: prezzi per zona e margine reale | Villa's Properties",
+    'titleTag': lambda name: titulo_corto(f"Comprare casa a {name}: prezzi", f"Comprare casa a {name}"),
     'ogDesc': lambda c: f"Quanto costa comprare a {c['EsName']}: {c['pedido']} richiesto contro {c['firmado']} rogitato. Prezzo zona per zona, quanta superficie entra nel tuo budget e cosa verificare prima di firmare.",
-    'metaDesc': "Villa's Properties: agenzia immobiliare nel sud di Tenerife con analisi di mercato propria per comprare, vendere, finanziare e investire con dati reali.",
+    'metaDesc': lambda c: f"Comprare casa a {c['EsName']}: {c['pedido']} richiesti, {c['firmado']} firmati. Prezzi per zona e cosa verificare prima di firmare.",
     'serviceType': lambda name: f"Consulenza per l'acquisto di casa a {name}",
     'offerDesc': 'Prima consulenza e lettura del prezzo di zona senza costi',
     'faqName': lambda name: f"Domande frequenti su comprare casa a {name}",
@@ -165,9 +174,9 @@ T = {
 },
 'en': {
     'eyeZone': lambda c: f"{c['EsName'].upper()} · South coast" if c['EsName']=='Arona' else f"{c['EsName'].upper()} · Southwest coast",
-    'titleTag': lambda name: f"Buying a house in {name}: prices by zone and the real margin | Villa's Properties",
+    'titleTag': lambda name: titulo_corto(f"Buying a house in {name}: prices", f"Buying a house in {name}"),
     'ogDesc': lambda c: f"What it costs to buy in {c['EsName']}: {c['pedido']} asking versus {c['firmado']} notarised. Price zone by zone, how much space fits your budget and what to check before signing.",
-    'metaDesc': "Villa's Properties: a South Tenerife estate agency with in-house market analysis for buying, selling, financing and investing with real data.",
+    'metaDesc': lambda c: f"Buying a house in {c['EsName']}: {c['pedido']} asked, {c['firmado']} notarised. Prices by zone and what to check before signing.",
     'serviceType': lambda name: f"Advice on buying a home in {name}",
     'offerDesc': 'First consultation and zone-price read at no cost',
     'faqName': lambda name: f"Frequently asked questions about buying in {name}",
@@ -195,9 +204,9 @@ T = {
 },
 'de': {
     'eyeZone': lambda c: f"{c['EsName'].upper()} · Südküste" if c['EsName']=='Arona' else f"{c['EsName'].upper()} · Südwestküste",
-    'titleTag': lambda name: f"Haus kaufen in {name}: Preise nach Zone und reale Spanne | Villa's Properties",
+    'titleTag': lambda name: titulo_corto(f"Haus kaufen in {name}: Preise", f"Haus kaufen in {name}"),
     'ogDesc': lambda c: f"Was der Kauf in {c['EsName']} kostet: {c['pedido']} Angebotspreis gegenüber {c['firmado']} notariell beurkundet. Preis Zone für Zone, wie viel Fläche in Ihr Budget passt und was vor der Unterschrift zu prüfen ist.",
-    'metaDesc': "Villa's Properties: Immobilienmakler im Süden von Teneriffa mit eigener Marktanalyse für Kauf, Verkauf, Finanzierung und Investition mit echten Daten.",
+    'metaDesc': lambda c: f"Haus kaufen in {c['EsName']}: {c['pedido']} verlangt, {c['firmado']} beurkundet. Preise nach Zone und was vor der Unterschrift zu prüfen ist.",
     'serviceType': lambda name: f"Beratung beim Hauskauf in {name}",
     'offerDesc': 'Erstgespräch und Einschätzung des Zonenpreises kostenlos',
     'faqName': lambda name: f"Häufige Fragen zum Hauskauf in {name}",
@@ -291,7 +300,7 @@ def build_page(city_key, lang):
     es_url = f"https://villasproperties.es/{es_page}"
     title = t['titleTag'](name)
     og_desc = t['ogDesc'](c)
-    meta_desc = t['metaDesc']
+    meta_desc = t['metaDesc'](c)
     og_locale = OG_LOCALE[lang]
     out_mark = f' hreflang="es" title="{FOREIGN_TITLE[lang]}"'
 
