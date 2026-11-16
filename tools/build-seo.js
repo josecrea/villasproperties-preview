@@ -19,7 +19,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { TEXTOS, recortaDesc, esLanding, tituloLanding } = require('./seo-textos');
+const { TEXTOS, recortaDesc, esLanding, tituloLanding, tituloCorto } = require('./seo-textos');
 
 const ROOT = path.join(__dirname, '..');
 /* 🔴 El dominio comercial, NO el de Pages: cada build reescribe canonical, og:url y
@@ -87,7 +87,7 @@ const PAGES = {
     type: 'property', priority: '0.8', noindex: true, robots: 'noindex,follow',
   },
   'valuation.html': {
-    title: 'Valoración gratis de tu casa en Tenerife Sur | Villa’s',
+    title: 'Valoración gratis de tu casa en Tenerife Sur — Villa’s Properties',
     desc: 'Calcula gratis lo que vale tu vivienda en Tenerife Sur con datos reales: precio de anuncio, salida realista y valor escriturado.',
     type: 'faq', priority: '0.9',
   },
@@ -277,7 +277,8 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
   const ogPrevio = (htmlSinBloque.match(/<meta property="og:description" content="([^"]*)"/) || [, ''])[1]
     .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   if (esLanding(file) && !meta.title) meta.title = tituloLanding(titleOf(html));
-  const title = meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`;
+  const title = tituloCorto(meta.title || titleOf(html) || `${ORG.name} — Property Intelligence · Tenerife`);
+  const ponerTitulo = Boolean(meta.title) || title !== titleOf(html);
   /* Orden: el texto escrito a mano en seo-textos.js manda; si no lo hay, la descripción
      que la página ya traía —fuera del bloque (informes, boletines) o DENTRO de él (las
      landings en otro idioma la traen ahí)—; y solo al final la genérica.
@@ -328,9 +329,9 @@ files.filter((f) => !esFicha(f)).forEach((file) => {
   html = html.replace(/\s*<meta name="robots"[^>]*>/g, '');
   html = html.replace(/\s*<meta name="theme-color"[^>]*>/g, '');
   html = html.replace(/\s*<link rel="canonical"[^>]*>/g, '');
-  if (meta.title) html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`);
+  if (ponerTitulo) html = html.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${esc(title)}</title>`);
   /* og:title y twitter:title que escribió el generador (fuera del bloque) siguen al <title>. */
-  if (meta.title) html = html.replace(/(<meta (?:property="og:title"|name="twitter:title") content=")[^"]*(">)/g, `$1${esc(meta.title)}$2`);
+  if (ponerTitulo) html = html.replace(/(<meta (?:property="og:title"|name="twitter:title") content=")[^"]*(">)/g, (_, a, b) => a + esc(title) + b);
 
   /* hreflang: manda la lista que calcula tools/i18n (hreflangPorPagina). Se recogen los que
      hubiera sueltos, se borran todos y se reescriben junto al bloque. Esta es la versión que

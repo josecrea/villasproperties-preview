@@ -10,6 +10,7 @@ Tres cosas que antes estaban duplicadas (y mal) en cada gen_*.py:
   3. reescribir_rutas: prefija '../' en TODO atributo que lleva URL
      (href, src, action, poster, data-src, data-poster, data-img, srcset).
 """
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -17,12 +18,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 
+# Para probar un cambio de la fuente española antes de fusionarlo: VP_FUENTE_REF=HEAD
+REF_FUENTE = os.environ.get("VP_FUENTE_REF", "origin/main")
+
+
 def leer_fuente(nombre: str) -> str:
     """HTML español sin parchear: `origin/main:<nombre>`; si no hay git o
     remoto, el fichero de la raíz (comportamiento antiguo)."""
     try:
         out = subprocess.run(
-            ["git", "-C", str(ROOT), "show", f"origin/main:{nombre}"],
+            ["git", "-C", str(ROOT), "show", f"{REF_FUENTE}:{nombre}"],
             capture_output=True, check=True,
         ).stdout
         return out.decode("utf-8")

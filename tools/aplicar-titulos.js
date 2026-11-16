@@ -37,53 +37,20 @@ const FAM = [
   { re: /^en\/buy-house-(.+)\.html$/, lang: 'en', t: (M) => [`Buying a house in ${M}: prices`, `Buying a house in ${M}`], d: (M, a, b) => `Buying a house in ${M}: ${a} €/m² asked, ${b} €/m² notarised. Prices by zone and what to check before signing.` },
   { re: /^de\/haus-kaufen-(.+)\.html$/, lang: 'de', t: (M) => [`Haus kaufen in ${M}: Preise`, `Haus kaufen in ${M}`], d: (M, a, b) => `Haus kaufen in ${M}: ${a} €/m² verlangt, ${b} €/m² beurkundet. Preise nach Zone und was vor der Unterschrift zu prüfen ist.` },
 ];
-/* Casos a mano (título = base sin marca; se ajusta a ≤60 con la marca). */
+/* Casos a mano (título = base sin marca; se ajusta a ≤60 con la marca).
+   Los títulos y descripciones de las páginas españolas de la raíz NO van aquí: mandan
+   tools/seo-textos.js y build-seo.js, que se ejecuta ANTES que este script. */
 const OVR = {
   'advisory.html': { h1: 'Asesoría inmobiliaria en Tenerife Sur' },
-  'case-studies.html': { title: 'Casos reales de compraventa en Tenerife Sur' },
-  'decision-lab.html': { title: 'Decision Lab: calculadora de inversión' },
-  'finance-lab.html': { title: 'Finance Lab: calcula tu capacidad de compra' },
-  'insights.html': { title: 'Insights: análisis del mercado inmobiliario' },
-  'intelligence.html': { title: 'Intelligence: datos de mercado inmobiliario' },
-  'market-impact.html': { title: 'Market Impact: tu precio frente al mercado' },
   'property.html': { title: 'Ficha de propiedad en Tenerife Sur', h1: 'Ficha de propiedad en Tenerife Sur' },
-  'properties.html': { title: 'Propiedades en venta en Tenerife Sur' },
-  'property-compare.html': { title: 'Property Compare: compara propiedades en Tenerife' },
-  'property-brief.html': { title: 'Property Brief: define tu búsqueda en Tenerife' },
   'nl/zoekprofiel.html': { title: 'Zoekprofiel: uw zoektocht op Tenerife' },
   'fr/brief-recherche.html': { title: 'Brief de recherche : votre bien à Tenerife' },
   'it/brief-ricerca.html': { title: 'Brief di ricerca: la tua casa a Tenerife' },
   'de/suchprofil.html': { title: 'Suchprofil: Ihre Immobiliensuche auf Teneriffa' },
   'en/property-brief.html': { title: 'Property brief: define your Tenerife home search' },
-  'valuation.html': { title: 'Valoración gratis de tu casa en Tenerife Sur' },
-  'informe-sur-de-tenerife-2026-10-27.html': { title: 'Informe del sur de Tenerife · octubre 2026' },
-  'post-mapa-metro-cuadrado.html': { title: 'El mapa del metro cuadrado en Tenerife Sur' },
-  'post-newsletter-sur-de-tenerife-2026-10-27.html': { title: 'Las Rosas +16,6 %: el sur de Tenerife en cifras' },
-  'post-de-adeje-al-norte-las-zonas-de-tenerife-que-marcaran-la-revalorizacion-en-2026-4.html': { title: 'Zonas de Tenerife que más se revalorizan en 2026' },
-  'post-el-precio-de-la-vivienda-en-espana-se-ha-incrementado-un-45-en-los-ultimos-diez-anos-7.html': { title: 'La vivienda en España sube un 45 % en diez años' },
-  'post-suelo-urbano-canarias-125000-viviendas.html': { title: 'Suelo urbano en Canarias: 125.000 viviendas' },
-  'post-vender-casa-tenerife-sur.html': { title: 'Vender casa en Tenerife Sur: precio real y plazos' },
-  'aviso-legal.html': { desc: 'Aviso legal de Villa’s Properties (VILLVERG SL): titular, datos de contacto y condiciones de uso de la web según la Ley 34/2002 (LSSI-CE).' },
-  'post-como-vender-una-casa-5.html': { desc: 'Cómo vender una casa en Tenerife: entiende el mercado y fija un precio de salida realista antes de publicar el anuncio. Fase 1.' },
-  'post-como-vender-una-casa-fase-2-6.html': { desc: 'Cómo vender una casa, fase 2: prepara la operación, la documentación y el canal de venta una vez decidido el precio de salida.' },
-  'post-cuanto-vale-realmente-mi-villa-en-tenerife-la-clave-esta-en-la-precision-no-en-la-prisa-2.html': { desc: 'Cuánto vale realmente tu villa en Tenerife: por qué la clave está en la precisión y no en la prisa al fijar el precio de venta.' },
-  'post-de-adeje-al-norte-las-zonas-de-tenerife-que-marcaran-la-revalorizacion-en-2026-4.html#d': { },
-  'post-el-precio-de-la-vivienda-en-espana-se-ha-incrementado-un-45-en-los-ultimos-diez-anos-7.html#d': { },
-  'post-estudio-anual-del-mercado-inmobiliario-1.html': { desc: 'Estudio anual del mercado inmobiliario en Tenerife: tendencia alcista sostenida entre 2020 y 2025 y qué significa para vender o comprar.' },
-  'post-invertir-en-tenerife-por-que-la-seguridad-juridica-es-mas-importante-que-la-rentabilidad-3.html': { desc: 'Invertir en Tenerife: por qué la seguridad jurídica pesa más que la rentabilidad y qué comprobar antes de comprometer capital.' },
-  'post-por-que-tu-casa-no-se-vende-en-tenerife-8.html': { desc: 'Por qué tu casa no se vende en Tenerife Sur tras meses en el mercado: las causas habituales, sobre todo en gama alta, y cómo corregirlas.' },
-  'post-suelo-urbano-canarias-125000-viviendas.html#d': { },
   'fr/index.html': { desc: "Agence immobilière dans le sud de Tenerife : analyse de marché propre pour acheter, vendre, financer et investir avec des données réelles." },
   'en/index.html': { h1raw: 'Tenerife.<br>Property.<br>Different.' },
 };
-const DESC_POSTS = {
-  'post-de-adeje-al-norte-las-zonas-de-tenerife-que-marcaran-la-revalorizacion-en-2026-4.html': 'De Adeje al norte: las zonas de Tenerife con más recorrido de revalorización en 2026 y qué significa si compras o vendes.',
-  'post-el-precio-de-la-vivienda-en-espana-se-ha-incrementado-un-45-en-los-ultimos-diez-anos-7.html': 'El precio de la vivienda en España ha subido un 45 % en diez años: qué cambió en el mercado y qué implica hoy comprar o vender en Tenerife.',
-  'post-suelo-urbano-canarias-125000-viviendas.html': 'Suelo urbano en Canarias: caben 125.024 viviendas sin recalificar, pero solo 11.000 son unifamiliares. Por qué eso marca el precio de la villa.',
-  'post-vender-casa-tenerife-sur.html': 'Vender casa en Tenerife Sur: en 2026 se firma entre un 9 % y un 25 % por debajo del precio pedido, según el municipio. Impuestos y plazos.',
-};
-for (const k of Object.keys(OVR)) if (k.endsWith('#d')) delete OVR[k];
-for (const [k, d] of Object.entries(DESC_POSTS)) OVR[k] = Object.assign(OVR[k] || {}, { desc: d });
 
 function leadNums(html) {
   const m = html.match(/<p class="pagelede">([\s\S]*?)<\/p>/);
@@ -116,7 +83,9 @@ for (const r of fails) {
   if (o.h1raw) { h1 = o.h1raw; }
   else if (has('H1≠título') || has('H1 otro idioma') || has('sin H1') || o.h1) {
     h1 = E(o.h1 || baseOf(title));
-    if (r.h1 && !o.h1raw) sub = (file.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) || [])[1];
+    /* Si la página ya trae subtítulo (p. ej. el eslogan traducido por un generador de idioma)
+       se conserva; solo cuando no lo hay baja a subtítulo el H1 que había. */
+    if (r.h1) sub = (file.match(/<p class="h1-sub">([\s\S]*?)<\/p>/) || file.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) || [])[1];
   }
   if (desc.length > 155) ERR.push('desc>155 ' + r.u + ' ' + desc.length);
   if (title.length > 60) ERR.push('title>60 ' + r.u);

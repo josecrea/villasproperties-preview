@@ -39,9 +39,11 @@ const TEXTOS = {
     desc: 'Cuánto vale de verdad una villa en Tenerife: por qué el precio de salida pide precisión y no prisa, y cómo fijarlo con datos de su zona.',
   },
   'post-de-adeje-al-norte-las-zonas-de-tenerife-que-marcaran-la-revalorizacion-en-2026-4.html': {
+    title: 'Zonas de Tenerife que más se revalorizan en 2026',
     desc: 'Las zonas de Tenerife con más recorrido de revalorización en 2026, de Adeje al norte: dónde está el techo de precios y dónde las oportunidades emergentes.',
   },
   'post-el-precio-de-la-vivienda-en-espana-se-ha-incrementado-un-45-en-los-ultimos-diez-anos-7.html': {
+    title: 'La vivienda en España sube un 45 % en diez años',
     desc: 'El metro cuadrado en España pasó de 1.307 € a 1.896 € entre 2016 y 2025 (+45 %), pero no en todas partes por igual: lectura por mercados locales.',
   },
   'post-estudio-anual-del-mercado-inmobiliario-1.html': {
@@ -54,14 +56,47 @@ const TEXTOS = {
     desc: 'Si tu casa lleva meses sin venderse en Tenerife Sur, casi siempre es por unos pocos errores evitables: precio, presentación y exposición. Cómo detectarlos.',
   },
   'post-suelo-urbano-canarias-125000-viviendas.html': {
+    title: 'Suelo urbano en Canarias: 125.000 viviendas',
     desc: 'Canarias tiene suelo urbano consolidado para 125.024 viviendas según el observatorio Obvia, y el potencial se concentra donde ya está la demanda.',
   },
   'post-vender-casa-tenerife-sur.html': {
+    title: 'Vender casa en Tenerife Sur: precio real y plazos',
     desc: 'Vender casa en el sur de Tenerife: precio real por zona, lo que te queda neto tras impuestos, la retención del 3 % a no residentes y los plazos.',
   },
+  /* Páginas publicadas después de la auditoría: el título propio pasaba de 60 y Google lo corta. */
+  'informe-sur-de-tenerife-2026-10-27.html': { title: 'Informe del sur de Tenerife · octubre 2026' },
+  'post-newsletter-sur-de-tenerife-2026-10-27.html': { title: 'Las Rosas +16,6 %: el sur de Tenerife en cifras' },
+  'post-mapa-metro-cuadrado.html': { title: 'El mapa del metro cuadrado en Tenerife Sur' },
+  'informe-sur-de-tenerife-2026-11-05.html': { title: 'Informe del sur de Tenerife · noviembre 2026' },
+  'post-newsletter-sur-de-tenerife-2026-11-05.html': { title: 'San Isidro +11,4 % y la demanda extranjera, en máximos' },
+  'post-comprar-vivienda-tenerife-desde-la-ue.html': {
+    title: 'Comprar vivienda en Tenerife desde otro país de la UE',
+    desc: 'Cómo comprar una vivienda en Tenerife viviendo en otro país de la UE: NIE, poder notarial, cuenta bancaria, hipoteca para no residentes y plazos reales.',
+  },
+  'post-impuestos-comprar-vivienda-canarias.html': { title: 'Impuestos al comprar vivienda en Canarias (2026)' },
+  'post-segunda-residencia-costa-adeje.html': { title: 'Segunda residencia en Costa Adeje: zonas y costes (2026)' },
+  'residence-secondaire-costa-adeje-fr.html': {
+    title: 'Résidence secondaire à Costa Adeje : zones et coûts (2026)',
+    desc: 'Résidence secondaire à Costa Adeje pour acheteurs belges, néerlandais et allemands : zones, coûts réels, fiscalité et démarches avant de signer.',
+  },
+  'tweede-verblijf-costa-adeje-nl.html': { title: 'Tweede verblijf in Costa Adeje: zones en kosten (2026)' },
+  'zweitwohnsitz-costa-adeje-de.html': { title: 'Zweitwohnsitz in Costa Adeje: Zonen und Kosten (2026)' },
 };
 
-const MAX_DESC = 158;
+const MAX_DESC = 155;
+const MAX_TITULO = 60;
+
+/* Un título que pasa de 60 pierde primero «Properties» y después la marca entera
+   (Google la añade por su cuenta). Si aun así no cabe se deja como está y lo canta
+   tools/audit-titulos.js: toca escribirle uno corto arriba, en TEXTOS. */
+const tituloCorto = (t) => {
+  const s = String(t).trim();
+  if (s.length <= MAX_TITULO) return s;
+  const m = s.match(/^(.*?)\s*(—|\|)\s*Villa(?:’|')s(?: Properties)?$/);
+  if (!m) return s;
+  const corta = `${m[1]} ${m[2]} Villa’s`;
+  return corta.length <= MAX_TITULO ? corta : (m[1].length <= MAX_TITULO ? m[1] : s);
+};
 
 /* Una descripción larga se recorta en el último punto que deje ≥ 70 caracteres;
    si no hay, en la última palabra. Nunca a mitad de cifra. */
@@ -80,7 +115,8 @@ const esLanding = (f) => /^(comprar|vender)-casa-.+\.html$/.test(f);
 const tituloLanding = (t) => {
   let r = t.replace(/\s*\|\s*Villa’s Properties$/, '');
   if (r.length > 60) r = r.replace('precios por zona y margen real', 'precios y margen real');
+  if (r.length > 60) r = r.replace(' y qué comprobar', '');
   return r;
 };
 
-module.exports = { TEXTOS, recortaDesc, esLanding, tituloLanding, MAX_DESC };
+module.exports = { TEXTOS, recortaDesc, esLanding, tituloLanding, tituloCorto, MAX_DESC, MAX_TITULO };
