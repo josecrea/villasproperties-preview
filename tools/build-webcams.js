@@ -126,8 +126,39 @@ const CSS = `<style>
 .cam img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
 .cam a:hover img,.cam a:focus-visible img{transform:scale(1.03)}
 .cam figcaption{margin-top:8px;font-size:15px}
+.vcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px 18px}
+.vc{display:block;color:inherit;text-decoration:none}
+.vc img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:4px;background:#e9ece9}
+.vc-zona{display:block;margin-top:12px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.vc strong{display:block;margin-top:6px;font-size:17px;font-weight:500;line-height:1.3}
+.vc-precio{display:block;margin-top:8px;font-size:22px;letter-spacing:-.02em}
+.vc:hover strong,.vc:focus-visible strong{text-decoration:underline}
 @media (prefers-reduced-motion:reduce){.cam img{transition:none}}
 </style>`;
+
+const utm = (lang) => `utm_source=web&amp;utm_medium=webcams&amp;utm_campaign=webcams_${lang}`;
+const LISTADO = { nl: 'woningen.html', de: 'immobilien.html', fr: 'biens.html', it: 'immobili.html' };
+
+// Viviendas en venta. En nl/de/fr/it salen del listado ya traducido de ese idioma (misma foto,
+// título y precio que allí); en es y en, de properties-data.js, con enlace a la ficha en español.
+function viviendas(lang) {
+  if (LISTADO[lang]) {
+    const h = fs.readFileSync(path.join(ROOT, lang, LISTADO[lang]), 'utf8');
+    const arts = h.match(/<article class="property vl-item"[\s\S]*?<\/article>/g) || [];
+    if (!arts.length) throw new Error(`[webcams] ${lang}: ${LISTADO[lang]} no tiene viviendas`);
+    return arts.map((a) => {
+      const g = (re) => { const m = a.match(re); if (!m) throw new Error(`[webcams] ${lang}: tarjeta sin ${re}`); return m[1]; };
+      return { href: `${LISTADO[lang]}?${utm(lang)}#${g(/ id="([^"]+)"/)}`, img: g(/<img src="([^"]+)"/), titulo: g(/<h3>([\s\S]*?)<\/h3>/), zona: g(/<div class="meta">([\s\S]*?)<\/div>/), precio: g(/<div class="price">([\s\S]*?)<\/div>/) };
+    });
+  }
+  const w = {};
+  require('vm').runInNewContext(fs.readFileSync(path.join(ROOT, 'properties-data.js'), 'utf8'), { window: w });
+  const pre = lang === 'es' ? '' : '../';
+  return w.VP_PROPERTIES.filter((p) => p.status === 'En venta').map((p) => ({
+    href: `${pre}vivienda-${p.slug}.html?${utm(lang)}`, hreflang: lang !== 'es', img: pre + p.images[0],
+    titulo: p.title, zona: `${p.zone} · ${p.town}`, precio: `${p.price.toLocaleString('es-ES')} €`,
+  }));
+}
 
 function cuerpo(lang) {
   const t = T[lang];
@@ -150,9 +181,10 @@ ${rejilla}
 </div>
 <p class="bankpie">${t.fuente}</p>
 </div></section>
-<section class="sell-cta" data-header-theme="green"><div class="wrap" style="position:relative;z-index:1">
-<div class="eye">${t.ctaEye}</div><h2>${t.ctaH}</h2><p style="max-width:580px">${t.ctaP}</p>
-<div class="actions" style="justify-content:flex-start;margin-top:25px"><a class="btn fill" href="${t.b1href}?utm_source=web&amp;utm_medium=webcams&amp;utm_campaign=webcams_${lang}">${t.b1}</a><a class="btn" href="${WA}" target="_blank" rel="noopener">${t.b2}</a></div>
+<section class="section tight" id="viviendas"><div class="wrap">
+<div class="head"><div class="eye">${t.ctaEye}</div><div><h2>${t.ctaH}</h2><p class="muted">${t.ctaP}</p></div></div>
+<div class="vcgrid">${viviendas(lang).map((v) => `<a class="vc" href="${v.href}"${v.hreflang ? ' hreflang="es"' : ''}><img src="${v.img}" alt="" loading="lazy" decoding="async" width="1200" height="800"><span class="vc-zona">${v.zona}</span><strong>${v.titulo}</strong><span class="vc-precio">${v.precio}</span></a>`).join('')}</div>
+<div class="actions" style="justify-content:flex-start;margin-top:32px"><a class="btn fill" href="${t.b1href}?${utm(lang)}">${t.b1}</a><a class="btn" href="${WA}" target="_blank" rel="noopener">${t.b2}</a></div>
 </div></section>`;
 }
 
