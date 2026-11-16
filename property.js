@@ -25,7 +25,11 @@
   const U = (v) => (window.VPSafe ? VPSafe.url(v) : String(v ?? ''));
 
   const params = new URLSearchParams(location.search);
-  const property = props.find((p) => p.ref === params.get('ref') || p.slug === params.get('ref')) || props[0];
+  /* vivienda-<slug>.html (tools/build-fichas.js) fija su vivienda con VP_FICHA_REF: ya
+     trae title, description y JSON-LD propios en el HTML y aquí no se pisan. */
+  const fichaFija = window.VP_FICHA_REF || null;
+  const refPedida = fichaFija || params.get('ref');
+  const property = props.find((p) => p.ref === refPedida || p.slug === refPedida) || props[0];
 
   if (!property) {
     root.innerHTML = '<div class="wrap"><p class="muted">No hay inmuebles publicados.</p></div>';
@@ -34,9 +38,9 @@
 
   /* Google recorta el title a ~60-65 caracteres: usamos el corto (tipología +
      zona), que además es el que se busca. */
-  document.title = `${property.titleShort || property.title} — Villa’s Properties`;
+  if (!fichaFija) document.title = `${property.titleShort || property.title} — Villa’s Properties`;
   const desc = $('meta[name="description"]');
-  if (desc) desc.setAttribute('content', `${property.type} en ${property.zone}, ${property.town}. ${property.built} m², ${property.beds} hab, ${property.baths} baños. ${euro(property.price)}.`);
+  if (desc && !fichaFija) desc.setAttribute('content', `${property.type} en ${property.zone}, ${property.town}. ${property.built} m², ${property.beds} hab, ${property.baths} baños. ${euro(property.price)}.`);
 
   /* ---------- Lectura de mercado: el inmueble contra su microzona ---------- */
   const marketRead = () => {
@@ -462,8 +466,11 @@
       geo: { '@type': 'GeoCoordinates', latitude: property.coords[0], longitude: property.coords[1] },
     },
   };
-  const script = document.createElement('script');
-  script.type = 'application/ld+json';
-  script.textContent = JSON.stringify(ld);
-  document.head.appendChild(script);
+  /* En vivienda-<slug>.html el JSON-LD ya está en el HTML: no se duplica. */
+  if (!fichaFija) {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify(ld);
+    document.head.appendChild(script);
+  }
 })();

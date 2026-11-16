@@ -47,6 +47,18 @@ const MERCADO = JSON.parse(src.match(/window\.VP_MARKET\s*=\s*(\{[\s\S]*\});/)[1
 
 /* Se calca el envoltorio de una página que ya existe: mismo CSS, misma cabecera,
    mismo pie. Ni un estilo nuevo. */
+/* IDIOMAS (PR #5): los <link rel="alternate" hreflang> de estas páginas los escribe tools/i18n, no
+   este generador. Al regenerar la página se CONSERVAN los que ya tenía el fichero (si no, cada
+   refresco mensual los borra). Sin #5 el fichero no tiene ninguno y sale exactamente igual. */
+function escribe(nombre, html) {
+  const ruta = path.join(RAIZ, nombre);
+  let previo = '';
+  try { previo = fs.readFileSync(ruta, 'utf8'); } catch (e) { /* primera vez */ }
+  const tags = (previo.match(/<link rel="alternate" hreflang="[^"]*"[^>]*>/g) || []).filter((t) => !html.includes(t));
+  if (tags.length) html = html.replace('</head>', () => `${tags.join('')}\n</head>`);
+  fs.writeFileSync(ruta, html, 'utf8');
+}
+
 const modelo = fs.readFileSync(path.join(RAIZ, 'buy.html'), 'utf8');
 const scripts = (modelo.match(/<script src="[^"]+"[^>]*><\/script>/g) || []).join('');
 const cssTag = (modelo.match(/<link rel="stylesheet" href="site\.css[^"]*">/) || [''])[0];
@@ -319,7 +331,7 @@ for (const [k, cfg] of Object.entries(MUNI)) {
     breadcrumb: `Comprar casa en ${n}`,
     schemaCity: { name: n, geo: cfg.geo },
   });
-  fs.writeFileSync(path.join(RAIZ, `${cfg.slug}.html`), html, 'utf8');
+  escribe(`${cfg.slug}.html`, html);
   hechas += 1;
   console.log(`  ✓ ${(cfg.slug + '.html').padEnd(38)} ${fmt(m.eurM2)} €/m² · ${zonas.length} zonas · ${faqCompra(n, ctx).length} preguntas`);
 }
@@ -376,7 +388,7 @@ for (const nu of NUCLEOS) {
     breadcrumb: `Comprar casa en ${n}`,
     schemaCity: { name: n, geo: nu.geo },
   });
-  fs.writeFileSync(path.join(RAIZ, `${nu.slug}.html`), html, 'utf8');
+  escribe(`${nu.slug}.html`, html);
   hechas += 1;
   console.log(`  ✓ ${(nu.slug + '.html').padEnd(38)} ${fmt(z.eurM2)} €/m² · ${n} (${m.name}) · ${faq.length} preguntas`);
 }

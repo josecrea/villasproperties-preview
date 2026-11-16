@@ -34,6 +34,15 @@
 - [Cómo valorar tu vivienda](https://villasproperties.es/post-como-valorar-tu-vivienda.html): método y errores frecuentes.
 - [Propiedades](https://villasproperties.es/properties.html): catálogo con ficha completa.
 
+## Viviendas en venta (una página por vivienda)
+- [Apartamento reformado en Costa Adeje](https://villasproperties.es/vivienda-costa-adeje-torviscas.html): Torviscas Centro y Alto, Adeje · 88 m² · 2 dormitorios · 395.000 €
+- [Ático de 3 dormitorios en Las Chafiras](https://villasproperties.es/vivienda-las-chafiras-biltmore.html): Las Chafiras, San Miguel de Abona · 93 m² · 3 dormitorios · 299.000 €
+- [Apartamento con garaje en Cabo Blanco](https://villasproperties.es/vivienda-cabo-blanco-arona.html): Cabo Blanco, Arona · 110 m² · 2 dormitorios · 255.000 €
+- [Entreplanta luminosa en Los Abrigos](https://villasproperties.es/vivienda-los-abrigos-granadilla.html): Los Abrigos, Granadilla de Abona · 56 m² · 2 dormitorios · 189.000 €
+- [Apartamento con terraza en el casco de Adeje](https://villasproperties.es/vivienda-casco-adeje-la-paz.html): Casco Urbano, Adeje · 50 m² · 1 dormitorio · 165.000 €
+- [Loft de 2 habitaciones en El Fraile](https://villasproperties.es/vivienda-el-fraile-2hab.html): El Fraile, Arona · 60 m² · 2 dormitorios · 135.000 €
+- [Loft de 1 habitación en El Fraile](https://villasproperties.es/vivienda-el-fraile-loft.html): El Fraile, Arona · 60 m² · 1 dormitorio · 129.000 €
+
 ## Criterio editorial
 No publicamos cifras sin fuente ni damos una valoración automática cuando el dato
 no es fiable (terrenos, inmuebles singulares o municipios sin serie estadística).

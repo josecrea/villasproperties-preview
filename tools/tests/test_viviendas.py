@@ -56,7 +56,7 @@ class Pagina(unittest.TestCase):
         enlaces = re.findall(r'href="(https://wa\.me/\d+\?text=[^"]+)"', pagina)
         self.assertEqual(len(enlaces), len(TEXTOS))
         self.assertIn("Hallo", enlaces[0])
-        self.assertIn("14541", enlaces[0])
+        self.assertIn(next(iter(TEXTOS)), enlaces[0])   # la primera vivienda de la página
 
     def test_escapa_el_html_de_los_textos(self):
         textos = json.loads(json.dumps(TEXTOS))
