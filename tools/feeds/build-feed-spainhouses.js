@@ -4,7 +4,10 @@
  *
  * Sale de `properties-data.js` (datos y precio) y de `tools/i18n/viviendas_i18n.json`
  * (textos en alemán, neerlandés, italiano y francés). Solo entran las viviendas que
- * tienen esos textos y fotos JPG en `assets/feed/<slug>/`.
+ * tienen esos textos Y figuran en `fotosLimpias` de `tools/feed-portales.config.json`:
+ * la misma regla que `tools/feed-portales.js`. Las fotos de las demás son las bajadas de
+ * idealista y llevan su marca de agua; no se mandan a otro portal.
+ * Las fotos JPG son las de `feeds/img/<slug>/`, que genera `tools/feed-portales.js`.
  *
  * La `fecha` de cada vivienda solo cambia cuando cambia su contenido: el portal la usa
  * para saber qué actualizar. Se guarda en `tools/feeds/estado-spainhouses.json`.
@@ -21,6 +24,7 @@ const RAIZ = path.resolve(__dirname, '..', '..');
 const WEB = 'https://villasproperties.es';
 const SALIDA = path.join(RAIZ, 'feed', 'spainhouses.xml');
 const ESTADO = path.join(__dirname, 'estado-spainhouses.json');
+const CONFIG = path.join(RAIZ, 'tools', 'feed-portales.config.json');
 const ESQUEMA = 'https://xcp.entersoftweb.com/sh/xsd/cartera.xsd';
 const PROVINCIA = 'Santa Cruz de Tenerife';
 const MAX_FOTOS = 20;
@@ -83,10 +87,10 @@ function descripciones(ficha, traducciones) {
 }
 
 function fotos(slug, raiz = RAIZ) {
-  const carpeta = path.join(raiz, 'assets', 'feed', slug);
+  const carpeta = path.join(raiz, 'feeds', 'img', slug);
   if (!fs.existsSync(carpeta)) return [];
   return fs.readdirSync(carpeta).filter((f) => /^\d+\.jpg$/.test(f)).sort().slice(0, MAX_FOTOS)
-    .map((f) => `${WEB}/assets/feed/${slug}/${f}`);
+    .map((f) => `${WEB}/feeds/img/${slug}/${f}`);
 }
 
 function tiene(ficha, patron) {
@@ -98,7 +102,7 @@ function propiedad(ficha, traducciones, fecha, urls) {
   const e = energia(ficha.energy);
   const cp = CODIGO_POSTAL[ficha.zone];
   if (!cp) throw new Error(`falta el código postal de la zona «${ficha.zone}» (ref. ${ficha.ref})`);
-  if (!urls.length) throw new Error(`la vivienda ${ficha.ref} no tiene fotos JPG en assets/feed/${ficha.slug}/`);
+  if (!urls.length) throw new Error(`la vivienda ${ficha.ref} no tiene fotos JPG en feeds/img/${ficha.slug}/`);
   const [lat, lon] = ficha.coords.map((n) => Number(n).toFixed(DECIMALES_COORDENADA));
   const desc = descripciones(ficha, traducciones)
     .map(([idioma, texto]) => `<descripcion><idioma>${idioma}</idioma><texto>${escapar(texto)}</texto></descripcion>`).join('\n');
@@ -149,8 +153,13 @@ function fechar(cuerpos, estadoPrevio, ahora) {
 
 const sello = (d) => d.toISOString().slice(0, 19);
 
-function construir({ fichas, traducciones, estadoPrevio = {}, ahora = sello(new Date()), raiz = RAIZ }) {
-  const elegidas = fichas.filter((f) => traducciones[f.ref] && fotos(f.slug, raiz).length);
+function fotosLimpias() {
+  return JSON.parse(fs.readFileSync(CONFIG, 'utf8')).fotosLimpias || [];
+}
+
+function construir({ fichas, traducciones, estadoPrevio = {}, ahora = sello(new Date()), raiz = RAIZ, limpias = fotosLimpias() }) {
+  const permitidas = new Set(limpias);
+  const elegidas = fichas.filter((f) => traducciones[f.ref] && permitidas.has(f.slug) && fotos(f.slug, raiz).length);
   const SIN_FECHA = '0000-00-00T00:00:00';
   const cuerpos = Object.fromEntries(elegidas.map((f) => [f.ref, propiedad(f, traducciones[f.ref], SIN_FECHA, fotos(f.slug, raiz))]));
   const estado = fechar(cuerpos, estadoPrevio, ahora);
@@ -170,5 +179,5 @@ function main() {
   console.log(`feed/spainhouses.xml: ${referencias.length} viviendas (${referencias.join(', ')})`);
 }
 
-module.exports = { construir, propiedad, tipoInmueble, energia, fechar, leerFichas, escapar };
+module.exports = { construir, propiedad, tipoInmueble, energia, fechar, leerFichas, escapar, fotosLimpias };
 if (require.main === module) main();
