@@ -27,6 +27,15 @@
 .vc strong{display:block;margin-top:6px;font-size:17px;font-weight:500;line-height:1.3}
 .vc-precio{display:block;margin-top:8px;font-size:22px;letter-spacing:-.02em}
 .vc:hover strong,.vc:focus-visible strong{text-decoration:underline}
+.climawrap{overflow-x:auto}
+.clima{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+.clima th,.clima td{padding:11px 14px 11px 0;text-align:right;border-bottom:1px solid rgba(0,0,0,.1);white-space:nowrap}
+.clima th:first-child{text-align:left;font-weight:500}
+.clima thead th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.clima .climabar{width:34%;min-width:120px;position:relative;padding:0}
+.clima .climabar span{position:absolute;top:50%;height:8px;margin-top:-4px;border-radius:4px;background:linear-gradient(90deg,#7fb3c8,#e8a04c)}
+@media (max-width:640px){.clima .climabar,.clima thead th:nth-child(4){display:none}.clima{font-size:14px}.clima th,.clima td{padding-right:8px}.clima td:last-child,.clima th:last-child{padding-right:0}.clima thead th{white-space:normal;letter-spacing:.06em;font-size:10px;vertical-align:bottom}}
+@media (max-width:400px){.clima .u{display:none}.clima{font-size:13px}.clima th,.clima td{padding-right:6px}}
 @media (prefers-reduced-motion:reduce){.cam img{transition:none}}
 </style>
 <section class="pagehero"><div class="wrap"><div class="eye">OP DIT MOMENT · ZUID-TENERIFE</div><h1>Zo ziet het er nu uit<br>op de stranden in het zuiden.</h1><p class="pagelede">Veertien openbare webcams, van Los Gigantes tot El Médano. Elk beeld wordt om de twee minuten vernieuwd: herlaad de pagina voor het laatste beeld, of klik op een camera voor de live video.</p></div></section>
@@ -49,7 +58,24 @@
 <div><strong>2.725</strong><small>uren zon per jaar</small></div>
 <div><strong>15</strong><small>regendagen per jaar</small></div>
 </div>
-<p class="bankpie">Bron: AEMET, weerstation Tenerife Sur Aeropuerto, normalen 1981-2010.</p>
+<h3 class="camzona">Maand per maand</h3>
+<div class="climawrap"><table class="clima">
+<thead><tr><th scope="col">Maand</th><th scope="col">Maximum °C</th><th scope="col">Minimum °C</th><th aria-hidden="true"></th><th scope="col">Uren zon</th><th scope="col">Regendagen</th></tr></thead>
+<tbody>
+<tr><th scope="row">Januari</th><td>21,7<span class="u"> °C</span></td><td>15,2<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:26.0%;width:32.5%"></span></td><td>193</td><td>1,8</td></tr>
+<tr><th scope="row">Februari</th><td>22,0<span class="u"> °C</span></td><td>15,0<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:25.0%;width:35.0%"></span></td><td>195</td><td>2,2</td></tr>
+<tr><th scope="row">Maart</th><td>23,1<span class="u"> °C</span></td><td>15,6<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:28.0%;width:37.5%"></span></td><td>226</td><td>1,9</td></tr>
+<tr><th scope="row">April</th><td>23,1<span class="u"> °C</span></td><td>16,0<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:30.0%;width:35.5%"></span></td><td>219</td><td>1,1</td></tr>
+<tr><th scope="row">Mei</th><td>23,9<span class="u"> °C</span></td><td>17,0<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:35.0%;width:34.5%"></span></td><td>246</td><td>0,3</td></tr>
+<tr><th scope="row">Juni</th><td>25,4<span class="u"> °C</span></td><td>18,8<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:44.0%;width:33.0%"></span></td><td>259</td><td>0,0</td></tr>
+<tr><th scope="row">Juli</th><td>27,7<span class="u"> °C</span></td><td>20,2<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:51.0%;width:37.5%"></span></td><td>295</td><td>0,0</td></tr>
+<tr><th scope="row">Augustus</th><td>28,4<span class="u"> °C</span></td><td>21,1<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:55.5%;width:36.5%"></span></td><td>277</td><td>0,2</td></tr>
+<tr><th scope="row">September</th><td>27,9<span class="u"> °C</span></td><td>21,1<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:55.5%;width:34.0%"></span></td><td>213</td><td>0,6</td></tr>
+<tr><th scope="row">Oktober</th><td>26,8<span class="u"> °C</span></td><td>20,0<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:50.0%;width:34.0%"></span></td><td>214</td><td>1,6</td></tr>
+<tr><th scope="row">November</th><td>24,8<span class="u"> °C</span></td><td>18,2<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:41.0%;width:33.0%"></span></td><td>193</td><td>1,9</td></tr>
+<tr><th scope="row">December</th><td>22,8<span class="u"> °C</span></td><td>16,5<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:32.5%;width:31.5%"></span></td><td>195</td><td>3,5</td></tr>
+</tbody></table></div>
+<p class="bankpie">Daggemiddelden per maand. Regendag: 1 mm of meer. Bron: AEMET, weerstation Tenerife Sur Aeropuerto, normalen 1981-2010.</p>
 </div></section>
 <section class="section tight" id="viviendas"><div class="wrap">
 <div class="head"><div class="eye">Hier wonen</div><div><h2>Woningen te koop<br>bij deze stranden.</h2><p class="muted">Bevalt wat u ziet? Bekijk wat er in het zuiden te koop staat. Wij antwoorden schriftelijk in het Nederlands.</p></div></div>

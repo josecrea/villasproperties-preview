@@ -27,6 +27,15 @@
 .vc strong{display:block;margin-top:6px;font-size:17px;font-weight:500;line-height:1.3}
 .vc-precio{display:block;margin-top:8px;font-size:22px;letter-spacing:-.02em}
 .vc:hover strong,.vc:focus-visible strong{text-decoration:underline}
+.climawrap{overflow-x:auto}
+.clima{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+.clima th,.clima td{padding:11px 14px 11px 0;text-align:right;border-bottom:1px solid rgba(0,0,0,.1);white-space:nowrap}
+.clima th:first-child{text-align:left;font-weight:500}
+.clima thead th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.clima .climabar{width:34%;min-width:120px;position:relative;padding:0}
+.clima .climabar span{position:absolute;top:50%;height:8px;margin-top:-4px;border-radius:4px;background:linear-gradient(90deg,#7fb3c8,#e8a04c)}
+@media (max-width:640px){.clima .climabar,.clima thead th:nth-child(4){display:none}.clima{font-size:14px}.clima th,.clima td{padding-right:8px}.clima td:last-child,.clima th:last-child{padding-right:0}.clima thead th{white-space:normal;letter-spacing:.06em;font-size:10px;vertical-align:bottom}}
+@media (max-width:400px){.clima .u{display:none}.clima{font-size:13px}.clima th,.clima td{padding-right:6px}}
 @media (prefers-reduced-motion:reduce){.cam img{transition:none}}
 </style>
 <section class="pagehero"><div class="wrap"><div class="eye">IN QUESTO MOMENTO · SUD DI TENERIFE</div><h1>Le spiagge del sud,<br>in questo momento.</h1><p class="pagelede">Quattordici webcam pubbliche, da Los Gigantes a El Médano. Ogni immagine si rinnova ogni due minuti: ricarichi la pagina per vedere l’ultima, oppure clicchi su una webcam per il video in diretta.</p></div></section>
@@ -49,7 +58,24 @@
 <div><strong>2.725</strong><small>ore di sole all’anno</small></div>
 <div><strong>15</strong><small>giorni di pioggia all’anno</small></div>
 </div>
-<p class="bankpie">Fonte: AEMET, stazione Tenerife Sur Aeropuerto, valori normali 1981-2010.</p>
+<h3 class="camzona">Mese per mese</h3>
+<div class="climawrap"><table class="clima">
+<thead><tr><th scope="col">Mese</th><th scope="col">Massima °C</th><th scope="col">Minima °C</th><th aria-hidden="true"></th><th scope="col">Ore di sole</th><th scope="col">Giorni di pioggia</th></tr></thead>
+<tbody>
+<tr><th scope="row">Gennaio</th><td>21,7<span class="u"> °C</span></td><td>15,2<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:26.0%;width:32.5%"></span></td><td>193</td><td>1,8</td></tr>
+<tr><th scope="row">Febbraio</th><td>22,0<span class="u"> °C</span></td><td>15,0<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:25.0%;width:35.0%"></span></td><td>195</td><td>2,2</td></tr>
+<tr><th scope="row">Marzo</th><td>23,1<span class="u"> °C</span></td><td>15,6<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:28.0%;width:37.5%"></span></td><td>226</td><td>1,9</td></tr>
+<tr><th scope="row">Aprile</th><td>23,1<span class="u"> °C</span></td><td>16,0<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:30.0%;width:35.5%"></span></td><td>219</td><td>1,1</td></tr>
+<tr><th scope="row">Maggio</th><td>23,9<span class="u"> °C</span></td><td>17,0<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:35.0%;width:34.5%"></span></td><td>246</td><td>0,3</td></tr>
+<tr><th scope="row">Giugno</th><td>25,4<span class="u"> °C</span></td><td>18,8<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:44.0%;width:33.0%"></span></td><td>259</td><td>0,0</td></tr>
+<tr><th scope="row">Luglio</th><td>27,7<span class="u"> °C</span></td><td>20,2<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:51.0%;width:37.5%"></span></td><td>295</td><td>0,0</td></tr>
+<tr><th scope="row">Agosto</th><td>28,4<span class="u"> °C</span></td><td>21,1<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:55.5%;width:36.5%"></span></td><td>277</td><td>0,2</td></tr>
+<tr><th scope="row">Settembre</th><td>27,9<span class="u"> °C</span></td><td>21,1<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:55.5%;width:34.0%"></span></td><td>213</td><td>0,6</td></tr>
+<tr><th scope="row">Ottobre</th><td>26,8<span class="u"> °C</span></td><td>20,0<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:50.0%;width:34.0%"></span></td><td>214</td><td>1,6</td></tr>
+<tr><th scope="row">Novembre</th><td>24,8<span class="u"> °C</span></td><td>18,2<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:41.0%;width:33.0%"></span></td><td>193</td><td>1,9</td></tr>
+<tr><th scope="row">Dicembre</th><td>22,8<span class="u"> °C</span></td><td>16,5<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:32.5%;width:31.5%"></span></td><td>195</td><td>3,5</td></tr>
+</tbody></table></div>
+<p class="bankpie">Medie giornaliere di ogni mese. Giorno di pioggia: 1 mm o più. Fonte: AEMET, stazione Tenerife Sur Aeropuerto, valori normali 1981-2010.</p>
 </div></section>
 <section class="section tight" id="viviendas"><div class="wrap">
 <div class="head"><div class="eye">Vivere qui</div><div><h2>Immobili in vendita<br>vicino a queste spiagge.</h2><p class="muted">Le piace quello che vede? Guardi cosa c’è in vendita nel sud. Le rispondiamo per iscritto, in italiano.</p></div></div>

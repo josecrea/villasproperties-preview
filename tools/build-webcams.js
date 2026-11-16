@@ -38,6 +38,7 @@ const T = {
     climaEye: 'El clima, en cifras', climaH: 'No es un día<br>de suerte.',
     c1: 'máxima media en enero', c2: 'mínima media en enero', c3: 'horas de sol al año', c4: 'días de lluvia al año',
     fuente: 'Fuente: AEMET, estación Tenerife Sur Aeropuerto, valores normales 1981-2010.',
+    mesH: 'Mes a mes', mMes: 'Mes', mMax: 'Máxima °C', mMin: 'Mínima °C', mSol: 'Horas de sol', mLluvia: 'Días de lluvia', mNota: 'Medias diarias de cada mes. Día de lluvia: 1 mm o más.',
     ctaEye: 'Vivir aquí', ctaH: 'Viviendas en venta<br>cerca de estas playas.',
     ctaP: 'Si lo que ves te gusta, mira qué hay en venta en el sur. Te respondemos por escrito, sin llamadas automáticas.',
     b1: 'Ver viviendas', b1href: 'properties.html', b2: 'Escribir por WhatsApp ↗',
@@ -51,6 +52,7 @@ const T = {
     climaEye: 'Het klimaat in cijfers', climaH: 'Geen toevallig<br>mooie dag.',
     c1: 'gemiddelde maximumtemperatuur in januari', c2: 'gemiddelde minimumtemperatuur in januari', c3: 'uren zon per jaar', c4: 'regendagen per jaar',
     fuente: 'Bron: AEMET, weerstation Tenerife Sur Aeropuerto, normalen 1981-2010.',
+    mesH: 'Maand per maand', mMes: 'Maand', mMax: 'Maximum °C', mMin: 'Minimum °C', mSol: 'Uren zon', mLluvia: 'Regendagen', mNota: 'Daggemiddelden per maand. Regendag: 1 mm of meer.',
     ctaEye: 'Hier wonen', ctaH: 'Woningen te koop<br>bij deze stranden.',
     ctaP: 'Bevalt wat u ziet? Bekijk wat er in het zuiden te koop staat. Wij antwoorden schriftelijk in het Nederlands.',
     b1: 'Bekijk onze woningen', b1href: 'woningen.html', b2: 'Stel uw vraag via WhatsApp ↗',
@@ -64,6 +66,7 @@ const T = {
     climaEye: 'Das Klima in Zahlen', climaH: 'Kein zufällig<br>schöner Tag.',
     c1: 'mittlere Höchsttemperatur im Januar', c2: 'mittlere Tiefsttemperatur im Januar', c3: 'Sonnenstunden pro Jahr', c4: 'Regentage pro Jahr',
     fuente: 'Quelle: AEMET, Wetterstation Tenerife Sur Aeropuerto, Normalwerte 1981-2010.',
+    mesH: 'Monat für Monat', mMes: 'Monat', mMax: 'Max. °C', mMin: 'Min. °C', mSol: 'Sonnen&shy;stunden', mLluvia: 'Regen&shy;tage', mNota: 'Tagesmittel je Monat. Regentag: 1 mm oder mehr.',
     ctaEye: 'Hier wohnen', ctaH: 'Immobilien zum Kauf<br>in der Nähe dieser Strände.',
     ctaP: 'Gefällt Ihnen, was Sie sehen? Schauen Sie, was im Süden zum Verkauf steht. Wir antworten Ihnen schriftlich auf Deutsch.',
     b1: 'Unsere Immobilien ansehen', b1href: 'immobilien.html', b2: 'Frage per WhatsApp stellen ↗',
@@ -77,6 +80,7 @@ const T = {
     climaEye: 'Le climat en chiffres', climaH: 'Ce n’est pas<br>un jour de chance.',
     c1: 'température maximale moyenne en janvier', c2: 'température minimale moyenne en janvier', c3: 'heures de soleil par an', c4: 'jours de pluie par an',
     fuente: 'Source : AEMET, station Tenerife Sur Aeropuerto, normales 1981-2010.',
+    mesH: 'Mois par mois', mMes: 'Mois', mMax: 'Maximale °C', mMin: 'Minimale °C', mSol: 'Heures de soleil', mLluvia: 'Jours de pluie', mNota: 'Moyennes journalières de chaque mois. Jour de pluie : 1 mm ou plus.',
     ctaEye: 'Vivre ici', ctaH: 'Biens à vendre<br>près de ces plages.',
     ctaP: 'Ce que vous voyez vous plaît ? Regardez ce qui est à vendre dans le sud. Nous vous répondons par écrit, en français.',
     b1: 'Voir nos biens', b1href: 'biens.html', b2: 'Poser une question par WhatsApp ↗',
@@ -90,6 +94,7 @@ const T = {
     climaEye: 'Il clima in cifre', climaH: 'Non è un giorno<br>fortunato.',
     c1: 'temperatura massima media a gennaio', c2: 'temperatura minima media a gennaio', c3: 'ore di sole all’anno', c4: 'giorni di pioggia all’anno',
     fuente: 'Fonte: AEMET, stazione Tenerife Sur Aeropuerto, valori normali 1981-2010.',
+    mesH: 'Mese per mese', mMes: 'Mese', mMax: 'Massima °C', mMin: 'Minima °C', mSol: 'Ore di sole', mLluvia: 'Giorni di pioggia', mNota: 'Medie giornaliere di ogni mese. Giorno di pioggia: 1 mm o più.',
     ctaEye: 'Vivere qui', ctaH: 'Immobili in vendita<br>vicino a queste spiagge.',
     ctaP: 'Le piace quello che vede? Guardi cosa c’è in vendita nel sud. Le rispondiamo per iscritto, in italiano.',
     b1: 'Vedi i nostri immobili', b1href: 'immobili.html', b2: 'Scriva su WhatsApp ↗',
@@ -103,11 +108,36 @@ const T = {
     climaEye: 'The climate in figures', climaH: 'Not just<br>a lucky day.',
     c1: 'average high in January', c2: 'average low in January', c3: 'hours of sunshine a year', c4: 'rainy days a year',
     fuente: 'Source: AEMET, Tenerife Sur Aeropuerto station, 1981-2010 normals.',
+    mesH: 'Month by month', mMes: 'Month', mMax: 'High °C', mMin: 'Low °C', mSol: 'Hours of sunshine', mLluvia: 'Rainy days', mNota: 'Daily averages for each month. Rainy day: 1 mm or more.',
     ctaEye: 'Living here', ctaH: 'Homes for sale<br>near these beaches.',
     ctaP: 'Like what you see? Have a look at what is for sale in the south. We answer in writing, in English.',
     b1: 'See our properties', b1href: '../properties.html', b2: 'Ask us on WhatsApp ↗',
   },
 };
+
+// AEMET, Tenerife Sur Aeropuerto, normales 1981-2010: [máxima, mínima, horas de sol, días de lluvia ≥ 1 mm].
+const MESES = [[21.7, 15.2, 193, 1.8], [22.0, 15.0, 195, 2.2], [23.1, 15.6, 226, 1.9], [23.1, 16.0, 219, 1.1],
+  [23.9, 17.0, 246, 0.3], [25.4, 18.8, 259, 0.0], [27.7, 20.2, 295, 0.0], [28.4, 21.1, 277, 0.2],
+  [27.9, 21.1, 213, 0.6], [26.8, 20.0, 214, 1.6], [24.8, 18.2, 193, 1.9], [22.8, 16.5, 195, 3.5]];
+const ESCALA = [10, 30]; // °C que abarca la barra de temperaturas
+const dec = (lang, n) => n.toFixed(1).replace('.', lang === 'en' ? '.' : ',');
+const pct = (n) => (((n - ESCALA[0]) / (ESCALA[1] - ESCALA[0])) * 100).toFixed(1);
+
+function tablaClima(lang) {
+  const t = T[lang];
+  const mes = new Intl.DateTimeFormat(lang, { month: 'long', timeZone: 'UTC' });
+  const filas = MESES.map(([max, min, sol, lluvia], i) => {
+    const nombre = mes.format(new Date(Date.UTC(2026, i, 1)));
+    return `<tr><th scope="row">${nombre[0].toUpperCase() + nombre.slice(1)}</th><td>${dec(lang, max)}<span class="u"> °C</span></td><td>${dec(lang, min)}<span class="u"> °C</span></td><td class="climabar" aria-hidden="true"><span style="left:${pct(min)}%;width:${(pct(max) - pct(min)).toFixed(1)}%"></span></td><td>${sol}</td><td>${dec(lang, lluvia)}</td></tr>`;
+  }).join('\n');
+  return `<h3 class="camzona">${t.mesH}</h3>
+<div class="climawrap"><table class="clima">
+<thead><tr><th scope="col">${t.mMes}</th><th scope="col">${t.mMax}</th><th scope="col">${t.mMin}</th><th aria-hidden="true"></th><th scope="col">${t.mSol}</th><th scope="col">${t.mLluvia}</th></tr></thead>
+<tbody>
+${filas}
+</tbody></table></div>
+<p class="bankpie">${t.mNota} ${t.fuente}</p>`;
+}
 
 const cifra = (lang, n) => (lang === 'en' ? (n === '2.725' ? '2,725' : n.replace(',', '.')) : n);
 const attr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
@@ -133,6 +163,15 @@ const CSS = `<style>
 .vc strong{display:block;margin-top:6px;font-size:17px;font-weight:500;line-height:1.3}
 .vc-precio{display:block;margin-top:8px;font-size:22px;letter-spacing:-.02em}
 .vc:hover strong,.vc:focus-visible strong{text-decoration:underline}
+.climawrap{overflow-x:auto}
+.clima{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+.clima th,.clima td{padding:11px 14px 11px 0;text-align:right;border-bottom:1px solid rgba(0,0,0,.1);white-space:nowrap}
+.clima th:first-child{text-align:left;font-weight:500}
+.clima thead th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.clima .climabar{width:34%;min-width:120px;position:relative;padding:0}
+.clima .climabar span{position:absolute;top:50%;height:8px;margin-top:-4px;border-radius:4px;background:linear-gradient(90deg,#7fb3c8,#e8a04c)}
+@media (max-width:640px){.clima .climabar,.clima thead th:nth-child(4){display:none}.clima{font-size:14px}.clima th,.clima td{padding-right:8px}.clima td:last-child,.clima th:last-child{padding-right:0}.clima thead th{white-space:normal;letter-spacing:.06em;font-size:10px;vertical-align:bottom}}
+@media (max-width:400px){.clima .u{display:none}.clima{font-size:13px}.clima th,.clima td{padding-right:6px}}
 @media (prefers-reduced-motion:reduce){.cam img{transition:none}}
 </style>`;
 
@@ -179,7 +218,7 @@ ${rejilla}
 <div><strong>${cifra(lang, '2.725')}</strong><small>${t.c3}</small></div>
 <div><strong>15</strong><small>${t.c4}</small></div>
 </div>
-<p class="bankpie">${t.fuente}</p>
+${tablaClima(lang)}
 </div></section>
 <section class="section tight" id="viviendas"><div class="wrap">
 <div class="head"><div class="eye">${t.ctaEye}</div><div><h2>${t.ctaH}</h2><p class="muted">${t.ctaP}</p></div></div>
