@@ -2990,3 +2990,9 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 
 /* Eslogan que antes era el H1: el H1 ahora lleva la palabra clave y el eslogan pasa a subtítulo. */
 .h1-sub{margin:.5rem 0 1.25rem;max-width:34ch;font-size:clamp(1.05rem,1.7vw,1.5rem);line-height:1.25;font-style:italic;opacity:.8}
+/* Un H1 con palabra clave es tres veces más largo que el eslogan que sustituye: al tamaño
+   de titular (128 px) ocupaba media pantalla y empujaba el contenido fuera. Cuando lleva
+   subtítulo baja de cuerpo para quedarse en dos o tres líneas. En móvil ya cabía. */
+@media (min-width: 821px) {
+  .pagehero h1:has(+ .h1-sub) { font-size: clamp(36px, 4.8vw, 72px); max-width: 26ch; margin-bottom: 14px; }
+}
