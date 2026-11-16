@@ -121,6 +121,16 @@ const CAM = CAMS.find((c) => c.slug === DESTACADA.slug);
 if (!CAM) throw new Error(`[webcams] no existe la cámara ${DESTACADA.slug}`);
 for (const t of Object.values(T)) for (const k of ['title', 'desc', 'h1', 'lede']) t[k] = t[k].replace('{n}', DESTACADA.lugar);
 
+// Web oficial de Turismo de Tenerife en cada idioma (dominios comprobados el 16-nov-2026).
+const TURISMO = {
+  es: ['https://www.webtenerife.com/', 'Web oficial de Turismo de Tenerife ↗'],
+  de: ['https://www.webtenerife.de/', 'Offizielle Tourismus-Website Teneriffas ↗'],
+  fr: ['https://www.webtenerifefr.com/', 'Site officiel du tourisme de Tenerife ↗'],
+  it: ['https://www.webtenerife.it/', 'Sito ufficiale del turismo di Tenerife ↗'],
+  nl: ['https://www.webtenerife.nl/', 'Officiële toerismesite van Tenerife ↗'],
+  en: ['https://www.webtenerife.co.uk/', 'Official Tenerife tourism website ↗'],
+};
+
 // AEMET, Tenerife Sur Aeropuerto, normales 1981-2010: [máxima, mínima, horas de sol, días de lluvia ≥ 1 mm].
 const MESES = [[21.7, 15.2, 193, 1.8], [22.0, 15.0, 195, 2.2], [23.1, 15.6, 226, 1.9], [23.1, 16.0, 219, 1.1],
   [23.9, 17.0, 246, 0.3], [25.4, 18.8, 259, 0.0], [27.7, 20.2, 295, 0.0], [28.4, 21.1, 277, 0.2],
@@ -142,7 +152,8 @@ function tablaClima(lang) {
 <tbody>
 ${filas}
 </tbody></table></div>
-<p class="bankpie">${t.mNota} ${t.fuente}</p>`;
+<p class="bankpie">${t.mNota} ${t.fuente}</p>
+<p style="margin-top:24px"><a class="btn" href="${TURISMO[lang][0]}" target="_blank" rel="noopener">${TURISMO[lang][1]}</a></p>`;
 }
 
 const cifra = (lang, n) => (lang === 'en' ? (n === '2.725' ? '2,725' : n.replace(',', '.')) : n);
