@@ -3,7 +3,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const { embed, CAMS } = require('../build-webcams.js');
+const { embed, CAMS, CAM } = require('../build-webcams.js');
 
 const ROOT = path.join(__dirname, '..', '..');
 const PAGINAS = ['webcams-playas-tenerife-sur.html', 'de/webcams.html', 'en/webcams.html', 'fr/webcams.html', 'it/webcams.html', 'nl/webcams.html'];
@@ -20,11 +20,13 @@ prueba('no hay cámaras repetidas y todas tienen título en los 5 idiomas de Sky
   for (const c of CAMS) for (const l of ['es', 'en', 'de', 'fr', 'it']) assert.ok(c.titulos[l], `${c.slug} sin título en ${l}`);
 });
 
-prueba('cada página trae todas las cámaras y ninguna imagen copiada a la web', () => {
+prueba('cada página trae una sola cámara, la destacada, con su enlace a Skyline', () => {
   for (const p of PAGINAS) {
     const h = fs.readFileSync(path.join(ROOT, p), 'utf8');
     const n = (h.match(/<img src="https:\/\/embed\.skylinewebcams\.com\/img\/\d+\.jpg"/g) || []).length;
-    assert.strictEqual(n, CAMS.length, `${p}: ${n} cámaras`);
+    assert.strictEqual(n, 1, `${p}: ${n} cámaras`);
+    assert.ok(h.includes(`https://embed.skylinewebcams.com/img/${CAM.id}.jpg`), `${p}: no es la destacada`);
+    assert.ok(!h.includes('{n}'), `${p}: texto sin sustituir`);
     assert.ok(!/<figure class="cam">(?!<a href="https:\/\/www\.skylinewebcams\.com\/)/.test(h), `${p}: cámara sin enlace a Skyline`);
   }
 });
