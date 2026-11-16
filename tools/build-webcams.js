@@ -30,10 +30,10 @@ const WA = 'https://wa.me/34667384965';
 
 const T = {
   es: {
-    sky: 'es', title: 'Webcams de las playas del sur de Tenerife, ahora',
-    desc: '14 cámaras públicas de las playas del sur de Tenerife: Costa Adeje, Los Cristianos, El Médano y Los Gigantes. Así está el tiempo ahora mismo.',
-    eye: 'AHORA MISMO · SUR DE TENERIFE', h1: 'Así están ahora<br>las playas del sur.',
-    lede: 'Catorce cámaras públicas, de Los Gigantes a El Médano. Cada imagen se renueva cada dos minutos: recarga la página para ver la última, o pulsa una cámara para ver el vídeo en directo.',
+    sky: 'es', title: '{n} ahora: webcam del sur de Tenerife',
+    desc: 'Así está {n}, en el sur de Tenerife, ahora mismo: imagen de la cámara pública, el clima mes a mes y viviendas en venta cerca.',
+    eye: 'AHORA MISMO · SUR DE TENERIFE', h1: '{n},<br>ahora mismo.',
+    lede: 'La imagen se renueva cada dos minutos: recarga la página para ver la última, o púlsala para ver el vídeo en directo.',
     credito: 'Imágenes de <a href="' + SKY + '/es.html" target="_blank" rel="noopener">SkylineWebcams</a>. Al pulsar una imagen sales a su web.',
     climaEye: 'El clima, en cifras', climaH: 'No es un día<br>de suerte.',
     c1: 'máxima media en enero', c2: 'mínima media en enero', c3: 'horas de sol al año', c4: 'días de lluvia al año',
@@ -44,10 +44,10 @@ const T = {
     b1: 'Ver viviendas', b1href: 'properties.html', b2: 'Escribir por WhatsApp ↗',
   },
   nl: {
-    sky: 'en', title: 'Webcams stranden Zuid-Tenerife: zo is het nu',
-    desc: '14 openbare webcams van de stranden in het zuiden van Tenerife: Costa Adeje, Los Cristianos, El Médano en Los Gigantes. Zo is het weer op dit moment.',
-    eye: 'OP DIT MOMENT · ZUID-TENERIFE', h1: 'Zo ziet het er nu uit<br>op de stranden in het zuiden.',
-    lede: 'Veertien openbare webcams, van Los Gigantes tot El Médano. Elk beeld wordt om de twee minuten vernieuwd: herlaad de pagina voor het laatste beeld, of klik op een camera voor de live video.',
+    sky: 'en', title: '{n} nu: webcam Zuid-Tenerife',
+    desc: 'Zo ziet {n} in het zuiden van Tenerife er op dit moment uit: beeld van de openbare webcam, het klimaat per maand en woningen te koop in de buurt.',
+    eye: 'OP DIT MOMENT · ZUID-TENERIFE', h1: '{n},<br>op dit moment.',
+    lede: 'Het beeld wordt om de twee minuten vernieuwd: herlaad de pagina voor het laatste beeld, of klik erop voor de live video.',
     credito: 'Beelden van <a href="' + SKY + '/en.html" target="_blank" rel="noopener">SkylineWebcams</a> (website in het Engels). Een klik op een beeld brengt u naar hun site.',
     climaEye: 'Het klimaat in cijfers', climaH: 'Geen toevallig<br>mooie dag.',
     c1: 'gemiddelde maximumtemperatuur in januari', c2: 'gemiddelde minimumtemperatuur in januari', c3: 'uren zon per jaar', c4: 'regendagen per jaar',
@@ -58,10 +58,10 @@ const T = {
     b1: 'Bekijk onze woningen', b1href: 'woningen.html', b2: 'Stel uw vraag via WhatsApp ↗',
   },
   de: {
-    sky: 'de', title: 'Webcams Strände Teneriffa Süd: so sieht es jetzt aus',
-    desc: '14 öffentliche Webcams der Strände im Süden Teneriffas: Costa Adeje, Los Cristianos, El Médano und Los Gigantes. So ist das Wetter in diesem Moment.',
-    eye: 'IN DIESEM MOMENT · TENERIFFA SÜD', h1: 'So sieht es jetzt aus<br>an den Stränden im Süden.',
-    lede: 'Vierzehn öffentliche Webcams, von Los Gigantes bis El Médano. Jedes Bild wird alle zwei Minuten erneuert: Laden Sie die Seite neu, um das aktuelle Bild zu sehen, oder klicken Sie auf eine Kamera für das Live-Video.',
+    sky: 'de', title: '{n} jetzt: Webcam Teneriffa Süd',
+    desc: 'So sieht es in diesem Moment an der {n} im Süden Teneriffas aus: Bild der öffentlichen Webcam, das Klima Monat für Monat und Immobilien zum Kauf in der Nähe.',
+    eye: 'IN DIESEM MOMENT · TENERIFFA SÜD', h1: '{n},<br>in diesem Moment.',
+    lede: 'Das Bild wird alle zwei Minuten erneuert: Laden Sie die Seite neu, um das aktuelle Bild zu sehen, oder klicken Sie darauf für das Live-Video.',
     credito: 'Bilder von <a href="' + SKY + '/de.html" target="_blank" rel="noopener">SkylineWebcams</a>. Ein Klick auf ein Bild führt Sie auf deren Website.',
     climaEye: 'Das Klima in Zahlen', climaH: 'Kein zufällig<br>schöner Tag.',
     c1: 'mittlere Höchsttemperatur im Januar', c2: 'mittlere Tiefsttemperatur im Januar', c3: 'Sonnenstunden pro Jahr', c4: 'Regentage pro Jahr',
@@ -72,10 +72,10 @@ const T = {
     b1: 'Unsere Immobilien ansehen', b1href: 'immobilien.html', b2: 'Frage per WhatsApp stellen ↗',
   },
   fr: {
-    sky: 'fr', title: 'Webcams des plages du sud de Tenerife, en ce moment',
-    desc: '14 webcams publiques des plages du sud de Tenerife : Costa Adeje, Los Cristianos, El Médano et Los Gigantes. Le temps qu’il fait en ce moment.',
-    eye: 'EN CE MOMENT · SUD DE TENERIFE', h1: 'Les plages du sud,<br>en ce moment.',
-    lede: 'Quatorze webcams publiques, de Los Gigantes à El Médano. Chaque image est renouvelée toutes les deux minutes : rechargez la page pour voir la dernière, ou cliquez sur une caméra pour la vidéo en direct.',
+    sky: 'fr', title: '{n} en ce moment : webcam du sud de Tenerife',
+    desc: 'Voici {n}, dans le sud de Tenerife, en ce moment : image de la webcam publique, le climat mois par mois et des biens à vendre à proximité.',
+    eye: 'EN CE MOMENT · SUD DE TENERIFE', h1: '{n},<br>en ce moment.',
+    lede: 'L’image est renouvelée toutes les deux minutes : rechargez la page pour voir la dernière, ou cliquez dessus pour la vidéo en direct.',
     credito: 'Images de <a href="' + SKY + '/fr.html" target="_blank" rel="noopener">SkylineWebcams</a>. Un clic sur une image vous amène sur leur site.',
     climaEye: 'Le climat en chiffres', climaH: 'Ce n’est pas<br>un jour de chance.',
     c1: 'température maximale moyenne en janvier', c2: 'température minimale moyenne en janvier', c3: 'heures de soleil par an', c4: 'jours de pluie par an',
@@ -86,10 +86,10 @@ const T = {
     b1: 'Voir nos biens', b1href: 'biens.html', b2: 'Poser une question par WhatsApp ↗',
   },
   it: {
-    sky: 'it', title: 'Webcam delle spiagge del sud di Tenerife, adesso',
-    desc: '14 webcam pubbliche delle spiagge del sud di Tenerife: Costa Adeje, Los Cristianos, El Médano e Los Gigantes. Che tempo fa in questo momento.',
-    eye: 'IN QUESTO MOMENTO · SUD DI TENERIFE', h1: 'Le spiagge del sud,<br>in questo momento.',
-    lede: 'Quattordici webcam pubbliche, da Los Gigantes a El Médano. Ogni immagine si rinnova ogni due minuti: ricarichi la pagina per vedere l’ultima, oppure clicchi su una webcam per il video in diretta.',
+    sky: 'it', title: '{n} adesso: webcam del sud di Tenerife',
+    desc: 'Ecco {n}, nel sud di Tenerife, in questo momento: immagine della webcam pubblica, il clima mese per mese e immobili in vendita nelle vicinanze.',
+    eye: 'IN QUESTO MOMENTO · SUD DI TENERIFE', h1: '{n},<br>in questo momento.',
+    lede: 'L’immagine si rinnova ogni due minuti: ricarichi la pagina per vedere l’ultima, oppure ci clicchi sopra per il video in diretta.',
     credito: 'Immagini di <a href="' + SKY + '/it.html" target="_blank" rel="noopener">SkylineWebcams</a>. Cliccando su un’immagine si apre il loro sito.',
     climaEye: 'Il clima in cifre', climaH: 'Non è un giorno<br>fortunato.',
     c1: 'temperatura massima media a gennaio', c2: 'temperatura minima media a gennaio', c3: 'ore di sole all’anno', c4: 'giorni di pioggia all’anno',
@@ -100,10 +100,10 @@ const T = {
     b1: 'Vedi i nostri immobili', b1href: 'immobili.html', b2: 'Scriva su WhatsApp ↗',
   },
   en: {
-    sky: 'en', title: 'South Tenerife beach webcams: what it looks like now',
-    desc: '14 public webcams of the beaches in the south of Tenerife: Costa Adeje, Los Cristianos, El Médano and Los Gigantes. The weather right now.',
-    eye: 'RIGHT NOW · SOUTH TENERIFE', h1: 'The southern beaches,<br>right now.',
-    lede: 'Fourteen public webcams, from Los Gigantes to El Médano. Each image is renewed every two minutes: reload the page for the latest one, or click a camera for the live video.',
+    sky: 'en', title: '{n} right now: South Tenerife webcam',
+    desc: 'This is {n}, in the south of Tenerife, right now: the public webcam image, the climate month by month and homes for sale nearby.',
+    eye: 'RIGHT NOW · SOUTH TENERIFE', h1: '{n},<br>right now.',
+    lede: 'The image is renewed every two minutes: reload the page for the latest one, or click it for the live video.',
     credito: 'Images by <a href="' + SKY + '/en.html" target="_blank" rel="noopener">SkylineWebcams</a>. Clicking an image takes you to their site.',
     climaEye: 'The climate in figures', climaH: 'Not just<br>a lucky day.',
     c1: 'average high in January', c2: 'average low in January', c3: 'hours of sunshine a year', c4: 'rainy days a year',
@@ -114,6 +114,12 @@ const T = {
     b1: 'See our properties', b1href: '../properties.html', b2: 'Ask us on WhatsApp ↗',
   },
 };
+
+// Jose, 16-nov-2026: una sola cámara, grande. Las demás siguen en webcams.json por si se cambia.
+const DESTACADA = { slug: 'playa-troya', lugar: 'Playa de Troya', pie: 'Playa de Troya · Playa de las Américas (Arona)' };
+const CAM = CAMS.find((c) => c.slug === DESTACADA.slug);
+if (!CAM) throw new Error(`[webcams] no existe la cámara ${DESTACADA.slug}`);
+for (const t of Object.values(T)) for (const k of ['title', 'desc', 'h1', 'lede']) t[k] = t[k].replace('{n}', DESTACADA.lugar);
 
 // AEMET, Tenerife Sur Aeropuerto, normales 1981-2010: [máxima, mínima, horas de sol, días de lluvia ≥ 1 mm].
 const MESES = [[21.7, 15.2, 193, 1.8], [22.0, 15.0, 195, 2.2], [23.1, 15.6, 226, 1.9], [23.1, 16.0, 219, 1.1],
@@ -151,7 +157,7 @@ function embed(cam, sky) {
 const CSS = `<style>
 .camzona{margin:44px 0 14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .camgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
-.cam{margin:0}
+.cam{margin:0;max-width:760px} /* la imagen de Skyline mide 450 px: más grande se ve borrosa */
 .cam a{display:block;aspect-ratio:16/9;background:#e9ece9;overflow:hidden;border-radius:4px}
 .cam img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
 .cam a:hover img,.cam a:focus-visible img{transform:scale(1.03)}
@@ -201,12 +207,10 @@ function viviendas(lang) {
 
 function cuerpo(lang) {
   const t = T[lang];
-  const zonas = [...new Set(CAMS.map((c) => c.zona))];
-  const rejilla = zonas.map((z) => `<h3 class="camzona">${z}</h3>
-<div class="camgrid">${CAMS.filter((c) => c.zona === z).map((c) => `<figure class="cam">${embed(c, t.sky)}<figcaption>${c.nombre}</figcaption></figure>`).join('')}</div>`).join('\n');
+  const rejilla = `<figure class="cam">${embed(CAM, t.sky)}<figcaption>${DESTACADA.pie}</figcaption></figure>`;
   return `${CSS}
 <section class="pagehero"><div class="wrap"><div class="eye">${t.eye}</div><h1>${t.h1}</h1><p class="pagelede">${t.lede}</p></div></section>
-<section class="section tight"><div class="wrap">
+<section class="section tight" style="padding-top:0"><div class="wrap">
 ${rejilla}
 <p class="bankpie" style="margin-top:28px">${t.credito}</p>
 </div></section>
@@ -297,8 +301,8 @@ function paginaIdioma(lang) {
 function main() {
   fs.writeFileSync(path.join(ROOT, ES), paginaEs());
   for (const l of IDIOMAS) fs.writeFileSync(path.join(ROOT, l, 'webcams.html'), paginaIdioma(l));
-  console.log(`[webcams] ${CAMS.length} cámaras · ${ES} + ${IDIOMAS.map((l) => `${l}/webcams.html`).join(', ')}`);
+  console.log(`[webcams] cámara ${CAM.slug} · ${ES} + ${IDIOMAS.map((l) => `${l}/webcams.html`).join(', ')}`);
 }
 
 if (require.main === module) main();
-module.exports = { embed, CAMS, T };
+module.exports = { embed, CAMS, CAM, T };
