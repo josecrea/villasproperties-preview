@@ -32,8 +32,24 @@
   const STYLE_HOVER = { fillColor: '#c9ad95', fillOpacity: 0.34, weight: 2 };
   const STYLE_ON = { color: '#20242a', fillColor: '#c9ad95', fillOpacity: 0.46, weight: 2.2 };
 
-  const perM2 = (value) => `${String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} €/m²`;
-  const delta = (pct) => `${pct > 0 ? '+' : ''}${pct.toLocaleString('es-ES')}%`;
+  /* IDIOMAS: mismos textos que siempre en español; en it/ nl/ fr/ en/ de/ los
+     trae valuation-i18n.js (window.VP_VAL_I18N[lang].map). */
+  const LANG = (document.documentElement.getAttribute('lang') || 'es').toLowerCase().slice(0, 2);
+  const I18N = (window.VP_VAL_I18N || {})[LANG] || {};
+  const M = {
+    up: 'Sube', down: 'Baja', months: '12 meses', cta: 'Valorar aquí ↗', deed: 'Escritura',
+    deedSmall: 'precio escriturado', ops: 'Operaciones', foot: 'Precio medio de oferta por zona',
+    fallback: 'El mapa no se ha podido cargar. Los datos por municipio siguen disponibles en el valorador.',
+    ...(I18N.map || {}),
+  };
+  const LOCALE = I18N.locale || 'es-ES';
+  /* Leaflet y la geometría se piden relativos a ESTE script, no a la página:
+     desde it/valuation.html 'vendor/leaflet.js' sería it/vendor/… (404). */
+  const AQUI = document.currentScript ? new URL('.', document.currentScript.src).href : '';
+  const SEP = I18N.sep || '.';
+  const miles = (value) => String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, SEP);
+  const perM2 = (value) => `${miles(value)} €/m²`;
+  const delta = (pct) => `${pct > 0 ? '+' : ''}${pct.toLocaleString(LOCALE)}%`;
 
   const loadAsset = (kind, url) => new Promise((resolve, reject) => {
     const el = kind === 'css'
@@ -54,21 +70,21 @@
     panel.innerHTML = `
       <header class="mp-head">
         <div>
-          <div class="eye">${town.var1a >= 0 ? 'Sube' : 'Baja'} ${delta(town.var1a)} · 12 meses</div>
+          <div class="eye">${town.var1a >= 0 ? M.up : M.down} ${delta(town.var1a)} · ${M.months}</div>
           <h3>${town.name}</h3>
           <p class="mp-price">${perM2(town.eurM2)}</p>
         </div>
-        <button type="button" class="btn green mp-cta" data-town="${key}">Valorar aquí ↗</button>
+        <button type="button" class="btn green mp-cta" data-town="${key}">${M.cta}</button>
       </header>
       <div class="mp-sources">
         <div><span>idealista</span><b>${perM2(town.eurM2)}</b><small>${DATES.idealista || ''}</small></div>
-        <div><span>Escritura</span><b>${town.notaria ? perM2(town.notaria) : '—'}</b><small>precio escriturado</small></div>
-        <div><span>Operaciones</span><b>${town.catastroCV ? String(town.catastroCV).replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '—'}</b><small>Catastro ${DATES.catastro || ''}</small></div>
+        <div><span>${M.deed}</span><b>${town.notaria ? perM2(town.notaria) : '—'}</b><small>${M.deedSmall}</small></div>
+        <div><span>${M.ops}</span><b>${town.catastroCV ? miles(town.catastroCV) : '—'}</b><small>Catastro ${DATES.catastro || ''}</small></div>
       </div>
       <ul class="mp-zones">
         ${zonas.map((z) => `<li><span>${z.label}</span><i><b style="width:${Math.round((z.eurM2 / maxZone) * 100)}%"></b></i><em>${perM2(z.eurM2)}</em></li>`).join('')}
       </ul>
-      <footer class="mp-foot">Precio medio de oferta por zona · idealista ${DATES.idealista || ''}</footer>`;
+      <footer class="mp-foot">${M.foot} · idealista ${DATES.idealista || ''}</footer>`;
 
     const cta = panel.querySelector('.mp-cta');
     cta.addEventListener('click', () => {
@@ -179,12 +195,12 @@
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       obs.disconnect();
-      Promise.all([loadAsset('css', 'vendor/leaflet.css'), loadAsset('js', 'vendor/leaflet.js')])
-        .then(() => loadAsset('js', 'assets/geo-tenerife-sur.js'))
+      Promise.all([loadAsset('css', `${AQUI}vendor/leaflet.css`), loadAsset('js', `${AQUI}vendor/leaflet.js`)])
+        .then(() => loadAsset('js', `${AQUI}assets/geo-tenerife-sur.js`))
         .then(initMap)
         .catch((error) => {
           console.warn('[mapa] no disponible:', error);
-          container.innerHTML = '<div class="map-fallback">El mapa no se ha podido cargar. Los datos por municipio siguen disponibles en el valorador.</div>';
+          container.innerHTML = `<div class="map-fallback">${M.fallback}</div>`;
         });
     });
   }, { rootMargin: '260px' });

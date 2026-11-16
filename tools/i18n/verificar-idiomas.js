@@ -41,6 +41,8 @@ const PAGINAS = [
   'nl/huis-kopen-arona.html', 'fr/acheter-maison-arona.html', 'it/comprare-casa-arona.html', 'en/buy-house-arona.html', 'de/haus-kaufen-arona.html',
   'property-brief.html',
   'nl/zoekprofiel.html', 'fr/brief-recherche.html', 'it/brief-ricerca.html', 'en/property-brief.html', 'de/suchprofil.html',
+  'valuation.html',
+  'nl/valuation.html', 'fr/valuation.html', 'it/valuation.html', 'en/valuation.html', 'de/valuation.html',
 ];
 
 const dentro = (s, re) => { const m = s.match(re); return m ? m[1] : ''; };
