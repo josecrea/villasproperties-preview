@@ -119,6 +119,74 @@
   const waLink = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
     `Hola, me interesa la referencia ${property.ref} — ${property.title} (${property.zone}, ${euro(property.price)}). ¿Podemos hablar?`)}`;
 
+  /* ---------- Cierre: reservar la visita ----------
+     Hasta aquí la ficha atrae y da confianza; este bloque es el que pide la cita
+     (17-nov-2026). Lleva reseñas REALES de Google (reviews-data.js, sin tocar el
+     texto: lo exigen los términos de Google) y un formulario de tres campos que
+     deja el lead en Odoo con la referencia y abre WhatsApp con la visita pedida. */
+  const resenas = window.VP_RESENAS || null;
+  const resenasBlock = () => {
+    const lista = ((resenas && resenas.resenas) || []).filter((r) => r.texto && r.puntuacion >= 4).slice(0, 3);
+    if (!lista.length) return '';
+    const nota = resenas.puntuacion.toFixed(1).replace('.', ',');
+    return `
+          <div class="presenas">
+            <a class="eye plink" href="${U(resenas.ficha)}" target="_blank" rel="noopener">${nota} ★ · ${resenas.total} reseñas en Google ↗</a>
+            ${lista.map((r) => `<blockquote class="presena"><p>«${E(r.texto)}»</p><cite>${E(r.autor)}</cite></blockquote>`).join('')}
+          </div>`;
+  };
+
+  const FRANJAS = ['Entre semana, por la mañana', 'Entre semana, por la tarde', 'Sábado', 'Me da igual'];
+  const reservaBlock = () => `
+    <section class="section tight preserva" id="reservar-visita">
+      <div class="wrap">
+        <div class="head" data-reveal>
+          <div class="eye">Reservar visita</div>
+          <div><h2>Ven a verla.</h2><p class="muted">Dinos cuándo te viene bien y te confirmamos día y hora por WhatsApp. Sin compromiso: la visita sirve para decidir, no para firmar.</p></div>
+        </div>
+        <div class="preserva-grid">
+          <form class="fields" id="rvForm" novalidate>
+            <div class="field"><label for="rvNombre">Nombre</label><input id="rvNombre" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="rvTel">Teléfono</label><input id="rvTel" type="tel" autocomplete="tel" placeholder="+34 600 000 000"></div>
+            <div class="field full"><label for="rvFranja">¿Cuándo te viene bien?</label><select id="rvFranja">${FRANJAS.map((f) => `<option>${f}</option>`).join('')}</select></div>
+            <div class="vp-hp" aria-hidden="true"><label for="rvHp">No rellenes esto</label><input id="rvHp" type="text" tabindex="-1" autocomplete="off"></div>
+            <div class="field full"><small class="vw-error" id="rvError" role="alert"></small></div>
+            <div class="field full"><button class="btn green" type="submit">Reservar visita ↗</button>
+              <small class="muted">Ref. ${E(property.ref)} · tu petición llega a nuestro equipo para organizar la visita. <a href="privacy.html">Privacidad</a></small></div>
+          </form>
+          ${resenasBlock()}
+        </div>
+      </div>
+    </section>`;
+
+  const reservar = (event) => {
+    event.preventDefault();
+    const val = (id) => ($(`#${id}`)?.value || '').trim();
+    const nombre = val('rvNombre');
+    const tel = val('rvTel');
+    const franja = val('rvFranja');
+    const error = $('#rvError');
+    if (!nombre) {
+      if (error) error.textContent = 'Escribe tu nombre para saber con quién quedamos.';
+      $('#rvNombre')?.focus();
+      return;
+    }
+    if (error) error.textContent = '';
+    const texto = [`Hola, soy ${nombre}.`,
+      `Quiero visitar la referencia ${property.ref} — ${property.titleShort || property.title} (${property.zone}, ${euro(property.price)}).`,
+      `Me viene bien: ${franja.toLowerCase()}.`, tel ? `Mi teléfono: ${tel}` : ''].filter(Boolean).join('\n');
+    if (window.VPLead) {
+      const c = VPLead.repartirContacto(tel);
+      VPLead.enviar({
+        asunto: `Visita · Ref ${property.ref} · ${property.zone}`,
+        nombre, email: c.email, telefono: c.telefono || tel,
+        descripcion: texto, honeypot: val('rvHp'),
+      });
+    }
+    window.open(`https://api.whatsapp.com/send/?phone=${WHATSAPP}&text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
+    if (error) error.textContent = 'Si WhatsApp no se ha abierto, escríbenos al +34 667 384 965 con la referencia.';
+  };
+
   /* El vídeo no vive en el repositorio (pesa demasiado para Pages): se aloja en
      Vimeo o YouTube y aquí solo se incrusta. Un .mp4 propio también vale. */
   const videoEmbed = (url) => {
@@ -307,7 +375,7 @@
             <h3>¿La vemos?</h3>
             <p class="muted">Te contamos lo que no está en el anuncio: estado real, comunidad, documentación y margen de negociación.</p>
             <a class="btn green" href="${waLink}" target="_blank" rel="noopener">WhatsApp ↗</a><a class="btn" href="finance.html">Financiar esta compra</a>
-            <a class="btn" href="contact.html">Solicitar visita</a>
+            <a class="btn" href="#reservar-visita">Reservar visita</a>
             ${property.url ? `<a class="btn" href="${U(property.url)}" target="_blank" rel="noopener">Ver en idealista ↗</a>` : ''}
           </div>
         </aside>
@@ -323,6 +391,8 @@
         <div class="pmap" id="propertyMap" role="application" aria-label="Ubicación aproximada de ${E(property.zone)}"></div>
       </div>
     </section>
+
+    ${reservaBlock()}
 
     ${entornoBlock()}
 
@@ -376,6 +446,8 @@
   };
   const open = (i) => { show(i); lightbox.classList.add('is-open'); document.body.style.overflow = 'hidden'; };
   const close = () => { lightbox.classList.remove('is-open'); document.body.style.overflow = ''; };
+
+  $('#rvForm')?.addEventListener('submit', reservar);
 
   root.addEventListener('click', (event) => {
     const button = event.target.closest('[data-index]');

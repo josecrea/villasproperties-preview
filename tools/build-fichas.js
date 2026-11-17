@@ -43,6 +43,8 @@ const WA = '34667384965';
 global.window = {};
 require(path.join(RAIZ, 'properties-data.js'));
 const props = global.window.VP_PROPERTIES || [];
+require(path.join(RAIZ, 'reviews-data.js'));
+const resenas = global.window.VP_RESENAS || null;
 if (!props.length) { console.error('[fichas] properties-data.js vacío: no se toca nada.'); process.exit(1); }
 
 const E = (v) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -122,6 +124,33 @@ const jsonld = (p) => {
       },
     ],
   };
+};
+
+/* Cierre de la ficha (17-nov-2026): reseñas REALES de Google, tal cual, y la visita
+   pedida por WhatsApp con la referencia. property.js lo sustituye por el formulario
+   que además deja el lead en Odoo; esto es lo que ve Google y quien no tiene JS. */
+const resenasHtml = () => {
+  const lista = ((resenas && resenas.resenas) || []).filter((r) => r.texto && r.puntuacion >= 4).slice(0, 3);
+  if (!lista.length) return '';
+  const nota = resenas.puntuacion.toFixed(1).replace('.', ',');
+  return `      <div class="presenas">
+        <a class="eye plink" href="${E(resenas.ficha)}" target="_blank" rel="noopener">${nota} ★ · ${resenas.total} reseñas en Google ↗</a>
+${lista.map((r) => `        <blockquote class="presena"><p>«${E(r.texto)}»</p><cite>${E(r.autor)}</cite></blockquote>`).join('\n')}
+      </div>\n`;
+};
+const reservaHtml = (p) => {
+  const wa = `https://wa.me/${WA}?text=${encodeURIComponent(`Hola, quiero visitar la referencia ${p.ref} — ${p.titleShort} (${p.zone}, ${euro(p.price)}). ¿Qué días tenéis?`)}`;
+  return `  <section class="section tight preserva" id="reservar-visita"><div class="wrap">
+    <div class="eye">Reservar visita</div>
+    <h2 class="ph2">Ven a verla.</h2>
+    <div class="preserva-grid">
+      <div>
+        <p class="muted">Dinos cuándo te viene bien y te confirmamos día y hora por WhatsApp. Sin compromiso: la visita sirve para decidir, no para firmar.</p>
+        <p><a class="btn green" href="${wa}" target="_blank" rel="noopener">Reservar visita por WhatsApp ↗</a></p>
+      </div>
+${resenasHtml()}    </div>
+  </div></section>
+`;
 };
 
 const ficha = (p) => {
@@ -224,7 +253,7 @@ ${enlaces.length ? `    <p class="muted">${enlaces.map((l) => `<a href="${l.href
 ${otras.map((o) => `      <li><a href="${archivo(o)}">${E(o.titleShort)} · ${euro(o.price)}</a></li>`).join('\n')}
     </ul>
   </div></div></section>
-</main>
+${enVenta(p) ? reservaHtml(p) : ''}</main>
 
 <footer class="footer"></footer>
 <script>window.VP_FICHA_REF=${JSON.stringify(p.slug)};</script>
