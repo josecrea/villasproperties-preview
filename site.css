@@ -2996,3 +2996,13 @@ body.is-loaded .hero h1 .ltr { color: var(--c, #fff); }
 @media (min-width: 821px) {
   .pagehero h1:has(+ .h1-sub) { font-size: clamp(36px, 4.8vw, 72px); max-width: 26ch; margin-bottom: 14px; }
 }
+
+/* Vender: tres planes de honorarios (sell.html, 17-nov-2026) */
+.planes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.plan{border:1px solid var(--line);background:#fff;padding:26px 24px;display:flex;flex-direction:column;gap:8px}
+.plan.is-top{background:var(--ink-deep);color:var(--paper);border-color:var(--ink-deep)}
+.plan-pct{font-size:clamp(48px,6vw,80px);font-weight:400;letter-spacing:-.05em;line-height:1}
+.plan-ej{font-size:13px;margin:0;opacity:.75}
+.plan ul{margin:14px 0 0;padding-left:18px;font-size:14px;line-height:1.55}
+.plan-nota{font-size:12px;margin-top:18px}
+@media(max-width:820px){.planes-grid{grid-template-columns:1fr}}
